@@ -277,7 +277,7 @@ for each row execute function public.sync_staff_role();
 
 -- ---------------------------------------------------------------------
 -- 4) คิวอีเมลอัตโนมัติ: ออกใบแจ้งหนี้ -> คิวอีเมลใบแจ้งหนี้ / อนุมัติชำระ -> คิวอีเมลใบเสร็จ
---    (Edge Function "send-email" มาอ่านคิวแล้วส่งจริง)
+--    (Edge Function "resend-email" มาอ่านคิวแล้วส่งจริง)
 -- ---------------------------------------------------------------------
 create or replace function public.queue_invoice_email() returns trigger
 language plpgsql security definer set search_path = public as
@@ -715,9 +715,9 @@ on conflict (room_no) do nothing;
 -- เปิดใช้ extensions pg_cron และ pg_net ก่อน แล้วแก้ <PROJECT_REF> และ <SERVICE_ROLE_KEY> ก่อนรัน
 -- (เก็บคีย์ใน Vault จะปลอดภัยกว่า) เว็บจะสั่งส่งอีเมลให้เองทุกครั้งที่ผู้ดูแลออกบิล/อนุมัติ จึงไม่บังคับ
 -- ---------------------------------------------------------------------
--- select cron.schedule('send-email-sweep', '*/5 * * * *', $$
+-- select cron.schedule('resend-email-sweep', '*/5 * * * *', $$
 --   select net.http_post(
---     url := 'https://<PROJECT_REF>.supabase.co/functions/v1/send-email',
+--     url := 'https://<PROJECT_REF>.supabase.co/functions/v1/resend-email',
 --     headers := jsonb_build_object('Content-Type','application/json','Authorization','Bearer <SERVICE_ROLE_KEY>'),
 --     body := '{"sweep":true}'::jsonb);
 -- $$);
