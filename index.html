@@ -5263,7 +5263,7 @@ async function sbPush(){
    else if(t=='invoice_items'){const[a,y]=k.split(':'),r=await c.from(t).delete().eq('invoice_id',a).eq('item_type',y);if(r.error)throw r.error}
    else if(t=='news'){const r=await c.from(t).delete().eq('id',k);if(r.error)throw r.error}}}
  SBX.snap=sbRows();
- if(mailTrig&&ad)c.functions.invoke('resend-email',{body:{sweep:true}}).then(()=>setTimeout(()=>{if(U)sbRefresh()},3000)).catch(()=>{});
+ if(mailTrig&&ad)c.functions.invoke('send-email',{body:{sweep:true}}).then(()=>setTimeout(()=>{if(U)sbRefresh()},3000)).catch(()=>{});
 }
 function sbAudit(a){if(SBX.cl&&SBX.uid&&U)SBX.cl.from('audit_logs').insert({actor_id:SBX.uid,actor_name:U.name,action:a}).then(()=>{})}
 // ---------- เรียลไทม์ ----------
@@ -5324,7 +5324,7 @@ if(SBON){
   lg('แก้ไขผู้เช่า '+n);save();cm();R();tt('✓ บันทึกข้อมูลผู้เช่าแล้ว')};
  {const _s=pg.set;pg.set=()=>_s().replace(/<div class="cd"><label>EmailJS[^<]*<\/label>.*?<\/div><\/div>/g,'')}
  ss=function(){const s=D.set;['rent','rate','dep','due','max'].forEach(k=>s[k]=+$('#s_'+k).value||0);['pp','tax','name','payee','tel','addr','url'].forEach(k=>s[k]=$('#s_'+k).value.trim());lg('แก้ไขการตั้งค่า');save();tt('✓ บันทึกแล้ว')};
- mail=async function(){};   // อีเมลส่งโดยเซิร์ฟเวอร์ (trigger + Edge Function resend-email)
+ mail=async function(){};   // อีเมลส่งโดยเซิร์ฟเวอร์ (trigger + Edge Function send-email)
  rs2=async function(x){const m=D.mail[x];const r=await SBX.cl.from('email_queue').update({status:'pending',error:null,send_after:new Date().toISOString()}).eq('id',m._id);if(r.error)return alert(r.error.message);tt('กำลังส่งอีเมลอีกครั้ง…');try{await SBX.cl.functions.invoke('send-email',{body:{sweep:true}})}catch(x){}await sbLoad();R()};
  sub=async function(id){
   const i=gi(id);if(!SLIP)return alert('กรุณาอัปโหลดสลิปโอนเงิน');
