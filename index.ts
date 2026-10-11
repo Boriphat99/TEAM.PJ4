@@ -1,8 +1,8 @@
-// Supabase Edge Function: send-email
+// Supabase Edge Function: resend-email
 // อ่านคิว public.email_queue (สถานะ pending ที่ถึงเวลา send_after) แล้วส่งอีเมลใบแจ้งหนี้/ใบเสร็จผ่าน Resend
 //
 // ตั้งค่า:   supabase secrets set RESEND_API_KEY=re_xxx MAIL_FROM="T&T Mansion <billing@yourdomain.com>"
-// ติดตั้ง:   supabase functions deploy send-email
+// ติดตั้ง:   supabase functions deploy resend-email
 // เรียกใช้:  เว็บเรียกเองหลังผู้ดูแลออกบิล/อนุมัติชำระ (functions.invoke) หรือตั้ง pg_cron เรียกทุก 5 นาที
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
 
