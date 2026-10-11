@@ -4749,7 +4749,7 @@
                 alert('พื้นที่จัดเก็บเต็ม')
             }
         };
-        const e = s => String(s ? ? '').replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) + ';'),
+        const e = s => String(s || '').replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) + ';'),
             fm = n => Number(n).toLocaleString(LOCF()),
             sd = d => new Date(d.getFullYear(), d.getMonth(), d.getDate()),
             due = i => {
