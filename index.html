@@ -5035,10 +5035,11 @@ function rcpHTML(i){const S=D.set,u=tu(i)||{},nm=S.name||'T&T Mansion',pe=S.paye
 <div style="background:#f1f5f9;border-radius:10px;padding:12px;margin:16px 0 0"><span style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#16a34a;color:#fff;text-align:center;line-height:18px;font-size:11px;margin-right:8px">✓</span>ได้รับชำระเงินเรียบร้อยแล้ว<div style="color:#475569;margin:4px 0 0 26px;font-size:12px">วิธีชำระ: ${i.mt=='qr'?'โอนเงิน (PromptPay)':'เงินสด'}</div></div>
 <table style="width:100%;border-collapse:collapse"><tr>${sg(u.name||'-','ผู้จ่ายเงิน')}${sg(pe,'ผู้รับเงิน')}</tr></table>
 <div style="text-align:center;font-size:11px;color:#94a3b8;margin-top:14px">ขอบคุณที่ใช้บริการ ${e(nm)}</div></div>`}
-function rc(id){const i=gi(id);if(i.s=='paid'&&!i.rc){i.rc=nrc();save()}mo(`<div id="rcimg" style="background:#fff;padding:2px;border-radius:14px">${rcpHTML(i)}</div><br><div class="np" style="display:flex;gap:8px;flex-wrap:wrap"><button class="b gr" onclick="si('${id}')">⬇ บันทึกรูปใบเสร็จ</button><button class="b b2" onclick="try{window.print()}catch(x){}">พิมพ์</button><button class="b b2" onclick="cm()">ปิด</button></div>`);if(innerWidth>800)$('#mc').style.maxWidth='560px'}
+function rc(id){const i=gi(id);if(i.s=='paid'&&!i.rc){i.rc=nrc();save()}mo(`<div id="rcimg" style="background:#fff;padding:2px;border-radius:14px">${rcpHTML(i)}</div><br><div class="np" style="display:flex;gap:8px;flex-wrap:wrap"><button class="b gr" onclick="si('${id}')">⬇ บันทึกรูปใบเสร็จ</button>${innerWidth>800?'<button class="b b2" onclick="try{window.print()}catch(x){}">พิมพ์</button>':''}<button class="b b2" onclick="cm()">ปิด</button></div>`);if(innerWidth>800)$('#mc').style.maxWidth='560px'}
 async function si(id){const i=gi(id),el=$('#rcimg');if(!window.html2canvas)return alert('โหลดตัวสร้างรูปไม่สำเร็จ กรุณารีเฟรชหน้าแล้วลองใหม่');tt('กำลังสร้างรูปใบเสร็จ...');
  try{const c=await html2canvas(el,{scale:2,backgroundColor:'#ffffff'}),blob=await new Promise(r=>c.toBlob(r,'image/png')),fn='receipt-'+(i.rc||id)+'.png';let dl=null;try{dl=window.claude&&await claude.use('downloads')}catch(x){}
   if(dl){try{await dl.save({filename:fn,data:blob});tt('✓ บันทึกรูปใบเสร็จแล้ว');return}catch(x){if(x&&x.code=='declined')return}}
+  try{const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=fn;a.rel='noopener';a.style.display='none';document.body.appendChild(a);a.click();setTimeout(()=>{a.remove();URL.revokeObjectURL(u)},10000);tt('✓ บันทึกรูปใบเสร็จลงเครื่องแล้ว');return}catch(x){}
   mo(`<img src="${c.toDataURL('image/png')}" style="width:100%;border-radius:10px" alt="ใบเสร็จรับเงิน"><p class="mu" style="font-size:13px">กดค้างที่รูป (มือถือ) หรือคลิกขวา (คอมพิวเตอร์) แล้วเลือกบันทึกรูปภาพ</p><button class="b b2" onclick="cm()">ปิด</button>`)}
  catch(x){alert('สร้างรูปไม่สำเร็จ: '+(x&&x.message||x))}}
 
@@ -5126,7 +5127,7 @@ function ns(){const t=$('#n_t').value.trim(),b=$('#n_b').value.trim();if(!t||!b)
 function nd(id){cf('ลบข่าวนี้?',()=>{D.news=D.news.filter(x=>x.id!=id);lg('ลบข่าว');save();R()})}
 const NVA=[['dash','แดชบอร์ด','▦'],['rooms','ห้องพัก','⌂'],['ten','ผู้เช่า',PI],['con','สัญญาเช่า','▥'],['met','มิเตอร์ & ออกบิล','◔'],['pay','รับชำระเงิน','▤'],['rep','รายงาน','☰'],['set','ตั้งค่า','⚙'],['help','ช่วยเหลือ','◍'],['news','ข่าวสาร','▣'],['prof','โปรไฟล์','◉']];
 let CPR=0;
-const pdfc=(n,ad)=>{const r=D.rooms.find(x=>x.n==n),f=r&&r.pdf;return f?`<span class="ac ptr" onclick="cpv(${n})">${e(f.name.length>24?f.name.slice(0,22)+'…':f.name)}</span><br><small class="mu">${Math.round(f.size/1024)} KB</small>${ad?` <button class="b b2 sm" onclick="CPR=${n};$('#cpi').click()">เปลี่ยน</button> <button class="b b2 sm" onclick="cpd(${n})">ลบ</button>`:''}`:(ad?`<button class="b b2 sm" onclick="CPR=${n};$('#cpi').click()">อัปโหลด PDF</button>`:'<small class="mu">ยังไม่มีไฟล์</small>')};
+const pdfc=(n,ad)=>{const r=D.rooms.find(x=>x.n==n),f=r&&r.pdf;return f?`<button class="b b2 sm" style="border:1px solid var(--ac);color:var(--ac);max-width:100%;text-align:left" title="${e(f.name)}" onclick="cpv(${n})">📄 ${e(f.name.length>24?f.name.slice(0,22)+'…':f.name)}</button><br><small class="mu">${Math.round(f.size/1024)} KB</small>${ad?` <button class="b b2 sm" onclick="CPR=${n};$('#cpi').click()">เปลี่ยน</button> <button class="b b2 sm" onclick="cpd(${n})">ลบ</button>`:''}`:(ad?`<button class="b b2 sm" onclick="CPR=${n};$('#cpi').click()">อัปโหลด PDF</button>`:'<small class="mu">ยังไม่มีไฟล์</small>')};
 function cpf(el){const f=el.files[0];el.value='';if(!f)return;if(f.type!='application/pdf'&&!/\.pdf$/i.test(f.name))return alert('รองรับเฉพาะไฟล์ PDF');if(f.size>2*1024*1024)return alert('ไฟล์ใหญ่เกิน 2MB (พื้นที่จัดเก็บของเบราว์เซอร์จำกัด)');
  const rd=new FileReader;rd.onload=()=>{const r=D.rooms.find(x=>x.n==CPR);if(!r)return;const old=r.pdf;r.pdf={name:f.name,size:f.size,data:rd.result,t:Date.now()};try{localStorage.setItem(K,JSON.stringify(D))}catch(x){if(old)r.pdf=old;else delete r.pdf;return alert('พื้นที่จัดเก็บเต็ม ไม่สามารถเก็บไฟล์นี้ได้')}lg('อัปโหลดไฟล์สัญญา ห้อง '+CPR);R();tt('✓ อัปโหลดไฟล์สัญญา ห้อง '+CPR+' แล้ว')};rd.readAsDataURL(f)}
 function cpd(n){cf('ลบไฟล์สัญญาห้อง '+n+'?',()=>{delete D.rooms.find(x=>x.n==n).pdf;lg('ลบไฟล์สัญญา ห้อง '+n);save();R()})}
@@ -5187,7 +5188,7 @@ async function sbLoad(){
   stf?q('audit_logs',x=>x.order('created_at',{ascending:false}).limit(50)):[],ad?q('email_queue',x=>x.order('created_at',{ascending:false}).limit(100)):[]]);
  const S=st[0]||{},rn=id=>{const r=rm_.find(x=>x.id==id);return r?+r.room_no:null};
  D.set={rent:+S.rent_rate||0,rate:+S.electricity_rate||0,dep:+S.default_deposit||0,due:+S.due_day||5,max:+S.max_fine||0,fpd:+S.fine_per_day||50,pp:S.promptpay_id||'',name:S.dorm_name||'',addr:S.address||'',tel:S.phone||'',tax:S.tax_id||'',payee:S.payee_name||'',url:S.system_url||'',line:S.line_id||'',_id:S.id};
- if(S.line_qr_path)D.set.lineqr=pubUrl('branding',S.line_qr_path)+'?v='+(tsv(S.updated_at)||0);
+ D.set._lqp=S.line_qr_path||undefined;if(S.line_qr_path)D.set.lineqr=pubUrl('branding',S.line_qr_path)+'?v='+(tsv(S.updated_at)||0);
  D.rooms=rm_.map(r=>({n:+r.room_no,m:+r.current_meter,st:r.occupancy_status=='free'?undefined:r.occupancy_status,pdf:r.contract_pdf_path?{name:r.contract_pdf_name,size:r.contract_pdf_size||0,path:r.contract_pdf_path}:undefined,_id:r.id}));
  const avU=u=>u.avatar_path?pubUrl('avatars',u.avatar_path):undefined,L=[];
  us.filter(u=>u.role!='tenant').forEach(u=>L.push({id:+u.app_id,name:u.full_name||u.email,email:u.email,role:u.role,tel:u.phone||'',g:u.gender||'',av:avU(u),_avp:u.avatar_path,pf:{lang:u.lang||'th'},_uid:u.id}));
@@ -5263,7 +5264,7 @@ async function sbPush(){
    else if(t=='invoice_items'){const[a,y]=k.split(':'),r=await c.from(t).delete().eq('invoice_id',a).eq('item_type',y);if(r.error)throw r.error}
    else if(t=='news'){const r=await c.from(t).delete().eq('id',k);if(r.error)throw r.error}}}
  SBX.snap=sbRows();
- if(mailTrig&&ad)c.functions.invoke('send-email',{body:{sweep:true}}).then(()=>setTimeout(()=>{if(U)sbRefresh()},3000)).catch(()=>{});
+ if(mailTrig&&ad)c.functions.invoke('resend-email',{body:{sweep:true}}).then(()=>setTimeout(()=>{if(U)sbRefresh()},3000)).catch(()=>{});
 }
 function sbAudit(a){if(SBX.cl&&SBX.uid&&U)SBX.cl.from('audit_logs').insert({actor_id:SBX.uid,actor_name:U.name,action:a}).then(()=>{})}
 // ---------- เรียลไทม์ ----------
@@ -5324,8 +5325,8 @@ if(SBON){
   lg('แก้ไขผู้เช่า '+n);save();cm();R();tt('✓ บันทึกข้อมูลผู้เช่าแล้ว')};
  {const _s=pg.set;pg.set=()=>_s().replace(/<div class="cd"><label>EmailJS[^<]*<\/label>.*?<\/div><\/div>/g,'')}
  ss=function(){const s=D.set;['rent','rate','dep','due','max'].forEach(k=>s[k]=+$('#s_'+k).value||0);['pp','tax','name','payee','tel','addr','url'].forEach(k=>s[k]=$('#s_'+k).value.trim());lg('แก้ไขการตั้งค่า');save();tt('✓ บันทึกแล้ว')};
- mail=async function(){};   // อีเมลส่งโดยเซิร์ฟเวอร์ (trigger + Edge Function send-email)
- rs2=async function(x){const m=D.mail[x];const r=await SBX.cl.from('email_queue').update({status:'pending',error:null,send_after:new Date().toISOString()}).eq('id',m._id);if(r.error)return alert(r.error.message);tt('กำลังส่งอีเมลอีกครั้ง…');try{await SBX.cl.functions.invoke('send-email',{body:{sweep:true}})}catch(x){}await sbLoad();R()};
+ mail=async function(){};   // อีเมลส่งโดยเซิร์ฟเวอร์ (trigger + Edge Function resend-email)
+ rs2=async function(x){const m=D.mail[x];const r=await SBX.cl.from('email_queue').update({status:'pending',error:null,send_after:new Date().toISOString()}).eq('id',m._id);if(r.error)return alert(r.error.message);tt('กำลังส่งอีเมลอีกครั้ง…');try{await SBX.cl.functions.invoke('resend-email',{body:{sweep:true}})}catch(x){}await sbLoad();R()};
  sub=async function(id){
   const i=gi(id);if(!SLIP)return alert('กรุณาอัปโหลดสลิปโอนเงิน');
   const path=i._id+'/'+Date.now()+'.jpg',up=await SBX.cl.storage.from('slips').upload(path,d2b(SLIP),{contentType:'image/jpeg'});
@@ -5345,7 +5346,7 @@ if(SBON){
   const u=await SBX.cl.from('rooms').update({contract_pdf_path:null,contract_pdf_name:null,contract_pdf_size:null}).eq('id',r._id);if(u.error)return alert(u.error.message);delete r.pdf;lg('ลบไฟล์สัญญา ห้อง '+n);R()})};
  cpv=async function(n){
   const r=D.rooms.find(x=>x.n==n);if(!r||!r.pdf)return;const s=await SBX.cl.storage.from('contracts').createSignedUrl(r.pdf.path,600);if(!s.data)return alert('เปิดไฟล์ไม่สำเร็จ');const u=s.data.signedUrl;
-  mo(`<h3>สัญญาเช่า ห้อง ${n}</h3><small class="mu">${e(r.pdf.name)}</small><iframe src="${u}" style="width:100%;height:62vh;border:1px solid var(--ln);border-radius:12px;margin:10px 0"></iframe><a class="b b2" target="_blank" rel="noopener" href="${u}">เปิดในแท็บใหม่</a> <button class="b b2" onclick="cm()">ปิด</button>`);$('#mc').style.maxWidth='860px'};
+  mo(`<h3>สัญญาเช่า ห้อง ${n}</h3><small class="mu">${e(r.pdf.name)}</small>${innerWidth>800?`<iframe src="${u}" style="width:100%;height:62vh;border:1px solid var(--ln);border-radius:12px;margin:10px 0"></iframe>`:'<br><br>'}<a class="b" style="display:inline-block;text-decoration:none" target="_blank" rel="noopener" href="${u}">เปิดไฟล์สัญญา</a> <button class="b b2" onclick="cm()">ปิด</button>`);$('#mc').style.maxWidth='860px'};
  crs=async function(){
   const o=document.createElement('canvas');o.width=o.height=256;o.getContext('2d').drawImage(CR.m,(10-CR.x)/CR.s,(10-CR.y)/CR.s,260/CR.s,260/CR.s,0,0,256,256);
   const blob=d2b(o.toDataURL('image/jpeg',.85));CR=null;const path=SBX.uid+'.'+Date.now()+'.jpg',old=U._avp;
@@ -5356,10 +5357,11 @@ if(SBON){
   if(old)SBX.cl.storage.from('avatars').remove([old]);delete U.av;U._avp=null;lg('ลบรูปโปรไฟล์');R();tt('✓ ลบรูปแล้ว')})};
  ls=async function(){
   const id=$('#l_id').value.trim(),upd={line_id:id||null,updated_at:new Date().toISOString()};
-  if(/^data:/.test(LQ)){const up=await SBX.cl.storage.from('branding').upload('line_qr.png',d2b(LQ),{upsert:true,contentType:'image/png'});if(up.error)return alert('อัปโหลดไม่สำเร็จ: '+up.error.message);upd.line_qr_path='line_qr.png'}
-  else if(!LQ){await SBX.cl.storage.from('branding').remove(['line_qr.png']);upd.line_qr_path=null}
+  if(/^data:/.test(LQ)){const np='line_qr_'+Date.now()+'.png',up=await SBX.cl.storage.from('branding').upload(np,d2b(LQ),{contentType:'image/png'});if(up.error)return alert('อัปโหลดไม่สำเร็จ: '+up.error.message);upd.line_qr_path=np}
+  else if(!LQ){upd.line_qr_path=null}
   const r=await SBX.cl.from('app_settings').update(upd).eq('id',D.set._id);if(r.error)return alert(r.error.message);
-  D.set.line=id;if(upd.line_qr_path)D.set.lineqr=pubUrl('branding','line_qr.png')+'?v='+Date.now();else if(upd.line_qr_path===null)delete D.set.lineqr;
+  const oq=D.set._lqp;if(upd.line_qr_path!==undefined&&oq&&oq!==upd.line_qr_path)SBX.cl.storage.from('branding').remove([oq]).catch(()=>{});if(upd.line_qr_path!==undefined)D.set._lqp=upd.line_qr_path||undefined;
+  D.set.line=id;if(upd.line_qr_path)D.set.lineqr=pubUrl('branding',upd.line_qr_path)+'?v='+Date.now();else if(upd.line_qr_path===null)delete D.set.lineqr;
   lg('แก้ไขช่องทาง LINE');cm();R();tt('✓ บันทึกแล้ว')};
  tks=async function(){
   const c=$('#tkc').value,t=$('#tkt').value.trim(),b=$('#tkb').value.trim();if(!c||!t||!b)return alert('กรอกหมวดหมู่ หัวข้อ และรายละเอียดให้ครบ');
