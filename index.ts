@@ -1,8 +1,8 @@
-// Supabase Edge Function: send-email
+// Supabase Edge Function: resend-email
 // อ่านคิว public.email_queue (สถานะ pending ที่ถึงเวลา send_after) แล้วส่งอีเมลใบแจ้งหนี้/ใบเสร็จผ่าน Resend
 //
 // ตั้งค่า:   supabase secrets set RESEND_API_KEY=re_xxx MAIL_FROM="T&T Mansion <billing@yourdomain.com>"
-// ติดตั้ง:   supabase functions deploy send-email
+// ติดตั้ง:   supabase functions deploy resend-email
 // เรียกใช้:  เว็บเรียกเองหลังผู้ดูแลออกบิล/อนุมัติชำระ (functions.invoke) หรือตั้ง pg_cron เรียกทุก 5 นาที
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
 
@@ -15,6 +15,7 @@ const json = (b: unknown, s = 200) =>
 
 const baht = (n: number) =>
   "฿" + Number(n || 0).toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const safeUrl = (u: unknown) => (/^https?:\/\//i.test(String(u ?? "")) ? String(u) : "");
 const esc = (s: unknown) =>
   String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!));
 const monthTh = (ym: string) => {
@@ -22,7 +23,7 @@ const monthTh = (ym: string) => {
   return new Date(y, m - 1, 1).toLocaleDateString("th-TH", { month: "long", year: "numeric" });
 };
 const dateTh = (d: string | null) =>
-  d ? new Date(d).toLocaleDateString("th-TH", { day: "numeric", month: "long", year: "numeric" }) : "-";
+  d ? new Date(d).toLocaleDateString("th-TH", { day: "numeric", month: "long", year: "numeric", timeZone: "Asia/Bangkok" }) : "-";
 
 // deno-lint-ignore no-explicit-any
 async function build(sb: any, q: any) {
@@ -56,7 +57,7 @@ async function build(sb: any, q: any) {
     : `ครบกำหนดชำระ ${dateTh(inv.due_date)} · เลขที่ ${esc(inv.code)}`;
   const foot = isReceipt
     ? "ขอบคุณที่ใช้บริการ"
-    : `ชำระผ่าน PromptPay${S?.payee_name ? " (" + esc(S.payee_name) + ")" : ""} แล้วแนบสลิปที่ระบบ${S?.system_url ? ` <a href="${esc(S.system_url)}">${esc(S.system_url)}</a>` : ""}`;
+    : `ชำระผ่าน PromptPay${S?.payee_name ? " (" + esc(S.payee_name) + ")" : ""} แล้วแนบสลิปที่ระบบ${safeUrl(S?.system_url) ? ` <a href="${esc(safeUrl(S.system_url))}">${esc(safeUrl(S.system_url))}</a>` : ""}`;
 
   const html = `<div style="font-family:Tahoma,Arial,sans-serif;max-width:560px;margin:auto;color:#111">
   <div style="background:${accent};color:#fff;padding:18px 22px;border-radius:12px 12px 0 0">
@@ -89,6 +90,11 @@ Deno.serve(async (req) => {
         await sb.from("email_queue").update({ status: "wait", error: "ยังไม่ได้ตั้งค่า RESEND_API_KEY" }).eq("id", q.id);
         continue;
       }
+      // จองแถวก่อนส่ง กันการเรียกพร้อมกัน (เว็บ + pg_cron) ส่งอีเมลซ้ำ: อัปเดตได้เฉพาะเมื่อ send_after ยังเป็นค่าเดิม
+      const { data: claimed } = await sb.from("email_queue")
+        .update({ send_after: new Date(Date.now() + 2 * 60_000).toISOString() })
+        .eq("id", q.id).eq("send_after", q.send_after).in("status", ["pending", "wait"]).select("id");
+      if (!claimed?.length) continue;
       const { subject, html } = await build(sb, q);
       const r = await fetch("https://api.resend.com/emails", {
         method: "POST",
