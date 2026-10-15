@@ -4921,7 +4921,7 @@ const home0=()=>{const K=kp(),nm=e(D.set.name||'T&T Mansion'),AD=D.users.find(u=
 <section class="hw hx" id="hf"><h2>ครบทุกขั้นตอนการเก็บค่าหอพัก</h2><div class="fx">${[['⌂','ห้องพัก','จัดการห้อง สถานะ และผู้เช่า'],['▥','สัญญาเช่า','บันทึกสัญญาและเงินแรกเข้า'],['◔','มิเตอร์ไฟฟ้า','จดเลขมิเตอร์ คำนวณหน่วยไฟอัตโนมัติ'],['▤','ใบแจ้งหนี้','ออกบิลทุกห้อง พร้อมค่าปรับอัตโนมัติ'],['฿','ชำระเงิน','Dynamic PromptPay QR และแนบสลิป'],['☰','รายงาน','สรุปรายได้และสถานะการชำระเงิน']].map(f=>`<div class="fxc"><i>${f[0]}</i><b>${f[1]}</b><small>${f[2]}</small></div>`).join('')}</div></section>
 <section class="hw hx" id="hst"><h2>ชำระเงินง่ายใน 4 ขั้นตอน</h2><div class="sp">${['ดูใบแจ้งหนี้ของห้องคุณ','สแกน QR ยอดขึ้นอัตโนมัติ','แนบสลิปโอนเงิน','ผู้ดูแลอนุมัติ รับใบเสร็จ'].map((t,i)=>`<div><b>${i+1}</b><span>${t}</span></div>`).join('')}</div><div class="hc" style="margin-top:34px"><button class="b" onclick="go('reg')">สมัครสมาชิก</button></div></section>
 </div><footer class="lf">© 2026 T&T Mansion Payment System</footer></div>`};
-const home=()=>PUBD?withPub(home0):home0();
+const home=()=>{if(PUBD){try{return withPub(home0)}catch(x){console.error(x);PUBD=null}}return home0()};
 let LP=0;
 function lp(){cancelAnimationFrame(LP);const el=$('#lp'),cv=$('#pc');if(!el||!cv)return;const x=cv.getContext('2d'),N=innerWidth<700?28:60;let W,H;const ps=[];
  const sz=()=>{W=cv.width=innerWidth;H=cv.height=innerHeight};sz();window.onresize=sz;
@@ -4946,7 +4946,17 @@ function fp(){const m=$('#em').value.trim().toLowerCase(),t=$('#rt').value.repla
  if(u.tel.replace(/\D/g,'')!=t)return alert('เบอร์โทรไม่ตรงกับที่ลงทะเบียนไว้');if(u.out)return alert('บัญชีนี้ย้ายออกแล้ว กรุณาติดต่อผู้ดูแล');
  if(w.length<6)return alert('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัว');if(w!=$('#pw2').value)return alert('ยืนยันรหัสผ่านไม่ตรงกัน');
  u.pw=w;save();go('login');tt('✓ ตั้งรหัสผ่านใหม่สำเร็จ กรุณาเข้าสู่ระบบ')}
-function out(){const r=U&&U.role;U=null;P='home';try{localStorage.removeItem('ttm_s')}catch(x){}try{R()}catch(x){console.error(x)}try{tt('✓ ออกจากระบบสำเร็จ'+(r?' · '+RL[r]:''))}catch(x){}}
+function lof(r,err){ // ตัวกันเหนียว: ถ้าวาดหน้าต้อนรับไม่สำเร็จ ให้ล้างเซสชันแล้วโหลดหน้าแรกใหม่
+ try{Object.keys(localStorage).filter(k=>/^sb-.*-auth-token/.test(k)||k=='ttm_s').forEach(k=>localStorage.removeItem(k))}catch(x){}
+ try{sessionStorage.setItem('ttm_lo',r||'1')}catch(x){}
+ try{console.error('logout render failed:',err)}catch(x){}
+ location.replace(location.pathname+location.search)}
+function lok(){return !document.querySelector('#app > .app')}
+function lout(r){let bad=null;try{R()}catch(x){bad=x;PUBD=null;try{R();bad=null}catch(y){bad=y}}
+ if(bad||!lok())return lof(r,bad);
+ try{tt('✓ ออกจากระบบสำเร็จ'+(r?' · '+RL[r]:''))}catch(x){}
+ setTimeout(()=>{if(!U&&!lok())lof(r,'late re-render')},1500)}
+function out(){const r=U&&U.role;U=null;P='home';try{localStorage.removeItem('ttm_s')}catch(x){}lout(r)}
 // ---- admin pages ----
 const FL=[['all','ทั้งหมด'],['paid','ชำระแล้ว'],['pending','รอตรวจสอบ'],['unpaid','ยังไม่ชำระ'],['over','ผิดนัดชำระ']];
 const flt=()=>`<div class="fl">${FL.map(f=>`<button class="b ${F==f[0]?'':'b2'}" onclick="F='${f[0]}';R()">${f[1]}</button>`).join('')}</div>`;
@@ -5061,7 +5071,7 @@ function withPub(f){const o={rooms:D.rooms,users:D.users,inv:D.inv,set:D.set};D.
 function pubBuild(d){const rr=d.rooms||[],occ=new Set(rr.filter(r=>r.st=='occ').map(r=>+r.n)),s=d.set||{};
  return{rooms:rr.map(r=>({n:+r.n,m:0,st:(r.st=='busy'||r.st=='maint')?r.st:undefined})),
   users:[...occ].map(n=>({id:'p'+n,name:'ห้อง '+n,role:'tenant',room:n})),
-  inv:(d.inv||[]).map(v=>({id:v.code,room:+v.room,uid:'p'+v.room,per:v.per,pv:0,u:0,el:+v.el||0,x:+v.x||0,xn:'',rent:+v.rent||0,fine:+v.fine||0,s:v.s=='overdue'?'unpaid':v.s,iss:v.iss?Date.parse(v.iss):0,paid:v.paid?Date.parse(v.paid):undefined})),
+  inv:(d.inv||[]).filter(v=>v&&typeof v=='object'&&/^\d{4}-\d{2}$/.test(v.per||'')&&+v.room>0).map(v=>({id:v.code,room:+v.room,uid:'p'+v.room,per:v.per,pv:0,u:0,el:+v.el||0,x:+v.x||0,xn:'',rent:+v.rent||0,fine:+v.fine||0,s:v.s=='overdue'?'unpaid':v.s,iss:v.iss?Date.parse(v.iss):0,paid:v.paid?Date.parse(v.paid):undefined})),
   set:{rent:+s.rent||undefined,rate:+s.rate||undefined,dep:+s.dep||undefined,due:+s.due||undefined,max:+s.max||undefined,fpd:+s.fpd||undefined,name:s.name||undefined}}}
 async function pubLoad(force){if(!SBON||!SBX.cl||U)return;if(!force&&PUBD&&Date.now()-PUBT<36e5)return;
  try{const{data,error}=await SBX.cl.rpc('public_stats');if(error||!data)return;PUBD=pubBuild(data);PUBT=Date.now();if(!U&&P=='home')R()}catch(x){}}
@@ -5384,8 +5394,7 @@ if(SBON){
   try{const p=SBX.cl.auth.signOut();if(p&&p.catch)p.catch(()=>{})}catch(x){}
   try{sbReset()}catch(x){}
   U=null;P='home';try{localStorage.removeItem('ttm_s')}catch(x){}
-  try{R()}catch(x){console.error(x)}
-  try{tt('✓ ออกจากระบบสำเร็จ'+(r?' · '+RL[r]:''))}catch(x){}
+  lout(r);
   setTimeout(purge,1500);try{pubLoad()}catch(x){}};
  pc=async function(){
   const o=$('#p_o').value,w=$('#p_w').value;if(w.length<6)return alert('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัว');if(w!=$('#p_c').value)return alert('ยืนยันรหัสผ่านไม่ตรงกัน');
@@ -5458,7 +5467,7 @@ if(SBON){
   lg('ส่งคำขอช่วยเหลือ: '+t);save();R();tt('✓ ส่งคำขอแล้ว เราจะตอบกลับโดยเร็วที่สุด')};
 }
 
-applyPf(U);R();if(SBON)sbBoot().catch(x=>alert('เชื่อมต่อ Supabase ไม่สำเร็จ: '+(x.message||x)));
+applyPf(U);R();try{const lo=sessionStorage.getItem('ttm_lo');if(lo){sessionStorage.removeItem('ttm_lo');setTimeout(()=>tt('✓ ออกจากระบบสำเร็จ'+(RL[lo]?' · '+RL[lo]:'')),400)}}catch(x){}if(SBON)sbBoot().catch(x=>alert('เชื่อมต่อ Supabase ไม่สำเร็จ: '+(x.message||x)));
     </script>
 </body>
 
