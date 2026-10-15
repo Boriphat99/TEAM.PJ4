@@ -4009,150 +4009,6 @@
         .sbon .dm {
             display: none
         }
-<<<<<<< HEAD
-        /* ===== มือถือเป็นหลัก + รองรับ PC ===== */
-        
-        html {
-            -webkit-text-size-adjust: 100%;
-        }
-        
-        img,
-        svg,
-        video,
-        canvas {
-            max-width: 100%;
-        }
-        
-        .b,
-        .nv,
-        .tabs span,
-        .mm,
-        select {
-            touch-action: manipulation;
-        }
-        
-        @media(max-width:800px) {
-            .top {
-                flex-wrap: wrap
-            }
-            .top input {
-                flex: 1 1 100%;
-                order: 9
-            }
-            .top .seg,
-            .top .b {
-                flex: 0 0 auto
-            }
-            .tb2 input,
-            .tb2 select {
-                min-width: 0;
-                flex: 1 1 140px;
-                width: 100%
-            }
-            .tb2 .b {
-                flex: 1 1 auto
-            }
-            .tabs {
-                max-width: none !important
-            }
-            .dg2,
-            .dg3,
-            .dg3b {
-                gap: 12px
-            }
-            .hd2 {
-                flex-wrap: wrap
-            }
-            .b {
-                min-height: 44px
-            }
-            .b.sm {
-                min-height: 36px
-            }
-            .mm {
-                display: inline-block;
-                padding: 6px 12px
-            }
-            .cd .big {
-                font-size: 28px
-            }
-            #mo .cd {
-                max-height: 90vh
-            }
-        }
-        
-        @media(max-width:700px) {
-            .sg {
-                grid-template-columns: 1fr !important
-            }
-            .sc {
-                overflow-x: visible
-            }
-            table.rt,
-            .rt tbody {
-                display: block;
-                width: 100%
-            }
-            .rt tr.rh {
-                display: none
-            }
-            .rt tr {
-                display: block;
-                background: var(--cd);
-                border: 1px solid var(--ln);
-                border-radius: 14px;
-                padding: 4px 12px;
-                margin: 0 0 10px
-            }
-            .rt td {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                gap: 12px;
-                text-align: right;
-                white-space: normal;
-                border: 0;
-                border-bottom: 1px dashed var(--ln);
-                padding: 9px 0;
-                word-break: break-word
-            }
-            .rt td:last-child {
-                border-bottom: 0
-            }
-            .rt td[data-l]:before {
-                content: attr(data-l);
-                color: var(--mu);
-                font-size: 12px;
-                text-align: left;
-                flex: 0 0 40%
-            }
-            .rt td:not([data-l]) {
-                display: block;
-                text-align: left
-            }
-            .rt td:empty {
-                display: none
-            }
-            .rt td .tc {
-                text-align: left
-            }
-            .rt input,
-            .rt select {
-                width: 58% !important;
-                max-width: 100%;
-                min-width: 0
-            }
-            .rt .b {
-                margin: 2px 0
-            }
-        }
-        
-        @media(min-width:1200px) {
-            .mn {
-                max-width: 1400px
-            }
-        }
-=======
 
         /* ===== มือถือเป็นหลัก + รองรับ PC ===== */
         html { -webkit-text-size-adjust: 100%; }
@@ -4189,7 +4045,6 @@
             .rt .b { margin: 2px 0 }
         }
         @media(min-width:1200px) { .mn { max-width: 1400px } }
->>>>>>> 5e622c3c81ca9b8efaef045d240635fbc284f44c
     </style>
 </head>
 
@@ -5004,32 +4859,11 @@
             F = 'all',
             Q = '',
             SLIP = null;
-<<<<<<< HEAD
-        const RL = {
-                admin: 'ผู้ดูแลระบบ',
-                owner: 'เจ้าของกิจการ',
-                tenant: 'ผู้เช่า'
-            },
-            bk = () => {
-                try {
-                    const o = {};
-                    new Intl.DateTimeFormat('en-US', {
-                        timeZone: 'Asia/Bangkok',
-                        hourCycle: 'h23',
-                        year: 'numeric',
-                        month: 'numeric',
-                        day: 'numeric',
-                        hour: 'numeric',
-                        minute: 'numeric',
-                        second: 'numeric'
-                    }).formatToParts(new Date()).forEach(p => o[p.type] = +p.value);
-=======
         const RL = {admin: 'ผู้ดูแลระบบ', owner: 'เจ้าของกิจการ', tenant: 'ผู้เช่า'},
             bk = () => {
                 try {
                     const o = {};
                     new Intl.DateTimeFormat('en-US', {timeZone: 'Asia/Bangkok', hourCycle: 'h23', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'}).formatToParts(new Date()).forEach(p => o[p.type] = +p.value);
->>>>>>> 5e622c3c81ca9b8efaef045d240635fbc284f44c
                     return new Date(o.year, o.month - 1, o.day, o.hour % 24, o.minute, o.second)
                 } catch (x) {
                     return new Date(Date.now() + (new Date().getTimezoneOffset() + 420) * 6e4)
@@ -5636,3 +5470,5 @@ if(SBON){
 applyPf(U);R();try{const lo=sessionStorage.getItem('ttm_lo');if(lo){sessionStorage.removeItem('ttm_lo');setTimeout(()=>tt('✓ ออกจากระบบสำเร็จ'+(RL[lo]?' · '+RL[lo]:'')),400)}}catch(x){}if(SBON)sbBoot().catch(x=>alert('เชื่อมต่อ Supabase ไม่สำเร็จ: '+(x.message||x)));
     </script>
 </body>
+
+</html>
