@@ -4860,7 +4860,15 @@
             Q = '',
             SLIP = null;
         const RL = {admin: 'ผู้ดูแลระบบ', owner: 'เจ้าของกิจการ', tenant: 'ผู้เช่า'},
-            bk = () => new Date(new Date().toLocaleString('en-US', {timeZone: 'Asia/Bangkok'})),
+            bk = () => {
+                try {
+                    const o = {};
+                    new Intl.DateTimeFormat('en-US', {timeZone: 'Asia/Bangkok', hourCycle: 'h23', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'}).formatToParts(new Date()).forEach(p => o[p.type] = +p.value);
+                    return new Date(o.year, o.month - 1, o.day, o.hour % 24, o.minute, o.second)
+                } catch (x) {
+                    return new Date(Date.now() + (new Date().getTimezoneOffset() + 420) * 6e4)
+                }
+            },
             padd = (p, k) => {
                 const [y, m] = p.split('-').map(Number), d = new Date(y, m - 1 + k, 1);
                 return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0')
@@ -4938,7 +4946,7 @@ function fp(){const m=$('#em').value.trim().toLowerCase(),t=$('#rt').value.repla
  if(u.tel.replace(/\D/g,'')!=t)return alert('เบอร์โทรไม่ตรงกับที่ลงทะเบียนไว้');if(u.out)return alert('บัญชีนี้ย้ายออกแล้ว กรุณาติดต่อผู้ดูแล');
  if(w.length<6)return alert('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัว');if(w!=$('#pw2').value)return alert('ยืนยันรหัสผ่านไม่ตรงกัน');
  u.pw=w;save();go('login');tt('✓ ตั้งรหัสผ่านใหม่สำเร็จ กรุณาเข้าสู่ระบบ')}
-function out(){const r=U&&U.role;U=null;P='home';try{localStorage.removeItem('ttm_s')}catch(x){}R();tt('✓ ออกจากระบบสำเร็จ'+(r?' · '+RL[r]:''))}
+function out(){const r=U&&U.role;U=null;P='home';try{localStorage.removeItem('ttm_s')}catch(x){}try{R()}catch(x){console.error(x)}try{tt('✓ ออกจากระบบสำเร็จ'+(r?' · '+RL[r]:''))}catch(x){}}
 // ---- admin pages ----
 const FL=[['all','ทั้งหมด'],['paid','ชำระแล้ว'],['pending','รอตรวจสอบ'],['unpaid','ยังไม่ชำระ'],['over','ผิดนัดชำระ']];
 const flt=()=>`<div class="fl">${FL.map(f=>`<button class="b ${F==f[0]?'':'b2'}" onclick="F='${f[0]}';R()">${f[1]}</button>`).join('')}</div>`;
@@ -5049,7 +5057,7 @@ function mv(id){const u=D.users.find(x=>x.id==id),k=D.inv.filter(i=>(i.uid?i.uid
 function BLD(z){return`<i class="ci" style="width:${z}px;height:${z}px;flex:0 0 auto"><svg viewBox="0 0 24 24" width="${Math.round(z*.56)}" height="${Math.round(z*.56)}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16"/><path d="M14 10h5a1 1 0 0 1 1 1v10"/><path d="M3 21h18"/><path d="M8 8h2M8 12h2M8 16h2M17 14h.01M17 17h.01"/></svg></i>`}
 // ---- ข้อมูลสรุปแบบสาธารณะ (ไม่มีชื่อผู้เช่า) สำหรับแดชบอร์ดตัวอย่างหน้าต้อนรับ: โหลดใหม่ทุก 1 ชั่วโมง ----
 var PUBD=null,PUBT=0;
-function withPub(f){const o={rooms:D.rooms,users:D.users,inv:D.inv,set:D.set};D.rooms=PUBD.rooms;D.users=PUBD.users;D.inv=PUBD.inv;D.set=Object.assign({},o.set,PUBD.set);try{return f()}finally{D.rooms=o.rooms;D.users=o.users;D.inv=o.inv;D.set=o.set}}
+function withPub(f){const o={rooms:D.rooms,users:D.users,inv:D.inv,set:D.set};D.rooms=PUBD.rooms;D.users=PUBD.users;D.inv=PUBD.inv;D.set=Object.assign({},o.set);Object.keys(PUBD.set).forEach(k=>{if(PUBD.set[k]!==undefined)D.set[k]=PUBD.set[k]});try{return f()}finally{D.rooms=o.rooms;D.users=o.users;D.inv=o.inv;D.set=o.set}}
 function pubBuild(d){const rr=d.rooms||[],occ=new Set(rr.filter(r=>r.st=='occ').map(r=>+r.n)),s=d.set||{};
  return{rooms:rr.map(r=>({n:+r.n,m:0,st:(r.st=='busy'||r.st=='maint')?r.st:undefined})),
   users:[...occ].map(n=>({id:'p'+n,name:'ห้อง '+n,role:'tenant',room:n})),
@@ -5072,7 +5080,7 @@ function iss2(){let c=0;if(plock(PER))return alert(LKM(PER));
  if(c){lg('ออกบิล '+c+' ห้อง รอบ '+PER);save();D.inv.slice(-c).forEach(i=>mail('inv',i));tt('✓ ออกใบแจ้งหนี้ '+c+' ห้อง · เพิ่มคิวส่งอีเมลแล้ว');R()}else alert('ยังไม่ได้กรอกเลขมิเตอร์ใหม่')}
 // ---- tenant pages ----
 pg.my=()=>{const l=D.inv.filter(i=>mine(i)&&i.s!='paid');
- return`<h2>ใบแจ้งหนี้ของฉัน</h2><p class="mu">${U.room?'ห้อง '+U.room:'ยังไม่ได้จัดห้อง'} · ${e(U.name)}</p>${U.room?'':'<div class="note">⏳ ลงทะเบียนสำเร็จแล้ว รอผู้ดูแลจัดห้องพักให้ จึงจะมีใบแจ้งหนี้</div>'}<div class="note">💵 ชำระผ่าน PromptPay QR · หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div><div style="margin-top:14px;display:grid;gap:14px">${l.map(i=>{const s=st(i);return`<div class="cd"><div style="display:flex;justify-content:space-between"><b>${mon(i.per)}</b>${pill(i)}</div><div class="big">฿${fm(tot(i))}</div><p class="mu" style="margin:6px 0 14px">ครบกำหนด ${dt(due(i))}${late(i)>0&&i.s=='unpaid'?` · <b style="color:#fb7185">เลยกำหนด ${late(i)} วัน</b>`:''}${i.s=='pending'?' · รอผู้ดูแลตรวจสอบสลิป':''}</p><button class="b" style="width:100%" onclick="vi('${i.id}')">ดูใบแจ้งหนี้</button></div>`}).join('')||'<div class="cd mu">ไม่มีบิลค้างชำระ 🎉</div>'}</div>`};
+ return`<h2>ใบแจ้งหนี้ของฉัน</h2><p class="mu">${U.room?'ห้อง '+U.room:'ยังไม่ได้จัดห้อง'} · ${e(U.name)}</p>${U.room?'':'<div class="note">⏳ ลงทะเบียนสำเร็จแล้ว รอผู้ดูแลจัดห้องพักให้ จึงจะมีใบแจ้งหนี้</div>'}<div class="note">💵 ชำระผ่าน PromptPay QR · หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div><div style="margin-top:14px;display:grid;gap:14px">${l.map(i=>{const s=st(i);return`<div class="cd"><div style="display:flex;justify-content:space-between"><b>${mon(i.per)}</b>${pill(i)}</div><div class="big">฿${fm(tot(i))}</div><div class="bd mu"><span>ค่าเช่า</span><span>฿${fm(i.rent)}</span></div><div class="bd mu"><span>ค่าไฟ ${i.u} หน่วย × ${D.set.rate}</span><span>฿${fm(i.el)}</span></div>${i.x?`<div class="bd mu"><span>${e(i.xn||'ค่าใช้จ่ายเพิ่มเติม')}</span><span>฿${fm(i.x)}</span></div>`:''}${tot(i)>base(i)?`<div class="bd" style="color:#fb7185"><span>ค่าปรับ</span><span>฿${fm(tot(i)-base(i))}</span></div>`:''}<p class="mu">ครบกำหนด ${dt(due(i))}</p>${i.s=='unpaid'?`<button class="b" onclick="pm('${i.id}')">ดูใบแจ้งหนี้ / ชำระเงิน</button>`:`<span class="mu">รอผู้ดูแลตรวจสอบ</span> <button class="b b2 sm" onclick="vi('${i.id}')">ดูใบแจ้งหนี้</button>`}</div>`}).join('')||'<div class="cd mu">ไม่มีบิลค้างชำระ 🎉</div>'}</div>`};
 pg.hist=()=>{const l=D.inv.filter(i=>mine(i)&&i.s=='paid');return`<h2>ประวัติ & ใบเสร็จ</h2><div class="cd sc" style="margin-top:14px"><table><tr><th>รอบบิล</th><th>ยอด</th><th>วันที่ชำระ</th><th></th></tr>${l.map(i=>`<tr><td>${mon(i.per)}</td><td>฿${fm(tot(i))}</td><td>${dt(i.paid)}</td><td><button class="b b2 sm" onclick="rc('${i.id}')">ใบเสร็จ</button></td></tr>`).join('')||'<tr><td colspan=4 class=mu>ยังไม่มีประวัติ</td></tr>'}</table></div>`};
 function pm(id){const i=gi(id),f=fine(i),t=base(i)+f;SLIP=null;
  mo(`<div class="mh"><h3>ชำระเงินผ่าน PromptPay</h3><span class="mu">${i.id}</span></div>
@@ -5081,8 +5089,7 @@ function pm(id){const i=gi(id),f=fine(i),t=base(i)+f;SLIP=null;
  <div class="st"><b>1</b> สแกน QR ด้วยแอปธนาคาร</div><div class="qrc"><div class="qr" id="qr"></div><small class="mu">ยอดเงินจะขึ้นอัตโนมัติ ไม่ต้องกรอกเอง</small></div>
  <div class="st"><b>2</b> อัปโหลดสลิปโอนเงิน (JPG/PNG)</div><input type="file" id="sf" accept="image/jpeg,image/png" onchange="sl(this)">
  <button class="b" style="width:100%" onclick="sub('${id}')">แจ้งชำระเงิน</button>
- <div class="note">💵 หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div>
- <button class="b b2" style="width:100%;margin-top:8px" onclick="vi('${id}')">‹ กลับไปดูใบแจ้งหนี้</button>`);tm(id)}
+ <div class="note">💵 หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div>`);tm(id)}
 function tm(id){const i=gi(id);
  try{const k=qrcode(0,'M');k.addData(ppay(D.set.pp,base(i)+fine(i)));k.make();$('#qr').innerHTML=k.createSvgTag(5,2)}catch(x){$('#qr').textContent='สร้าง QR ไม่สำเร็จ'}}
 function sl(el){const f=el.files[0];if(!f)return;if(!/^image\/(jpeg|png)$/.test(f.type)||f.size>8e6){el.value='';return alert('รองรับเฉพาะ JPG/PNG ไม่เกิน 8MB')}
@@ -5149,7 +5156,7 @@ function docHTML(i,k){if(k=='rcp')return rcpHTML(i);const S=D.set,inv=k=='inv',c
 ${inv?`<div style="font-weight:700">ช่องทางการชำระเงิน</div><div style="color:#475569;margin:6px 0">ชำระผ่าน PromptPay QR ในระบบ แล้วแนบสลิปโอนเงิน${S.pp?'<br>PromptPay: <b style="color:#0f172a">'+e(S.pp)+'</b>':''}<br>หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div><div style="color:#b45309;font-size:12px">ชำระหลังวันที่ ${S.due} ของเดือนถัดไป มีค่าปรับวันละ 50 บาท สูงสุด ${S.max} บาท</div>${url?`<a href="${url}" style="display:block;background:${c};color:#fff;text-align:center;text-decoration:none;padding:12px;border-radius:10px;margin-top:14px;font-weight:700">ดูใบแจ้งหนี้ / ชำระเงิน</a>`:''}`
 :`<div style="background:#f1f5f9;border-radius:10px;padding:12px;color:#166534">✓ ได้รับชำระเงินเรียบร้อยแล้ว<br><span style="color:#475569">วิธีชำระ: ${i.mt=='qr'?'โอนเงิน (PromptPay)':'เงินสด'}</span></div><div style="color:#475569;margin-top:12px">ผู้รับเงิน: ${e(S.payee||nm)}</div>`}
 <div style="color:#94a3b8;font-size:12px;text-align:center;margin-top:16px">${S.addr?e(S.addr)+'<br>':''}${S.tel?'โทร '+e(S.tel)+'<br>':''}ขอบคุณที่ใช้บริการ ${e(nm)}</div></div></div>`}
-const vi=id=>{const i=gi(id),can=U&&U.role=='tenant'&&i.s=='unpaid'&&mine(i);mo(docHTML(i,'inv')+'<br>'+(can?`<button class="b np" style="width:100%;margin-bottom:8px" onclick="pm('${id}')">ชำระเงิน</button>`:'')+'<button class="b b2 np" style="width:100%" onclick="cm()">ปิด</button>')};
+const vi=id=>mo(docHTML(gi(id),'inv')+'<br><button class="b b2 np" onclick="cm()">ปิด</button>');
 async function mail(k,i,re){const u=tu(i);if(!u)return;D.mail=D.mail||[];const S=D.set,sj=(k=='inv'?'ใบแจ้งหนี้ ':'ใบเสร็จรับเงิน ')+mon(i.per)+' ห้อง '+i.room+' - '+(S.name||'T&T Mansion');
  const m=re||{t:Date.now(),to:u.email,sj,k,inv:i.id,st:'sending'};if(!re){D.mail.unshift(m);D.mail=D.mail.slice(0,100)}m.to=u.email;
  if(!(S.ejs&&S.ejt&&S.ejk)){m.st='wait';m.er='ยังไม่ได้ตั้งค่า EmailJS ในหน้าตั้งค่า';save();if(P=='rep')R();return}
@@ -5373,7 +5380,13 @@ if(SBON){
   const w=$('#pw').value;if(w.length<6)return alert('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัว');if(w!=$('#pw2').value)return alert('ยืนยันรหัสผ่านไม่ตรงกัน');
   const{error}=await SBX.cl.auth.updateUser({password:w});if(error)return alert(error.message);
   SBX.recov=false;await SBX.cl.auth.signOut();try{history.replaceState(null,'',location.pathname)}catch(x){}sbReset();go('login');alert('ตั้งรหัสผ่านใหม่สำเร็จ กรุณาเข้าสู่ระบบ')};
- out=async function(){const r=U&&U.role;try{await SBX.cl.auth.signOut()}catch(x){}sbReset();U=null;P='home';try{localStorage.removeItem('ttm_s')}catch(x){}R();tt('✓ ออกจากระบบสำเร็จ'+(r?' · '+RL[r]:''));pubLoad()};
+ out=function(){const r=U&&U.role,purge=()=>{try{Object.keys(localStorage).filter(k=>/^sb-.*-auth-token/.test(k)).forEach(k=>localStorage.removeItem(k))}catch(x){}};
+  try{const p=SBX.cl.auth.signOut();if(p&&p.catch)p.catch(()=>{})}catch(x){}
+  try{sbReset()}catch(x){}
+  U=null;P='home';try{localStorage.removeItem('ttm_s')}catch(x){}
+  try{R()}catch(x){console.error(x)}
+  try{tt('✓ ออกจากระบบสำเร็จ'+(r?' · '+RL[r]:''))}catch(x){}
+  setTimeout(purge,1500);try{pubLoad()}catch(x){}};
  pc=async function(){
   const o=$('#p_o').value,w=$('#p_w').value;if(w.length<6)return alert('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัว');if(w!=$('#p_c').value)return alert('ยืนยันรหัสผ่านไม่ตรงกัน');
   const a=await SBX.cl.auth.signInWithPassword({email:U.email,password:o});if(a.error)return alert('รหัสผ่านปัจจุบันไม่ถูกต้อง');
