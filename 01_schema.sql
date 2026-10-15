@@ -277,7 +277,7 @@ for each row execute function public.sync_staff_role();
 
 -- ---------------------------------------------------------------------
 -- 4) คิวอีเมลอัตโนมัติ: ออกใบแจ้งหนี้ -> คิวอีเมลใบแจ้งหนี้ / อนุมัติชำระ -> คิวอีเมลใบเสร็จ
---    (Edge Function "send-email" มาอ่านคิวแล้วส่งจริง)
+--    (Edge Function "resend-email" มาอ่านคิวแล้วส่งจริง)
 -- ---------------------------------------------------------------------
 create or replace function public.queue_invoice_email() returns trigger
 language plpgsql security definer set search_path = public as
@@ -683,6 +683,12 @@ create policy st_br_upd on storage.objects for update to authenticated
 create policy st_br_del on storage.objects for delete to authenticated
   using (bucket_id = 'branding' and public.app_role() = 'admin');
 
+-- ผู้ใช้ที่ล็อกอินอ่านไฟล์ใน bucket สาธารณะได้ (จำเป็นต่อการลบ/เขียนทับไฟล์ผ่าน Storage API: upsert และ remove ต้องมีสิทธิ์ SELECT)
+drop policy if exists st_br_sel on storage.objects;
+drop policy if exists st_av_sel on storage.objects;
+create policy st_br_sel on storage.objects for select to authenticated using (bucket_id = 'branding');
+create policy st_av_sel on storage.objects for select to authenticated using (bucket_id = 'avatars');
+
 -- ---------------------------------------------------------------------
 -- 8) Realtime (ให้หน้าเว็บอัปเดตเรียลไทม์เมื่อมีบิล/สลิป/คำขอ/ข่าวใหม่)
 -- ---------------------------------------------------------------------
@@ -715,9 +721,9 @@ on conflict (room_no) do nothing;
 -- เปิดใช้ extensions pg_cron และ pg_net ก่อน แล้วแก้ <PROJECT_REF> และ <SERVICE_ROLE_KEY> ก่อนรัน
 -- (เก็บคีย์ใน Vault จะปลอดภัยกว่า) เว็บจะสั่งส่งอีเมลให้เองทุกครั้งที่ผู้ดูแลออกบิล/อนุมัติ จึงไม่บังคับ
 -- ---------------------------------------------------------------------
--- select cron.schedule('send-email-sweep', '*/5 * * * *', $$
+-- select cron.schedule('resend-email-sweep', '*/5 * * * *', $$
 --   select net.http_post(
---     url := 'https://<PROJECT_REF>.supabase.co/functions/v1/send-email',
+--     url := 'https://<PROJECT_REF>.supabase.co/functions/v1/resend-email',
 --     headers := jsonb_build_object('Content-Type','application/json','Authorization','Bearer <SERVICE_ROLE_KEY>'),
 --     body := '{"sweep":true}'::jsonb);
 -- $$);
