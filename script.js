@@ -330,6 +330,15 @@
 ลงทะเบียนสำเร็จแล้ว รอผู้ดูแลจัดห้องพักให้ จึงจะมีใบแจ้งหนี้|Registered. Invoices will appear once the admin assigns your room
 ลงทะเบียนแล้วผู้ดูแลจะเป็นผู้จัดห้องพักให้ภายหลัง|After registering, the admin will assign your room
 ลงทะเบียนใหม่|Register
+ปฏิเสธสลิป|Reject slip
+ผู้เช่าจะเห็นเหตุผลนี้ในหน้าใบแจ้งหนี้ แล้วส่งสลิปใหม่ได้|The tenant will see this reason on the invoice page and can resend a slip
+ยืนยันปฏิเสธ|Confirm rejection
+รายละเอียดเพิ่มเติม (ไม่บังคับ)|Additional details (optional)
+กรุณาตรวจสอบแล้วส่งสลิปใหม่|Please check and resend the slip
+สลิปโอนเงินและใบเสร็จของผู้เช่า|Tenant payment slips & receipts
+สลิปที่ผู้เช่าส่งมาทุกห้อง และใบเสร็จเมื่อผู้ดูแลยืนยันการชำระแล้ว|Slips sent by tenants of every room, and receipts once the admin confirms payment
+วันที่แจ้งชำระ|Date notified
+ดูทั้งหมด (|View all (
 แก้ไขบิล|Edit invoice
 แก้ไข/ส่งสลิปใหม่|Edit / resend slip
 ส่งสลิปใหม่|Resend slip
@@ -918,7 +927,9 @@ const FL=[['all','ทั้งหมด'],['paid','ชำระแล้ว'],['
 const flt=()=>`<div class="fl">${FL.map(f=>`<button class="b ${F==f[0]?'':'b2'}" onclick="F='${f[0]}';R()">${f[1]}</button>`).join('')}</div>`;
 function tbl(){const q=Q.toLowerCase(),l=D.inv.filter(i=>(F=='all'||st(i)==F)&&(!q||(i.id+i.room+((tu(i)||{}).name||'')).toLowerCase().includes(q))).sort((a,b)=>b.per.localeCompare(a.per)||a.room-b.room);
  return`<div class="sc"><table><tr><th>เลขที่</th><th>ห้อง</th><th>ผู้เช่า</th><th>รอบบิล</th><th>ยอดสุทธิ</th><th>ครบกำหนด</th><th>วิธีชำระ</th><th>สถานะ</th><th></th></tr>${l.map(i=>{const s=st(i);return`<tr><td>${i.id}</td><td>${i.room}</td><td>${e((tu(i)||{}).name)}</td><td>${mon(i.per)}</td><td>฿${fm(tot(i))}</td><td>${dt(due(i))}</td><td>${i.mt=='qr'?'QR':i.mt=='cash'?'เงินสด':'-'}</td><td>${pill(i)}</td><td>${s=='pending'?`${i.slip?`<button class="b b2 sm" onclick="vs('${i.id}')">สลิป</button> `:''}<button class="b sm" onclick="ap('${i.id}',1)">อนุมัติ</button> <button class="b b2 sm" onclick="ap('${i.id}',0)">ปฏิเสธ</button>`:s=='paid'?`<button class="b b2 sm" onclick="rc('${i.id}')">ใบเสร็จ</button>`:`<button class="b b2 sm" onclick="vi('${i.id}')">ใบแจ้งหนี้</button> <button class="b b2 sm" onclick="cs('${i.id}')">รับเงินสด (เคาน์เตอร์)</button>`}</td></tr>`}).join('')||'<tr><td colspan=9 class=mu>ยังไม่มีรายการ</td></tr>'}</table></div>`}
-function ap(id,y){const i=gi(id);if(y){i.s='paid';i.paid=Date.now();i.rc=nrc();lg('อนุมัติ '+id);mail('rcp',i)}else{i.s='unpaid';i.fine=0;delete i.slip;delete i.mt;lg('ปฏิเสธ '+id)}save();R()}
+function ap(id,y){const i=gi(id);if(y){i.s='paid';i.paid=Date.now();i.rc=nrc();lg('อนุมัติ '+id);mail('rcp',i);save();R();return}
+ mo(`<h3>ปฏิเสธสลิป ${id}</h3><small class="mu">ผู้เช่าจะเห็นเหตุผลนี้ในหน้าใบแจ้งหนี้ แล้วส่งสลิปใหม่ได้</small><label>เหตุผล</label><select id="rj_s"><option value="">— เลือกเหตุผล —</option><option>ยอดเงินไม่ตรงกับใบแจ้งหนี้</option><option>สลิปไม่ชัดเจน อ่านข้อมูลไม่ได้</option><option>สลิปไม่ใช่ของรายการนี้หรือเป็นสลิปซ้ำ</option><option>ไม่พบยอดเงินเข้าบัญชี</option><option>อื่นๆ</option></select><label>รายละเอียดเพิ่มเติม (ไม่บังคับ)</label><input id="rj_t" maxlength="120"><div style="display:flex;gap:8px;margin-top:12px"><button class="b" onclick="apr('${id}')">ยืนยันปฏิเสธ</button><button class="b b2" onclick="cm()">ยกเลิก</button></div>`)}
+function apr(id){const i=gi(id),a=$('#rj_s').value,t=$('#rj_t').value.trim();if(!a)return alert('เลือกเหตุผลที่ปฏิเสธ');const rs=a+(t?' · '+t:'');i._rjr=rs;i.rj=rs;i.s='unpaid';i.fine=0;delete i.slip;delete i.mt;lg('ปฏิเสธ '+id+' ('+rs+')');save();cm();R()}
 function cs(id){const i=gi(id);cf('ยืนยันรับเงินสดห้อง '+i.room+' ยอด ฿'+fm(tot(i))+'?',()=>{i.fine=fine(i);i.mt='cash';i.sub=Date.now();i.s='paid';i.paid=Date.now();i.rc=nrc();lg('รับเงินสด '+id);save();mail('rcp',i);R()})}
 function vs(id){return mo(`<h3>สลิป ${id}</h3><img src="${gi(id).slip}" style="width:100%;border-radius:12px;margin:12px 0"><button class="b b2" onclick="cm()">ปิด</button>`)}
 const bar=(l,t,w,c)=>`<div class="bd"><small class="mu">${l}</small><b style="color:${c}">${t}</b></div><div class="pb"><i style="width:${w}%;background:${c}"></i></div>`,
@@ -1057,14 +1068,14 @@ function iss2(){let c=0;if(plock(PER))return alert(LKM(PER));
  if(c){lg('ออกบิล '+c+' ห้อง รอบ '+PER);save();D.inv.slice(-c).forEach(i=>mail('inv',i));tt('✓ ออกใบแจ้งหนี้ '+c+' ห้อง · เพิ่มคิวส่งอีเมลแล้ว');R()}else alert('ยังไม่ได้กรอกเลขมิเตอร์ใหม่')}
 // ---- tenant pages ----
 pg.my=()=>{const l=D.inv.filter(i=>mine(i)&&i.s!='paid');
- return`<h2>ใบแจ้งหนี้ของฉัน</h2><p class="mu">${U.room?'ห้อง '+U.room:'ยังไม่ได้จัดห้อง'} · ${e(U.name)}</p>${U.room?'':'<div class="note">⏳ ลงทะเบียนสำเร็จแล้ว รอผู้ดูแลจัดห้องพักให้ จึงจะมีใบแจ้งหนี้</div>'}<div class="note">💵 ชำระผ่าน PromptPay QR · หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div><div style="margin-top:14px;display:grid;gap:14px">${l.map(i=>{const s=st(i);return`<div class="cd"><div style="display:flex;justify-content:space-between"><b>${mon(i.per)}</b>${pill(i)}</div><div class="big">฿${fm(tot(i))}</div><div class="bd mu"><span>ค่าเช่า</span><span>฿${fm(i.rent)}</span></div><div class="bd mu"><span>ค่าไฟ ${i.u} หน่วย × ${D.set.rate}</span><span>฿${fm(i.el)}</span></div>${i.x?`<div class="bd mu"><span>${e(i.xn||'ค่าใช้จ่ายเพิ่มเติม')}</span><span>฿${fm(i.x)}</span></div>`:''}${tot(i)>base(i)?`<div class="bd" style="color:#fb7185"><span>ค่าปรับ</span><span>฿${fm(tot(i)-base(i))}</span></div>`:''}<p class="mu">ครบกำหนด ${dt(due(i))}</p>${i.s=='pending'?'<span class="mu">รอผู้ดูแลตรวจสอบ · ส่งสลิปผิดแก้ไขได้ก่อนผู้ดูแลยืนยัน</span> ':''}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="b" onclick="vi('${i.id}')">ดูใบแจ้งหนี้</button>${i.s=='pending'&&i.mt!='cash'?`<button class="b b2" onclick="pm('${i.id}')">แก้ไข/ส่งสลิปใหม่</button>`:''}</div></div>`}).join('')||'<div class="cd mu">ไม่มีบิลค้างชำระ 🎉</div>'}</div>`};
+ return`<h2>ใบแจ้งหนี้ของฉัน</h2><p class="mu">${U.room?'ห้อง '+U.room:'ยังไม่ได้จัดห้อง'} · ${e(U.name)}</p>${U.room?'':'<div class="note">⏳ ลงทะเบียนสำเร็จแล้ว รอผู้ดูแลจัดห้องพักให้ จึงจะมีใบแจ้งหนี้</div>'}<div class="note">💵 ชำระผ่าน PromptPay QR · หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div><div style="margin-top:14px;display:grid;gap:14px">${l.map(i=>{const s=st(i);return`<div class="cd"><div style="display:flex;justify-content:space-between"><b>${mon(i.per)}</b>${pill(i)}</div><div class="big">฿${fm(tot(i))}</div><div class="bd mu"><span>ค่าเช่า</span><span>฿${fm(i.rent)}</span></div><div class="bd mu"><span>ค่าไฟ ${i.u} หน่วย × ${D.set.rate}</span><span>฿${fm(i.el)}</span></div>${i.x?`<div class="bd mu"><span>${e(i.xn||'ค่าใช้จ่ายเพิ่มเติม')}</span><span>฿${fm(i.x)}</span></div>`:''}${tot(i)>base(i)?`<div class="bd" style="color:#fb7185"><span>ค่าปรับ</span><span>฿${fm(tot(i)-base(i))}</span></div>`:''}<p class="mu">ครบกำหนด ${dt(due(i))}</p>${i.s=='unpaid'&&i.rj?`<div class="note" style="background:#fee2e2;color:#b91c1c;border-color:#fecaca">⚠ สลิปถูกปฏิเสธ: ${e(i.rj)}<br>กรุณาตรวจสอบแล้วส่งสลิปใหม่</div>`:''}${i.s=='pending'?'<span class="mu">รอผู้ดูแลตรวจสอบ · ส่งสลิปผิดแก้ไขได้ก่อนผู้ดูแลยืนยัน</span> ':''}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="b" onclick="vi('${i.id}')">ดูใบแจ้งหนี้</button>${i.s=='pending'&&i.mt!='cash'?`<button class="b b2" onclick="pm('${i.id}')">แก้ไข/ส่งสลิปใหม่</button>`:''}</div></div>`}).join('')||'<div class="cd mu">ไม่มีบิลค้างชำระ 🎉</div>'}</div>`};
 pg.hist=()=>{const l=D.inv.filter(i=>mine(i)&&i.s=='paid');return`<h2>ประวัติ & ใบเสร็จ</h2><div class="cd sc" style="margin-top:14px"><table><tr><th>รอบบิล</th><th>ยอด</th><th>วันที่ชำระ</th><th></th></tr>${l.map(i=>`<tr><td>${mon(i.per)}</td><td>฿${fm(tot(i))}</td><td>${dt(i.paid)}</td><td><button class="b b2 sm" onclick="rc('${i.id}')">ใบเสร็จ</button></td></tr>`).join('')||'<tr><td colspan=4 class=mu>ยังไม่มีประวัติ</td></tr>'}</table></div>`};
 const fz=i=>i.s=='pending'?(i.fine||0):fine(i); // ส่งสลิปใหม่: ค่าปรับคงตามวันที่แจ้งชำระครั้งแรก
 function pm(id){const i=gi(id),pd=i.s=='pending',f=fz(i),t=base(i)+f;SLIP=null;
  mo(`<div class="mh"><h3>${pd?'แก้ไขสลิป · ส่งสลิปใหม่':'ชำระเงินผ่าน PromptPay'}</h3><span class="mu">${i.id}</span></div>
  <div class="amt"><small>ยอดที่ต้องชำระ</small><div class="big">฿${fm(t)}</div><small>ครบกำหนด ${dt(due(i))}${late(i)>0?` · <b style="color:#fb7185">เลยกำหนด ${late(i)} วัน</b>`:''}</small></div>
  <div class="bk"><div class="bd"><span>ค่าเช่า</span><span>฿${fm(i.rent)}</span></div><div class="bd"><span>ค่าไฟ ${i.u} หน่วย</span><span>฿${fm(i.el)}</span></div>${i.x?`<div class="bd"><span>${e(i.xn||'ค่าใช้จ่ายเพิ่มเติม')}</span><span>฿${fm(i.x)}</span></div>`:''}${f?`<div class="bd" style="color:#fb7185"><span>ค่าปรับ (นับถึงวันที่แจ้งชำระ)</span><span>฿${f}</span></div>`:''}</div>
- ${pd?'<div class="note">ผู้ดูแลยังไม่ได้ยืนยัน จึงส่งสลิปใหม่ได้ · เมื่อผู้ดูแลยืนยันแล้วจะแก้ไขไม่ได้</div>':''}<div class="st"><b>1</b> สแกน QR ด้วยแอปธนาคาร</div><div class="qrc"><div class="qr" id="qr"></div><small class="mu">ยอดเงินจะขึ้นอัตโนมัติ ไม่ต้องกรอกเอง</small></div>
+ ${pd?'<div class="note">ผู้ดูแลยังไม่ได้ยืนยัน จึงส่งสลิปใหม่ได้ · เมื่อผู้ดูแลยืนยันแล้วจะแก้ไขไม่ได้</div>':''}${!pd&&i.rj?`<div class="note" style="background:#fee2e2;color:#b91c1c;border-color:#fecaca">⚠ สลิปครั้งก่อนถูกปฏิเสธ: ${e(i.rj)}</div>`:''}<div class="st"><b>1</b> สแกน QR ด้วยแอปธนาคาร</div><div class="qrc"><div class="qr" id="qr"></div><small class="mu">ยอดเงินจะขึ้นอัตโนมัติ ไม่ต้องกรอกเอง</small></div>
  <div class="st"><b>2</b> อัปโหลดสลิปโอนเงิน (JPG/PNG)</div><input type="file" id="sf" accept="image/jpeg,image/png" onchange="sl(this)">
  <button class="b" style="width:100%" onclick="sub('${id}')">${pd?'ส่งสลิปใหม่':'แจ้งชำระเงิน'}</button>
  <div class="note">💵 หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div>
@@ -1074,9 +1085,9 @@ function tm(id){const i=gi(id);
 function sl(el){const f=el.files[0];if(!f)return;if(!/^image\/(jpeg|png)$/.test(f.type)||f.size>8e6){el.value='';return alert('รองรับเฉพาะ JPG/PNG ไม่เกิน 8MB')}
  const r=new FileReader;r.onload=()=>{const m=new Image;m.onload=()=>{const k=Math.min(1,800/Math.max(m.width,m.height)),c=document.createElement('canvas');c.width=m.width*k;c.height=m.height*k;c.getContext('2d').drawImage(m,0,0,c.width,c.height);SLIP=c.toDataURL('image/jpeg',.7)};m.src=r.result};r.readAsDataURL(f)}
 function sub(id){const i=gi(id);if(!SLIP)return alert('กรุณาอัปโหลดสลิปโอนเงิน');
- if(i.s!='pending')i.fine=fine(i);i.mt='qr';i.sub=Date.now();i.slip=SLIP;i.s='pending';lg('แจ้งชำระ '+id);save();cm();R();tt('✓ แจ้งชำระเงินแล้ว รอผู้ดูแลตรวจสอบ')}
+ if(i.s!='pending')i.fine=fine(i);delete i.rj;i.mt='qr';i.sub=Date.now();i.slip=SLIP;i.s='pending';lg('แจ้งชำระ '+id);save();cm();R();tt('✓ แจ้งชำระเงินแล้ว รอผู้ดูแลตรวจสอบ')}
 const ch=g=>{const k=Object.keys(g).sort().slice(-6),m=Math.max(1,...k.map(x=>g[x].t));return k.length?`<div class="cd" style="margin-top:14px"><h3>รายได้ 6 เดือนล่าสุด</h3><br>${k.map(x=>`<div class="bd"><small class="mu" style="width:110px">${mon(x)}</small><div class="pb" style="flex:1;margin:8px 10px"><i style="width:${Math.round(g[x].p/m*100)}%"></i></div><small>฿${fm(g[x].p)}</small></div>`).join('')}<small class="mu">แถบ = ยอดที่ชำระแล้วเทียบกับยอดรวมสูงสุดของเดือน</small></div>`:''};
-const nrc=()=>{const d=new Date();return 'RC'+d.getFullYear()+pad(d.getMonth()+1)+'-'+String(D.inv.filter(x=>x.rc).length+1).padStart(4,'0')};
+const nrc=()=>{if(SBON)return'(กำลังออกเลขที่)';const d=new Date();return 'RC'+d.getFullYear()+pad(d.getMonth()+1)+'-'+String(D.inv.filter(x=>x.rc).length+1).padStart(4,'0')};
 function bahtText(n){n=Math.round(n*100)/100;const N0=['ศูนย์','หนึ่ง','สอง','สาม','สี่','ห้า','หก','เจ็ด','แปด','เก้า'],PL=['','สิบ','ร้อย','พัน','หมื่น','แสน'];
  const rd=x=>{let r='';const t=String(x);for(let k=0;k<t.length;k++){const d=+t[k],p=t.length-k-1;if(!d)continue;if(p==1)r+=(d==1?'':d==2?'ยี่':N0[d])+'สิบ';else if(p==0)r+=(d==1&&t.length>1?'เอ็ด':N0[d]);else r+=N0[d]+PL[p]}return r},
  mm=x=>x<1e6?rd(x):mm(Math.floor(x/1e6))+'ล้าน'+(x%1e6?rd(x%1e6):''),b=Math.floor(n),sa=Math.round((n-b)*100);
@@ -1095,9 +1106,10 @@ function rcpHTML(i){const S=D.set,u=tu(i)||{},nm=S.name||'T&T Mansion',pe=S.paye
 <div style="background:#f1f5f9;border-radius:10px;padding:12px;margin:16px 0 0"><span style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#16a34a;color:#fff;text-align:center;line-height:18px;font-size:11px;margin-right:8px">✓</span>ได้รับชำระเงินเรียบร้อยแล้ว<div style="color:#475569;margin:4px 0 0 26px;font-size:12px">วิธีชำระ: ${i.mt=='qr'?'โอนเงิน (PromptPay)':'เงินสด'}</div></div>
 <table style="width:100%;border-collapse:collapse"><tr>${sg(u.name||'-','ผู้จ่ายเงิน')}${sg(pe,'ผู้รับเงิน')}</tr></table>
 <div style="text-align:center;font-size:11px;color:#94a3b8;margin-top:14px">ขอบคุณที่ใช้บริการ ${e(nm)}</div></div>`}
-let RCA=0;
-function rcTable(){const L=D.inv.filter(i=>i.s=='paid').sort((a,b)=>(b.paid||0)-(a.paid||0)),V=RCA?L:L.slice(0,20);
- return`<div class="cd sc" style="margin-top:14px"><h3 style="margin-bottom:6px">ใบเสร็จรับเงินของผู้เช่า</h3><small class="mu">ใบเสร็จที่ออกให้ผู้เช่าเมื่อผู้ดูแลยืนยันการชำระ</small><table style="margin-top:10px"><tr><th>เลขที่ใบเสร็จ</th><th>ห้อง</th><th>ผู้เช่า</th><th>รอบบิล</th><th>ยอด</th><th>วันที่ชำระ</th><th></th></tr>${V.map(i=>{const u=tu(i)||{};return`<tr><td>${e(i.rc||'-')}</td><td>${e(i.room)}</td><td>${e(u.name||'-')}</td><td>${mon(i.per)}</td><td>฿${fm(tot(i))}</td><td>${dt(i.paid)}</td><td><button class="b b2 sm" onclick="rc('${i.id}')">ใบเสร็จ</button></td></tr>`}).join('')||'<tr><td colspan=7 class=mu>ยังไม่มีใบเสร็จ</td></tr>'}</table>${!RCA&&L.length>20?`<div style="margin-top:10px"><button class="b b2 sm" onclick="RCA=1;R()">ดูทั้งหมด (${L.length} ใบ)</button></div>`:''}</div>`}
+let RCA=0,RCF='all';
+function rcTable(){const all=D.inv.filter(i=>i.slip||i.s=='paid'),L=all.filter(i=>RCF=='all'||st(i)==RCF).sort((a,b)=>(b.sub||b.paid||0)-(a.sub||a.paid||0)),V=RCA?L:L.slice(0,20),
+ fb=(k,t)=>`<button class="b ${RCF==k?'':'b2'} sm" onclick="RCF='${k}';RCA=0;R()">${t}</button>`;
+ return`<div class="cd sc" style="margin-top:14px"><h3 style="margin-bottom:6px">สลิปโอนเงินและใบเสร็จของผู้เช่า</h3><small class="mu">สลิปที่ผู้เช่าส่งมาทุกห้อง และใบเสร็จเมื่อผู้ดูแลยืนยันการชำระแล้ว</small><div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">${fb('all','ทั้งหมด')}${fb('pending','รอตรวจสอบ')}${fb('paid','ชำระแล้ว')}</div><table><tr><th>ห้อง</th><th>ผู้เช่า</th><th>รอบบิล</th><th>ยอด</th><th>ช่องทาง</th><th>วันที่แจ้งชำระ</th><th>สถานะ</th><th></th></tr>${V.map(i=>{const u=tu(i)||{};return`<tr><td>${e(i.room)}</td><td>${e(u.name||'-')}</td><td>${mon(i.per)}</td><td>฿${fm(tot(i))}</td><td>${i.mt=='qr'?'QR':i.mt=='cash'?'เงินสด':'-'}</td><td>${i.sub?dt(i.sub):'-'}</td><td>${pill(i)}</td><td style="white-space:nowrap">${i.slip?`<button class="b b2 sm" onclick="vs('${i.id}')">สลิป</button> `:''}${i.s=='paid'?`<button class="b b2 sm" onclick="rc('${i.id}')">ใบเสร็จ</button>`:''}</td></tr>`}).join('')||'<tr><td colspan=8 class=mu>ยังไม่มีรายการ</td></tr>'}</table>${!RCA&&L.length>20?`<div style="margin-top:10px"><button class="b b2 sm" onclick="RCA=1;R()">ดูทั้งหมด (${L.length} รายการ)</button></div>`:''}</div>`}
 function rc(id){const i=gi(id);if(i.s=='paid'&&!i.rc&&U.role!='owner'){i.rc=nrc();save()}mo(`<div id="rcimg" style="background:#fff;padding:2px;border-radius:14px">${rcpHTML(i)}</div><br><div class="np" style="display:flex;gap:8px;flex-wrap:wrap"><button class="b gr" onclick="si('${id}')">⬇ บันทึกรูปใบเสร็จ</button>${innerWidth>800?'<button class="b b2" onclick="try{window.print()}catch(x){}">พิมพ์</button>':''}<button class="b b2" onclick="cm()">ปิด</button></div>`);if(innerWidth>800)$('#mc').style.maxWidth='560px'}
 async function si(id){const i=gi(id),el=$('#rcimg');if(!window.html2canvas)return alert('โหลดตัวสร้างรูปไม่สำเร็จ กรุณารีเฟรชหน้าแล้วลองใหม่');tt('กำลังสร้างรูปใบเสร็จ...');
  try{const c=await html2canvas(el,{scale:2,backgroundColor:'#ffffff'}),blob=await new Promise(r=>c.toBlob(r,'image/png')),fn='receipt-'+(i.rc||id)+'.png';let dl=null;try{dl=window.claude&&await claude.use('downloads')}catch(x){}
@@ -1265,6 +1277,8 @@ async function sbLoad(){
    p=(pmBy[v.id]||[]).filter(x=>x.verify_status!='rejected').sort((a,b)=>String(b.submitted_at).localeCompare(String(a.submitted_at)))[0];
   const i={id:v.code,room:rn(c0.room_id),uid:tn0.app_id==null?undefined:+tn0.app_id,per:v.billing_month,pv:+m.previous_reading||0,u:+m.units_used||0,el:+(g('electricity')||{}).amount||0,x:+(g('other')||{}).amount||0,xn:(g('other')||{}).description||'',rent:+(g('rent')||{}).amount||0,fine:+(g('fine')||{}).amount||0,s:v.status=='overdue'?'unpaid':v.status,iss:tsv(v.created_at),_id:v.id,_cid:v.contract_id,_mid:m.id};
   if(p){i.mt=p.payment_method;i.sub=tsv(p.submitted_at);if(p.slip_url)i.slip=p.slip_url;if(p.receipt_no)i.rc=p.receipt_no;if(p.verify_status=='approved')i.paid=tsv(p.paid_at||p.verified_at);i._pid=p.id}
+  const rjp=(pmBy[v.id]||[]).filter(x=>x.verify_status=='rejected').sort((a,b)=>String(b.submitted_at).localeCompare(String(a.submitted_at)))[0];
+  if(!p&&rjp&&i.s=='unpaid')i.rj=rjp.reject_reason||'ไม่ระบุเหตุผล';
   return i});
  D.tk=[];for(const t of tk){let imgs=[];if((t.image_paths||[]).length){const r=await c.storage.from('attachments').createSignedUrls(t.image_paths,3600);imgs=((r&&r.data)||[]).map(x=>x.signedUrl).filter(Boolean)}
   const a0=D.users.find(x=>x._uid==t.author_id);D.tk.push({id:t.code,uid:a0?a0.id:null,name:t.author_name,room:t.author_room?+t.author_room:null,cat:t.category,title:t.title,body:t.body,imgs,imgp:t.image_paths||[],t:tsv(t.created_at),s:t.status,reply:t.admin_reply||undefined,rby:t.replied_by||undefined,rt:tsv(t.replied_at),_id:t.id,_au:t.author_id})}
@@ -1299,7 +1313,7 @@ function sbRows(){
   g('electricity',{invoice_id:i._id,item_type:'electricity',meter_reading_id:i._mid||null,description:null,amount:i.el});
   if(i.x)g('other',{invoice_id:i._id,item_type:'other',description:i.xn||null,amount:i.x});
   if(i.fine)g('fine',{invoice_id:i._id,item_type:'fine',description:null,amount:i.fine});
-  if(i._pid&&(i.mt||i.slip||i.s=='paid'))A('payments',i._pid,{id:i._pid,invoice_id:i._id,receipt_no:i.rc||null,payment_method:i.mt||'cash',slip_url:i.slip||null,amount_paid:base(i)+(i.fine||0),verify_status:i.s=='paid'?'approved':'pending',submitted_at:ISO(i.sub),paid_at:i.paid?ISO(i.paid):null,verified_at:i.paid?ISO(i.paid):null})});
+  if(i._pid&&(i.mt||i.slip||i.s=='paid'))A('payments',i._pid,{id:i._pid,invoice_id:i._id,receipt_no:(i.rc&&i.rc[0]!='(')?i.rc:null,payment_method:i.mt||'cash',slip_url:i.slip||null,amount_paid:base(i)+(i.fine||0),verify_status:i.s=='paid'?'approved':'pending',submitted_at:ISO(i.sub),paid_at:i.paid?ISO(i.paid):null,verified_at:i.paid?ISO(i.paid):null})});
  D.tk.forEach(t=>{if(t._id)A('support_tickets',t._id,{id:t._id,code:t.id,author_id:t._au,author_name:t.name||null,author_room:t.room?String(t.room):null,category:t.cat,title:t.title,body:t.body,status:t.s,admin_reply:t.reply||null,replied_by:t.rby||null,replied_at:t.rt?ISO(t.rt):null,image_paths:t.imgp||[],created_at:ISO(t.t)})});
  D.news.forEach(n=>{if(n._id)A('news',n._id,{id:n._id,title:n.title,body:n.body,author_name:n.by||null,created_at:ISO(n.t)})});
  return o;
@@ -1309,7 +1323,7 @@ const sbFlush=()=>{clearTimeout(SBX.t);return SBX.q=SBX.q.then(sbPush).catch(er=
 function sbSync(){clearTimeout(SBX.t);SBX.t=setTimeout(()=>{SBX.q=SBX.q.then(sbPush).catch(er=>tt('⚠ บันทึกไม่สำเร็จ: '+(er.message||er)))},250)}
 async function sbPush(){
  if(!U||!SBX.cl)return;sbPrep();
- const c=SBX.cl,now=sbRows(),old=SBX.snap,ad=U.role=='admin';let mailTrig=false;
+ const c=SBX.cl,now=sbRows(),old=SBX.snap,ad=U.role=='admin';let mailTrig=false,payChg=false;
  const ok=(t,k)=>ad||(t=='users'?k==SBX.uid:t=='tenants'?k==U._tid:t=='support_tickets'?now[t][k].author_id==SBX.uid:false);
  const sel=(b,t,k)=>{if(t=='invoice_items'){const[a,y]=k.split(':');return b.eq('invoice_id',a).eq('item_type',y)}return b.eq('id',k)};
  const upd=async(t,k,row)=>{const r=await sel(c.from(t).update(row),t,k);if(r.error)throw r.error};
@@ -1320,13 +1334,14 @@ async function sbPush(){
   for(const k of ks){if(!ok(t,k))continue;const row=nr[k];
    if(!(k in or)){if(t=='users'||t=='tenants')continue;
     const r=await c.from(t).insert(row);if(r.error){if(r.error.code=='23505')await upd(t,k,row);else throw r.error}
-    if(t=='invoices')mailTrig=true}
-   else if(JSON.stringify(or[k])!==JSON.stringify(row)){await upd(t,k,row);if(t=='payments'&&row.verify_status=='approved')mailTrig=true}}
+    if(t=='invoices')mailTrig=true;if(t=='payments')payChg=true}
+   else if(JSON.stringify(or[k])!==JSON.stringify(row)){await upd(t,k,row);if(t=='payments'){payChg=true;if(row.verify_status=='approved')mailTrig=true}}}
   if(ad)for(const k in or){if(k in nr)continue;
-   if(t=='payments'){await upd(t,k,{verify_status:'rejected'});const v=D.inv.find(x=>x._pid==k);if(v)delete v._pid}
+   if(t=='payments'){const v=D.inv.find(x=>x._pid==k);await upd(t,k,{verify_status:'rejected',reject_reason:(v&&v._rjr)||null});payChg=true;if(v){delete v._pid;delete v._rjr}}
    else if(t=='invoice_items'){const[a,y]=k.split(':'),r=await c.from(t).delete().eq('invoice_id',a).eq('item_type',y);if(r.error)throw r.error}
    else if(t=='news'){const r=await c.from(t).delete().eq('id',k);if(r.error)throw r.error}}}
  SBX.snap=sbRows();
+ if(payChg&&ad)setTimeout(()=>{if(U)sbRefresh()},1200); // โหลดเลขใบเสร็จที่ฐานข้อมูลออกให้
  if(mailTrig&&ad)c.functions.invoke('resend-email',{body:{sweep:true}}).then(()=>setTimeout(()=>{if(U)sbRefresh()},3000)).catch(()=>{});
 }
 function sbAudit(a){if(SBX.cl&&SBX.uid&&U)SBX.cl.from('audit_logs').insert({actor_id:SBX.uid,actor_name:U.name,action:a}).then(()=>{})}
@@ -1398,7 +1413,7 @@ if(SBON){
   const{error}=await SBX.cl.rpc('submit_payment',{p_invoice:i._id,p_slip:path});if(error)return alert(error.message);
   lg((pd?'ส่งสลิปใหม่ ':'แจ้งชำระ ')+id);cm();await sbLoad();R();tt(pd?'✓ ส่งสลิปใหม่แล้ว รอผู้ดูแลตรวจสอบ':'✓ แจ้งชำระเงินแล้ว รอผู้ดูแลตรวจสอบ')};
  vs=async function(id){
-  const i=gi(id);let src=i.slip;if(src&&!/^data:/.test(src)){const r=await SBX.cl.storage.from('slips').createSignedUrl(src,600);src=r.data&&r.data.signedUrl}
+  const i=gi(id);let src=i.slip;if(src&&!/^data:/.test(src)){const r=await SBX.cl.storage.from('slips').createSignedUrl(src,600);src=r.data&&r.data.signedUrl;if(!src)return alert('เปิดสลิปไม่สำเร็จ')}
   mo(`<h3>สลิป ${id}</h3><img src="${src}" style="width:100%;border-radius:12px;margin:12px 0"><button class="b b2" onclick="cm()">ปิด</button>`)};
  cpf=async function(el){
   const f=el.files[0];el.value='';if(!f)return;if(f.type!='application/pdf'&&!/\.pdf$/i.test(f.name))return alert('รองรับเฉพาะไฟล์ PDF');if(f.size>5*1024*1024)return alert('ไฟล์ใหญ่เกิน 5MB');
