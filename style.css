@@ -4037,3 +4037,131 @@ img, svg, video, canvas { max-width: 100%; }
     .rt .b { margin: 2px 0 }
 }
 @media(min-width:1200px) { .mn { max-width: 1400px } }
+
+
+/* =====================================================================
+   UI POLISH LAYER — ชั้นตกแต่งเพิ่มเติม (ไม่ลบ/ไม่แก้กฎเดิมด้านบน)
+   ใช้สีและตัวแปรเดิมของธีม (--ac, --ln, --cd, --tx, --mu) จึงเข้ากับทั้งธีมสว่าง (แดง-ขาว) และธีมมืด
+   ถ้าต้องการยกเลิกทั้งหมด: ลบตั้งแต่บรรทัดนี้ถึงท้ายไฟล์ แล้วลบบล็อก "UI POLISH LAYER" ท้าย script.js
+   ===================================================================== */
+:root {
+    --ease: cubic-bezier(.22, .8, .3, 1);
+    --t-fast: .15s;
+    --t: .22s;
+    --ring: color-mix(in srgb, var(--ac) 24%, transparent);
+    --sh1: 0 1px 2px rgba(17, 24, 39, .05), 0 6px 20px rgba(220, 38, 38, .07);
+    --sh2: 0 2px 6px rgba(17, 24, 39, .07), 0 16px 38px rgba(220, 38, 38, .15)
+}
+html[data-theme=dark] {
+    --sh1: 0 1px 2px rgba(0, 0, 0, .45), 0 8px 24px rgba(0, 0, 0, .35);
+    --sh2: 0 2px 6px rgba(0, 0, 0, .5), 0 18px 42px rgba(0, 0, 0, .55)
+}
+body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility }
+::selection { background: color-mix(in srgb, var(--ac) 26%, transparent) }
+.sc { scrollbar-width: thin }
+button, .b, .nv, .tabs span, .seg span, .mm { -webkit-tap-highlight-color: transparent }
+
+/* ---------- จังหวะแอนิเมชัน (ใช้เฉพาะ transform/opacity เพื่อให้ลื่น) ---------- */
+@keyframes ttm-fade { from { opacity: 0 } to { opacity: 1 } }
+@keyframes ttm-rise { from { opacity: 0; transform: translateY(12px) } to { opacity: 1; transform: none } }
+@keyframes ttm-pop { from { opacity: 0; transform: translateY(8px) scale(.96) } to { opacity: 1; transform: none } }
+@keyframes ttm-drop { from { opacity: 0; transform: translateY(-6px) scale(.98) } to { opacity: 1; transform: none } }
+@keyframes ttm-spin { to { transform: rotate(360deg) } }
+@keyframes ttm-rp { to { transform: scale(1); opacity: 0 } }
+@keyframes ttm-grow { from { transform: scaleX(0) } to { transform: scaleX(1) } }
+@keyframes ttm-tso { to { opacity: 0; transform: translate(-50%, -46%) scale(.96) } }
+@keyframes ttm-pulse { 0%, 100% { opacity: 1 } 50% { opacity: .35 } }
+
+/* ---------- ปุ่ม: hover ยกตัว / กดแล้วยุบ / โฟกัสชัด / กำลังประมวลผล ---------- */
+.b { --bs: #dc262640; transition: transform var(--t-fast) var(--ease), box-shadow var(--t) var(--ease), filter var(--t), background-color var(--t), border-color var(--t), color var(--t) }
+.b.gr { --bs: #16a34a40 }
+.b.lgb { --bs: #06c75540 }
+html[data-theme=dark] .b { --bs: rgba(225, 29, 72, .38) }
+.b:not(.b2):hover { transform: translateY(-2px); filter: brightness(1.06) saturate(1.05); box-shadow: 0 10px 26px var(--bs) }
+.b2:hover { transform: translateY(-1px); box-shadow: 0 6px 16px color-mix(in srgb, var(--ac) 14%, transparent) }
+.b:active, .b2:active { transform: translateY(0) scale(.97); filter: brightness(.96); transition-duration: .08s }
+.b:focus-visible, .hb:focus-visible, .nv:focus-visible, .tabs span:focus-visible, .mdd button:focus-visible { outline: 0; box-shadow: 0 0 0 3px var(--ring) }
+.b[disabled], .b.is-loading { cursor: not-allowed; opacity: .72; transform: none; filter: none }
+.b.is-loading { cursor: progress; pointer-events: none }
+.b.is-loading::before { content: ""; display: inline-block; width: 14px; height: 14px; margin-right: 8px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: ttm-spin .7s linear infinite; vertical-align: -2px }
+.hb { transition: transform var(--t-fast) var(--ease), background-color var(--t), border-color var(--t), color var(--t) }
+.hb:hover { transform: translateY(-1px) }
+.hb:active { transform: scale(.97) }
+.ttm-rel { position: relative }
+.rpc { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; pointer-events: none }
+.rp { position: absolute; border-radius: 50%; background: currentColor; opacity: .2; transform: scale(0); animation: ttm-rp .55s var(--ease) forwards }
+
+/* ---------- การ์ดและกล่องข้อมูล ---------- */
+.cd { box-shadow: var(--sh1); background-image: linear-gradient(180deg, color-mix(in srgb, var(--ac) 3%, transparent), transparent 46%); transition: box-shadow var(--t) var(--ease), border-color var(--t), transform var(--t) var(--ease) }
+.cd:hover { box-shadow: var(--sh2) }
+#mo .cd, #dg .cd { box-shadow: 0 24px 70px rgba(0, 0, 0, .28) }
+#mo .cd:hover, #dg .cd:hover { box-shadow: 0 24px 70px rgba(0, 0, 0, .28); transform: none }
+.dg3 .cd, .dg3b .cd, .g4 .cd { position: relative; overflow: hidden }
+.dg3 .cd::before, .dg3b .cd::before, .g4 .cd::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: linear-gradient(90deg, var(--ac), transparent 80%); opacity: .85 }
+.k, .big { font-variant-numeric: tabular-nums }
+.pb i { transform-origin: left; animation: ttm-grow .8s var(--ease) both }
+.pl { font-weight: 600; letter-spacing: .01em; transition: background-color var(--t), border-color var(--t), color var(--t) }
+.pl.y::before { animation: ttm-pulse 1.8s ease-in-out infinite }
+.rm { transition: transform var(--t-fast) var(--ease), border-color var(--t), box-shadow var(--t) var(--ease), background-color var(--t) }
+@media (hover: hover) {
+    .dg3 .cd:hover, .dg3b .cd:hover, .g4 .cd:hover, .cd[onclick]:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--ac) 38%, var(--ln)) }
+    .rm:hover { transform: translateY(-2px); box-shadow: var(--sh1); border-color: color-mix(in srgb, var(--ac) 45%, var(--ln)) }
+    .cd[onclick] { cursor: pointer }
+}
+
+/* ---------- เมนู / แท็บ / Dropdown ---------- */
+.nv { transition: background-color var(--t-fast), color var(--t-fast), box-shadow var(--t) var(--ease), border-color var(--t-fast), transform var(--t-fast) var(--ease) }
+.nv:active { transform: scale(.97) }
+@media (hover: hover) and (min-width: 901px) { .nv:hover { transform: translateX(3px) } }
+.tabs span, .seg span, .mm { transition: color var(--t-fast), background-color var(--t-fast), border-color var(--t-fast) }
+.tabs span { cursor: pointer }
+.tabs span:hover { color: var(--ac) }
+.seg span:hover:not(.on) { color: var(--ac) }
+.mdd.open { animation: ttm-drop .16s var(--ease) both; transform-origin: top }
+.mdd button { transition: background-color var(--t-fast), color var(--t-fast), padding-left var(--t-fast) var(--ease) }
+.mdd button:hover { padding-left: 16px }
+
+/* ---------- ตาราง ---------- */
+th { font-size: 12px; font-weight: 600; letter-spacing: .02em; background: color-mix(in srgb, var(--ac) 4%, var(--cd)) }
+td { transition: background-color var(--t-fast) }
+tr:hover td { background: color-mix(in srgb, var(--ac) 6%, transparent) }
+.doc tr:hover td { background: none }
+.doc th { background: none; font-weight: inherit; letter-spacing: normal }
+
+/* ---------- ฟอร์ม / ช่องค้นหา / ตัวกรอง ---------- */
+input, select, textarea { transition: border-color var(--t-fast), box-shadow var(--t-fast), background-color var(--t-fast) }
+input:hover, select:hover, textarea:hover { border-color: color-mix(in srgb, var(--ac) 38%, var(--ln)) }
+input:focus, select:focus, textarea:focus { border-color: var(--ac); box-shadow: 0 0 0 3px var(--ring) }
+label { letter-spacing: .01em }
+
+/* ---------- หน้าต่าง (Modal / Dialog) ---------- */
+#mo, #dg { animation: ttm-fade .2s ease both }
+#mo .cd, #dg .cd { animation: ttm-pop .26s var(--ease) both }
+
+/* ---------- Toast ---------- */
+.ts { display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 18px 50px rgba(0, 0, 0, .28); animation: tsi .26s var(--ease) both, ttm-tso .3s ease 2.65s forwards }
+.ts[data-k]::before { flex: none; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 800; color: #fff; line-height: 1 }
+.ts[data-k=ok]::before { content: "✓"; background: #16a34a }
+.ts[data-k=er]::before { content: "!"; background: #f59e0b }
+
+/* ---------- แอนิเมชันเข้าหน้า (เล่นเฉพาะตอนเปลี่ยนหน้า — JS เป็นผู้เปิดคลาส) ---------- */
+body.ttm-js .mn > * { animation: none }
+body.ttm-js.ttm-enter .mn > * { animation: ttm-rise .42s var(--ease) both }
+body.ttm-js.ttm-enter .mn > :nth-child(2) { animation-delay: .05s }
+body.ttm-js.ttm-enter .mn > :nth-child(3) { animation-delay: .10s }
+body.ttm-js.ttm-enter .mn > :nth-child(4) { animation-delay: .15s }
+body.ttm-js.ttm-enter .mn > :nth-child(5) { animation-delay: .20s }
+body.ttm-js.ttm-enter .mn > :nth-child(n+6) { animation-delay: .25s }
+body.ttm-js.ttm-enter .g4 > .cd, body.ttm-js.ttm-enter .dg3 > .cd, body.ttm-js.ttm-enter .dg3b > .cd { animation: ttm-rise .5s var(--ease) both }
+body.ttm-js.ttm-enter .g4 > .cd:nth-child(2), body.ttm-js.ttm-enter .dg3 > .cd:nth-child(2), body.ttm-js.ttm-enter .dg3b > .cd:nth-child(2) { animation-delay: .08s }
+body.ttm-js.ttm-enter .g4 > .cd:nth-child(3), body.ttm-js.ttm-enter .dg3 > .cd:nth-child(3), body.ttm-js.ttm-enter .dg3b > .cd:nth-child(3) { animation-delay: .16s }
+body.ttm-js.ttm-enter .g4 > .cd:nth-child(4) { animation-delay: .24s }
+
+/* ---------- เคารพการตั้งค่าลดการเคลื่อนไหว / พิมพ์ ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .rp, .rpc { display: none }
+}
+@media print {
+    *, *::before, *::after { animation: none !important; transition: none !important }
+    .rpc { display: none }
+}
