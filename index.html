@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>T&T Mansion Payment System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>try{var d=document.documentElement,t=localStorage.getItem('ttm_theme');if(t)d.dataset.theme=t;var mc=document.createElement('meta');mc.name='theme-color';mc.content=(t==='dark')?'#16171a':'#f8f6f5';document.head.appendChild(mc);var p=JSON.parse(localStorage.getItem('ttm_pf')||'{}');if(p.lang)d.lang=p.lang;var s=localStorage.getItem('ttm_sb');if(s==='1'||(s===null&&innerWidth<1100))d.classList.add('sb-mini')}catch(e){}</script>
+    <!-- CSS: โหลดเรียงตามเลข (ลำดับมีผลต่อการทับกันของสไตล์ ห้ามสลับ) -->
+    <link rel="stylesheet" href="css/01_base_layout.css">
+    <link rel="stylesheet" href="css/02_modal_responsive_print.css">
+    <link rel="stylesheet" href="css/03_hover_cards_receipt.css">
+    <link rel="stylesheet" href="css/04_landing_visuals.css">
+    <link rel="stylesheet" href="css/05_landing_responsive.css">
+    <link rel="stylesheet" href="css/06_auth_forms_dialog.css">
+    <link rel="stylesheet" href="css/07_landing_tweaks.css">
+    <link rel="stylesheet" href="css/08_theme_light.css">
+    <link rel="stylesheet" href="css/09_landing_habio.css">
+    <link rel="stylesheet" href="css/10_landing_phone_band.css">
+    <link rel="stylesheet" href="css/11_dashboard.css">
+    <link rel="stylesheet" href="css/12_landing_dash_preview.css">
+    <link rel="stylesheet" href="css/13_rooms_tenants_report.css">
+    <link rel="stylesheet" href="css/14_help_news.css">
+    <link rel="stylesheet" href="css/15_lang_theme_switch.css">
+    <link rel="stylesheet" href="css/16_theme_dark.css">
+    <link rel="stylesheet" href="css/17_landing_buttons_preview.css">
+    <link rel="stylesheet" href="css/18_mobile_first.css">
+    <link rel="stylesheet" href="css/19_animations.css">
+    <link rel="stylesheet" href="css/20_ui_polish_v2.css">
+    <link rel="stylesheet" href="css/21_theme_smooth.css">
+    <link rel="stylesheet" href="css/22_typography.css">
+    <link rel="stylesheet" href="css/23_help_line.css">
+    <link rel="stylesheet" href="css/24_responsive_devices.css">
+</head>
+
+<body>
+    <div id="app"></div>
+    <div id="mo" onclick="if(event.target==this)cm()">
+        <div class="cd" id="mc"></div>
+    </div>
+    <div id="dg"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- JS: โหลดเรียงตามเลข (ลำดับมีผล ห้ามสลับ) -->
+    <script src="js/01_logo_favicon.js"></script>
+    <script src="js/02_globals_prefs.js"></script>
+    <script src="js/03_i18n_dictionary.js"></script>
+    <script src="js/04_i18n_apply_prefs.js"></script>
+    <script src="js/05_supabase_config.js"></script>
+    <script src="js/06_data_storage_seed.js"></script>
+    <script src="js/07_helpers_billing.js"></script>
+    <script src="js/08_promptpay_qr.js"></script>
+    <script src="js/09_state_ui_helpers.js"></script>
+    <script src="js/10_pages_public_auth.js"></script>
+    <script src="js/11_admin_payments_report.js"></script>
+    <script src="js/12_admin_pages_forms.js"></script>
+    <script src="js/13_public_stats_dashboard.js"></script>
+    <script src="js/14_admin_meter_billing.js"></script>
+    <script src="js/15_tenant_pay_receipt.js"></script>
+    <script src="js/16_profile_documents_mail.js"></script>
+    <script src="js/17_help_news_contacts.js"></script>
+    <script src="js/18_shell_render_v2_helpers.js"></script>
+    <script src="js/19_supabase_boot.js"></script>
+    <script src="js/20_supabase_load_rows.js"></script>
+    <script src="js/21_supabase_save_audit.js"></script>
+    <script src="js/22_supabase_realtime_hooks.js"></script>
+    <script src="js/23_ui_polish_effects.js"></script>
+    <script src="js/24_v2_runtime.js"></script>
+</body>
+
+</html>
