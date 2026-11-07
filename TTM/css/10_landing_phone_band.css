@@ -1,0 +1,150 @@
+/* 10_landing_phone_band.css — หน้าต้อนรับ: โทรศัพท์ + แถบมืด
+   (แยกมาจาก style.css บรรทัด 2382-2529; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
+/* landing: phone + dark band */
+
+.pv {
+    border-radius: 18px;
+    border-bottom: 1px solid var(--ln);
+    margin: 0
+}
+
+.pvw {
+    position: relative;
+    z-index: 3;
+    max-width: 820px;
+    margin: 46px auto 0
+}
+
+.ph {
+    position: absolute;
+    right: -30px;
+    bottom: -44px;
+    width: 150px;
+    height: 300px;
+    border: 6px solid #111827;
+    border-radius: 28px;
+    background: #fff;
+    box-shadow: 0 20px 50px #0005;
+    overflow: hidden;
+    text-align: center
+}
+
+.phh {
+    background: linear-gradient(135deg, #ef4444, #b91c1c);
+    color: #fff;
+    padding: 20px 10px 12px;
+    font-size: 12px
+}
+
+.phb {
+    padding: 12px 10px;
+    display: grid;
+    gap: 8px;
+    font-size: 11px;
+    color: #6b7280
+}
+
+.phb b {
+    font-size: 20px;
+    color: #dc2626
+}
+
+.phq {
+    width: 84px;
+    height: 84px;
+    margin: 0 auto;
+    border: 5px solid #fff;
+    outline: 1px solid #eee;
+    background: repeating-conic-gradient(#111827 0 25%, #fff 0 50%) 0 0/10px 10px
+}
+
+.phb span {
+    background: #dc2626;
+    color: #fff;
+    border-radius: 99px;
+    padding: 7px;
+    font-weight: 700
+}
+
+.hdk {
+    background: #3b0d0d;
+    color: #fff;
+    margin-top: -120px;
+    padding: 190px 20px 40px;
+    text-align: center;
+    position: relative;
+    z-index: 1
+}
+
+.hs3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr)
+}
+
+.hs3>div {
+    display: grid;
+    gap: 6px;
+    justify-items: center;
+    padding: 10px 20px;
+    border-right: 1px solid #ffffff22
+}
+
+.hs3>div:last-child {
+    border: 0
+}
+
+.hs3 i {
+    font-style: normal;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #7f1d1d;
+    color: #fca5a5;
+    display: grid;
+    place-items: center
+}
+
+.hs3 b {
+    font-size: clamp(26px, 4vw, 40px);
+    color: #fca5a5
+}
+
+.hs3 small {
+    color: #fecaca
+}
+
+.hdn {
+    font-size: 11px;
+    color: #fca5a580;
+    margin-top: 26px
+}
+
+.hcr {
+    background: #fff7f2;
+    padding-bottom: 20px
+}
+
+@media(max-width:700px) {
+    .ph {
+        width: 96px;
+        height: 200px;
+        right: -6px;
+        bottom: -30px;
+        border-width: 4px
+    }
+    .phq {
+        width: 54px;
+        height: 54px
+    }
+    .hs3 {
+        grid-template-columns: 1fr
+    }
+    .hs3>div {
+        border-right: 0;
+        border-bottom: 1px solid #ffffff22
+    }
+    .hdk {
+        margin-top: -90px;
+        padding-top: 150px
+    }
+}

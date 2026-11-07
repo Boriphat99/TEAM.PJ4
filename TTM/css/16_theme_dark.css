@@ -1,0 +1,511 @@
+/* 16_theme_dark.css — ธีมมืด (ดำ-ทับทิม)
+   (แยกมาจาก style.css บรรทัด 3336-3844; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
+/* ===== Dark theme (black + ruby) ===== */
+
+html[data-theme=dark] {
+    color-scheme: dark;
+    --bg: #0b0a0c;
+    --cd: #141114;
+    --ln: #2a2226;
+    --tx: #f2eef0;
+    --mu: #a69ca1;
+    --ac: #ff5c7a;
+    scrollbar-color: #3a2e34 #0b0a0c
+}
+
+html[data-theme=dark],
+html[data-theme=dark] body {
+    background: #0b0a0c;
+    color: var(--tx)
+}
+
+html[data-theme=dark] body {
+    background: radial-gradient(900px 520px at 10% -8%, rgba(190, 18, 60, .22) 0, transparent 62%), radial-gradient(700px 420px at 100% 0, rgba(120, 10, 40, .16) 0, transparent 60%), #0b0a0c
+}
+
+html[data-theme=dark] .b {
+    background: linear-gradient(135deg, #e11d48, #be123c);
+    box-shadow: 0 6px 22px rgba(225, 29, 72, .30)
+}
+
+html[data-theme=dark] .b.gr {
+    background: linear-gradient(135deg, #22c55e, #16a34a)
+}
+
+html[data-theme=dark] .b.lgb {
+    background: #06c755
+}
+
+html[data-theme=dark] .b2 {
+    background: #1a1519;
+    color: var(--tx);
+    border-color: #33292e;
+    box-shadow: none
+}
+
+html[data-theme=dark] .b2:hover {
+    border-color: #e11d48;
+    color: #ff8da1
+}
+
+html[data-theme=dark] input,
+html[data-theme=dark] select,
+html[data-theme=dark] textarea {
+    background: #0e0b0d;
+    border-color: #302830;
+    color: var(--tx)
+}
+
+html[data-theme=dark] input::placeholder,
+html[data-theme=dark] textarea::placeholder {
+    color: #6f6268
+}
+
+html[data-theme=dark] input:focus,
+html[data-theme=dark] select:focus,
+html[data-theme=dark] textarea:focus {
+    border-color: #e11d48;
+    box-shadow: 0 0 0 3px rgba(225, 29, 72, .25)
+}
+
+html[data-theme=dark] .cd {
+    background: linear-gradient(180deg, #1a1519, #141114);
+    border-color: var(--ln);
+    box-shadow: 0 10px 32px rgba(0, 0, 0, .5)
+}
+
+html[data-theme=dark] .rc2,
+html[data-theme=dark] .fxc,
+html[data-theme=dark] .tp,
+html[data-theme=dark] .mdd,
+html[data-theme=dark] .ln2,
+html[data-theme=dark] .tg,
+html[data-theme=dark] .hch span,
+html[data-theme=dark] .pvf,
+html[data-theme=dark] .pv,
+html[data-theme=dark] .mt3>div,
+html[data-theme=dark] .po,
+html[data-theme=dark] .pt2>div,
+html[data-theme=dark] .dy {
+    background: #191418;
+    border-color: var(--ln)
+}
+
+html[data-theme=dark] .seg {
+    background: #141114
+}
+
+html[data-theme=dark] .seg span {
+    color: #a69ca1
+}
+
+html[data-theme=dark] .seg .on {
+    background: #e11d48;
+    color: #fff
+}
+
+html[data-theme=dark] .sb {
+    background: #0f0c0e!important;
+    border-color: #231c20
+}
+
+html[data-theme=dark] .nv {
+    color: #b3a9ae
+}
+
+html[data-theme=dark] .nv:hover {
+    background: #1a1519
+}
+
+html[data-theme=dark] .nv.on {
+    background: rgba(225, 29, 72, .14);
+    border-color: rgba(225, 29, 72, .40);
+    color: #ff8da1;
+    box-shadow: inset 3px 0 0 #e11d48
+}
+
+html[data-theme=dark] .logo i,
+html[data-theme=dark] .sp b,
+html[data-theme=dark] .st b {
+    background: #e11d48
+}
+
+html[data-theme=dark] .ac,
+html[data-theme=dark] .big {
+    color: #ff5c7a
+}
+
+html[data-theme=dark] .pl.g {
+    color: #4ade80;
+    background: rgba(34, 197, 94, .13);
+    border-color: rgba(34, 197, 94, .32)
+}
+
+html[data-theme=dark] .pl.y {
+    color: #fbbf24;
+    background: rgba(245, 158, 11, .13);
+    border-color: rgba(245, 158, 11, .32)
+}
+
+html[data-theme=dark] .pl.r {
+    color: #ff8da1;
+    background: rgba(225, 29, 72, .15);
+    border-color: rgba(225, 29, 72, .38)
+}
+
+html[data-theme=dark] .pl.p {
+    color: #c4b5fd;
+    background: rgba(139, 92, 246, .16);
+    border-color: rgba(139, 92, 246, .35)
+}
+
+html[data-theme=dark] .pl[style] {
+    background: rgba(160, 150, 156, .14)!important;
+    color: #b3a9ae!important;
+    border-color: rgba(160, 150, 156, .3)!important
+}
+
+html[data-theme=dark] .ci {
+    background: rgba(225, 29, 72, .15)!important;
+    color: #ff8da1!important
+}
+
+html[data-theme=dark] .amt {
+    background: rgba(225, 29, 72, .1);
+    border-color: rgba(225, 29, 72, .32)
+}
+
+html[data-theme=dark] .bk {
+    background: rgba(225, 29, 72, .12)
+}
+
+html[data-theme=dark] .note {
+    background: rgba(245, 158, 11, .1);
+    border-color: rgba(245, 158, 11, .3);
+    color: #fcd34d
+}
+
+html[data-theme=dark] .ts {
+    background: #2a2126;
+    color: #fff;
+    border: 1px solid #42343b
+}
+
+html[data-theme=dark] .pb {
+    background: #2a2226
+}
+
+html[data-theme=dark] .pb i {
+    background: linear-gradient(90deg, #fb3a5d, #be123c)
+}
+
+html[data-theme=dark] .av {
+    background: linear-gradient(135deg, #f43f5e, #be123c);
+    box-shadow: 0 0 0 2px rgba(225, 29, 72, .4)
+}
+
+html[data-theme=dark] .ib {
+    background: rgba(225, 29, 72, .14);
+    border-color: rgba(225, 29, 72, .38)
+}
+
+html[data-theme=dark] tr:hover td {
+    background: rgba(225, 29, 72, .07)
+}
+
+html[data-theme=dark] .rm {
+    background: #141114
+}
+
+html[data-theme=dark] .rm.o {
+    background: rgba(225, 29, 72, .13);
+    border-color: rgba(225, 29, 72, .38);
+    color: #ff8da1
+}
+
+html[data-theme=dark] .rm.m {
+    background: rgba(245, 158, 11, .12);
+    border-color: rgba(245, 158, 11, .3);
+    color: #fbbf24
+}
+
+html[data-theme=dark] .tabs .on {
+    color: #ff5c7a;
+    border-color: #e11d48
+}
+
+html[data-theme=dark] .mm:hover {
+    background: rgba(225, 29, 72, .12)
+}
+
+html[data-theme=dark] .mdd button {
+    color: #d6cdd1
+}
+
+html[data-theme=dark] .mdd button:hover {
+    background: rgba(225, 29, 72, .14);
+    color: #ff8da1
+}
+
+html[data-theme=dark] .sq .hot {
+    background: rgba(225, 29, 72, .1)
+}
+
+html[data-theme=dark] .live {
+    background: linear-gradient(160deg, rgba(225, 29, 72, .16), #141114 70%)
+}
+
+html[data-theme=dark] .tl2 {
+    background: rgba(34, 197, 94, .1);
+    border-color: rgba(34, 197, 94, .3)
+}
+
+html[data-theme=dark] .tl3 {
+    background: rgba(245, 158, 11, .1);
+    border-color: rgba(245, 158, 11, .3)
+}
+
+html[data-theme=dark] .tl4 {
+    background: rgba(225, 29, 72, .1);
+    border-color: rgba(225, 29, 72, .32)
+}
+
+html[data-theme=dark] .tsw.on {
+    border: 1px solid #42343b;
+    box-sizing: border-box;
+    background: #241c21
+}
+
+html[data-theme=dark] .lq {
+    background: #0e0b0d;
+    border-color: #42343b
+}
+
+html[data-theme=dark] .lq img {
+    background: #fff;
+    border-radius: 8px
+}
+
+html[data-theme=dark] .pchip {
+    background: rgba(225, 29, 72, .12);
+    border-color: rgba(225, 29, 72, .38);
+    color: #ff8da1
+}
+
+html[data-theme=dark] .tg {
+    color: #b3a9ae
+}
+
+html[data-theme=dark] .hch span {
+    color: #e6dde1
+}
+
+html[data-theme=dark] .mu {
+    color: var(--mu)
+}
+
+html[data-theme=dark] #mo,
+html[data-theme=dark] #dg {
+    background: rgba(5, 3, 4, .7)
+}
+
+html[data-theme=dark] #mo .cd {
+    background: #1a1519;
+    color: var(--tx)
+}
+
+html[data-theme=dark] .doc {
+    background: #fff!important;
+    color: #0f172a!important
+}
+
+html[data-theme=dark] [style*="color:#15803d"] {
+    color: #4ade80!important
+}
+
+html[data-theme=dark] [style*="color:#a16207"] {
+    color: #fbbf24!important
+}
+
+html[data-theme=dark] [style*="color:#b91c1c"] {
+    color: #ff8da1!important
+}
+
+html[data-theme=dark] [style*="color:#dc2626"] {
+    color: #ff5c7a!important
+}
+
+html[data-theme=dark] [style*="background:#dc2626"] {
+    background: #e11d48!important
+}
+
+html[data-theme=dark] [style*="background:#fff1f1"] {
+    background: rgba(225, 29, 72, .12)!important
+}
+
+html[data-theme=dark] svg text[fill="#1f2937"] {
+    fill: #f2eef0
+}
+
+html[data-theme=dark] svg text[fill="#6b7280"] {
+    fill: #a69ca1
+}
+
+html[data-theme=dark] svg text[fill="#9ca3af"] {
+    fill: #857a80
+}
+
+html[data-theme=dark] svg line[stroke="#f3dcdc"] {
+    stroke: #2c2327
+}
+
+html[data-theme=dark] svg circle[stroke="#fee2e2"] {
+    stroke: #2c2327
+}
+
+html[data-theme=dark] svg circle[fill="#fff"] {
+    fill: #141114
+}
+
+html[data-theme=dark] svg circle[stroke="#fff"] {
+    stroke: #141114
+}
+
+html[data-theme=dark] svg [stroke="#dc2626"] {
+    stroke: #e11d48
+}
+
+html[data-theme=dark] svg circle[fill="#dc2626"],
+html[data-theme=dark] svg path[fill="#dc2626"] {
+    fill: #e11d48
+}
+
+html[data-theme=dark] svg stop[stop-color="#dc2626"] {
+    stop-color: #e11d48
+}
+
+html[data-theme=dark] .hp {
+    background: linear-gradient(180deg, #1d0b12 0, #0b0a0c 720px)
+}
+
+html[data-theme=dark] .hn {
+    background: rgba(11, 10, 12, .88)
+}
+
+html[data-theme=dark] .hl a {
+    color: #cfc5ca
+}
+
+html[data-theme=dark] .hl a.on,
+html[data-theme=dark] .hl a:hover {
+    color: #ff5c7a
+}
+
+html[data-theme=dark] .hb {
+    color: #f2eef0
+}
+
+html[data-theme=dark] .hh h1 {
+    color: #f6f2f4
+}
+
+html[data-theme=dark] .hh h1 em {
+    color: #ff5c7a;
+    box-shadow: inset 0 -.16em 0 rgba(225, 29, 72, .38)
+}
+
+html[data-theme=dark] .pvb {
+    background: #130f12
+}
+
+html[data-theme=dark] .pvsb {
+    background: #0f0c0e
+}
+
+html[data-theme=dark] .pvx {
+    background: #0c0a0c
+}
+
+html[data-theme=dark] .pvs {
+    color: #b3a9ae
+}
+
+html[data-theme=dark] .pvs .on,
+html[data-theme=dark] .pvr .o {
+    background: rgba(225, 29, 72, .14);
+    color: #ff8da1;
+    border-color: rgba(225, 29, 72, .38)
+}
+
+html[data-theme=dark] .pvr span {
+    background: #191418
+}
+
+html[data-theme=dark] .pvr b {
+    color: #f2eef0
+}
+
+html[data-theme=dark] .pv {
+    box-shadow: 0 30px 80px rgba(0, 0, 0, .6)
+}
+
+html[data-theme=dark] .fxc i {
+    background: rgba(225, 29, 72, .15)
+}
+
+html[data-theme=dark] .fxc:hover,
+html[data-theme=dark] .rc2:hover {
+    border-color: #e11d48
+}
+
+html[data-theme=dark] .hcr {
+    background: #0f0c0e
+}
+
+html[data-theme=dark] .hdk {
+    background: linear-gradient(180deg, #2a0a14, #14060b)
+}
+
+html[data-theme=dark] .hs3 i {
+    background: #4a0f22;
+    color: #ff8da1
+}
+
+html[data-theme=dark] .hs3 b {
+    color: #ff8da1
+}
+
+html[data-theme=dark] .ph {
+    border-color: #050304;
+    background: #141114
+}
+
+html[data-theme=dark] .pnb {
+    background: #141114;
+    border-color: var(--ln)
+}
+
+html[data-theme=dark] .phb2 {
+    background: #0f0c0e
+}
+
+html[data-theme=dark] .phh,
+html[data-theme=dark] .phh2 {
+    background: linear-gradient(160deg, #7a0f2b, #e11d48)
+}
+
+html[data-theme=dark] .phb span {
+    background: #e11d48
+}
+
+html[data-theme=dark] .pnb .on {
+    color: #ff5c7a
+}
+
+html[data-theme=dark] .wrap.au .gc {
+    background: #0c0a0c
+}
+
+html[data-theme=dark] .wrap.au .al {
+    background: linear-gradient(160deg, #2a0610, #7a0f2b 55%, #c2183f)
+}

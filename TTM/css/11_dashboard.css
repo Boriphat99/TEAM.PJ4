@@ -1,0 +1,157 @@
+/* 11_dashboard.css — แดชบอร์ด + tooltip กราฟ
+   (แยกมาจาก style.css บรรทัด 2530-2684; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
+/* dashboard */
+
+.dg3 {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 1.15fr;
+    gap: 14px;
+    margin: 14px 0
+}
+
+.dg3b {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 12px 0
+}
+
+.dg2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 14px 0
+}
+
+.ri {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 12px 0
+}
+
+.sq {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0;
+    overflow: hidden
+}
+
+.sq>div {
+    padding: 18px 20px
+}
+
+.sq>div:nth-child(-n+2) {
+    border-bottom: 1px solid var(--ln)
+}
+
+.sq>div:nth-child(odd) {
+    border-right: 1px solid var(--ln)
+}
+
+.sq .hot {
+    background: #fff1f2
+}
+
+.live {
+    background: linear-gradient(160deg, #fff1f1, #fff)
+}
+
+.mt3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 12px 0
+}
+
+.mt3>div {
+    background: #fff;
+    border: 1px solid var(--ln);
+    border-radius: 12px;
+    padding: 8px 10px
+}
+
+.mt3 small {
+    display: block;
+    color: var(--mu);
+    font-size: 11px
+}
+
+.mt3 b {
+    color: #dc2626;
+    font-size: 15px
+}
+
+.dt {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%
+}
+
+.dy {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    border: 1px solid var(--ln);
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    color: #dc2626;
+    flex: none
+}
+
+.rch {
+    border: 1px solid var(--ln);
+    border-radius: 6px;
+    padding: 1px 6px;
+    font-size: 11px;
+    color: var(--mu)
+}
+
+@media(max-width:1000px) {
+    .dg3,
+    .dg3b,
+    .dg2,
+    .ri {
+        grid-template-columns: 1fr
+    }
+}
+/* chart tooltip */
+
+.cw {
+    position: relative;
+    touch-action: pan-y
+}
+
+.tp {
+    display: none;
+    position: absolute;
+    background: #fff;
+    border: 1px solid var(--ln);
+    border-radius: 12px;
+    padding: 10px 14px;
+    box-shadow: 0 10px 30px #0002;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 5;
+    font-size: 13px
+}
+
+.tp>b {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 4px
+}
+
+.tp i {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    margin-right: 8px
+}
+
+.tp div b {
+    margin-left: 18px
+}

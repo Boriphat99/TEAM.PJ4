@@ -1,0 +1,195 @@
+/* 13_rooms_tenants_report.css — ห้องพัก ผู้เช่า รายงาน
+   (แยกมาจาก style.css บรรทัด 2914-3106; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
+/* rooms / tenants / report (Habio-style) */
+
+.hd2 {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 18px
+}
+
+.pchip {
+    display: inline-block;
+    font-size: 12px;
+    color: #b91c1c;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 99px;
+    padding: 3px 12px
+}
+
+.tb2 {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap
+}
+
+.tb2 input,
+.tb2 select {
+    margin: 0;
+    width: auto;
+    min-width: 160px
+}
+
+.rgc {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 12px
+}
+
+.rc2 {
+    background: #fff;
+    border: 1px solid var(--ln);
+    border-radius: 16px;
+    padding: 16px;
+    display: grid;
+    gap: 8px;
+    transition: .2s
+}
+
+.rc2:hover {
+    border-color: #f87171;
+    box-shadow: 0 8px 24px #dc262614
+}
+
+.rh2,
+.fh,
+.tn2,
+.tc {
+    display: flex;
+    gap: 8px;
+    align-items: center
+}
+
+.rc2 .bd {
+    font-size: 13px
+}
+
+.rc2 .b {
+    width: 100%;
+    margin-top: 4px
+}
+
+.tg {
+    display: inline-flex;
+    gap: 4px;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 99px;
+    border: 1px solid var(--ln);
+    background: #fff;
+    color: #4b5563
+}
+
+.s4c {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin: 14px 0
+}
+
+.s4c .k {
+    margin: 4px 0
+}
+
+.tl2 {
+    background: #f0fdf4;
+    border-color: #bbf7d0
+}
+
+.tl3 {
+    background: #fffbeb;
+    border-color: #fde68a
+}
+
+.tl4 {
+    background: #fff1f2;
+    border-color: #fecaca
+}
+
+.ptr {
+    cursor: pointer
+}
+
+.ro .rmb {
+    display: none
+}
+
+.mm {
+    position: relative;
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-weight: 700
+}
+
+.mm:hover {
+    background: #fef2f2
+}
+
+.mdd {
+    display: none;
+    position: fixed;
+    z-index: 60;
+    background: #fff;
+    border: 1px solid var(--ln);
+    border-radius: 12px;
+    box-shadow: 0 12px 30px #0002;
+    padding: 6px;
+    min-width: 160px;
+    text-align: left
+}
+
+.mdd.open {
+    display: grid
+}
+
+.mdd button {
+    background: none;
+    border: 0;
+    text-align: left;
+    padding: 9px 12px;
+    border-radius: 8px;
+    font: 600 13px Anuphan, sans-serif;
+    cursor: pointer;
+    color: #374151
+}
+
+.mdd button:hover {
+    background: #fef2f2;
+    color: #dc2626
+}
+
+@media(max-width:1000px) {
+    .rgc {
+        grid-template-columns: 1fr 1fr
+    }
+    .s4c {
+        grid-template-columns: 1fr 1fr
+    }
+}
+
+@media(max-width:560px) {
+    .rgc {
+        grid-template-columns: 1fr
+    }
+}
+
+@media print {
+    body.pr .mn,
+    body.pr .mn * {
+        visibility: visible
+    }
+    body.pr .mn {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%
+    }
+    body.pr .np {
+        display: none
+    }
+}
