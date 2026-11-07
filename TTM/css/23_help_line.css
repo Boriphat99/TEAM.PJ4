@@ -1,0 +1,33 @@
+/* 23_help_line.css — การ์ด LINE ในหน้า "ช่วยเหลือ": จัดข้อความ/ปุ่มให้ตรงกัน ทุกขนาดจอ
+   (ไฟล์ใหม่ · ทำงานคู่กับ markup ใหม่ใน js/17_help_news_contacts.js) */
+.ln2 { background: var(--cd); border: 1px solid var(--ln); border-radius: var(--r-lg, 20px); box-shadow: var(--sh1); overflow: hidden }
+.lnh { display: flex; align-items: center; gap: 10px; background: #06c755; color: #fff; padding: 13px 22px; font-size: 15px; line-height: 1.3 }
+.lnh b { display: inline; color: inherit; font-weight: 600; padding: 0; background: none }
+.lnh .lni { display: grid; place-items: center; width: 22px; height: 22px; flex: none; font-style: normal }
+.lnh svg { width: 22px; height: 22px }
+.lnb { display: flex; flex-wrap: wrap; align-items: center; gap: 22px 30px; padding: 24px }
+.lq { width: 150px; height: 150px; flex: none; display: grid; place-items: center; text-align: center; padding: 8px;
+      font-size: 12.5px; line-height: 1.55; color: var(--mu); background: color-mix(in srgb, var(--bg) 70%, var(--cd)); border: 2px dashed var(--ln); border-radius: 14px; overflow: hidden }
+.lq img { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; background: #fff }
+.lnx { flex: 1 1 240px; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 4px }
+.lnx > * { margin: 0 }
+.lid { color: #06c755; font-size: clamp(20px, 2.6vw, 25px); line-height: 1.3; word-break: break-all; letter-spacing: 0 }
+.lns { font-size: 13.5px; line-height: 1.5 }
+.lnt { font-size: 14px; line-height: 1.6; margin-top: 6px !important }
+.lna { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 12px !important }
+.lna .b { margin: 0; white-space: nowrap }
+
+/* ปุ่มลิงก์ (<a class="b">) ต้องจัดข้อความกึ่งกลางเหมือนปุ่มทั่วไป (เดิมมี display:inline-block ทำให้ตัวหนังสือตกไปบนสุด) */
+a.b { display: inline-flex !important; align-items: center; justify-content: center; text-decoration: none }
+.b.lgb { background: #06c755; color: #fff; border: 0; min-height: 42px; padding: 0 22px }
+.b.lgb:hover { background: #05b34c; color: #fff }
+html[data-theme=dark] .b.lgb { color: #fff }
+
+/* มือถือ: เรียงแนวตั้ง จัดกึ่งกลาง ปุ่มเต็มความกว้าง */
+@media (max-width: 640px) {
+    .lnb { flex-direction: column; text-align: center; gap: 16px; padding: 20px 16px }
+    .lq { width: min(62vw, 210px); height: min(62vw, 210px) }
+    .lnx { align-items: center; flex: none; width: 100% }
+    .lna { justify-content: center; width: 100% }
+    .lna .b { flex: 1 1 100% }
+}

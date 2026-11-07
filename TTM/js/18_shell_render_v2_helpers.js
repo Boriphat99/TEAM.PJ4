@@ -32,7 +32,32 @@ const IG={'⌂':IC.rooms,'▥':IC.con,'◔':IC.met,'▤':IC.my,'฿':IC.pay,'☰
 const T2=s=>LANG=='en'?tl(s):s;
 const THB=()=>`<button class="thm" type="button" onclick="toggleTheme()" aria-label="Theme" data-tip="${T2('สลับธีม')}">${IC.sun}${IC.moon}</button>`;
 const TGL=c=>`<span class="tgl ${c||''}"><span class="seg"><span class="${LANG=='th'?'on':''}" onclick="setPf('lang','th')">TH</span><span class="${LANG=='en'?'on':''}" onclick="setPf('lang','en')">EN</span></span>${THB()}</span>`;
-function applyTheme(v){THEME=v;const r=document.documentElement;r.classList.add('theme-anim');r.dataset.theme=v;try{localStorage.setItem('ttm_theme',v)}catch(x){}syncThemeUI();clearTimeout(applyTheme.t);applyTheme.t=setTimeout(()=>r.classList.remove('theme-anim'),500)}
+function applyTheme(v){
+  /* สลับธีมแบบ cross-fade ทั้งหน้า (View Transitions) -> เนียนเท่ากันทุกองค์ประกอบ รวมถึงพื้นหลังไล่สี
+     ถ้าเบราว์เซอร์ไม่รองรับ หรือผู้ใช้ตั้งลดการเคลื่อนไหว จะใช้ transition สีแบบเดียวกันทั้งหน้าแทน */
+  const r=document.documentElement;
+  if(r.dataset.theme===v&&THEME===v)return;
+  THEME=v;
+  const commit=()=>{
+    r.dataset.theme=v;
+    try{localStorage.setItem('ttm_theme',v)}catch(x){}
+    let mt=document.querySelector('meta[name=theme-color]');
+    if(!mt){mt=document.createElement('meta');mt.name='theme-color';document.head.appendChild(mt)}
+    mt.content=v=='dark'?'#16171a':'#f8f6f5';
+    syncThemeUI()
+  };
+  const calm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(document.startViewTransition&&!calm){
+    clearTimeout(applyTheme.t);
+    r.classList.remove('theme-anim');
+    r.classList.add('theme-vt');
+    let t;try{t=document.startViewTransition(commit)}catch(x){t=null}
+    if(t){const done=()=>r.classList.remove('theme-vt');t.finished.then(done,done);return}
+    r.classList.remove('theme-vt')
+  }
+  r.classList.add('theme-anim');commit();
+  clearTimeout(applyTheme.t);applyTheme.t=setTimeout(()=>r.classList.remove('theme-anim'),520)
+}
 function toggleTheme(){applyTheme(THEME=='dark'?'light':'dark')}
 function syncThemeUI(){const dk=THEME=='dark';document.querySelectorAll('.tsw').forEach(el=>{el.classList.toggle('on',dk);el.setAttribute('onclick',"setPf('theme','"+(dk?'light':'dark')+"')");const b=el.previousElementSibling;if(b&&b.tagName=='B')b.textContent=dk?'โหมดกลางคืน':'โหมดกลางวัน'});document.querySelectorAll('.thm').forEach(b=>b.setAttribute('aria-pressed',dk))}
 function toggleSb(){const m=document.documentElement.classList.toggle('sb-mini');try{localStorage.setItem('ttm_sb',m?'1':'0')}catch(x){}}
