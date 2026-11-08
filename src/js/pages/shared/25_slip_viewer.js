@@ -56,7 +56,7 @@ async function vsl(id) {
         ${U && U.role == 'admin' && i.s == 'pending' && typeof ap == 'function' ? `<button class="b" onclick="cm();ap('${id}')">อนุมัติ</button>` : ''}
         <button class="b" onclick="cm()">ปิด</button></div>`;
     const body = i.slip
-        ? `<div class="slv-img"><div class="slv-ld">กำลังโหลดรูปสลิป…</div><img id="slvimg" alt="สลิปโอนเงินห้อง ${e(i.room)}" style="display:none"></div>`
+        ? `<div class="slv-img"><div class="slv-ld">กำลังโหลดรูปสลิป…</div><img id="slvimg" decoding="async" alt="สลิปโอนเงินห้อง ${e(i.room)}" style="display:none"></div>`
         : `<div class="slv-none">${i.mt == 'cash' ? '💵 ชำระเป็นเงินสดที่เคาน์เตอร์ — ไม่มีสลิปโอนเงิน' : 'ผู้เช่ายังไม่ได้ส่งสลิปโอนเงินสำหรับบิลนี้'}</div>`;
     mo(`<h3>สลิปโอนเงินที่ผู้เช่าส่งมา</h3><small class="mu">${e(i.id)}</small>${body}${info}${btns}`);
     if (innerWidth > 800) $('#mc').style.maxWidth = '520px';

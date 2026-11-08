@@ -403,11 +403,12 @@ img.slt:hover { transform: scale(1.06); box-shadow: var(--sh2) }
 .slv-info b { font-weight: 600; overflow-wrap: anywhere }
 .slv-info .pl { align-self: flex-start }
 
-/* ===================== 21) มือถือ: แถบบน (โปรไฟล์ ธีม ภาษา ออกจากระบบ) ชิดขวา ทุกบทบาท ===================== */
+/* ===================== 21) มือถือ: แถบบน — โปรไฟล์ชิดซ้าย, ธีม/ภาษา/ออกจากระบบชิดขวา ทุกบทบาท ===================== */
 @media (max-width: 800px) {
     .top { justify-content: flex-end !important; flex-wrap: wrap }
     .top > span[style*="flex:1"] { display: none }
-    .top .me { margin-left: auto }
+    /* โปรไฟล์อยู่ซ้าย · ธีม ภาษา ออกจากระบบ อยู่ขวา */
+    .top .me { margin-left: 0; margin-right: auto; order: 0 }
     .top input { order: 9; flex: 1 1 100% }
 }
 
@@ -427,3 +428,24 @@ img.slt:hover { transform: scale(1.06); box-shadow: var(--sh2) }
 /* เจ้าของ (โหมดอ่านอย่างเดียว .ro): ซ่อนปุ่มแก้ไขเหมือนเดิม แต่ให้เห็นปุ่ม "ดูสลิป / ใบเสร็จ" และการ์ดลัด "สลิปโอนเงินของผู้เช่า" */
 .ro table .b.rok { display: inline-flex !important }
 .ro .cd.nv.rok { display: block !important; cursor: pointer }
+
+/* ===================== 23) มือถือ: ให้เลื่อนดูลื่น (โดยเฉพาะหน้าต่างดูสลิปและตารางสลิปของเจ้าของ) =====================
+   สาเหตุที่เลื่อนช้าบน iPhone: พื้นหลังแบบ fixed + เบลอฉากหลัง (backdrop-filter) ใต้หน้าต่างป๊อปอัปและแถบเมนู
+   + รูปย่อที่มีแอนิเมชันวิ่งตลอด ทำให้เครื่องต้องวาดหน้าจอใหม่ทุกเฟรมขณะเลื่อน */
+@media (max-width: 800px), (pointer: coarse) {
+    body, html[data-theme=dark] body { background-attachment: scroll !important }
+    body::before { display: none !important }
+    #mo, #dg { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; background: rgba(18, 10, 13, .62) !important }
+    #mo .cd { -webkit-overflow-scrolling: touch; overscroll-behavior: contain; transform: translateZ(0); box-shadow: 0 -10px 30px rgba(0, 0, 0, .25) !important }
+    .top.is-scrolled, .hn, html[data-theme=dark] .hn { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; background: color-mix(in srgb, var(--bg) 96%, transparent) !important }
+    .sb, html[data-theme=dark] .sb { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; background: var(--cd) !important }
+    img.slt, img.slt:not([src]) { animation: none !important; box-shadow: none; transition: none }
+    img.slt:hover { transform: none }
+    .cd { transition: none }
+}
+/* เปิดหน้าต่างป๊อปอัปแล้วล็อกหน้าเว็บด้านหลังไม่ให้เลื่อนตาม */
+html:has(#mo[style*="flex"]), html:has(#mo[style*="flex"]) body { overflow: hidden }
+@media (max-width: 800px) {
+    .slv-img { min-height: 0 }
+    .slv-img img { max-height: 46vh }
+}
