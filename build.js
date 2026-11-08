@@ -14,12 +14,18 @@ const cat = (files) => files.map((f) => {
 }).join('');
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });
-fs.writeFileSync(path.join(OUT, 'style.css'), cat(css));
-fs.writeFileSync(path.join(OUT, 'script.js'), cat(js));
+const CSS = cat(css), JS = cat(js);
+fs.writeFileSync(path.join(OUT, 'style.css'), CSS);
+fs.writeFileSync(path.join(OUT, 'script.js'), JS);
+// เลขเวอร์ชันจากเนื้อหาไฟล์ (?v=...) — มือถือจะโหลดไฟล์ใหม่ทันทีที่อัปเดต ไม่ค้างเวอร์ชันเก่าในแคช
+const ver = require('crypto').createHash('sha1').update(CSS + JS).digest('hex').slice(0, 8);
+// คัดลอกไฟล์ประกอบ (ไอคอนแอป, manifest) จาก src/static → dist/static
+const ST = path.join(SRC, 'static');
+if (fs.existsSync(ST)) { fs.mkdirSync(path.join(OUT, 'static'), { recursive: true }); for (const f of fs.readdirSync(ST)) fs.copyFileSync(path.join(ST, f), path.join(OUT, 'static', f)) }
 let out = html
-  .replace(/(\s*<link rel="stylesheet" href="(?!https?:)[^"]+">)+/, '\n    <link rel="stylesheet" href="style.css">')
-  .replace(/(\s*<script src="(?!https?:)[^"]+"><\/script>)+/, '\n    <script src="script.js"></script>')
+  .replace(/(\s*<link rel="stylesheet" href="(?!https?:)[^"]+">)+/, '\n    <link rel="stylesheet" href="style.css?v=' + ver + '">')
+  .replace(/(\s*<script src="(?!https?:)[^"]+"><\/script>)+/, '\n    <script src="script.js?v=' + ver + '"></script>')
   .replace(/<!-- (CSS|JS):[^>]*-->\s*/g, '');
 fs.writeFileSync(path.join(OUT, 'index.html'), out);
 console.log(`สร้าง dist/ สำเร็จ: CSS ${css.length} ไฟล์ + JS ${js.length} ไฟล์ -> style.css, script.js, index.html`);
-console.log('อัปโหลดทั้ง 3 ไฟล์ใน dist/ ไปที่รากของ repo (GitHub Pages)');
+console.log('เวอร์ชัน ' + ver + ' · อัปโหลดไฟล์ใน dist/ (index.html, style.css, script.js และโฟลเดอร์ static/) ไปที่รากของ repo (GitHub Pages)');

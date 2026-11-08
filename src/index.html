@@ -5,6 +5,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>T&T Mansion Payment System</title>
+    <meta name="description" content="ระบบชำระค่าบริการหอพัก T&T แมนชั่น — ดูบิล สแกนจ่าย PromptPay แนบสลิป ออนไลน์">
+    <link rel="manifest" href="static/manifest.webmanifest">
+    <link rel="apple-touch-icon" href="static/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="T&T Mansion">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="preconnect" href="https://hpliogcnsxtnrvuyykzd.supabase.co" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&family=Noto+Serif+Thai:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -44,7 +54,7 @@
     </div>
     <div id="dg"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- html2canvas โหลดเมื่อกดบันทึกรูปใบเสร็จ (ดู js/effects/27_ux_polish.js) -->
     <!-- JS: โหลดเรียงตามเลข (ลำดับมีผล ห้ามสลับ) -->
     <script src="js/core/01_logo_favicon.js"></script>
     <script src="js/core/02_globals_prefs.js"></script>
@@ -72,6 +82,7 @@
     <script src="js/effects/24_v2_runtime.js"></script>
     <script src="js/pages/shared/25_slip_viewer.js"></script>
     <script src="js/pages/admin/26_add_tenant.js"></script>
+    <script src="js/effects/27_ux_polish.js"></script>
 </body>
 
 </html>
