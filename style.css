@@ -5016,3 +5016,49 @@ html[data-theme=dark] .big, html[data-theme=dark] .ac { color: var(--ac3) }
     .hl { gap: 18px }
 }
 
+/* ===================== 19) แก้จุดทับกัน/ล้นจอ (ตรวจด้วยสคริปต์ทุกหน้า 360–1440px) ===================== */
+/* เส้นแดงหนาใต้ข้อความหัวเรื่อง (มาจากกฎธีมมืดเดิม box-shadow inset) */
+.hh h1 em, html[data-theme=dark] .hh h1 em { box-shadow: none !important; text-decoration: none !important }
+
+/* หัวเว็บหน้าแรกบนมือถือ: โลโก้ทับปุ่ม TH/EN — ซ่อนตัวหนังสือโลโก้ เหลือรูปโลโก้ และไม่ให้ปุ่มล้นจอ */
+.hnr { min-width: 0 }
+.hnr .logo { min-width: 0; flex: 0 1 auto }
+@media (max-width: 600px) {
+    .hnr .logo div { display: none !important }
+    .hr { gap: 8px !important; flex-wrap: nowrap; min-width: 0 }
+    .hr .b, .hr .hb { padding: 0 14px !important; min-height: 38px }
+}
+@media (max-width: 380px) {
+    .hr .seg span { padding-left: 9px !important; padding-right: 9px !important }
+    .hr .b, .hr .hb { padding: 0 11px !important; font-size: 13px }
+}
+
+/* หน้าเข้าสู่ระบบบนมือถือ: ปุ่มภาษา/ธีมลอยทับโลโก้ — เว้นที่ด้านบน */
+@media (max-width: 800px) {
+    .al .logo { margin-top: 44px }
+}
+
+/* ป้ายเลขห้องในรายการชำระล่าสุด (แดชบอร์ด) ไม่ให้แตกบรรทัดกลางคำ */
+.rch { white-space: nowrap; display: inline-block }
+
+/* ตารางที่กลายเป็นการ์ดบนมือถือ/แท็บเล็ต: ช่องที่มีหลายบรรทัด (รูป ชื่อ ป้าย อีเมล ที่ตั้ง) ให้วางป้ายกำกับไว้ด้านบน
+   แทนการบีบเป็นคอลัมน์แคบ ๆ ข้างป้าย ซึ่งทำให้ชื่อแตกกลางคำและป้ายสถานะทับชื่อ */
+@media (max-width: 1100px) {
+    .rt td { word-break: normal; overflow-wrap: anywhere; min-width: 0 }
+    .rt td > * { min-width: 0 }
+    .rt td[data-l]:has(.av), .rt td[data-l]:has(br), .rt td[data-l]:has(small), .rt td[data-l]:has(> div) {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: left;
+        gap: 6px;
+    }
+    .rt td[data-l]:has(.av)::before, .rt td[data-l]:has(br)::before, .rt td[data-l]:has(small)::before, .rt td[data-l]:has(> div)::before { flex: none }
+    .rt td .pl { white-space: nowrap }
+}
+
+/* ปุ่มแนบรูป + คำอธิบาย: จัดเรียงให้ตัดบรรทัดเป็นระเบียบ */
+div:has(> #tkf) { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px }
+
+/* กันตัวเลข/ป้ายสถานะแตกบรรทัด */
+.pl, .seg span, .b { white-space: nowrap }
+

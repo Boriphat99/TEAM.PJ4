@@ -19,7 +19,7 @@ function pc(){const o=$('#p_o').value,w=$('#p_w').value;if(o!=U.pw)return alert(
  U.pw=w;lg('เปลี่ยนรหัสผ่าน');save();R();alert('เปลี่ยนรหัสผ่านสำเร็จ\nครั้งต่อไปให้เข้าสู่ระบบด้วยรหัสผ่านใหม่')}
 
 const B=n=>'฿'+Number(n).toLocaleString(LOCF(),{minimumFractionDigits:2,maximumFractionDigits:2});
-function docHTML(i,k,nl){if(k=='rcp')return rcpHTML(i);const S=D.set,inv=k=='inv',c=inv?'#1d4ed8':'#16a34a',u=tu(i)||{},nm=S.name||'T&T Mansion',
+function docHTML(i,k,nl){if(k=='rcp')return rcpHTML(i);const S=D.set,inv=k=='inv',c=inv?'#a8122c':'#16a34a',u=tu(i)||{},nm=S.name||'T&T Mansion',
  f=inv?0:(i.fine||0),T=inv?base(i):tot(i),rows=[['ค่าเช่าห้อง',i.rent],['ค่าไฟฟ้า ('+i.pv+' - '+(i.pv+i.u)+') ใช้ '+i.u+' หน่วย × '+S.rate,i.el]];
  if(i.x)rows.push([i.xn||'ค่าใช้จ่ายเพิ่มเติม',i.x]);if(f)rows.push(['ค่าปรับล่าช้า',f]);
  const H=(l,v,b)=>`<tr><td style="padding:6px 0;color:#64748b;vertical-align:top">${e(l)}</td><td style="padding:6px 0 6px 12px;text-align:right;${b?'font-weight:700;color:#0f172a':'color:#0f172a'}">${v}</td></tr>`,
@@ -28,7 +28,7 @@ function docHTML(i,k,nl){if(k=='rcp')return rcpHTML(i);const S=D.set,inv=k=='inv
 <div style="background:${c};color:#fff;text-align:center;padding:24px 16px"><div style="font-size:26px;font-weight:700">${inv?'ใบแจ้งหนี้':'ใบเสร็จรับเงิน'}</div><div>${e(nm)}</div></div>
 <div style="padding:20px;font-size:14px"><table style="width:100%;border-collapse:collapse">${H('ผู้เช่า','คุณ '+e(u.name||'-')+' ห้อง '+i.room,1)}${H('เลขที่บิล',i.id,1)}${H('รอบบิล',mon(i.per),1)}${H(inv?'ครบกำหนด':'วันที่ชำระ',inv?dt(due(i)):dt(i.paid),1)}</table>
 <div style="border-top:1px solid #e2e8f0;margin:12px 0"></div><div style="font-weight:700">รายละเอียด</div><table style="width:100%;border-collapse:collapse">${rows.map(r=>H(r[0],B(r[1]))).join('')}</table>
-<div style="background:${inv?'#e0e7ff':'#dcfce7'};border-radius:12px;text-align:center;padding:16px;margin:16px 0"><div style="color:#64748b">${inv?'ยอดชำระทั้งสิ้น':'ยอดที่ชำระ'}</div><div style="font-size:32px;font-weight:700;color:${c}">${B(T)}</div></div>
+<div style="background:${inv?'#f9eef0':'#dcfce7'};border-radius:12px;text-align:center;padding:16px;margin:16px 0"><div style="color:#64748b">${inv?'ยอดชำระทั้งสิ้น':'ยอดที่ชำระ'}</div><div style="font-size:32px;font-weight:700;color:${c}">${B(T)}</div></div>
 ${inv?`<div style="font-weight:700">ช่องทางการชำระเงิน</div><div style="color:#475569;margin:6px 0">ชำระผ่าน PromptPay QR ในระบบ แล้วแนบสลิปโอนเงิน${S.pp?'<br>PromptPay: <b style="color:#0f172a">'+e(S.pp)+'</b>':''}<br>หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div><div style="color:#b45309;font-size:12px">ชำระหลังวันที่ ${S.due} ของเดือนถัดไป มีค่าปรับวันละ 50 บาท สูงสุด ${S.max} บาท</div>${url&&!nl?`<a href="${url}" style="display:block;background:${c};color:#fff;text-align:center;text-decoration:none;padding:12px;border-radius:10px;margin-top:14px;font-weight:700">ดูใบแจ้งหนี้ / ชำระเงิน</a>`:''}`
 :`<div style="background:#f1f5f9;border-radius:10px;padding:12px;color:#166534">✓ ได้รับชำระเงินเรียบร้อยแล้ว<br><span style="color:#475569">วิธีชำระ: ${i.mt=='qr'?'โอนเงิน (PromptPay)':'เงินสด'}</span></div><div style="color:#475569;margin-top:12px">ผู้รับเงิน: ${e(S.payee||nm)}</div>`}
 <div style="color:#94a3b8;font-size:12px;text-align:center;margin-top:16px">${S.addr?e(S.addr)+'<br>':''}${S.tel?'โทร '+e(S.tel)+'<br>':''}ขอบคุณที่ใช้บริการ ${e(nm)}</div></div></div>`}
