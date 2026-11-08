@@ -2,7 +2,7 @@
    และแจ้งเตือนผู้เช่าให้เปลี่ยนรหัสผ่านหลังเข้าสู่ระบบครั้งแรก (จนกว่าจะเปลี่ยนในหน้าโปรไฟล์)
    - โหมด Supabase: เรียก Edge Function "create-tenant" (ตรวจสิทธิ์แอดมิน สร้างบัญชี เปิดสัญญาในขั้นตอนเดียว)
    - โหมดทดลอง: บันทึกลงเบราว์เซอร์เหมือนเดิม
-   โหลดหลังไฟล์ 25 จึงแทนที่ at0() เดิม (ปุ่ม "+ เพิ่มผู้เช่า") */
+   at0() = ปุ่ม "+ เพิ่มผู้เช่า" ในหน้าผู้เช่า */
 
 const todayISO = () => { const d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) };
 const atfRooms = () => D.rooms.filter(r => vac(r));
@@ -103,7 +103,7 @@ async function atfCopy(b) {
 }
 
 // ปุ่ม "+ เพิ่มผู้เช่า" (หน้าผู้เช่า) → เปิดฟอร์มใหม่
-at0 = function () { const f = atfRooms(); if (!f.length) return alert('ไม่มีห้องว่างสำหรับเพิ่มผู้เช่า'); atf(f[0].n) };
+function at0() { const f = atfRooms(); if (!f.length) return alert('ไม่มีห้องว่างสำหรับเพิ่มผู้เช่า'); atf(f[0].n) };
 
 // ---------- แจ้งเตือนให้เปลี่ยนรหัสผ่าน (ผู้เช่าที่ใช้รหัสผ่านเริ่มต้นจากแอดมิน) ----------
 var PWN = false, PWN_SHOWN = false, PWN_PATCHED = false;

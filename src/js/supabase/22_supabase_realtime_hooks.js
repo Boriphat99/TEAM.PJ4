@@ -38,19 +38,6 @@ if(SBON){
   const n=$('#p_n').value.trim(),t=$('#p_t').value.trim();if(!n)return alert('กรอกชื่อ');if(t&&!/^[0-9\-+ ]{9,15}$/.test(t))return alert('เบอร์โทรไม่ถูกต้อง');
   Object.assign(U,{name:n,tel:t,g:$('#p_g').value});lg('แก้ไขโปรไฟล์');save();R();tt('✓ บันทึกข้อมูลแล้ว')};
  {const _p=pg.prof;pg.prof=()=>_p().replace('id="p_e"','id="p_e" disabled')}
- ad=async function(n){
-  const a=$('#an').value.trim(),m=$('#ae').value.trim().toLowerCase(),p=$('#ap').value,t=$('#at').value.trim();
-  if(!a||!m||p.length<6)return alert('กรอกชื่อ อีเมล และรหัสผ่านอย่างน้อย 6 ตัว');
-  if(!/^\S+@\S+\.\S+$/.test(m))return alert('รูปแบบอีเมลไม่ถูกต้อง');
-  if(t&&!/^[0-9\-+ ]{9,15}$/.test(t))return alert('เบอร์โทรไม่ถูกต้อง');
-  const r=await SBX.cl.functions.invoke('create-tenant',{body:{email:m,password:p,full_name:a,phone:t}});
-  if(r.error){let msg=r.error.message;try{const j=await r.error.context.json();if(j&&j.error)msg=j.error}catch(x){}return alert(msg)}
-  const uid=r.data&&r.data.user_id;
-  await sbLoad();const u=D.users.find(x=>x._uid==uid);if(!u)return alert('สร้างบัญชีแล้วแต่ยังไม่พบข้อมูล กรุณารีเฟรชหน้า');
-  u.room=n;u.cs=Date.now();lg('เพิ่มผู้เช่า ห้อง '+n);save();cm();R();
-  const txt='T&T Mansion\nอีเมลเข้าสู่ระบบ: '+m+'\nรหัสผ่านเริ่มต้น: '+p+'\nแนะนำให้เปลี่ยนรหัสผ่านในหน้าโปรไฟล์หลังเข้าสู่ระบบครั้งแรก';
-  try{await navigator.clipboard.writeText(txt)}catch(x){}
-  alert('สร้างบัญชีผู้เช่าแล้ว (ห้อง '+n+')\n\n'+txt+'\n\n(คัดลอกข้อความนี้ไว้ให้แล้ว ส่งให้ผู้เช่าทางอีเมลหรือ LINE)')};
  {const _e=et;et=function(id){_e(id);const w=$('#f_w'),m=$('#f_e');if(w){w.previousElementSibling.style.display='none';w.style.display='none'}if(m)m.disabled=true}}
  eu=function(id){
   const u=D.users.find(x=>x.id==id),n=$('#f_n').value.trim(),r=+$('#f_r').value,go2=$('#f_s').value=='out';if(!n)return alert('กรอกชื่อ');
@@ -67,9 +54,6 @@ if(SBON){
   if(up.error)return alert('อัปโหลดสลิปไม่สำเร็จ: '+up.error.message);
   const{error}=await SBX.cl.rpc('submit_payment',{p_invoice:i._id,p_slip:path});if(error)return alert(error.message);
   lg((pd?'ส่งสลิปใหม่ ':'แจ้งชำระ ')+id);cm();await sbLoad();R();tt(pd?'✓ ส่งสลิปใหม่แล้ว รอผู้ดูแลตรวจสอบ':'✓ แจ้งชำระเงินแล้ว รอผู้ดูแลตรวจสอบ')};
- vs=async function(id){
-  const i=gi(id);let src=i.slip;if(src&&!/^data:/.test(src)){const r=await SBX.cl.storage.from('slips').createSignedUrl(src,600);src=r.data&&r.data.signedUrl;if(!src)return alert('เปิดสลิปไม่สำเร็จ')}
-  mo(`<h3>สลิป ${id}</h3><img src="${src}" style="width:100%;border-radius:12px;margin:12px 0"><button class="b b2" onclick="cm()">ปิด</button>`)};
  cpf=async function(el){
   const f=el.files[0];el.value='';if(!f)return;if(f.type!='application/pdf'&&!/\.pdf$/i.test(f.name))return alert('รองรับเฉพาะไฟล์ PDF');if(f.size>5*1024*1024)return alert('ไฟล์ใหญ่เกิน 5MB');
   const r=D.rooms.find(x=>x.n==CPR);if(!r)return;const path=r.n+'.pdf';

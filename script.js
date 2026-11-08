@@ -952,15 +952,9 @@ const fld=(id,l,ic,t='text',x='')=>`<label>${l}</label><div class="fi"><i>${IG[i
 const tg=(id,b)=>{const el=$('#'+id);el.type=el.type=='password'?'text':'password';b.textContent=el.type=='password'?'แสดง':'ซ่อน'},fl=(m,p)=>{$('#em').value=m;$('#pw').value=p};
 const auth=(t,s,h,l,lk,lq)=>`${bgL(0)}${TGL('fx-tr')}<div class="wrap au"><div class="al"><div class="rings px" style="--k:14"><i class="r1"><b></b></i><i class="r2"><b></b></i></div><div class="logo"><img class="lgi" src="${LG}" alt=""> T&T MANSION</div><h1 class="gt">${t}</h1><p class="mu">${s}</p></div><div class="cd gc">${P=='forgot'?'':'<div class="tabs"><span class="'+(P=='login'?'on':'')+'" onclick="go(\'login\')">เข้าสู่ระบบ</span></div>'}${h}<p style="text-align:center;margin:18px 0 0" class="mu">${l} <b class="ac" style="cursor:pointer" onclick="go('${lq}')">${lk}</b></p></div></div>`;
 const login=()=>auth('ยินดีต้อนรับกลับ','เข้าสู่ระบบเพื่อตรวจสอบบิลและสถานะการชำระเงินของห้องพัก',`<div class="ah"><span class="ib">${IC.lock}</span><div><h2>เข้าสู่ระบบ</h2><small class="mu">สำหรับผู้เช่าและผู้ดูแล</small></div><b class="ac bk" onclick="go('home')">‹ หน้าหลัก</b></div>${fld('em','อีเมล','✉','email',`autocomplete="username" placeholder="name@example.com"`)}${fld('pw','รหัสผ่าน','🔑','password',`autocomplete="current-password" placeholder="••••••••" onkeydown="if(event.key=='Enter')dl()"`)}<div style="text-align:right;margin:-6px 0 12px"><span class="ac" style="cursor:pointer;font-size:13px" onclick="go('forgot')">ลืมรหัสผ่าน?</span></div><button class="b go" style="width:100%" onclick="dl()">เข้าสู่ระบบ →</button><div class="dm"><small class="mu">ทดลองใช้งาน</small><span><button class="b b2 sm" onclick="fl('admin@ttmansion.local','admin123')">ผู้ดูแล</button> <button class="b b2 sm" onclick="fl('owner@ttmansion.local','owner123')">เจ้าของ</button> <button class="b b2 sm" onclick="fl('nattapol@ttmansion.local','1234')">ผู้เช่า</button></span></div>`,'ยังไม่มีบัญชี? ติดต่อผู้ดูแลหอพักเพื่อขอสร้างบัญชี','','login');
-const reg=()=>auth('เริ่มต้นบัญชีผู้เช่า','ลงทะเบียนแล้วผู้ดูแลจะเป็นผู้จัดห้องพักให้ภายหลัง',`<div class="ah"><span class="ib">✨</span><div><h2>ลงทะเบียนใหม่</h2><small class="mu">ข้อมูลฉบับนี้บันทึกไว้ในเครื่องนี้</small></div><b class="ac bk" onclick="go('home')">‹ หน้าหลัก</b></div>${fld('rn','ชื่อ - นามสกุล',PI)}<label>เพศ</label><div class="fi"><i>⚥</i><select id="rg"><option value="">เลือกเพศ</option><option>ชาย</option><option>หญิง</option><option>อื่นๆ</option></select></div>${fld('rt','เบอร์โทร','☎','tel','placeholder="08x-xxx-xxxx" autocomplete="tel"')}${fld('em','อีเมล','✉','email')}${fld('pw','รหัสผ่าน (อย่างน้อย 6 ตัว)','🔑','password')}<button class="b go" style="width:100%" onclick="dr()">สร้างบัญชีและเข้าสู่ระบบ →</button>`,'มีบัญชีแล้ว?','เข้าสู่ระบบ','login');
 function dl(){const u=D.users.find(u=>u.email==$('#em').value.trim().toLowerCase()&&u.pw==$('#pw').value);if(!u)return alert('อีเมลหรือรหัสผ่านไม่ถูกต้อง');if(u.out)return alert('บัญชีนี้ย้ายออกแล้ว กรุณาติดต่อผู้ดูแล');enter(u,0,1)}
 function enter(u,pg2,how){U=u;applyPf(u);P=pg2||'x';try{localStorage.setItem('ttm_s',u.id)}catch(x){}R();if(how)tt('✓ เข้าสู่ระบบสำเร็จ · '+(RL[u.role]||'')+' '+u.name)}
 function genPw(){const c='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';let s='';const a=new Uint32Array(8);crypto.getRandomValues(a);for(const v of a)s+=c[v%c.length];return s}
-function dr(){const n=$('#rn').value.trim(),g=$('#rg').value,t=$('#rt').value.replace(/[\s-]/g,''),m=$('#em').value.trim().toLowerCase(),p=$('#pw').value;
- if(!n||!g||!t||!m||p.length<6)return alert('กรอกข้อมูลให้ครบ (ชื่อ เพศ เบอร์โทร อีเมล และรหัสผ่านอย่างน้อย 6 ตัว)');
- if(!/^\S+@\S+$/.test(m))return alert('รูปแบบอีเมลไม่ถูกต้อง');if(!MAILOK(m))return alert(MAILMSG);if(!/^0\d{8,9}$/.test(t))return alert('เบอร์โทรไม่ถูกต้อง (เช่น 0812345678)');
- if(D.users.some(u=>u.email==m))return alert('อีเมลนี้ถูกใช้แล้ว');
- const u={id:Date.now(),name:n,email:m,pw:p,role:'tenant',room:null,g,tel:t,cs:Date.now()};D.users.push(u);save();enter(u,'prof');tt('✓ ลงทะเบียนสำเร็จ · ผู้เช่า '+u.name+' · รอผู้ดูแลจัดห้องพักให้')}
 const forgot=()=>SBON?forgotSB():auth('ลืมรหัสผ่าน','ยืนยันตัวตนด้วยอีเมลและเบอร์โทรที่ลงทะเบียนไว้ แล้วตั้งรหัสผ่านใหม่',`<div class="ah"><span class="ib">${IC.key}</span><div><h2>ตั้งรหัสผ่านใหม่</h2><small class="mu">ใช้ได้เมื่อบัญชีมีเบอร์โทร</small></div><b class="ac bk" onclick="go('login')">‹ กลับ</b></div>${fld('em','อีเมล','✉','email')}${fld('rt','เบอร์โทรที่ลงทะเบียน','☎','tel')}${fld('pw','รหัสผ่านใหม่ (อย่างน้อย 6 ตัว)','🔑','password')}${fld('pw2','ยืนยันรหัสผ่านใหม่','🔑','password')}<button class="b go" style="width:100%" onclick="fp()">ตั้งรหัสผ่านใหม่ →</button><div class="note">หากบัญชียังไม่มีเบอร์โทร (เช่น ผู้ดูแลระบบ) ให้ติดต่อผู้ดูแลเพื่อรีเซ็ตรหัสผ่านให้</div>`,'จำรหัสผ่านได้แล้ว?','เข้าสู่ระบบ','login');
 function fp(){const m=$('#em').value.trim().toLowerCase(),t=$('#rt').value.replace(/\D/g,''),w=$('#pw').value,u=D.users.find(x=>x.email==m);
  if(!m||!t||!w)return alert('กรอกข้อมูลให้ครบ');if(!u||!u.tel)return alert('ไม่พบบัญชี หรือบัญชีนี้ยังไม่มีเบอร์โทร กรุณาติดต่อผู้ดูแลระบบ');
@@ -990,7 +984,6 @@ function ap(id,y){const i=gi(id);if(y){i.s='paid';i.paid=Date.now();i.rc=nrc();l
  mo(`<h3>ปฏิเสธสลิป ${id}</h3><small class="mu">ผู้เช่าจะเห็นเหตุผลนี้ในหน้าใบแจ้งหนี้ แล้วส่งสลิปใหม่ได้</small><label>เหตุผล</label><select id="rj_s"><option value="">— เลือกเหตุผล —</option><option>ยอดเงินไม่ตรงกับใบแจ้งหนี้</option><option>สลิปไม่ชัดเจน อ่านข้อมูลไม่ได้</option><option>สลิปไม่ใช่ของรายการนี้หรือเป็นสลิปซ้ำ</option><option>ไม่พบยอดเงินเข้าบัญชี</option><option>อื่นๆ</option></select><label>รายละเอียดเพิ่มเติม (ไม่บังคับ)</label><input id="rj_t" maxlength="120"><div style="display:flex;gap:8px;margin-top:12px"><button class="b" onclick="apr('${id}')">ยืนยันปฏิเสธ</button><button class="b b2" onclick="cm()">ยกเลิก</button></div>`)}
 function apr(id){const i=gi(id),a=$('#rj_s').value,t=$('#rj_t').value.trim();if(!a)return alert('เลือกเหตุผลที่ปฏิเสธ');const rs=a+(t?' · '+t:'');i._rjr=rs;i.rj=rs;i.s='unpaid';i.fine=0;delete i.slip;delete i.mt;lg('ปฏิเสธ '+id+' ('+rs+')');save();cm();R()}
 function cs(id){const i=gi(id);cf('ยืนยันรับเงินสดห้อง '+i.room+' ยอด ฿'+fm(tot(i))+'?',()=>{i.fine=fine(i);i.mt='cash';i.sub=Date.now();i.s='paid';i.paid=Date.now();i.rc=nrc();lg('รับเงินสด '+id);save();mail('rcp',i);R()})}
-function vs(id){return mo(`<h3>สลิป ${id}</h3><img src="${gi(id).slip}" style="width:100%;border-radius:12px;margin:12px 0"><button class="b b2" onclick="cm()">ปิด</button>`)}
 const bar=(l,t,w,c)=>`<div class="bd"><small class="mu">${l}</small><b style="color:${c}">${t}</b></div><div class="pb"><i style="width:${w}%;background:${c}"></i></div>`,
 dn=p=>`<svg viewBox="0 0 100 100" style="width:110px;height:110px"><circle cx="50" cy="50" r="40" fill="none" stroke="#fee2e2" stroke-width="10"/><circle cx="50" cy="50" r="40" fill="none" stroke="#dc2626" stroke-width="10" stroke-linecap="${p?'round':'butt'}" stroke-dasharray="${p*2.513} 251.3" transform="rotate(-90 50 50)"/><text x="50" y="56" text-anchor="middle" font-size="20" font-weight="700" fill="#1f2937">${p}%</text></svg>`,
 ms=p=>{const[y,m]=p.split('-');return new Date(y,m-1).toLocaleDateString(LOCF(),{month:'short',year:'numeric'})},
@@ -1002,7 +995,6 @@ hdr=(ic,t,sub,act)=>`<div class="hd2">${ic=='▦'?BLD(48):`<i class="ci" style="
 dn3=(parts,c)=>{const t=parts.reduce((a,x)=>a+x[0],0)||1;let off=0;return`<svg viewBox="0 0 100 100" style="width:150px;height:150px"><circle cx="50" cy="50" r="40" fill="none" stroke="#fee2e2" stroke-width="14"/>${parts.map(x=>{const l=x[0]/t*251.3,z=`<circle cx="50" cy="50" r="40" fill="none" stroke="${x[1]}" stroke-width="14" stroke-dasharray="${l} 251.3" stroke-dashoffset="${-off}" transform="rotate(-90 50 50)"/>`;off+=l;return z}).join('')}<text x="50" y="55" text-anchor="middle" font-size="11" font-weight="700" fill="#1f2937">฿${fm(c)}</text></svg>`};
 function mnu(ev,el){const m=el._m||el.querySelector('.mdd'),o=m.classList.contains('open');el._m=m;document.querySelectorAll('.mdd.open').forEach(x=>x.classList.remove('open'));if(!o){document.body.appendChild(m);const b=el.getBoundingClientRect();m.style.top=Math.min(b.bottom+4,innerHeight-170)+'px';m.style.left=Math.max(8,b.right-165)+'px';m.classList.add('open')}}
 document.addEventListener('click',ev=>{if(!ev.target.closest('.mm'))document.querySelectorAll('.mdd.open').forEach(x=>x.classList.remove('open'))});
-function at0(){const f=D.rooms.filter(vac);if(!f.length)return alert('ไม่มีห้องว่างสำหรับเพิ่มผู้เช่า');mo(`<h3>เพิ่มผู้เช่า</h3><label>เลือกห้องว่าง</label><select id="a0">${f.map(r=>`<option>${r.n}</option>`).join('')}</select><button class="b" onclick="const n=+$('#a0').value;cm();rm(n)">ต่อไป</button> <button class="b b2" onclick="cm()">ยกเลิก</button>`)}
 function repTop(){const cur=dper(),I=D.inv,y=cur.slice(0,4),d3=new Date(+y,+cur.slice(5)-3,1),m3=d3.getFullYear()+'-'+pad(d3.getMonth()+1),
  ok=i=>RP=='all'||(RP=='cur'?i.per==cur:RP=='yr'?i.per.startsWith(y):i.per>=m3),
  P=I.filter(i=>i.s=='paid'&&ok(i)).sort((a,b)=>(b.paid||0)-(a.paid||0)),sm=(a,f)=>a.reduce((t,i)=>t+f(i),0),T=sm(P,tot),rt=sm(P,i=>i.rent),el=sm(P,i=>i.el),ot=T-rt-el,
@@ -1099,7 +1091,6 @@ function ebs(id){const i=gi(id);if(plock(i.per))return alert(LKM(i.per));if(i.s!
  i.x=x;i.xn=$('#xb').value.trim();lg('แก้ไขบิล '+id);save();cm();R();tt('✓ แก้ไขบิลแล้ว')}
 function ex(id){const i=gi(id);if(plock(i.per))return alert(LKM(i.per));mo(`<h3>ค่าใช้จ่ายเพิ่มเติม ${id}</h3><label>จำนวนเงิน (บาท)</label><input id="xa" type="number" value="${i.x||''}"><label>หมายเหตุ</label><input id="xb" value="${e(i.xn||'')}"><button class="b" onclick="sx('${id}')">บันทึก</button> <button class="b b2" onclick="cm()">ยกเลิก</button>`)}
 function sx(id){const i=gi(id);if(plock(i.per))return alert(LKM(i.per));i.x=+$('#xa').value||0;i.xn=$('#xb').value.trim();lg('แก้ไขค่าอื่น '+id);save();cm();R()}
-function ad(n){const a=$('#an').value.trim(),m=$('#ae').value.trim().toLowerCase(),p=$('#ap').value;if(!a||!m||!p||D.users.some(u=>u.email==m))return alert('ข้อมูลไม่ครบหรืออีเมลซ้ำ');D.users.push({id:Date.now(),name:a,email:m,pw:p,role:'tenant',room:n,tel:$('#at').value.trim()});lg('เพิ่มผู้เช่า ห้อง '+n);save();cm();R()}
 function mv(id){const u=D.users.find(x=>x.id==id),k=D.inv.filter(i=>(i.uid?i.uid==id:i.room==u.room)&&i.s!='paid').length;
  cf('ยืนยันย้ายออก '+u.name+' (ห้อง '+u.room+')?\nสถานะห้องจะเปลี่ยนเป็น "ว่าง"'+(k?'\nมีบิลค้างชำระ '+k+' รายการ จะยังอยู่ในประวัติของผู้เช่าคนนี้':''),()=>{u.out=Date.now();lg('ย้ายออก ห้อง '+u.room);save();cm();R();tt('✓ ย้ายออกแล้ว ห้อง '+u.room+' ว่าง')})}
 function BLD(z){return`<i class="ci" style="width:${z}px;height:${z}px;flex:0 0 auto"><svg viewBox="0 0 24 24" width="${Math.round(z*.56)}" height="${Math.round(z*.56)}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16"/><path d="M14 10h5a1 1 0 0 1 1 1v10"/><path d="M3 21h18"/><path d="M8 8h2M8 12h2M8 16h2M17 14h.01M17 17h.01"/></svg></i>`}
@@ -1542,19 +1533,6 @@ if(SBON){
   const n=$('#p_n').value.trim(),t=$('#p_t').value.trim();if(!n)return alert('กรอกชื่อ');if(t&&!/^[0-9\-+ ]{9,15}$/.test(t))return alert('เบอร์โทรไม่ถูกต้อง');
   Object.assign(U,{name:n,tel:t,g:$('#p_g').value});lg('แก้ไขโปรไฟล์');save();R();tt('✓ บันทึกข้อมูลแล้ว')};
  {const _p=pg.prof;pg.prof=()=>_p().replace('id="p_e"','id="p_e" disabled')}
- ad=async function(n){
-  const a=$('#an').value.trim(),m=$('#ae').value.trim().toLowerCase(),p=$('#ap').value,t=$('#at').value.trim();
-  if(!a||!m||p.length<6)return alert('กรอกชื่อ อีเมล และรหัสผ่านอย่างน้อย 6 ตัว');
-  if(!/^\S+@\S+\.\S+$/.test(m))return alert('รูปแบบอีเมลไม่ถูกต้อง');
-  if(t&&!/^[0-9\-+ ]{9,15}$/.test(t))return alert('เบอร์โทรไม่ถูกต้อง');
-  const r=await SBX.cl.functions.invoke('create-tenant',{body:{email:m,password:p,full_name:a,phone:t}});
-  if(r.error){let msg=r.error.message;try{const j=await r.error.context.json();if(j&&j.error)msg=j.error}catch(x){}return alert(msg)}
-  const uid=r.data&&r.data.user_id;
-  await sbLoad();const u=D.users.find(x=>x._uid==uid);if(!u)return alert('สร้างบัญชีแล้วแต่ยังไม่พบข้อมูล กรุณารีเฟรชหน้า');
-  u.room=n;u.cs=Date.now();lg('เพิ่มผู้เช่า ห้อง '+n);save();cm();R();
-  const txt='T&T Mansion\nอีเมลเข้าสู่ระบบ: '+m+'\nรหัสผ่านเริ่มต้น: '+p+'\nแนะนำให้เปลี่ยนรหัสผ่านในหน้าโปรไฟล์หลังเข้าสู่ระบบครั้งแรก';
-  try{await navigator.clipboard.writeText(txt)}catch(x){}
-  alert('สร้างบัญชีผู้เช่าแล้ว (ห้อง '+n+')\n\n'+txt+'\n\n(คัดลอกข้อความนี้ไว้ให้แล้ว ส่งให้ผู้เช่าทางอีเมลหรือ LINE)')};
  {const _e=et;et=function(id){_e(id);const w=$('#f_w'),m=$('#f_e');if(w){w.previousElementSibling.style.display='none';w.style.display='none'}if(m)m.disabled=true}}
  eu=function(id){
   const u=D.users.find(x=>x.id==id),n=$('#f_n').value.trim(),r=+$('#f_r').value,go2=$('#f_s').value=='out';if(!n)return alert('กรอกชื่อ');
@@ -1571,9 +1549,6 @@ if(SBON){
   if(up.error)return alert('อัปโหลดสลิปไม่สำเร็จ: '+up.error.message);
   const{error}=await SBX.cl.rpc('submit_payment',{p_invoice:i._id,p_slip:path});if(error)return alert(error.message);
   lg((pd?'ส่งสลิปใหม่ ':'แจ้งชำระ ')+id);cm();await sbLoad();R();tt(pd?'✓ ส่งสลิปใหม่แล้ว รอผู้ดูแลตรวจสอบ':'✓ แจ้งชำระเงินแล้ว รอผู้ดูแลตรวจสอบ')};
- vs=async function(id){
-  const i=gi(id);let src=i.slip;if(src&&!/^data:/.test(src)){const r=await SBX.cl.storage.from('slips').createSignedUrl(src,600);src=r.data&&r.data.signedUrl;if(!src)return alert('เปิดสลิปไม่สำเร็จ')}
-  mo(`<h3>สลิป ${id}</h3><img src="${src}" style="width:100%;border-radius:12px;margin:12px 0"><button class="b b2" onclick="cm()">ปิด</button>`)};
  cpf=async function(el){
   const f=el.files[0];el.value='';if(!f)return;if(f.type!='application/pdf'&&!/\.pdf$/i.test(f.name))return alert('รองรับเฉพาะไฟล์ PDF');if(f.size>5*1024*1024)return alert('ไฟล์ใหญ่เกิน 5MB');
   const r=D.rooms.find(x=>x.n==CPR);if(!r)return;const path=r.n+'.pdf';
@@ -1723,7 +1698,7 @@ applyPf(U);R();try{const lo=sessionStorage.getItem('ttm_lo');if(lo){sessionStora
    - vsl(id): หน้าต่างแสดงรูปสลิป + ยอด วันที่แจ้ง สถานะ และปุ่มไปใบแจ้งหนี้/ใบเสร็จ
    - slipSrc(i): คืน URL ของรูปสลิป (โหมดทดลอง = data URL, โหมด Supabase = signed URL อายุ 1 ชม. เก็บแคชไว้)
    - fillSlips(): ใส่รูปย่อสลิปในตาราง (img.slt[data-sid]) แบบขอ URL ทีเดียวทั้งชุด
-   โหลดเป็นไฟล์ JS สุดท้าย จึงแทนที่ vs() เดิม (ที่ใช้ใน หน้ารับชำระเงิน/ประวัติ) ให้ใช้หน้าต่างใหม่นี้ด้วย */
+   vs(id) ที่ปุ่มเดิมเรียก ชี้มาที่หน้าต่างนี้ */
 const SLIPC = {};
 async function slipSrc(i) {
     const p = i && i.slip;
@@ -1790,8 +1765,8 @@ async function vsl(id) {
     im.onclick = () => window.open(src, '_blank');
     im.src = src;
 }
-// ใช้หน้าต่างใหม่แทน vs() เดิมทุกที่ (หน้ารับชำระเงินของผู้ดูแล, ประวัติของผู้เช่า, รายงานของเจ้าของ)
-vs = vsl;
+// vs(id) = ปุ่ม "สลิป" เดิมในหน้ารับชำระเงิน/ประวัติ/รายงาน → ใช้หน้าต่างดูสลิปนี้
+function vs(id) { return vsl(id) }
 // เติมรูปย่อสลิปหลังวาดหน้าใหม่ทุกครั้ง
 new MutationObserver(() => { if (document.querySelector('img.slt[data-sid]:not([src])')) fillSlips() })
     .observe(document.getElementById('app'), { childList: true, subtree: true });
@@ -1800,7 +1775,7 @@ new MutationObserver(() => { if (document.querySelector('img.slt[data-sid]:not([
    และแจ้งเตือนผู้เช่าให้เปลี่ยนรหัสผ่านหลังเข้าสู่ระบบครั้งแรก (จนกว่าจะเปลี่ยนในหน้าโปรไฟล์)
    - โหมด Supabase: เรียก Edge Function "create-tenant" (ตรวจสิทธิ์แอดมิน สร้างบัญชี เปิดสัญญาในขั้นตอนเดียว)
    - โหมดทดลอง: บันทึกลงเบราว์เซอร์เหมือนเดิม
-   โหลดหลังไฟล์ 25 จึงแทนที่ at0() เดิม (ปุ่ม "+ เพิ่มผู้เช่า") */
+   at0() = ปุ่ม "+ เพิ่มผู้เช่า" ในหน้าผู้เช่า */
 
 const todayISO = () => { const d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) };
 const atfRooms = () => D.rooms.filter(r => vac(r));
@@ -1901,7 +1876,7 @@ async function atfCopy(b) {
 }
 
 // ปุ่ม "+ เพิ่มผู้เช่า" (หน้าผู้เช่า) → เปิดฟอร์มใหม่
-at0 = function () { const f = atfRooms(); if (!f.length) return alert('ไม่มีห้องว่างสำหรับเพิ่มผู้เช่า'); atf(f[0].n) };
+function at0() { const f = atfRooms(); if (!f.length) return alert('ไม่มีห้องว่างสำหรับเพิ่มผู้เช่า'); atf(f[0].n) };
 
 // ---------- แจ้งเตือนให้เปลี่ยนรหัสผ่าน (ผู้เช่าที่ใช้รหัสผ่านเริ่มต้นจากแอดมิน) ----------
 var PWN = false, PWN_SHOWN = false, PWN_PATCHED = false;

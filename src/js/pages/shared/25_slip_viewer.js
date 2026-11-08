@@ -2,7 +2,7 @@
    - vsl(id): หน้าต่างแสดงรูปสลิป + ยอด วันที่แจ้ง สถานะ และปุ่มไปใบแจ้งหนี้/ใบเสร็จ
    - slipSrc(i): คืน URL ของรูปสลิป (โหมดทดลอง = data URL, โหมด Supabase = signed URL อายุ 1 ชม. เก็บแคชไว้)
    - fillSlips(): ใส่รูปย่อสลิปในตาราง (img.slt[data-sid]) แบบขอ URL ทีเดียวทั้งชุด
-   โหลดเป็นไฟล์ JS สุดท้าย จึงแทนที่ vs() เดิม (ที่ใช้ใน หน้ารับชำระเงิน/ประวัติ) ให้ใช้หน้าต่างใหม่นี้ด้วย */
+   vs(id) ที่ปุ่มเดิมเรียก ชี้มาที่หน้าต่างนี้ */
 const SLIPC = {};
 async function slipSrc(i) {
     const p = i && i.slip;
@@ -69,8 +69,8 @@ async function vsl(id) {
     im.onclick = () => window.open(src, '_blank');
     im.src = src;
 }
-// ใช้หน้าต่างใหม่แทน vs() เดิมทุกที่ (หน้ารับชำระเงินของผู้ดูแล, ประวัติของผู้เช่า, รายงานของเจ้าของ)
-vs = vsl;
+// vs(id) = ปุ่ม "สลิป" เดิมในหน้ารับชำระเงิน/ประวัติ/รายงาน → ใช้หน้าต่างดูสลิปนี้
+function vs(id) { return vsl(id) }
 // เติมรูปย่อสลิปหลังวาดหน้าใหม่ทุกครั้ง
 new MutationObserver(() => { if (document.querySelector('img.slt[data-sid]:not([src])')) fillSlips() })
     .observe(document.getElementById('app'), { childList: true, subtree: true });
