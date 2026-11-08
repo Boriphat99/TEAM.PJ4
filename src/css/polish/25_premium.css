@@ -382,3 +382,48 @@ div:has(> #tkf) { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 
 
 /* กันตัวเลข/ป้ายสถานะแตกบรรทัด */
 .pl, .seg span, .b { white-space: nowrap }
+
+/* ===================== 20) สลิปโอนเงิน: รูปย่อในตาราง + หน้าต่างดูสลิป ===================== */
+img.slt {
+    width: 48px; height: 64px; object-fit: cover; border-radius: 8px;
+    border: 1px solid var(--ln2); background: var(--bg2); cursor: zoom-in; display: block;
+    box-shadow: var(--sh1); transition: transform .15s var(--ease), box-shadow .15s;
+}
+img.slt:not([src]) { background: linear-gradient(90deg, var(--bg2), var(--cd), var(--bg2)); background-size: 200% 100%; animation: slt-sh 1.2s linear infinite }
+img.slt.slt-x { animation: none; opacity: .4 }
+img.slt:hover { transform: scale(1.06); box-shadow: var(--sh2) }
+@keyframes slt-sh { to { background-position: -200% 0 } }
+.slv-img { margin: 14px 0 4px; border-radius: 16px; overflow: hidden; border: 1px solid var(--ln); background: var(--bg2); min-height: 120px; display: flex; align-items: center; justify-content: center }
+.slv-img img { width: 100%; max-height: 62vh; object-fit: contain; cursor: zoom-in; background: #fff }
+.slv-ld { padding: 40px 16px; color: var(--mu); font-size: 14px }
+.slv-none { margin: 14px 0 4px; padding: 26px 16px; text-align: center; border: 1px dashed var(--ln2); border-radius: 16px; color: var(--mu); background: var(--bg2) }
+.slv-info { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; margin-top: 14px }
+.slv-info > div { display: flex; flex-direction: column; gap: 2px; min-width: 0 }
+.slv-info small { font-size: 12px }
+.slv-info b { font-weight: 600; overflow-wrap: anywhere }
+.slv-info .pl { align-self: flex-start }
+
+/* ===================== 21) มือถือ: แถบบน (โปรไฟล์ ธีม ภาษา ออกจากระบบ) ชิดขวา ทุกบทบาท ===================== */
+@media (max-width: 800px) {
+    .top { justify-content: flex-end !important; flex-wrap: wrap }
+    .top > span[style*="flex:1"] { display: none }
+    .top .me { margin-left: auto }
+    .top input { order: 9; flex: 1 1 100% }
+}
+
+/* ===================== 22) มือถือ/แท็บเล็ต: แถวปุ่มการทำงาน (ดูใบเสร็จ ชำระเงิน ปิด ฯลฯ) ชิดขวา ===================== */
+@media (max-width: 1100px) {
+    /* ช่องปุ่มในตารางที่กลายเป็นการ์ด */
+    .rt td:not([data-l]) { display: flex !important; justify-content: flex-end; flex-wrap: wrap; gap: 8px; text-align: right }
+    .rt td[data-l]:has(> .b) { justify-content: space-between }
+    /* แถวที่มีแต่ปุ่ม (ไม่รวมแถบตัวกรอง .fl และแท็บ) ทั้งในหน้าและในหน้าต่างป๊อปอัป */
+    .mn div:has(> .b):not(:has(> :not(.b, input[type=file], br))):not(.fl):not(.tabs):not(.seg),
+    #mc div:has(> .b):not(:has(> :not(.b, input[type=file], br))):not(.fl):not(.tabs),
+    #mc .acts { justify-content: flex-end !important; display: flex; flex-wrap: wrap }
+    /* ปุ่มเดี่ยวท้ายการ์ด */
+    .mn .cd > .b:only-of-type:last-child { display: flex; margin-left: auto; width: max-content }
+}
+
+/* เจ้าของ (โหมดอ่านอย่างเดียว .ro): ซ่อนปุ่มแก้ไขเหมือนเดิม แต่ให้เห็นปุ่ม "ดูสลิป / ใบเสร็จ" และการ์ดลัด "สลิปโอนเงินของผู้เช่า" */
+.ro table .b.rok { display: inline-flex !important }
+.ro .cd.nv.rok { display: block !important; cursor: pointer }

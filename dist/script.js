@@ -1046,9 +1046,9 @@ dash(){const I=D.inv,N=D.rooms.length,occ=D.rooms.filter(r=>tn(r.n)).length,mt=D
 <div class="dg2"><div class="cd"><h3 style="margin-bottom:12px">ผู้เช่าที่ชำระสูงสุด</h3>${tp.map((x,k)=>bar((k+1)+'  '+e(x[0]),'฿'+fm(x[1]),w(x[1],tm),'#dc2626')).join('')||'<small class="mu">ยังไม่มีข้อมูล</small>'}</div>
 <div class="cd"><h3 style="margin-bottom:12px">รอบบิล ${mon(cur)}</h3><div class="mt3" style="grid-template-columns:1fr 1fr"><div><small>ชำระแล้ว</small><b>${cs('paid')}</b></div><div><small>รอตรวจสอบ</small><b>${cs('pending')}</b></div><div><small>ยังไม่ชำระ</small><b>${cs('unpaid')}</b></div><div><small>ผิดนัดชำระ</small><b>${cs('over')}</b></div></div></div></div>
 <div class="dg2"><div class="cd"><h3 style="margin-bottom:8px">รายรับ 6 เดือนล่าสุด</h3>${lc(ps.map(inc),ps.map(ms),'#dc2626',1,'รายรับ')}</div><div class="cd"><h3 style="margin-bottom:8px">รายรับค่าไฟ 6 เดือนล่าสุด</h3>${lc(ps.map(q=>sm(I.filter(i=>pd(i)&&i.per==q),i=>i.el)),ps.map(ms),'#f59e0b',1,'ค่าไฟ')}</div></div>
-<div class="ch" style="margin:22px 0 4px"><h3>ใบเรียกเก็บเงินล่าสุด</h3><b class="ac" style="cursor:pointer" onclick="go('${U&&U.role=='owner'?'rep':'pay'}')">ดูทั้งหมด ›</b></div><div class="ri">${rc2.map(i=>`<div class="cd" onclick="vi('${i.id}')" style="cursor:pointer;display:flex;gap:12px;align-items:center;padding:16px"><span class="dy">${due(i).getDate()}</span><div style="flex:1;line-height:1.7"><b>${mon(i.per)}</b> <span class="rch">ห้อง ${i.room}</span><br><small class="mu">${e((tu(i)||{}).name)}</small><br>${pill(i)}</div><b>฿${fm(tot(i))}</b></div>`).join('')||'<div class="cd mu">ยังไม่มีใบเรียกเก็บเงิน</div>'}</div>
+<div class="ch" style="margin:22px 0 4px"><h3>ใบเรียกเก็บเงินล่าสุด</h3><b class="ac" style="cursor:pointer" onclick="go('${U&&U.role=='owner'?'rep':'pay'}')">ดูทั้งหมด ›</b></div><div class="ri">${rc2.map(i=>`<div class="cd" onclick="${U&&U.role!='tenant'&&i.slip?'vsl':'vi'}('${i.id}')" style="cursor:pointer;display:flex;gap:12px;align-items:center;padding:16px"><span class="dy">${due(i).getDate()}</span><div style="flex:1;line-height:1.7"><b>${mon(i.per)}</b> <span class="rch">ห้อง ${i.room}</span><br><small class="mu">${e((tu(i)||{}).name)}</small><br>${pill(i)}</div><b>฿${fm(tot(i))}</b></div>`).join('')||'<div class="cd mu">ยังไม่มีใบเรียกเก็บเงิน</div>'}</div>
 <div class="row" style="flex-wrap:wrap;margin-top:14px"><div class="cd" style="flex:2;min-width:300px"><div style="display:flex;justify-content:space-between"><div><h3>สถานะห้องพัก</h3><small class="mu">คลิกห้องเพื่อแก้ไขข้อมูล</small></div><b class="ac" style="cursor:pointer" onclick="go('rooms')">ดูทั้งหมด ›</b></div><br>${rg()}</div>
-<div class="cd" style="flex:1;min-width:240px"><h3>การดำเนินการด่วน</h3><br>${U&&U.role=='owner'?`<div class="cd nv" style="margin-bottom:10px" onclick="goSlips('all')">สลิปโอนเงินของผู้เช่า</div><div class="cd nv" style="margin-bottom:10px" onclick="goSlips('paid')">ใบเสร็จรับเงินของผู้เช่า</div><div class="cd nv" onclick="go('rep')">รายงานสรุปรายได้</div>`:`<div class="cd nv" style="margin-bottom:10px" onclick="go('met')">บันทึกเลขมิเตอร์</div><div class="cd nv" style="margin-bottom:10px" onclick="go('met')">ออกใบแจ้งหนี้</div><div class="cd nv" onclick="F='pending';go('pay')">ตรวจสอบสลิป</div>`}</div></div>
+<div class="cd" style="flex:1;min-width:240px"><h3>การดำเนินการด่วน</h3><br>${U&&U.role=='owner'?`<div class="cd nv rok" style="margin-bottom:10px" onclick="goSlips('all')">สลิปโอนเงินของผู้เช่า</div><div class="cd nv rok" style="margin-bottom:10px" onclick="goSlips('paid')">ใบเสร็จรับเงินของผู้เช่า</div><div class="cd nv rok" onclick="go('rep')">รายงานสรุปรายได้</div>`:`<div class="cd nv" style="margin-bottom:10px" onclick="go('met')">บันทึกเลขมิเตอร์</div><div class="cd nv" style="margin-bottom:10px" onclick="go('met')">ออกใบแจ้งหนี้</div><div class="cd nv" onclick="F='pending';go('pay')">ตรวจสอบสลิป</div>`}</div></div>
 <div class="cd" style="margin-top:14px"><h3>ใบแจ้งหนี้ประจำเดือน</h3><small class="mu">ค่าเช่า ฿${fm(D.set.rent)} + ค่าไฟ ฿${D.set.rate}/หน่วย</small>${flt()}${tbl()}</div>`},
 rooms(){const S=D.set,q=RQ.trim().toLowerCase(),ro=U.role=='owner',N=D.rooms.length,fr=D.rooms.filter(vac).length,
  card=r=>{const t=act(r.n),s=t?['มีผู้เช่า','g']:r.st=='busy'?['ไม่ว่าง','p']:r.st=='maint'?['ปิดปรับปรุง','r']:['ว่าง','y'];
@@ -1140,7 +1140,7 @@ function iss2(){let c=0;if(plock(PER))return alert(LKM(PER));
 // ---- tenant pages ----
 pg.my=()=>{const l=D.inv.filter(i=>mine(i)&&i.s!='paid');
  return`<h2>ใบแจ้งหนี้ของฉัน</h2><p class="mu">${U.room?'ห้อง '+U.room:'ยังไม่ได้จัดห้อง'} · ${e(U.name)}</p>${U.room?'':'<div class="note">⏳ ลงทะเบียนสำเร็จแล้ว รอผู้ดูแลจัดห้องพักให้ จึงจะมีใบแจ้งหนี้</div>'}<div class="note">💵 ชำระผ่าน PromptPay QR · หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div><div style="margin-top:14px;display:grid;gap:14px">${l.map(i=>{const s=st(i);return`<div class="cd"><div style="display:flex;justify-content:space-between"><b>${mon(i.per)}</b>${pill(i)}</div><div class="big">฿${fm(tot(i))}</div><div class="bd mu"><span>ค่าเช่า</span><span>฿${fm(i.rent)}</span></div><div class="bd mu"><span>ค่าไฟ ${i.u} หน่วย × ${D.set.rate}</span><span>฿${fm(i.el)}</span></div>${i.x?`<div class="bd mu"><span>${e(i.xn||'ค่าใช้จ่ายเพิ่มเติม')}</span><span>฿${fm(i.x)}</span></div>`:''}${tot(i)>base(i)?`<div class="bd" style="color:#fb7185"><span>ค่าปรับ</span><span>฿${fm(tot(i)-base(i))}</span></div>`:''}<p class="mu">ครบกำหนด ${dt(due(i))}</p>${i.s=='unpaid'&&i.rj?`<div class="note" style="background:#fee2e2;color:#b91c1c;border-color:#fecaca">⚠ สลิปถูกปฏิเสธ: ${e(i.rj)}<br>กรุณาตรวจสอบแล้วส่งสลิปใหม่</div>`:''}${i.s=='pending'?'<span class="mu">รอผู้ดูแลตรวจสอบ · ส่งสลิปผิดแก้ไขได้ก่อนผู้ดูแลยืนยัน</span> ':''}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="b" onclick="vi('${i.id}')">ดูใบแจ้งหนี้</button>${i.s=='pending'&&i.mt!='cash'?`<button class="b b2" onclick="pm('${i.id}')">แก้ไข/ส่งสลิปใหม่</button>`:''}</div></div>`}).join('')||'<div class="cd mu">ไม่มีบิลค้างชำระ 🎉</div>'}</div>`};
-pg.hist=()=>{const l=D.inv.filter(i=>mine(i)&&i.s=='paid');return`<h2>ประวัติ & ใบเสร็จ</h2><div class="cd sc" style="margin-top:14px"><table><tr><th>รอบบิล</th><th>ยอด</th><th>วันที่ชำระ</th><th></th></tr>${l.map(i=>`<tr><td>${mon(i.per)}</td><td>฿${fm(tot(i))}</td><td>${dt(i.paid)}</td><td><button class="b b2 sm" onclick="rc('${i.id}')">ใบเสร็จ</button></td></tr>`).join('')||'<tr><td colspan=4 class=mu>ยังไม่มีประวัติ</td></tr>'}</table></div>`};
+pg.hist=()=>{const l=D.inv.filter(i=>mine(i)&&i.s=='paid');return`<h2>ประวัติ & ใบเสร็จ</h2><div class="cd sc" style="margin-top:14px"><table><tr><th>รอบบิล</th><th>ยอด</th><th>วันที่ชำระ</th><th></th></tr>${l.map(i=>`<tr><td>${mon(i.per)}</td><td>฿${fm(tot(i))}</td><td>${dt(i.paid)}</td><td><button class="b b2 sm rok" onclick="rc('${i.id}')">ใบเสร็จ</button></td></tr>`).join('')||'<tr><td colspan=4 class=mu>ยังไม่มีประวัติ</td></tr>'}</table></div>`};
 const fz=i=>i.s=='pending'?(i.fine||0):fine(i); // ส่งสลิปใหม่: ค่าปรับคงตามวันที่แจ้งชำระครั้งแรก
 function pm(id){const i=gi(id),pd=i.s=='pending',f=fz(i),t=base(i)+f;SLIP=null;
  mo(`<div class="mh"><h3>${pd?'แก้ไขสลิป · ส่งสลิปใหม่':'ชำระเงินผ่าน PromptPay'}</h3><span class="mu">${i.id}</span></div>
@@ -1185,7 +1185,7 @@ let RCA=0,RCF='all';
 function goSlips(f){RCF=f;RCA=0;go('rep');setTimeout(()=>{const t=document.getElementById('slips');if(t&&t.scrollIntoView)t.scrollIntoView({behavior:'smooth',block:'start'})},80)}
 function rcTable(){const all=D.inv.filter(i=>i.slip||i.s=='paid'),L=all.filter(i=>RCF=='all'||st(i)==RCF).sort((a,b)=>(b.sub||b.paid||0)-(a.sub||a.paid||0)),V=RCA?L:L.slice(0,20),
  fb=(k,t)=>`<button class="b ${RCF==k?'':'b2'} sm" onclick="RCF='${k}';RCA=0;R()">${t}</button>`;
- return`<div id="slips" class="cd sc" style="margin-top:14px"><h3 style="margin-bottom:6px">สลิปโอนเงินและใบเสร็จของผู้เช่า</h3><small class="mu">สลิปที่ผู้เช่าส่งมาทุกห้อง และใบเสร็จเมื่อผู้ดูแลยืนยันการชำระแล้ว</small><div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">${fb('all','ทั้งหมด')}${fb('pending','รอตรวจสอบ')}${fb('paid','ชำระแล้ว')}</div><table><tr><th>ห้อง</th><th>ผู้เช่า</th><th>รอบบิล</th><th>ยอด</th><th>ช่องทาง</th><th>วันที่แจ้งชำระ</th><th>สถานะ</th><th></th></tr>${V.map(i=>{const u=tu(i)||{};return`<tr><td>${e(i.room)}</td><td>${e(u.name||'-')}</td><td>${mon(i.per)}</td><td>฿${fm(tot(i))}</td><td>${i.mt=='qr'?'QR':i.mt=='cash'?'เงินสด':'-'}</td><td>${i.sub?dt(i.sub):'-'}</td><td>${pill(i)}</td><td style="white-space:nowrap">${i.slip?`<button class="b b2 sm" onclick="vs('${i.id}')">สลิป</button> `:''}${i.s=='paid'?`<button class="b b2 sm" onclick="rc('${i.id}')">ใบเสร็จ</button>`:''}</td></tr>`}).join('')||'<tr><td colspan=8 class=mu>ยังไม่มีรายการ</td></tr>'}</table>${!RCA&&L.length>20?`<div style="margin-top:10px"><button class="b b2 sm" onclick="RCA=1;R()">ดูทั้งหมด (${L.length} รายการ)</button></div>`:''}</div>`}
+ return`<div id="slips" class="cd sc" style="margin-top:14px"><h3 style="margin-bottom:6px">สลิปโอนเงินและใบเสร็จของผู้เช่า</h3><small class="mu">สลิปที่ผู้เช่าส่งมาทุกห้อง และใบเสร็จเมื่อผู้ดูแลยืนยันการชำระแล้ว</small><div class="fl" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">${fb('all','ทั้งหมด')}${fb('pending','รอตรวจสอบ')}${fb('paid','ชำระแล้ว')}</div><table><tr><th>ห้อง</th><th>ผู้เช่า</th><th>รอบบิล</th><th>ยอด</th><th>ช่องทาง</th><th>วันที่แจ้งชำระ</th><th>สถานะ</th><th>สลิปที่ผู้เช่าส่ง</th><th></th></tr>${V.map(i=>{const u=tu(i)||{};return`<tr><td>${e(i.room)}</td><td>${e(u.name||'-')}</td><td>${mon(i.per)}</td><td>฿${fm(tot(i))}</td><td>${i.mt=='qr'?'QR':i.mt=='cash'?'เงินสด':'-'}</td><td>${i.sub?dt(i.sub):'-'}</td><td>${pill(i)}</td><td>${i.slip?`<img class="slt" data-sid="${i.id}" alt="สลิปห้อง ${e(i.room)}" onclick="vsl('${i.id}')">`:`<small class="mu">${i.mt=='cash'?'เงินสด':'-'}</small>`}</td><td style="white-space:nowrap">${i.slip?`<button class="b b2 sm rok" onclick="vsl('${i.id}')">ดูสลิป</button> `:''}${i.s=='paid'?`<button class="b b2 sm rok" onclick="rc('${i.id}')">ใบเสร็จ</button>`:''}</td></tr>`}).join('')||'<tr><td colspan=9 class=mu>ยังไม่มีรายการ</td></tr>'}</table>${!RCA&&L.length>20?`<div style="margin-top:10px"><button class="b b2 sm" onclick="RCA=1;R()">ดูทั้งหมด (${L.length} รายการ)</button></div>`:''}</div>`}
 function rc(id){const i=gi(id);if(i.s=='paid'&&!i.rc&&U.role!='owner'){i.rc=nrc();save()}mo(`<div id="rcimg" style="background:#fff;padding:2px;border-radius:14px">${rcpHTML(i)}</div><br><div class="np" style="display:flex;gap:8px;flex-wrap:wrap"><button class="b gr" onclick="si('${id}')">⬇ บันทึกรูปใบเสร็จ</button>${innerWidth>800?'<button class="b b2" onclick="try{window.print()}catch(x){}">พิมพ์</button>':''}<button class="b b2" onclick="cm()">ปิด</button></div>`);if(innerWidth>800)$('#mc').style.maxWidth='560px'}
 async function si(id){const i=gi(id),el=$('#rcimg');if(!window.html2canvas)return alert('โหลดตัวสร้างรูปไม่สำเร็จ กรุณารีเฟรชหน้าแล้วลองใหม่');tt('กำลังสร้างรูปใบเสร็จ...');
  try{const c=await html2canvas(el,{scale:2,backgroundColor:'#ffffff'}),blob=await new Promise(r=>c.toBlob(r,'image/png')),fn='receipt-'+(i.rc||id)+'.png';let dl=null;try{dl=window.claude&&await claude.use('downloads')}catch(x){}
@@ -1718,4 +1718,81 @@ applyPf(U);R();try{const lo=sessionStorage.getItem('ttm_lo');if(lo){sessionStora
  if(app)new MutationObserver(()=>{requestAnimationFrame(after)}).observe(app,{childList:true});
  after();
 }catch(x){try{console.warn('V2 runtime:',x)}catch(y){}}})();
+
+/* 25_slip_viewer.js — ดูสลิปโอนเงินที่ผู้เช่าส่งมา (รูปจริงจาก Storage) สำหรับเจ้าของ ผู้ดูแล และผู้เช่า
+   - vsl(id): หน้าต่างแสดงรูปสลิป + ยอด วันที่แจ้ง สถานะ และปุ่มไปใบแจ้งหนี้/ใบเสร็จ
+   - slipSrc(i): คืน URL ของรูปสลิป (โหมดทดลอง = data URL, โหมด Supabase = signed URL อายุ 1 ชม. เก็บแคชไว้)
+   - fillSlips(): ใส่รูปย่อสลิปในตาราง (img.slt[data-sid]) แบบขอ URL ทีเดียวทั้งชุด
+   โหลดเป็นไฟล์ JS สุดท้าย จึงแทนที่ vs() เดิม (ที่ใช้ใน หน้ารับชำระเงิน/ประวัติ) ให้ใช้หน้าต่างใหม่นี้ด้วย */
+const SLIPC = {};
+async function slipSrc(i) {
+    const p = i && i.slip;
+    if (!p) return null;
+    if (/^data:|^https?:/.test(p)) return p;
+    const c = SLIPC[p];
+    if (c && c.exp > Date.now()) return c.url;
+    if (!SBON || !SBX.cl) return null;
+    const r = await SBX.cl.storage.from('slips').createSignedUrl(p, 3600);
+    const url = r && r.data && r.data.signedUrl;
+    if (url) SLIPC[p] = { url, exp: Date.now() + 55 * 60e3 };
+    return url || null;
+}
+async function fillSlips() {
+    const imgs = [...document.querySelectorAll('img.slt[data-sid]:not([src])')];
+    if (!imgs.length) return;
+    const need = [];
+    for (const im of imgs) {
+        const i = gi(im.dataset.sid), p = i && i.slip;
+        if (!p) continue;
+        if (/^data:|^https?:/.test(p)) { im.src = p; continue }
+        const c = SLIPC[p];
+        if (c && c.exp > Date.now()) { im.src = c.url; continue }
+        need.push([im, p]);
+    }
+    if (!need.length || !SBON || !SBX.cl) return;
+    try {
+        const paths = [...new Set(need.map(x => x[1]))];
+        const r = await SBX.cl.storage.from('slips').createSignedUrls(paths, 3600);
+        const m = {};
+        ((r && r.data) || []).forEach(x => { if (x.signedUrl) { m[x.path] = x.signedUrl; SLIPC[x.path] = { url: x.signedUrl, exp: Date.now() + 55 * 60e3 } } });
+        need.forEach(([im, p]) => { if (m[p]) im.src = m[p]; else im.classList.add('slt-x') });
+    } catch (x) { need.forEach(([im]) => im.classList.add('slt-x')) }
+}
+async function vsl(id) {
+    const i = gi(id);
+    if (!i) return;
+    const u = tu(i) || {}, mt = i.mt == 'qr' ? 'PromptPay QR' : i.mt == 'cash' ? 'เงินสด (เคาน์เตอร์)' : '-';
+    const info = `<div class="slv-info">
+        <div><small class="mu">ห้อง</small><b>${e(i.room)}</b></div>
+        <div><small class="mu">ผู้เช่า</small><b>${e(u.name || '-')}</b></div>
+        <div><small class="mu">รอบบิล</small><b>${mon(i.per)}</b></div>
+        <div><small class="mu">ยอดที่แจ้งชำระ</small><b class="ac">฿${fm(tot(i))}</b></div>
+        <div><small class="mu">ช่องทาง</small><b>${mt}</b></div>
+        <div><small class="mu">วันที่แจ้งชำระ</small><b>${i.sub ? dt(i.sub) : '-'}</b></div>
+        <div><small class="mu">สถานะ</small>${pill(i)}</div>
+    </div>`;
+    const btns = `<div class="np acts" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+        <button class="b b2" onclick="vi('${id}')">ใบแจ้งหนี้</button>
+        ${i.s == 'paid' ? `<button class="b b2" onclick="rc('${id}')">ใบเสร็จ</button>` : ''}
+        ${U && U.role == 'admin' && i.s == 'pending' && typeof ap == 'function' ? `<button class="b" onclick="cm();ap('${id}')">อนุมัติ</button>` : ''}
+        <button class="b" onclick="cm()">ปิด</button></div>`;
+    const body = i.slip
+        ? `<div class="slv-img"><div class="slv-ld">กำลังโหลดรูปสลิป…</div><img id="slvimg" alt="สลิปโอนเงินห้อง ${e(i.room)}" style="display:none"></div>`
+        : `<div class="slv-none">${i.mt == 'cash' ? '💵 ชำระเป็นเงินสดที่เคาน์เตอร์ — ไม่มีสลิปโอนเงิน' : 'ผู้เช่ายังไม่ได้ส่งสลิปโอนเงินสำหรับบิลนี้'}</div>`;
+    mo(`<h3>สลิปโอนเงินที่ผู้เช่าส่งมา</h3><small class="mu">${e(i.id)}</small>${body}${info}${btns}`);
+    if (innerWidth > 800) $('#mc').style.maxWidth = '520px';
+    if (!i.slip) return;
+    const src = await slipSrc(i), im = $('#slvimg'), ld = document.querySelector('.slv-ld');
+    if (!im) return;
+    if (!src) { if (ld) ld.textContent = 'เปิดรูปสลิปไม่สำเร็จ'; return }
+    im.onload = () => { if (ld) ld.remove(); im.style.display = 'block' };
+    im.onerror = () => { if (ld) ld.textContent = 'เปิดรูปสลิปไม่สำเร็จ' };
+    im.onclick = () => window.open(src, '_blank');
+    im.src = src;
+}
+// ใช้หน้าต่างใหม่แทน vs() เดิมทุกที่ (หน้ารับชำระเงินของผู้ดูแล, ประวัติของผู้เช่า, รายงานของเจ้าของ)
+vs = vsl;
+// เติมรูปย่อสลิปหลังวาดหน้าใหม่ทุกครั้ง
+new MutationObserver(() => { if (document.querySelector('img.slt[data-sid]:not([src])')) fillSlips() })
+    .observe(document.getElementById('app'), { childList: true, subtree: true });
 
