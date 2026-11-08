@@ -449,3 +449,21 @@ html:has(#mo[style*="flex"]), html:has(#mo[style*="flex"]) body { overflow: hidd
     .slv-img { min-height: 0 }
     .slv-img img { max-height: 46vh }
 }
+
+/* ===================== 24) ฟอร์มเพิ่มผู้เช่า + แจ้งเตือนเปลี่ยนรหัสผ่าน ===================== */
+.atf { display: grid; gap: 12px; margin-top: 14px }
+.atf-sec { border: 1px solid var(--ln); border-radius: 16px; padding: 14px 16px 6px; background: color-mix(in srgb, var(--bg2) 45%, var(--cd)) }
+.atf-sec > b { display: block; font-size: 13px; letter-spacing: .02em; color: var(--ac); margin-bottom: 4px }
+.atf-sec > small { display: block; margin: -4px 0 10px; line-height: 1.55 }
+.atf-pw { display: flex; gap: 8px; align-items: center }
+.atf-pw input { margin: 6px 0 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: .04em }
+.atf-pw .b { flex: none; margin-bottom: 6px }
+.atf-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px }
+@media (max-width: 420px) { .atf-2 { grid-template-columns: 1fr } }
+.atf-cred { display: grid; gap: 10px; margin-top: 14px; padding: 14px 16px; border: 1px solid var(--acs2); border-radius: 16px; background: var(--acs) }
+.atf-cred > div { display: flex; flex-direction: column; gap: 2px; min-width: 0 }
+.atf-cred b { overflow-wrap: anywhere }
+.atf-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 18px; letter-spacing: .06em; color: var(--ac) }
+.pwn { display: flex; align-items: center; justify-content: space-between; gap: 10px 14px; flex-wrap: wrap; margin: 12px 0 14px; background: var(--acs) !important; border-color: var(--acs2) !important; color: var(--tx) !important }
+.pwn .b { flex: none }
+.pwn-ico { font-size: 34px; text-align: center; margin: 4px 0 6px }

@@ -1076,7 +1076,7 @@ set(){const s=D.set,f=(k,l,u)=>`<div class="cd"><label>${l}</label><div style="d
 function ss(){const s=D.set;['rent','rate','dep','due','max'].forEach(k=>s[k]=+$('#s_'+k).value||0);['pp','tax','name','payee','tel','addr','url','ejs','ejt','ejk'].forEach(k=>s[k]=$('#s_'+k).value.trim());lg('แก้ไขการตั้งค่า');save();tt('✓ บันทึกแล้ว')}
 function rg(){return`<div class="rg">${D.rooms.map(r=>{const n=tn(r.n);return`<div class="rm ${n||r.st=='busy'?'o':r.st=='maint'?'m':''}" onclick="rm(${r.n})"><b>${r.n}</b>${n?e(n):r.st=='busy'?'ไม่ว่าง':r.st=='maint'?'ปิดปรับปรุง':'ว่าง'}</div>`}).join('')}</div>`}
 function rm(n){if(U.role=='owner')return;const r=D.rooms.find(x=>x.n==n),t=act(n),s=t?'busy':r.st||'free',o=(v,l)=>`<option value="${v}" ${s==v?'selected':''}>${l}</option>`;
- mo(`<h3>ห้อง ${n}</h3><label>สถานะห้อง</label><select id="rs">${o('free','ว่าง')}${o('busy',t?'ไม่ว่าง (มีผู้เช่า)':'ไม่ว่าง')}${o('maint','ปิดปรับปรุง')}</select><label>เลขมิเตอร์ล่าสุด</label><input id="rmm" type="number" value="${r.m}" ${D.inv.some(i=>i.room==n)?'disabled':''}>${t?`<p>${e(t.name)}<br><small class="mu">${e(t.email)}${t.tel?' · '+e(t.tel):''}</small></p><small class="mu">เลือก “ว่าง” หรือ “ปิดปรับปรุง” เพื่อย้ายผู้เช่าออกพร้อมเปลี่ยนสถานะห้อง</small><br><br><button class="b" onclick="rsv(${n})">บันทึก</button> <button class="b b2" onclick="et(${t.id})">แก้ไขผู้เช่า</button> <button class="b b2" onclick="mv(${t.id})">ย้ายออก</button>`:`<button class="b" onclick="rsv(${n})">บันทึกสถานะ</button>${s=='free'?`${UN().length?`<hr style="border-color:var(--ln);margin:18px 0"><h3>จัดผู้เช่าที่ลงทะเบียนแล้วเข้าห้องนี้</h3><label>เลือกผู้เช่า</label><select id="as_u">${UN().map(u=>`<option value="${u.id}">${e(u.name)} · ${e(u.tel||u.email)}</option>`).join('')}</select><button class="b" onclick="asg(+$('#as_u').value,${n})">จัดเข้าห้อง ${n}</button>`:''}<hr style="border-color:var(--ln);margin:18px 0"><h3>เพิ่มผู้เช่า</h3><label>ชื่อ - นามสกุล</label><input id="an"><label>เบอร์โทร</label><input id="at"><label>อีเมล</label><input id="ae"><label>รหัสผ่าน</label><input id="ap" value="${genPw()}"><button class="b" onclick="ad(${n})">เพิ่มผู้เช่า</button>`:''}`} <button class="b b2" onclick="cm()">ปิด</button>`)}
+ mo(`<h3>ห้อง ${n}</h3><label>สถานะห้อง</label><select id="rs">${o('free','ว่าง')}${o('busy',t?'ไม่ว่าง (มีผู้เช่า)':'ไม่ว่าง')}${o('maint','ปิดปรับปรุง')}</select><label>เลขมิเตอร์ล่าสุด</label><input id="rmm" type="number" value="${r.m}" ${D.inv.some(i=>i.room==n)?'disabled':''}>${t?`<p>${e(t.name)}<br><small class="mu">${e(t.email)}${t.tel?' · '+e(t.tel):''}</small></p><small class="mu">เลือก “ว่าง” หรือ “ปิดปรับปรุง” เพื่อย้ายผู้เช่าออกพร้อมเปลี่ยนสถานะห้อง</small><br><br><button class="b" onclick="rsv(${n})">บันทึก</button> <button class="b b2" onclick="et(${t.id})">แก้ไขผู้เช่า</button> <button class="b b2" onclick="mv(${t.id})">ย้ายออก</button>`:`<button class="b" onclick="rsv(${n})">บันทึกสถานะ</button>${s=='free'?`${UN().length?`<hr style="border-color:var(--ln);margin:18px 0"><h3>จัดผู้เช่าที่ลงทะเบียนแล้วเข้าห้องนี้</h3><label>เลือกผู้เช่า</label><select id="as_u">${UN().map(u=>`<option value="${u.id}">${e(u.name)} · ${e(u.tel||u.email)}</option>`).join('')}</select><button class="b" onclick="asg(+$('#as_u').value,${n})">จัดเข้าห้อง ${n}</button>`:''}<hr style="border-color:var(--ln);margin:18px 0"><h3>เพิ่มผู้เช่าเข้าห้องนี้</h3><small class="mu">สร้างบัญชี (อีเมล + รหัสผ่าน) และเปิดสัญญาเช่าในขั้นตอนเดียว</small><div style="margin-top:10px"><button class="b" onclick="atf(${n})">+ เพิ่มผู้เช่าห้อง ${n}</button></div>`:''}`} <button class="b b2" onclick="cm()">ปิด</button>`)}
 function rsv(n){const r=D.rooms.find(x=>x.n==n),t=act(n),v=$('#rmm').value,sv=$('#rs').value,li=D.inv.filter(i=>i.room==n).sort((a,b)=>a.per<b.per?1:-1)[0];if(v!==''&&+v!=r.m&&li)return alert('เลขมิเตอร์ถูกล็อกตามบิลล่าสุดของห้องนี้ ('+mon(li.per)+') แก้ได้ที่เมนู มิเตอร์ & ออกบิล > แก้ไขบิล (ก่อนปิดรอบ)');const fin=()=>{if(v!==''&&+v>=0)r.m=+v;if(!t||sv!='busy')r.st=sv=='free'?'':sv;lg('แก้ไขสถานะห้อง '+n);save();cm();R();tt('✓ บันทึกสถานะห้อง '+n+' แล้ว')};
  if(t&&sv!='busy'){const k=D.inv.filter(i=>(i.uid?i.uid==t.id:i.room==n)&&i.s!='paid').length;
   return cf('เปลี่ยนเป็น'+(sv=='maint'?'ปิดปรับปรุง':'ว่าง')+' จะย้ายผู้เช่า '+t.name+' ออกจากห้อง'+(k?'\nมีบิลค้าง '+k+' รายการ จะยังอยู่ในประวัติผู้เช่าเดิม':'')+'\nยืนยัน?',()=>{t.out=Date.now();lg('ย้ายออก ห้อง '+n);fin()})}
@@ -1363,7 +1363,7 @@ function toggleSb(){const m=document.documentElement.classList.toggle('sb-mini')
 function snapForm(){const a=document.activeElement,s={y:window.scrollY,f:[],a:a&&a.id?{id:a.id,s:a.selectionStart,e:a.selectionEnd}:null};document.querySelectorAll('#app input,#app textarea,#app select').forEach(el=>{if(el.id&&el.type!='file')s.f.push([el.id,el.type=='checkbox'||el.type=='radio'?el.checked:el.value])});return s}
 function restoreForm(s){s.f.forEach(([id,v])=>{const el=document.getElementById(id);if(!el)return;if(el.type=='checkbox'||el.type=='radio'){el.checked=v}else if(el.value!==v)el.value=v});window.scrollTo(0,s.y);if(s.a){const el=document.getElementById(s.a.id);if(el){el.focus({preventScroll:true});try{el.setSelectionRange(s.a.s,s.a.e)}catch(x){}}}}
 function skel(){const a=$('#app');if(!a)return;a.innerHTML=`<div class="app"><div class="sb np sk-sb"><i class="sk sk-logo"></i>${'<i class="sk sk-nv"></i>'.repeat(7)}</div><div class="mn"><div class="sk sk-top"></div><div class="sk sk-h"></div><div class="dg3"><div class="cd sk"></div><div class="cd sk"></div><div class="cd sk"></div></div><div class="cd sk" style="height:240px"></div></div></div>`}
-function R0(){const a=$('#app');if(!U){if(!['home','login','forgot','recover'].includes(P))P='home';a.innerHTML={home,login,reg,forgot,recover}[P]();if(P=='home')lp();a.onpointermove=e=>{a.style.setProperty('--mx',(e.clientX/innerWidth*2-1).toFixed(3));a.style.setProperty('--my',(e.clientY/innerHeight*2-1).toFixed(3))};return}
+function R0(){const a=$('#app');if(!U){if(!['home','login','forgot','recover'].includes(P))P='home';a.innerHTML={home,login,reg:login,forgot,recover}[P]();if(P=='home')lp();a.onpointermove=e=>{a.style.setProperty('--mx',(e.clientX/innerWidth*2-1).toFixed(3));a.style.setProperty('--my',(e.clientY/innerHeight*2-1).toFixed(3))};return}
  a.onpointermove=null;a.style.removeProperty('--mx');a.style.removeProperty('--my');
  const ad=U.role=='admin',ow=U.role=='owner',nv=ow?[['dash','แดชบอร์ด','▦'],['rooms','ห้องพัก','⌂'],['con','สัญญาเช่า','▥'],['rep','รายงาน','☰'],['help','ช่วยเหลือ','◍'],['news','ข่าวสาร','▣'],['prof','โปรไฟล์','◉']]:ad?NVA:[['my','ใบแจ้งหนี้ของฉัน','▤'],['hist','ประวัติ & ใบเสร็จ','☰'],['con','สัญญาเช่า','▥'],['help','ช่วยเหลือ','◍'],['news','ข่าวสาร','▣'],['prof','โปรไฟล์','◉']];
  if(!nv.some(n=>n[0]==P))P=nv[0][0];
@@ -1795,4 +1795,158 @@ vs = vsl;
 // เติมรูปย่อสลิปหลังวาดหน้าใหม่ทุกครั้ง
 new MutationObserver(() => { if (document.querySelector('img.slt[data-sid]:not([src])')) fillSlips() })
     .observe(document.getElementById('app'), { childList: true, subtree: true });
+
+/* 26_add_tenant.js — ผู้ดูแลเพิ่มผู้เช่า: สร้างบัญชี (อีเมล + รหัสผ่านเริ่มต้น) + เลือกห้อง + เปิดสัญญาเช่า ในหน้าต่างเดียว
+   และแจ้งเตือนผู้เช่าให้เปลี่ยนรหัสผ่านหลังเข้าสู่ระบบครั้งแรก (จนกว่าจะเปลี่ยนในหน้าโปรไฟล์)
+   - โหมด Supabase: เรียก Edge Function "create-tenant" (ตรวจสิทธิ์แอดมิน สร้างบัญชี เปิดสัญญาในขั้นตอนเดียว)
+   - โหมดทดลอง: บันทึกลงเบราว์เซอร์เหมือนเดิม
+   โหลดหลังไฟล์ 25 จึงแทนที่ at0() เดิม (ปุ่ม "+ เพิ่มผู้เช่า") */
+
+const todayISO = () => { const d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) };
+const atfRooms = () => D.rooms.filter(r => vac(r));
+
+// ---------- หน้าต่างเพิ่มผู้เช่า ----------
+function atf(n) {
+    if (!U || U.role != 'admin') return;
+    const f = atfRooms();
+    if (!f.length) return alert('ไม่มีห้องว่างสำหรับเพิ่มผู้เช่า');
+    if (!f.some(r => r.n == n)) n = f[0].n;
+    const S = D.set;
+    mo(`<h3>เพิ่มผู้เช่า</h3><small class="mu">สร้างบัญชีเข้าสู่ระบบให้ผู้เช่า พร้อมเปิดสัญญาเช่า</small>
+    <div class="atf">
+      <div class="atf-sec"><b>1 · ห้องพัก</b>
+        <label>เลือกห้องว่าง</label><select id="af_r">${f.map(r => `<option value="${r.n}" ${r.n == n ? 'selected' : ''}>ห้อง ${r.n}</option>`).join('')}</select>
+      </div>
+      <div class="atf-sec"><b>2 · ข้อมูลผู้เช่า</b>
+        <label>ชื่อ - นามสกุล *</label><input id="af_n" autocomplete="off">
+        <label>เบอร์โทร</label><input id="af_t" type="tel" inputmode="tel" placeholder="08x-xxx-xxxx" autocomplete="off">
+      </div>
+      <div class="atf-sec"><b>3 · บัญชีเข้าสู่ระบบ</b>
+        <label>อีเมล *</label><input id="af_e" type="email" inputmode="email" placeholder="name@example.com" autocomplete="off">
+        <label>รหัสผ่านเริ่มต้น * <small class="mu">(อย่างน้อย 6 ตัว)</small></label>
+        <div class="atf-pw"><input id="af_p" value="${genPw()}" autocomplete="new-password" spellcheck="false"><button type="button" class="b b2 sm" onclick="$('#af_p').value=genPw()">สุ่มใหม่</button></div>
+        <small class="mu">ผู้เช่าจะได้รับการแจ้งเตือนให้เปลี่ยนรหัสผ่านเองหลังเข้าสู่ระบบครั้งแรก</small>
+      </div>
+      <div class="atf-sec"><b>4 · สัญญาเช่า</b>
+        <div class="atf-2"><div><label>วันเริ่มสัญญา *</label><input id="af_s" type="date" value="${todayISO()}"></div>
+        <div><label>วันสิ้นสุดสัญญา</label><input id="af_x" type="date"></div></div>
+        <small class="mu">เว้นวันสิ้นสุดว่างไว้ = ไม่กำหนด · ค่าเช่า ฿${fm(S.rent)}/เดือน · เงินแรกเข้า ฿${fm(S.dep)} (บันทึกครั้งเดียว ณ วันเริ่มสัญญา)</small>
+        <label>ไฟล์สัญญาเช่า (PDF ไม่บังคับ)</label><input id="af_f" type="file" accept="application/pdf,.pdf">
+      </div>
+    </div>
+    <div class="acts" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:16px">
+      <button class="b b2" onclick="cm()">ยกเลิก</button>
+      <button class="b" id="af_go" onclick="atfGo()">สร้างบัญชีและเปิดสัญญา</button>
+    </div>`);
+    if (innerWidth > 800) $('#mc').style.maxWidth = '560px';
+}
+
+async function atfGo() {
+    const n = +$('#af_r').value, name = $('#af_n').value.trim(), tel = $('#af_t').value.trim(),
+        em = $('#af_e').value.trim().toLowerCase(), pw = $('#af_p').value, s = $('#af_s').value, x = $('#af_x').value,
+        fEl = $('#af_f'), file = fEl && fEl.files[0];
+    if (!name) return alert('กรุณากรอกชื่อ - นามสกุล');
+    if (!/^\S+@\S+\.\S+$/.test(em)) return alert('รูปแบบอีเมลไม่ถูกต้อง');
+    if (pw.length < 6) return alert('รหัสผ่านต้องมีอย่างน้อย 6 ตัว');
+    if (tel && !/^[0-9\-+ ]{9,15}$/.test(tel)) return alert('เบอร์โทรไม่ถูกต้อง');
+    if (!s) return alert('กรุณาระบุวันเริ่มสัญญา');
+    if (x && x < s) return alert('วันสิ้นสุดสัญญาต้องไม่ก่อนวันเริ่มสัญญา');
+    if (file && (file.type != 'application/pdf' && !/\.pdf$/i.test(file.name))) return alert('ไฟล์สัญญารองรับเฉพาะ PDF');
+    if (file && file.size > 5 * 1024 * 1024) return alert('ไฟล์สัญญาใหญ่เกิน 5MB');
+    const btn = $('#af_go'); if (btn) { btn.disabled = true; btn.textContent = 'กำลังสร้างบัญชี…' }
+    const done = () => { if (btn) { btn.disabled = false; btn.textContent = 'สร้างบัญชีและเปิดสัญญา' } };
+    const D2T0 = v => new Date(v + 'T00:00:00').getTime();
+
+    if (SBON) {
+        const r = await SBX.cl.functions.invoke('create-tenant', { body: { email: em, password: pw, full_name: name, phone: tel, room_no: String(n), start_date: s, end_date: x || null } });
+        if (r.error) {
+            let msg = r.error.message;
+            try { const j = await r.error.context.json(); if (j && j.error) msg = j.error } catch (e2) { }
+            done(); return alert(msg);
+        }
+        await sbLoad();
+        if (file) { CPR = n; const dt = new DataTransfer(); dt.items.add(file); const tmp = document.createElement('input'); tmp.type = 'file'; tmp.files = dt.files; try { await cpf(tmp) } catch (e2) { } }
+        R();
+    } else {
+        if (D.users.some(u => u.email == em)) { done(); return alert('อีเมลนี้มีบัญชีอยู่แล้ว') }
+        D.users.push({ id: Date.now(), name, email: em, pw, role: 'tenant', room: n, tel, cs: D2T0(s), ce: x ? D2T0(x) : undefined, mcp: 1 });
+        lg('เพิ่มผู้เช่า ห้อง ' + n); save();
+        if (file) { CPR = n; const dt = new DataTransfer(); dt.items.add(file); const tmp = document.createElement('input'); tmp.type = 'file'; tmp.files = dt.files; cpf(tmp) }
+        R();
+    }
+    atfDone({ n, name, em, pw, s, x });
+}
+
+// ---------- สรุปบัญชีที่สร้าง + คัดลอกส่งให้ผู้เช่า ----------
+function atfDone(o) {
+    const url = (D.set.url || location.href.split('#')[0].split('?')[0]);
+    const txt = `${D.set.name || 'T&T Mansion'} — บัญชีผู้เช่าห้อง ${o.n}\nชื่อ: ${o.name}\nเว็บ: ${url}\nอีเมลเข้าสู่ระบบ: ${o.em}\nรหัสผ่านเริ่มต้น: ${o.pw}\n\nกรุณาเปลี่ยนรหัสผ่านเป็นของคุณเองที่เมนู "โปรไฟล์" หลังเข้าสู่ระบบครั้งแรก`;
+    ATF_TXT = txt;
+    mo(`<h3>✓ สร้างบัญชีผู้เช่าแล้ว</h3><small class="mu">ห้อง ${o.n} · สัญญาเริ่ม ${dt(o.s)}${o.x ? ' ถึง ' + dt(o.x) : ' (ไม่กำหนดวันสิ้นสุด)'}</small>
+    <div class="atf-cred">
+      <div><small class="mu">ชื่อผู้เช่า</small><b>${e(o.name)}</b></div>
+      <div><small class="mu">อีเมลเข้าสู่ระบบ</small><b>${e(o.em)}</b></div>
+      <div><small class="mu">รหัสผ่านเริ่มต้น</small><b class="atf-mono">${e(o.pw)}</b></div>
+    </div>
+    <div class="note" style="margin-top:12px">ส่งข้อมูลนี้ให้ผู้เช่า (เช่น ทาง LINE) · เมื่อผู้เช่าเข้าสู่ระบบ ระบบจะแจ้งเตือนให้เปลี่ยนรหัสผ่านเป็นของตัวเอง</div>
+    <div class="acts" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px">
+      <button class="b b2" onclick="cm()">ปิด</button>
+      <button class="b" onclick="atfCopy(this)">คัดลอกข้อมูลส่งผู้เช่า</button>
+    </div>`);
+}
+var ATF_TXT = '';
+async function atfCopy(b) {
+    try { await navigator.clipboard.writeText(ATF_TXT); b.textContent = '✓ คัดลอกแล้ว' }
+    catch (x) { prompt('คัดลอกข้อความนี้ส่งให้ผู้เช่า', ATF_TXT) }
+}
+
+// ปุ่ม "+ เพิ่มผู้เช่า" (หน้าผู้เช่า) → เปิดฟอร์มใหม่
+at0 = function () { const f = atfRooms(); if (!f.length) return alert('ไม่มีห้องว่างสำหรับเพิ่มผู้เช่า'); atf(f[0].n) };
+
+// ---------- แจ้งเตือนให้เปลี่ยนรหัสผ่าน (ผู้เช่าที่ใช้รหัสผ่านเริ่มต้นจากแอดมิน) ----------
+var PWN = false, PWN_SHOWN = false, PWN_PATCHED = false;
+function pwnPatch() {
+    // เมื่อเปลี่ยนรหัสผ่านสำเร็จ (หน้าโปรไฟล์ หรือ ลิงก์รีเซ็ต) ให้ล้างธงแจ้งเตือนในบัญชีด้วย
+    if (PWN_PATCHED || !SBON || !SBX.cl) return; PWN_PATCHED = true;
+    const a = SBX.cl.auth, uu = a.updateUser.bind(a);
+    a.updateUser = async (attrs, opt) => {
+        if (attrs && attrs.password) attrs = Object.assign({}, attrs, { data: Object.assign({}, attrs.data || {}, { must_change_pw: false }) });
+        const r = await uu(attrs, opt);
+        if (!r.error && attrs && attrs.password) { PWN = false; document.querySelectorAll('.pwn').forEach(x => x.remove()) }
+        return r;
+    };
+}
+async function pwnCheck() {
+    if (!U || U.role != 'tenant') { PWN = false; return }
+    if (SBON) { try { pwnPatch(); const { data } = await SBX.cl.auth.getUser(); PWN = !!(data && data.user && data.user.user_metadata && data.user.user_metadata.must_change_pw) } catch (x) { PWN = false } }
+    else PWN = !!U.mcp;
+    if (PWN) { pwnBanner(); if (!PWN_SHOWN) { PWN_SHOWN = true; setTimeout(pwnModal, 500) } }
+}
+function pwnModal() {
+    if (!PWN || !U) return;
+    if (getComputedStyle($('#mo')).display != 'none') return;
+    mo(`<div class="pwn-ico">🔐</div><h3 style="text-align:center">อย่าลืมเปลี่ยนรหัสผ่าน</h3>
+    <p class="mu" style="text-align:center;margin:8px 0 0">คุณกำลังใช้รหัสผ่านเริ่มต้นที่ผู้ดูแลตั้งให้<br>เพื่อความปลอดภัยของบัญชี กรุณาเปลี่ยนเป็นรหัสผ่านของคุณเองที่หน้า <b>โปรไฟล์</b></p>
+    <div class="acts" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:16px">
+      <button class="b b2" onclick="cm()">ไว้ทีหลัง</button>
+      <button class="b" onclick="cm();pwnGo()">เปลี่ยนรหัสผ่านตอนนี้</button>
+    </div>`);
+}
+function pwnGo() { go('prof'); setTimeout(() => { const el = $('#p_o'); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.focus({ preventScroll: true }) } }, 150) }
+function pwnBanner() {
+    if (!PWN || !U || U.role != 'tenant' || P == 'prof') return;
+    const mn = document.querySelector('.mn'); if (!mn || mn.querySelector('.pwn')) return;
+    const h = mn.querySelector(':scope > h2'); if (!h) return;
+    const d = document.createElement('div'); d.className = 'note pwn';
+    d.innerHTML = '🔐 คุณยังใช้รหัสผ่านเริ่มต้นจากผู้ดูแล — อย่าลืมเปลี่ยนรหัสผ่านเป็นของคุณเอง <button class="b sm" onclick="pwnGo()">เปลี่ยนรหัสผ่าน</button>';
+    const sub = h.nextElementSibling && h.nextElementSibling.matches('p,small,.mu') ? h.nextElementSibling : h;
+    sub.after(d);
+}
+// ตรวจทุกครั้งที่เข้าสู่ระบบ
+const _enter0 = enter;
+enter = function (u, pg2, how) { const r = _enter0(u, pg2, how); PWN_SHOWN = false; pwnCheck(); return r };
+// เติมแถบแจ้งเตือนทุกครั้งที่วาดหน้าใหม่
+new MutationObserver(() => { if (PWN) pwnBanner() }).observe(document.getElementById('app'), { childList: true, subtree: true });
+// โหมดทดลอง: เปลี่ยนรหัสผ่านสำเร็จ → ล้างธง
+if (!SBON && typeof pc == 'function') { const _pc0 = pc; pc = function () { const before = U && U.pw; _pc0(); if (U && U.pw != before) { U.mcp = 0; save(); PWN = false; document.querySelectorAll('.pwn').forEach(x => x.remove()) } } }
 
