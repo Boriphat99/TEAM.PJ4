@@ -4677,3 +4677,342 @@ a, button, .b, .nv, .tabs span, .seg span, .thm { -webkit-tap-highlight-color: t
     .hnr .logo { font-size: 0; gap: 0 }                           /* จอแคบมาก: เหลือแต่ไอคอนโลโก้ เพื่อให้ปุ่มเข้าสู่ระบบไม่ถูกตัด */
 }
 
+/* 25_premium.css — ยกระดับดีไซน์ "Ruby Ivory / Onyx Ruby" (โหลดเป็นไฟล์สุดท้าย ทับไฟล์ก่อนหน้า)
+   ธีมสว่าง: งาช้าง-ขาว + แดงทับทิมเข้ม  ·  ธีมมืด: ดำนิล + แดงทับทิม
+   ฟอนต์: Noto Sans Thai (เนื้อหา/ตัวเลข) + Noto Serif Thai (หัวข้อใหญ่ ให้ความรู้สึกหรูแบบนิตยสาร)
+   ไม่แก้ JavaScript ใด ๆ — เปลี่ยนเฉพาะหน้าตา ลบไฟล์นี้ออกจาก index.html เพื่อกลับไปดีไซน์เดิมได้ทันที */
+
+/* ===================== 1) Design tokens ===================== */
+:root {
+    --font: 'Noto Sans Thai', 'Inter', system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+    --font-d: 'Noto Serif Thai', 'Noto Sans Thai', Georgia, serif;
+    --bg: #faf7f4;            /* งาช้างอุ่น */
+    --bg2: #f4eee9;
+    --cd: #ffffff;
+    --ln: #ebe3de;            /* เส้นบางสีอุ่น */
+    --ln2: #ddd2cc;
+    --tx: #1b1416;            /* หมึกดำอมแดง */
+    --mu: #776b6d;
+    --ac: #a8122c;            /* แดงทับทิม */
+    --ac2: #7a0c20;           /* แดงเลือดหมู */
+    --ac3: #c62c44;           /* แดงสว่างสำหรับ hover/เส้น */
+    --acs: #f9eef0;
+    --acs2: #f2dadd;
+    --ink: #170d10;           /* สีแถบเมนูข้างแบบหรู */
+    --ink2: #24151a;
+    --sb: #ffffff;
+    --bar: rgba(250, 247, 244, .78);
+    --glow: rgba(168, 18, 44, .06);
+    --sh1: 0 1px 2px rgba(27, 20, 22, .04), 0 2px 8px -2px rgba(27, 20, 22, .05);
+    --sh2: 0 1px 2px rgba(27, 20, 22, .04), 0 18px 40px -16px rgba(27, 20, 22, .16);
+    --sh-ac: 0 10px 24px -10px rgba(122, 12, 32, .55);
+    --r: 14px;
+    --r-lg: 20px;
+    --ease: cubic-bezier(.22, .8, .24, 1);
+    --ok: #0e7a4b;  --ok-bg: #e9f6ef;  --ok-ln: #c7e8d6;
+    --wa: #8f5f00;  --wa-bg: #fcf4dd;  --wa-ln: #f1dfa6;
+    --er: #a8122c;  --er-bg: #fbecee;  --er-ln: #f2cfd5;
+    --pu: #5f2ba0;  --pu-bg: #f2ecfb;  --pu-ln: #ddd0f3;
+}
+html[data-theme=dark] {
+    --bg: #0c0a0b;
+    --bg2: #120e10;
+    --cd: #161214;
+    --ln: #2a2125;
+    --ln2: #3a2e33;
+    --tx: #f5f0f0;
+    --mu: #a59a9c;
+    --ac: #e3344e;
+    --ac2: #a3142d;
+    --ac3: #ff5a71;
+    --acs: rgba(227, 52, 78, .11);
+    --acs2: rgba(227, 52, 78, .2);
+    --ink: #0f0b0d;
+    --ink2: #1c1316;
+    --sb: #110d0f;
+    --bar: rgba(12, 10, 11, .72);
+    --glow: rgba(227, 52, 78, .09);
+    --sh1: 0 1px 0 rgba(255, 255, 255, .03) inset, 0 4px 16px -4px rgba(0, 0, 0, .5);
+    --sh2: 0 1px 0 rgba(255, 255, 255, .04) inset, 0 24px 48px -20px rgba(0, 0, 0, .75);
+    --sh-ac: 0 10px 28px -10px rgba(227, 52, 78, .55);
+    --ok: #4ed294;  --ok-bg: rgba(78, 210, 148, .1);  --ok-ln: rgba(78, 210, 148, .25);
+    --wa: #f2c14e;  --wa-bg: rgba(242, 193, 78, .1);  --wa-ln: rgba(242, 193, 78, .25);
+    --er: #ff6b80;  --er-bg: rgba(255, 107, 128, .1); --er-ln: rgba(255, 107, 128, .26);
+    --pu: #b997ff;  --pu-bg: rgba(185, 151, 255, .1); --pu-ln: rgba(185, 151, 255, .26);
+    scrollbar-color: #3a2e33 #0c0a0b;
+}
+
+/* ===================== 2) ตัวอักษร ===================== */
+html, body, button, input, select, textarea { font-family: var(--font) }
+body {
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: normal;
+}
+h1, h2, h3, h4 { color: var(--tx); letter-spacing: -.01em }
+.mn > h2, .hd2 h2 {
+    font-family: var(--font-d);
+    font-weight: 600;
+    font-size: clamp(26px, 2.4vw, 34px);
+    line-height: 1.3;
+    letter-spacing: -.005em;
+}
+.mn > h2 + .mu, .mn > h2 + p.mu { font-size: 14px; letter-spacing: .01em; margin-top: 4px }
+h3 { font-weight: 600; letter-spacing: -.005em }
+.k, .big { font-weight: 700; letter-spacing: -.025em; font-variant-numeric: tabular-nums lining-nums }
+td, th, .pl, .amt { font-variant-numeric: tabular-nums }
+::selection { background: color-mix(in srgb, var(--ac) 22%, transparent) }
+
+/* ===================== 3) พื้นหลัง ===================== */
+html, body, html[data-theme=dark], html[data-theme=dark] body { background: var(--bg) }
+body, html[data-theme=dark] body {
+    background:
+        radial-gradient(1100px 520px at 100% -12%, var(--glow), transparent 60%),
+        radial-gradient(800px 420px at -10% 0%, color-mix(in srgb, var(--glow) 60%, transparent), transparent 62%),
+        var(--bg);
+    background-attachment: fixed;
+}
+body::before { opacity: .22 }
+
+/* ===================== 4) ปุ่ม ===================== */
+.b { border-radius: 12px; font-weight: 600; letter-spacing: .01em; transition: transform .18s var(--ease), box-shadow .18s var(--ease), background-color .18s, color .18s, border-color .18s }
+.b:not(.b2):not(.gr):not(.lgb), html[data-theme=dark] .b:not(.b2):not(.gr):not(.lgb) {
+    background: linear-gradient(180deg, color-mix(in srgb, var(--ac) 92%, #fff) 0%, var(--ac) 42%, var(--ac2) 100%);
+    color: #fff;
+    border: 1px solid color-mix(in srgb, var(--ac2) 70%, #000);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, .22) inset, var(--sh-ac);
+}
+.b:not(.b2):not(.gr):not(.lgb):hover { transform: translateY(-1px); box-shadow: 0 1px 0 rgba(255, 255, 255, .22) inset, 0 14px 30px -12px color-mix(in srgb, var(--ac2) 75%, transparent) }
+.b:active { transform: translateY(0) scale(.985) }
+.b2, html[data-theme=dark] .b2 { background: var(--cd); color: var(--tx); border: 1px solid var(--ln2); box-shadow: 0 1px 1px rgba(27, 20, 22, .04) }
+html[data-theme=dark] .b2 { box-shadow: none }
+.b2:hover, html[data-theme=dark] .b2:hover { border-color: color-mix(in srgb, var(--ac) 55%, var(--ln2)); color: var(--ac); background: var(--acs) }
+.b.gr, html[data-theme=dark] .b.gr { background: linear-gradient(180deg, #17935b, #0e7a4b); border: 1px solid #0b6640; color: #fff; box-shadow: 0 1px 0 rgba(255, 255, 255, .2) inset, 0 10px 22px -10px rgba(14, 122, 75, .55) }
+.b:focus-visible, .nv:focus-visible, input:focus-visible { outline: 2px solid color-mix(in srgb, var(--ac) 60%, transparent); outline-offset: 2px }
+
+/* ===================== 5) ช่องกรอก ===================== */
+input, select, textarea,
+html[data-theme=dark] input, html[data-theme=dark] select, html[data-theme=dark] textarea {
+    background-color: var(--cd);
+    border: 1px solid var(--ln2);
+    border-radius: 12px;
+    color: var(--tx);
+    transition: border-color .15s, box-shadow .15s, background-color .15s;
+}
+html[data-theme=dark] input, html[data-theme=dark] select, html[data-theme=dark] textarea { background-color: #100c0e }
+input::placeholder, textarea::placeholder { color: color-mix(in srgb, var(--mu) 75%, transparent) }
+input:focus, select:focus, textarea:focus,
+html[data-theme=dark] input:focus, html[data-theme=dark] select:focus, html[data-theme=dark] textarea:focus {
+    border-color: var(--ac);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--ac) 14%, transparent);
+    outline: 0;
+}
+label { color: var(--mu); font-weight: 500; letter-spacing: .01em }
+
+/* ===================== 6) การ์ด ===================== */
+.cd, html[data-theme=dark] .cd {
+    background: var(--cd);
+    border: 1px solid var(--ln);
+    border-radius: var(--r-lg);
+    box-shadow: var(--sh1);
+}
+html[data-theme=dark] .cd { background: linear-gradient(180deg, #19141710, transparent 40%), var(--cd) }
+.g4 .cd:hover, .dg3 .cd:hover { border-color: var(--ln2); box-shadow: var(--sh2) }
+/* เส้นสีด้านบนการ์ดสถิติ: บางและเรียบขึ้น */
+.dg3 .cd::before, .dg3b .cd::before, .g4 .cd::before {
+    height: 2px !important;
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--ac) 70%, transparent) 30%, color-mix(in srgb, var(--ac) 70%, transparent) 70%, transparent) !important;
+    opacity: .9;
+}
+.ci, html[data-theme=dark] .ci { background: var(--acs) !important; color: var(--ac) !important; border: 1px solid var(--acs2); border-radius: 12px }
+
+/* ===================== 7) เมนูข้าง (คอมพิวเตอร์): ตามธีม — สว่าง = ขาว, มืด = ดำนิล ===================== */
+@media (min-width: 801px) {
+    /* ธีมสว่าง: พื้นขาว เส้นบางอุ่น เมนูที่เลือก = ทับทิมอ่อน */
+    .sb {
+        background: linear-gradient(180deg, #ffffff, #fdfbfa) !important;
+        border-right: 1px solid var(--ln) !important;
+        color: var(--tx);
+    }
+    .sb .logo { border-bottom: 1px solid var(--ln) !important }
+    .sb .logo div { font-family: var(--font-d); font-weight: 600; letter-spacing: .04em; color: var(--tx) }
+    .sb .logo small, .sb .logo .ac { font-family: var(--font); font-size: 10.5px; font-weight: 600; letter-spacing: .22em; color: var(--ac) !important }
+    .sb .nv { color: #5d5254; border: 1px solid transparent; background: transparent; border-radius: 12px }
+    .sb .nv i svg { opacity: .9 }
+    .sb .nv:hover { background: color-mix(in srgb, var(--acs) 70%, transparent); color: var(--tx) }
+    .sb .nv.on {
+        background: linear-gradient(90deg, var(--acs), color-mix(in srgb, var(--acs) 40%, #fff));
+        border-color: var(--acs2);
+        color: var(--ac2);
+        font-weight: 600;
+        box-shadow: 0 1px 0 #fff inset, 0 6px 16px -10px rgba(122, 12, 32, .35);
+    }
+    .sb .nv.on i svg { opacity: 1; color: var(--ac) }
+    .sb .nv::before { left: -14px; width: 3px; background: linear-gradient(180deg, var(--ac3), var(--ac2)) }
+    .sb .nv:not(.on)::before { height: 0 !important; opacity: 0 }
+    .sb .sbt { color: var(--mu); border: 1px solid var(--ln); background: transparent }
+    .sb .sbt:hover { color: var(--ac); border-color: var(--acs2); background: var(--acs) }
+
+    /* ธีมมืด: ดำนิล + แสงทับทิมจาง */
+    html[data-theme=dark] .sb {
+        background:
+            radial-gradient(420px 260px at 0% 0%, rgba(198, 44, 68, .18), transparent 70%),
+            linear-gradient(180deg, var(--ink2), var(--ink)) !important;
+        border-right: 1px solid rgba(255, 255, 255, .06) !important;
+        color: #efe6e8;
+    }
+    html[data-theme=dark] .sb .logo { border-bottom-color: rgba(255, 255, 255, .08) !important }
+    html[data-theme=dark] .sb .logo div { color: #fff }
+    html[data-theme=dark] .sb .logo small, html[data-theme=dark] .sb .logo .ac { color: #e9a7b2 !important }
+    html[data-theme=dark] .sb .nv { color: rgba(245, 236, 238, .68) }
+    html[data-theme=dark] .sb .nv:hover { background: rgba(255, 255, 255, .05); color: #fff }
+    html[data-theme=dark] .sb .nv.on {
+        background: linear-gradient(90deg, rgba(198, 44, 68, .30), rgba(198, 44, 68, .10));
+        border-color: rgba(255, 120, 140, .22);
+        color: #fff;
+        box-shadow: 0 1px 0 rgba(255, 255, 255, .06) inset, 0 8px 20px -12px rgba(0, 0, 0, .6);
+    }
+    html[data-theme=dark] .sb .nv.on i svg { color: #ff9aaa }
+    html[data-theme=dark] .sb .nv::before { background: linear-gradient(180deg, #ff7d91, var(--ac3)); box-shadow: 0 0 12px rgba(255, 90, 113, .6) }
+    html[data-theme=dark] .sb .sbt { color: rgba(245, 236, 238, .55); border-color: rgba(255, 255, 255, .09); background: rgba(255, 255, 255, .02) }
+    html[data-theme=dark] .sb .sbt:hover { color: #fff; border-color: rgba(255, 120, 140, .35); background: rgba(198, 44, 68, .14) }
+    html.sb-mini .nv::after { background: var(--tx); color: var(--bg) }
+}
+
+/* ===================== 8) เมนูล่าง (มือถือ) ===================== */
+@media (max-width: 800px) {
+    .sb, html[data-theme=dark] .sb {
+        background: color-mix(in srgb, var(--cd) 90%, transparent) !important;
+        border-top: 1px solid var(--ln) !important;
+        box-shadow: 0 -10px 30px -18px rgba(27, 20, 22, .25);
+    }
+    .sb .nv { color: var(--mu) }
+    .sb .nv.on, html[data-theme=dark] .sb .nv.on { color: var(--ac); background: var(--acs); border-color: transparent; box-shadow: none }
+    .sb .nv::before { background: var(--ac) }
+    .sb .nv:not(.on)::before { transform: scaleX(0) !important }
+}
+
+/* ===================== 9) แถบบน ===================== */
+.top input, html[data-theme=dark] .top input { background-color: var(--cd); border-color: var(--ln); border-radius: 999px; box-shadow: var(--sh1) }
+.top.is-scrolled { background: var(--bar) !important; -webkit-backdrop-filter: saturate(1.5) blur(16px); backdrop-filter: saturate(1.5) blur(16px); border-bottom-color: var(--ln) !important; box-shadow: 0 10px 30px -22px rgba(27, 20, 22, .35) }
+.me, .seg, .thm, .top .lo, html[data-theme=dark] .seg { border-color: var(--ln) !important; box-shadow: var(--sh1) }
+.seg .on, html[data-theme=dark] .seg .on { background: linear-gradient(180deg, var(--ac), var(--ac2)) !important; color: #fff !important; box-shadow: 0 4px 10px -4px color-mix(in srgb, var(--ac2) 70%, transparent) }
+.av { background: linear-gradient(140deg, var(--ac3), var(--ac2)) !important; color: #fff !important; box-shadow: 0 0 0 2px var(--cd), 0 0 0 3px var(--acs2) }
+
+/* ===================== 10) ตาราง ===================== */
+table { border-collapse: separate; border-spacing: 0 }
+th, html[data-theme=dark] th {
+    font-size: 11.5px !important;
+    font-weight: 600 !important;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--mu) !important;
+    background: color-mix(in srgb, var(--bg2) 70%, var(--cd)) !important;
+    border-bottom: 1px solid var(--ln) !important;
+}
+html[data-theme=dark] th { background: #1a1517 !important }
+th:first-child { border-top-left-radius: 12px }
+th:last-child { border-top-right-radius: 12px }
+td { border-bottom: 1px solid color-mix(in srgb, var(--ln) 75%, transparent) !important }
+tr:hover td, html[data-theme=dark] tr:hover td { background: color-mix(in srgb, var(--acs) 55%, transparent) !important }
+
+/* ===================== 11) ป้ายสถานะ (คงสี แดง/เหลือง/เขียว/ม่วง ตามเอกสาร แต่ปรับโทนให้หรู) ===================== */
+.pl { font-weight: 600; font-size: 12px; letter-spacing: .01em; border-radius: 999px; padding: 4px 11px 4px 9px; border: 1px solid transparent }
+.pl.g, html[data-theme=dark] .pl.g { color: var(--ok) !important; background: var(--ok-bg) !important; border-color: var(--ok-ln) !important }
+.pl.y, html[data-theme=dark] .pl.y { color: var(--wa) !important; background: var(--wa-bg) !important; border-color: var(--wa-ln) !important }
+.pl.r, html[data-theme=dark] .pl.r { color: var(--er) !important; background: var(--er-bg) !important; border-color: var(--er-ln) !important }
+.pl.p, html[data-theme=dark] .pl.p { color: var(--pu) !important; background: var(--pu-bg) !important; border-color: var(--pu-ln) !important }
+
+/* ===================== 12) กล่องข้อความ / แถบความคืบหน้า / หน้าต่าง ===================== */
+.note, html[data-theme=dark] .note { background: var(--wa-bg); border: 1px solid var(--wa-ln); color: var(--wa); border-radius: 14px }
+.pb, html[data-theme=dark] .pb { background: color-mix(in srgb, var(--ac) 12%, var(--bg2)); border-radius: 999px }
+.pb i { background: linear-gradient(90deg, var(--ac3), var(--ac2)) !important; border-radius: 999px }
+#mo, #dg { background: rgba(18, 10, 13, .52) !important; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px) }
+#mo .cd, html[data-theme=dark] #mo .cd { border-radius: 24px; box-shadow: 0 40px 80px -30px rgba(18, 10, 13, .6) }
+#mc h3 { font-family: var(--font-d); font-weight: 600 }
+.amt, html[data-theme=dark] .amt { background: linear-gradient(180deg, var(--acs), transparent); border-color: var(--acs2) }
+.qr { border-radius: 18px; box-shadow: 0 0 0 1px var(--ln), 0 0 0 8px var(--acs), 0 20px 40px -18px rgba(122, 12, 32, .45) !important }
+
+/* ===================== 13) หน้าต้อนรับ ===================== */
+.hn, html[data-theme=dark] .hn { background: var(--bar) !important; border-bottom: 1px solid var(--ln) !important; -webkit-backdrop-filter: saturate(1.5) blur(16px); backdrop-filter: saturate(1.5) blur(16px) }
+.hnr .logo div { font-family: var(--font-d); font-weight: 600; letter-spacing: .04em }
+.hnr .logo small, .hnr .logo .ac { font-family: var(--font); font-size: 10.5px; letter-spacing: .22em; font-weight: 600 }
+.hl a { font-weight: 500; letter-spacing: .01em; white-space: nowrap }
+.hh h1 {
+    font-family: var(--font-d);
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -.01em;
+}
+.hh h1 em {
+    font-style: normal;
+    color: var(--ac);
+    background: linear-gradient(180deg, var(--ac3), var(--ac2));
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-decoration: none;
+    box-shadow: none;
+}
+.hh h1 em::after, .hh h1 em::before { opacity: .35 }
+.hh p { color: var(--mu); font-size: 17px; line-height: 1.75 }
+.hck span, .hch span { letter-spacing: .01em }
+.hch span, .hb { border-color: var(--ln2) !important; box-shadow: var(--sh1) }
+/* แถบสีเข้มกลางหน้า: ไล่เฉดดำนิล-แดงเลือดหมู */
+.hdk, html[data-theme=dark] .hdk {
+    background:
+        radial-gradient(900px 380px at 50% -20%, rgba(198, 44, 68, .35), transparent 65%),
+        linear-gradient(180deg, #2a0b13, #14070b) !important;
+    color: #f7eef0;
+}
+.hs3 b { font-family: var(--font-d); font-weight: 600; color: #ffd3da !important; letter-spacing: -.01em }
+.hs3 i { background: rgba(255, 255, 255, .06) !important; border: 1px solid rgba(255, 255, 255, .12); color: #ff9aaa !important }
+.hs3 small { color: rgba(247, 238, 240, .72) !important }
+.hx h2 { font-family: var(--font-d); font-weight: 600 }
+.pvw, .ph { box-shadow: 0 40px 90px -40px rgba(27, 20, 22, .45) !important }
+
+/* ===================== 14) หน้าเข้าสู่ระบบ ===================== */
+.ah h2 { font-family: var(--font-d); font-weight: 600 }
+
+/* ===================== 15) รายละเอียดเล็ก ๆ ===================== */
+::-webkit-scrollbar { width: 10px; height: 10px }
+::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--mu) 35%, transparent); border-radius: 999px; border: 2px solid var(--bg) }
+::-webkit-scrollbar-track { background: transparent }
+.totop { background: var(--cd) !important; border: 1px solid var(--ln) !important; color: var(--ac) !important; box-shadow: var(--sh2) !important }
+hr { border: 0; border-top: 1px solid var(--ln) }
+@media (prefers-reduced-motion: reduce) { .b, .nv, .cd { transition: none !important } }
+@media print { .sb { display: none !important } body { background: #fff !important } }
+
+/* ฟอนต์ที่เคยกำหนดตายตัวเป็น Anuphan (ไม่ได้โหลดไว้ จึงตกไปใช้ Tahoma) — ให้ใช้ฟอนต์หลักเดียวกันทั้งระบบ */
+.doc, .doc * { font-family: var(--font) !important }
+.doc h1, .doc h2, .doc h3 { font-family: var(--font-d) !important }
+.mdd button { font-family: var(--font) }
+
+/* ===================== 16) หน้าเข้าสู่ระบบ: แผงซ้ายโทนดำนิล-ทับทิม ===================== */
+.al, html[data-theme=dark] .al {
+    background:
+        radial-gradient(700px 520px at 85% 110%, rgba(198, 44, 68, .55), transparent 60%),
+        radial-gradient(600px 400px at 0% 0%, rgba(122, 12, 32, .65), transparent 65%),
+        linear-gradient(165deg, #1f0a10 0%, #3b0d18 55%, #5a1022 100%) !important;
+    color: #f7eef0;
+}
+.al h1, .al .gt { font-family: var(--font-d); font-weight: 600; letter-spacing: -.005em; color: #fff }
+.al p, .al .mu, .al small { color: rgba(247, 238, 240, .72) !important }
+.al .g3 { opacity: .35 }
+.al i { filter: saturate(.6) }
+
+/* ===================== 17) สีหัวข้อ/ตัวเลขใหญ่ ให้ใช้โทเค็นเดียวกัน ===================== */
+.hh h1, .hx h2 { color: var(--tx) }
+.big, .ac { color: var(--ac) }
+html[data-theme=dark] .big, html[data-theme=dark] .ac { color: var(--ac3) }
+.cd .big { font-size: clamp(30px, 3vw, 40px) }
+.hh h1 em::after, .hh h1 em::before { display: none !important }
+
+/* ===================== 18) จอขนาดกลาง (แท็บเล็ต/หน้าต่างแคบ): ไม่ให้โลโก้และปุ่มตกบรรทัด ===================== */
+.hnr .logo small, .sb .logo small, .hr .b, .hl a, .top .lo .lbl, .me b { white-space: nowrap }
+@media (max-width: 1100px) {
+    .hnr .logo small, .sb .logo small { letter-spacing: .12em; font-size: 9.5px }
+    .hl { gap: 18px }
+}
+
