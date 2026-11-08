@@ -1,0 +1,5 @@
+{
+  "name": "tt-mansion-payment-system",
+  "private": true,
+  "scripts": { "build": "node build.js" }
+}
