@@ -5,10 +5,9 @@
 ```
 TEAM.PJ4/
 ├─ index.html  style.css  script.js   ← ไฟล์ขึ้นเว็บ (สร้างอัตโนมัติจาก src/ ด้วย build.js — ห้ามแก้ตรงนี้)
-├─ static/                            ← ไอคอนแอป + manifest (คัดลอกจาก src/static/ อัตโนมัติ)
+├─ static/                            ← ไอคอนแอป 192/512/maskable, apple-touch-icon, manifest (มีที่นี่ที่เดียว)
 ├─ src/                               ← โค้ดต้นฉบับ แก้ที่นี่เท่านั้น
 │  ├─ index.html                      ลิสต์ไฟล์ CSS/JS ตามลำดับโหลด (ลำดับมีผล!)
-│  ├─ static/                         ไอคอนแอป 192/512/maskable, apple-touch-icon, manifest.webmanifest
 │  ├─ css/
 │  │  ├─ base/          พื้นฐาน: ปุ่ม ฟอร์ม การ์ด ตาราง ป๊อปอัป พิมพ์
 │  │  ├─ landing/       หน้าต้อนรับ
@@ -41,12 +40,13 @@ TEAM.PJ4/
 | ทำอะไร | วิธี |
 |---|---|
 | ดู/แก้โค้ด | แก้ไฟล์ใน `src/` (เปิด `src/index.html` ด้วย Live Server เพื่อทดสอบได้เลย) |
-| เตรียมขึ้นเว็บ | เปิด Terminal ที่โฟลเดอร์ repo แล้วรัน `npm run build` (หรือ `node build.js`) — ได้ `index.html`, `style.css`, `script.js`, `static/` ที่รากของ repo |
+| เตรียมขึ้นเว็บ | เปิด Terminal ที่โฟลเดอร์ repo แล้วรัน `npm run build` (หรือ `node build.js`) — ได้ `index.html`, `style.css`, `script.js` ที่รากของ repo |
 | ขึ้นเว็บ (GitHub Pages) | commit แล้ว push ทั้ง repo (หรืออัปโหลด 3 ไฟล์ + โฟลเดอร์ `static/`) · CSS/JS มีเลขเวอร์ชัน `?v=` อัตโนมัติ มือถือจึงไม่ค้างเวอร์ชันเก่า |
 
 ## กติกาสำคัญ
 - **ลำดับไฟล์มีผล** ทั้ง JS (ไฟล์หลังใช้ฟังก์ชันของไฟล์ก่อน) และ CSS (ไฟล์หลังทับไฟล์ก่อน) จึงมีเลขนำหน้าชื่อไฟล์ ลำดับจริงดูที่ `src/index.html`
 - **เพิ่มไฟล์ใหม่:** สร้างไฟล์ในโฟลเดอร์ที่เหมาะสม แล้วเพิ่มแท็ก `<link>` / `<script>` ใน `src/index.html`
 - **แก้แล้วต้อง build ใหม่ทุกครั้ง** ไม่เช่นนั้นเว็บจะเป็นเวอร์ชันเก่า
-- `build.js` ลบ/เขียนทับเฉพาะ `style.css`, `script.js`, `index.html`, `static/` ที่รากของ repo ไฟล์อื่นไม่ถูกแตะ
+- `build.js` เขียนทับเฉพาะ `style.css`, `script.js`, `index.html` ที่รากของ repo ไฟล์อื่นไม่ถูกแตะ
+- ไฟล์ที่รากของ repo (`index.html`, `style.css`, `script.js`) คือผลรวมของไฟล์ใน `src/` ไม่ใช่ไฟล์ซ้ำ — แก้ที่ `src/` แล้ว build
 - `build.js` ไม่ต้องติดตั้งแพ็กเกจเพิ่ม ใช้ Node.js อย่างเดียว
