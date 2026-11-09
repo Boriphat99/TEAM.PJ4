@@ -563,7 +563,7 @@
 แนบสลิปโอนเงิน|Attach transfer slip
 แนบได้สูงสุด|Up to
 แนวโน้มรายรับ|Revenue trend
-แบบออนไลน์เรียลไทม์|online in real time
+แบบออนไลน์เรียลไทม์|Online, real-time
 แมนชั่น|Mansion
 และแนบสลิป|and attach the slip
 แล้ว|already

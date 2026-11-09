@@ -580,7 +580,7 @@
 แนบสลิปโอนเงิน|Attach transfer slip
 แนบได้สูงสุด|Up to
 แนวโน้มรายรับ|Revenue trend
-แบบออนไลน์เรียลไทม์|online in real time
+แบบออนไลน์เรียลไทม์|Online, real-time
 แมนชั่น|Mansion
 และแนบสลิป|and attach the slip
 แล้ว|already
@@ -931,9 +931,9 @@ const bgL=c=>`<div class="bgL"><div class="orb px" style="--k:40;left:-8%;top:-1
 const kp=()=>{const N=D.rooms.length,occ=D.rooms.filter(r=>tn(r.n)).length,cur=dper(),I=D.inv;return{N,op:Math.round(occ/N*100),ic:I.filter(i=>i.s=='paid'&&i.per==cur).reduce((t,i)=>t+tot(i),0),un:I.filter(i=>st(i)=='unpaid').length,ov:I.filter(i=>st(i)=='over').length}};
 const scr=id=>{const x=document.getElementById(id);x&&x.scrollIntoView({behavior:'smooth'})};
 const home0=()=>{const K=kp(),nm=e(D.set.name||'T&T Mansion'),AD=D.users.find(u=>u.role=='admin')||{name:'ผู้ดูแลระบบ'},OC=D.rooms.filter(r=>tn(r.n)).length;return`<div class="hp"><header class="hn np"><div class="hw hnr"><div class="logo"><img class="lgi" src="${LG}" alt=""><div>T&T MANSION<br><small class="ac">PAYMENT SYSTEM</small></div></div><nav class="hl"><a class="on" onclick="scrollTo({top:0,behavior:'smooth'})">หน้าแรก</a><a onclick="scr('hf')">ฟีเจอร์</a><a onclick="scr('hst')">ขั้นตอนชำระเงิน</a></nav><div class="hr">${TGL()}<button class="hb" onclick="go('login')">เข้าสู่ระบบ</button></div></div></header>
-<section class="hw hh"><h1>ยินดีต้อนรับสู่<br><em>ระบบชำระค่าบริการของหอพัก</em><br>แบบออนไลน์เรียลไทม์</h1>
+<section class="hw hh"><h1>ยินดีต้อนรับสู่<br><em>ระบบชำระค่าบริการของหอพัก</em></h1>
 <div class="hc"><button class="b" onclick="go('login')">เริ่มใช้งาน →</button></div>
-<div class="hck"><span>ไม่ต้องติดตั้งแอป</span><span>ใช้ได้ทั้งมือถือและคอมพิวเตอร์</span><span>ยอด QR ขึ้นอัตโนมัติ</span></div>
+<div class="hck"><span>แบบออนไลน์เรียลไทม์</span><span>ไม่ต้องติดตั้งแอป</span><span>ใช้ได้ทั้งมือถือและคอมพิวเตอร์</span><span>ยอด QR ขึ้นอัตโนมัติ</span></div>
 <small class="mu">รองรับผู้ใช้งาน 3 กลุ่ม</small><div class="hch"><span>${IC.rooms} เจ้าของหอพัก</span><span>${IC.set} ผู้ดูแลระบบ</span><span>${PI} ผู้เช่า</span></div>
 <div class="pvw"><div class="pv"><div class="pvb"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div><div class="pvx"><div class="pvd"><div class="app"><div class="sb np"><div class="logo" style="margin-bottom:14px"><img class="lgi" src="${LG}" alt=""><div>T&T MANSION<br><small class="ac">PAYMENT SYSTEM</small></div></div>${NVA.map(n=>`<div class="nv ${n[0]=='dash'?'on':''}"><i>${IC[n[0]]||n[2]}</i><span>${n[1]}</span></div>`).join('')}</div><div class="mn"><div class="top np"><input placeholder="ค้นหาห้อง ผู้เช่า หรือเลขที่บิล (กด Enter)"><span class="me">${av(AD,36)}<b>${e(AD.name)}</b></span><span class="seg"><span class="${LANG=='th'?'on':''}">TH</span><span class="${LANG=='en'?'on':''}">EN</span></span><button class="b b2 sm">ออกจากระบบ</button></div>${pg.dash()}</div></div></div></div><span class="pvf">● แดชบอร์ดผู้ดูแลระบบ</span></div>
 <div class="ph"><div class="pnt"></div><div class="phs"><div class="phtop"><span class="me">${av(AD,26)}<b>${e(AD.name)}</b></span><span class="seg"><span class="${LANG=='th'?'on':''}">TH</span><span class="${LANG=='en'?'on':''}">EN</span></span></div><b class="pht">ภาพรวมการจัดการ</b><div class="po"><div class="phr">${BLD(30)}<div><b>${nm}</b><small>หอพัก · พิษณุโลก</small></div></div><small>${OC}/${K.N} ห้อง</small><b>${K.op}%</b><div class="pb"><i style="width:${K.op}%"></i></div></div><div class="pt2"><div><small>ห้องทั้งหมด</small><b>${K.N}</b></div><div><small>รายได้เดือนนี้</small><b>฿${fm(K.ic)}</b></div><div><small>ยังไม่ชำระ</small><b>${K.un}</b></div><div><small>ผิดนัดชำระ</small><b>${K.ov}</b></div></div></div><div class="pnb">${NVA.map(n=>`<span class="${n[0]=='dash'?'on':''}"><i>${IC[n[0]]||n[2]}</i>${n[1]}</span>`).join('')}</div></div></div></section>
