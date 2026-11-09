@@ -640,3 +640,142 @@ html .hp .hdk, html[data-theme=dark] .hp .hdk {
 }
 /* แผงสถิติในธีมสว่าง: สีนิลเข้มใส ไม่ขุ่น */
 html:not([data-theme=dark]) .hp .hdk { background: radial-gradient(700px 260px at 50% 0%, rgba(194, 29, 58, .32), transparent 70%), linear-gradient(180deg, rgba(30, 14, 19, .93), rgba(18, 9, 12, .95)) !important }
+
+/* ===================== 27) หน้าในระบบ + หน้าเข้าสู่ระบบ: Silk & Glass =====================
+   ใช้วอลเปเปอร์ชุดเดียวกับหน้าต้อนรับ แต่ซ้อนชั้นสีจางทับ เพื่อให้ตัวเลข/ตารางอ่านชัด
+   คอมพิวเตอร์: เมนูข้างลอยเป็นกระจก + การ์ดกระจกเบลอ
+   มือถือ/จอสัมผัส: ไม่เบลอทีละการ์ด (ให้เลื่อนลื่น) ใช้การ์ดโปร่งแสงแทน · เมนูล่างลอยแบบ iOS */
+:root {
+    --s-veil: linear-gradient(180deg, rgba(250, 247, 244, .22), rgba(250, 247, 244, .42));
+    --s-card: rgba(255, 255, 255, .74);
+    --s-card-m: rgba(255, 255, 255, .88);
+    --s-edge: rgba(255, 255, 255, .78);
+    --s-in: inset 0 1px 0 rgba(255, 255, 255, .9);
+    --s-sh: 0 1px 2px rgba(40, 12, 20, .04), 0 18px 44px -30px rgba(70, 10, 28, .32);
+    --s-bar: rgba(255, 255, 255, .66);
+    --s-bar-m: rgba(255, 255, 255, .93);
+    --s-blur: blur(22px) saturate(160%);
+}
+html[data-theme=dark] {
+    --s-veil: linear-gradient(180deg, rgba(10, 8, 9, .18), rgba(10, 8, 9, .4));
+    --s-card: rgba(26, 19, 22, .66);
+    --s-card-m: rgba(24, 18, 21, .9);
+    --s-edge: rgba(255, 255, 255, .08);
+    --s-in: inset 0 1px 0 rgba(255, 255, 255, .06);
+    --s-sh: 0 22px 50px -30px rgba(0, 0, 0, .9);
+    --s-bar: rgba(22, 16, 19, .6);
+    --s-bar-m: rgba(20, 15, 17, .94);
+}
+
+/* วอลเปเปอร์ (ชั้น fixed แยก ไม่ใช้ background-attachment:fixed จึงไม่หน่วงตอนเลื่อน) */
+.app::before, .au::before {
+    content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; transform: translateZ(0);
+    background: var(--s-veil), var(--hp-bg-l, none) center / cover no-repeat, var(--bg);
+}
+html[data-theme=dark] .app::before, html[data-theme=dark] .au::before { background-image: var(--s-veil), var(--hp-bg-d, none) }
+@media (max-width: 800px) {
+    .app::before, .au::before { background-image: var(--s-veil), var(--hp-bg-lm, var(--hp-bg-l, none)); background-position: center bottom }
+    html[data-theme=dark] .app::before, html[data-theme=dark] .au::before { background-image: var(--s-veil), var(--hp-bg-dm, var(--hp-bg-d, none)) }
+}
+#app:has(.au) .bgL { display: none }
+.app, .au { position: relative; z-index: 0 }  /* ชั้นซ้อนของตัวเอง ให้วอลเปเปอร์อยู่เหนือพื้นของ body */
+
+/* การ์ด: โปร่งแสง ขอบสว่างบาง (ไม่ทับการ์ดที่มีสีเฉพาะ เพราะใช้ความเจาะจงต่ำ) */
+:where(.app) .cd, html[data-theme=dark] :where(.app) .cd {
+    background: var(--s-card);
+    border-color: var(--s-edge);
+    box-shadow: var(--s-in), var(--s-sh);
+}
+:where(.app) .cd .cd { background: color-mix(in srgb, var(--cd) 70%, transparent) }
+:where(.app) table th { background-color: color-mix(in srgb, var(--cd) 55%, transparent) }
+
+/* ---------- คอมพิวเตอร์ (เมาส์) ---------- */
+@media (min-width: 801px) and (hover: hover) and (pointer: fine) {
+    :where(.app) .cd { -webkit-backdrop-filter: var(--s-blur); backdrop-filter: var(--s-blur) }
+    :where(.app) .cd .cd { -webkit-backdrop-filter: none; backdrop-filter: none }
+    .top.is-scrolled, html[data-theme=dark] .top.is-scrolled {
+        background: var(--s-bar) !important; -webkit-backdrop-filter: var(--s-blur); backdrop-filter: var(--s-blur);
+        border-bottom-color: var(--s-edge) !important;
+    }
+    #mo .cd, html[data-theme=dark] #mo .cd {
+        background: color-mix(in srgb, var(--cd) 90%, transparent);
+        -webkit-backdrop-filter: blur(30px) saturate(160%); backdrop-filter: blur(30px) saturate(160%);
+        border: 1px solid var(--s-edge); box-shadow: var(--s-in), 0 40px 90px -30px rgba(18, 10, 13, .6)
+    }
+}
+
+/* ---------- เมนูข้างลอย (แท็บเล็ต + คอมพิวเตอร์) — ยังเป็นขาวในธีมสว่าง ดำนิลในธีมมืด ---------- */
+@media (min-width: 801px) {
+    .app .sb, html[data-theme=dark] .app .sb {
+        top: 14px; height: calc(100vh - 28px); margin: 14px 0 14px 14px;
+        border-radius: 24px; border: 1px solid var(--s-edge) !important;
+        box-shadow: var(--s-in), 0 30px 60px -36px rgba(70, 10, 28, .4) !important;
+    }
+    .app .sb { background: linear-gradient(180deg, rgba(255, 255, 255, .9), rgba(253, 251, 250, .82)) !important }
+    html[data-theme=dark] .app .sb {
+        background:
+            radial-gradient(420px 260px at 0% 0%, rgba(198, 44, 68, .2), transparent 70%),
+            linear-gradient(180deg, rgba(28, 20, 24, .9), rgba(14, 10, 12, .9)) !important;
+        box-shadow: var(--s-in), 0 30px 60px -30px rgba(0, 0, 0, .9) !important;
+    }
+    .app .sb .nv::before { left: -8px }
+}
+@media (min-width: 801px) and (hover: hover) and (pointer: fine) {
+    .app .sb, html[data-theme=dark] .app .sb { -webkit-backdrop-filter: var(--s-blur); backdrop-filter: var(--s-blur) }
+}
+@media (min-width: 801px) and (max-height: 640px) { .app .sb { height: calc(100vh - 20px); top: 10px; margin-block: 10px } }
+
+/* ---------- แท็บเล็ต: จัดกริดใหม่ให้ไม่บีบ ---------- */
+@media (min-width: 801px) and (max-width: 1099px) {
+    .dg3, .dg3b { grid-template-columns: repeat(2, minmax(0, 1fr)) !important }
+    .dg3 > :last-child:nth-child(odd), .dg3b > :last-child:nth-child(odd) { grid-column: 1 / -1 }
+    .ri { grid-template-columns: repeat(2, minmax(0, 1fr)) !important }
+    .row { flex-wrap: wrap }
+    .row > .cd { flex: 1 1 100% !important; min-width: 0 }
+}
+@media (min-width: 1100px) and (max-width: 1280px) {
+    .row > .cd:first-child { flex: 1.5 1 0 !important; min-width: 0 }
+    .row > .cd { min-width: 0 }
+}
+
+/* ---------- มือถือ: เมนูล่างลอยแบบ iOS (ไม่เบลอ เพื่อให้เลื่อนลื่น) ---------- */
+@media (max-width: 800px) {
+    :where(.app) .cd, html[data-theme=dark] :where(.app) .cd { background: var(--s-card-m) }
+    .app .sb, html[data-theme=dark] .app .sb {
+        left: 10px !important; right: 10px !important; bottom: calc(10px + var(--sab)) !important; width: auto !important;
+        border-radius: 22px !important; border: 1px solid var(--s-edge) !important;
+        background: var(--s-bar-m) !important;
+        box-shadow: var(--s-in), 0 16px 40px -14px rgba(40, 12, 20, .38), 0 2px 6px rgba(0, 0, 0, .06) !important;
+        padding-bottom: 6px !important;
+    }
+    html[data-theme=dark] .app .sb { box-shadow: var(--s-in), 0 18px 44px -12px rgba(0, 0, 0, .8) !important }
+    .app .sb .nv.on, html[data-theme=dark] .app .sb .nv.on { border-radius: 16px }
+    .app .mn { padding-bottom: calc(108px + var(--sab)) !important }
+}
+
+/* ---------- หน้าเข้าสู่ระบบ ---------- */
+.au .al, html[data-theme=dark] .au .al {
+    background:
+        radial-gradient(700px 520px at 85% 110%, rgba(198, 44, 68, .5), transparent 60%),
+        radial-gradient(600px 400px at 0% 0%, rgba(122, 12, 32, .55), transparent 65%),
+        linear-gradient(165deg, rgba(31, 10, 16, .9) 0%, rgba(59, 13, 24, .86) 55%, rgba(90, 16, 34, .84) 100%) !important;
+}
+.au .cd.gc, html[data-theme=dark] .au .cd.gc {
+    background: var(--s-card) !important; border-color: var(--s-edge) !important;
+    box-shadow: var(--s-in) !important;
+}
+@media (hover: hover) and (pointer: fine) {
+    .au .al { -webkit-backdrop-filter: blur(14px) saturate(140%); backdrop-filter: blur(14px) saturate(140%) }
+    .au .cd.gc { -webkit-backdrop-filter: var(--s-blur); backdrop-filter: var(--s-blur) }
+}
+@media (max-width: 800px) {
+    .au .cd.gc, html[data-theme=dark] .au .cd.gc { background: var(--s-card-m) !important }
+}
+
+/* ผู้ที่ตั้งค่า "ลดความโปร่งใส" ในเครื่อง: ใช้พื้นทึบ */
+@media (prefers-reduced-transparency: reduce) {
+    :root { --s-card: #fff; --s-card-m: #fff; --s-bar: #fff; --s-bar-m: #fff }
+    html[data-theme=dark] { --s-card: #161214; --s-card-m: #161214; --s-bar: #161214; --s-bar-m: #161214 }
+    :where(.app) .cd, .app .sb, .top.is-scrolled, .au .cd.gc { -webkit-backdrop-filter: none !important; backdrop-filter: none !important }
+}
+@media print { .app::before, .au::before { display: none } }
