@@ -5246,21 +5246,13 @@ html .hp .hn, html[data-theme=dark] .hp .hn { border-radius: 0 0 20px 20px }
 .hp .hr .seg .on { background: linear-gradient(180deg, #2a1a1f, #120b0e) !important; color: #fff !important; box-shadow: 0 4px 10px -4px rgba(0, 0, 0, .45) !important }
 html[data-theme=dark] .hp .hr .seg .on { background: linear-gradient(180deg, #fff, #ece4e6) !important; color: #1b1416 !important }
 
-/* ---- Hero: ป้ายเล็กด้านบน + หัวข้อบางสง่า ---- */
+/* ---- Hero: หัวข้อบางสง่า ---- */
 .hp .hh { padding-top: clamp(56px, 9vh, 110px) !important }
 .hp .hh h1 {
     font-family: var(--font-d); font-weight: 500 !important;
     font-size: clamp(34px, 4.6vw, 66px) !important; line-height: 1.24 !important; letter-spacing: -.012em;
     color: var(--hp-tx) !important; text-shadow: none !important; margin-bottom: 26px;
 }
-.hp .hh h1::before {
-    content: "T&T MANSION  ·  PHITSANULOK"; white-space: pre;
-    display: table; margin: 0 auto 26px; padding: 8px 16px 8px 18px; border-radius: 999px;
-    font: 600 11px/1 var(--font); letter-spacing: .3em; color: var(--ac);
-    background: var(--g-bg); box-shadow: var(--g-in), 0 6px 18px -12px rgba(70, 10, 28, .35);
-    -webkit-backdrop-filter: var(--g-blur); backdrop-filter: var(--g-blur);
-}
-html[data-theme=dark] .hp .hh h1::before { color: #ff8fa0 }
 .hp .hh h1 em { font-style: normal; font-weight: 500; background: linear-gradient(180deg, #a3122e 10%, #6a0a1d 90%) !important; -webkit-background-clip: text !important; background-clip: text !important; -webkit-text-fill-color: transparent; text-shadow: none !important; padding: 0 .04em }
 html[data-theme=dark] .hp .hh h1 em { background: linear-gradient(180deg, #ffb0bc 0%, #ff5a71 85%) !important; -webkit-background-clip: text !important; background-clip: text !important }
 .hp .hh h1 em::before, .hp .hh h1 em::after { display: none !important }
@@ -5319,7 +5311,6 @@ html .hp .hdk, html[data-theme=dark] .hp .hdk {
 @media (max-width: 800px) {
     .hp { --g-blur: blur(18px) saturate(145%) }
     html .hp .hn, html[data-theme=dark] .hp .hn { -webkit-backdrop-filter: var(--g-blur) !important; backdrop-filter: var(--g-blur) !important; background: var(--g-bg) !important }
-    .hp .hh h1::before { font-size: 10px; letter-spacing: .24em; margin-bottom: 20px }
     .hp .hck span { font-size: 12.5px }
 }
 @media (prefers-reduced-transparency: reduce) {
