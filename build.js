@@ -25,7 +25,7 @@ let out = html
   .replace(/(\s*<link rel="stylesheet" href="(?!https?:)[^"]+">)+/, '\n    <link rel="stylesheet" href="style.css?v=' + ver + '">')
   .replace(/(\s*<script src="(?!https?:)[^"]+"><\/script>)+/, '\n    <script src="script.js?v=' + ver + '"></script>')
   .replace(/<!-- (CSS|JS):[^>]*-->\s*/g, '')
-  .replace(/href="\.\.\/static\//g, 'href="static/');
+  .replace(/\.\.\/static\//g, 'static/');
 fs.writeFileSync(path.join(OUT, 'index.html'), out);
 console.log(`build สำเร็จ: CSS ${css.length} ไฟล์ + JS ${js.length} ไฟล์ -> style.css, script.js, index.html`);
 console.log('เวอร์ชัน ' + ver + ' · commit/อัปโหลด index.html, style.css, script.js ขึ้น GitHub ได้เลย');

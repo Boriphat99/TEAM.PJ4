@@ -503,3 +503,110 @@ button, .b, .nv, [onclick] { touch-action: manipulation }
 
 /* ข้อความแจ้งผล (toast) */
 .ts, html[data-theme=dark] .ts { border-radius: 14px !important; box-shadow: 0 18px 40px -16px rgba(0, 0, 0, .45) !important; backdrop-filter: none }
+
+/* ===================== 26) หน้าต้อนรับ: พื้นหลังวอลเปเปอร์ + กระจกฝ้า (Liquid Glass แบบ iOS) =====================
+   ใช้เฉพาะหน้าต้อนรับ (.hp) · รูปพื้นหลังกำหนดใน index.html (--hp-bg) เพราะ path ของรูปต้องอ้างจากหน้าเว็บ */
+.hp {
+    --g-bg: rgba(255, 255, 255, .44);
+    --g-bg2: rgba(255, 255, 255, .62);
+    --g-bd: rgba(255, 255, 255, .7);
+    --g-sheen: linear-gradient(135deg, rgba(255, 255, 255, .55), rgba(255, 255, 255, .08) 42%, rgba(255, 255, 255, .18));
+    --g-hi: inset 0 1px 0 rgba(255, 255, 255, .9), inset 0 -1px 0 rgba(255, 255, 255, .25);
+    --g-sh: 0 18px 44px -18px rgba(110, 12, 34, .35), 0 2px 6px -2px rgba(110, 12, 34, .08);
+    --g-blur: blur(22px) saturate(185%);
+    position: relative; isolation: isolate; background: transparent !important;
+}
+html[data-theme=dark] .hp {
+    --g-bg: rgba(24, 14, 18, .42);
+    --g-bg2: rgba(36, 20, 26, .58);
+    --g-bd: rgba(255, 255, 255, .13);
+    --g-sheen: linear-gradient(135deg, rgba(255, 255, 255, .14), rgba(255, 255, 255, .02) 45%, rgba(255, 255, 255, .06));
+    --g-hi: inset 0 1px 0 rgba(255, 255, 255, .14), inset 0 -1px 0 rgba(255, 255, 255, .04);
+    --g-sh: 0 22px 50px -20px rgba(0, 0, 0, .7);
+}
+/* ชั้นวอลเปเปอร์ติดจอ (position:fixed บนเลเยอร์แยก ไม่ใช้ background-attachment:fixed ที่ทำให้มือถือหน่วง) */
+.hp::before {
+    content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: var(--hp-bg-l, #fbf4ef) center / cover no-repeat;
+    transform: translateZ(0);
+}
+html[data-theme=dark] .hp::before { background-image: var(--hp-bg-d, none); background-color: #0b0708 }
+@media (max-aspect-ratio: 1/1) {
+    .hp::before { background-image: var(--hp-bg-lm, var(--hp-bg-l)) }
+    html[data-theme=dark] .hp::before { background-image: var(--hp-bg-dm, var(--hp-bg-d)) }
+}
+html:has(.hp) body, html[data-theme=dark]:has(.hp) body { background: transparent !important }
+html:has(.hp) { background: #fbf4ef } html[data-theme=dark]:has(.hp) { background: #0b0708 }
+.hp .hh, .hp .hcr, .hp .lf, .hp .hx { background: transparent !important }
+
+/* สูตรกระจก */
+.hp .hn, .hp .fxc, .hp .hch span, .hp .hb, .hp .hr .seg, .hp .hr .thm, .hp .sp > *, .hp .pv, .hp .ph, .hp .hdk {
+    -webkit-backdrop-filter: var(--g-blur) !important; backdrop-filter: var(--g-blur) !important;
+}
+/* แถบเมนูบน: กระจกลอย มุมโค้ง */
+html .hp .hn, html[data-theme=dark] .hp .hn {
+    background: var(--g-sheen), var(--g-bg) !important;
+    border: 1px solid var(--g-bd) !important; border-top: 0 !important;
+    box-shadow: var(--g-hi), var(--g-sh) !important;
+}
+@media (min-width: 801px) {
+    html .hp .hn { top: 12px !important; margin: 12px auto 0; width: min(1180px, calc(100% - 32px)); border-radius: 22px; border-top: 1px solid var(--g-bd) !important }
+}
+/* ปุ่ม/ป้ายเล็ก: แคปซูลกระจก */
+.hp .hch span, .hp .hb, .hp .hr .seg, .hp .hr .thm {
+    background: var(--g-sheen), var(--g-bg) !important;
+    border: 1px solid var(--g-bd) !important;
+    box-shadow: var(--g-hi), 0 6px 16px -10px rgba(110, 12, 34, .35) !important;
+}
+html[data-theme=dark] .hp .hch span, html[data-theme=dark] .hp .hb, html[data-theme=dark] .hp .hr .seg, html[data-theme=dark] .hp .hr .thm { color: #f5eef0 }
+.hp .hr .seg .on { box-shadow: 0 4px 12px -4px rgba(122, 12, 32, .6) !important }
+/* ปุ่มหลัก "เริ่มใช้งาน": ทับทิมเงาแก้ว */
+.hp .hh .b, .hp .hx .b {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45), inset 0 -2px 6px rgba(60, 0, 12, .25), 0 16px 34px -12px rgba(122, 12, 32, .65) !important;
+}
+/* ภาพตัวอย่างหน้าจอ: กรอบกระจกหนา */
+.hp .pv, .hp .ph {
+    border: 1px solid var(--g-bd) !important;
+    box-shadow: var(--g-hi), 0 40px 90px -36px rgba(90, 10, 30, .55) !important;
+}
+.hp .pv { background: var(--g-bg2) !important; padding: 8px; border-radius: 22px !important }
+.hp .pv > * { border-radius: 14px; overflow: hidden }
+/* แถบสถิติ: กระจกทับทิมเข้ม */
+html .hp .hdk, html[data-theme=dark] .hp .hdk {
+    background: linear-gradient(180deg, rgba(90, 10, 30, .62), rgba(40, 6, 16, .7)) !important;
+    border-top: 1px solid rgba(255, 255, 255, .18); border-bottom: 1px solid rgba(255, 255, 255, .08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12);
+    margin: 0 auto; width: min(1180px, calc(100% - 32px)); border-radius: 28px;
+}
+@media (max-width: 800px) { html .hp .hdk { width: calc(100% - 24px); border-radius: 24px } }
+/* การ์ดฟีเจอร์ + ขั้นตอน: กระจกฝ้า */
+.hp .fxc, html[data-theme=dark] .hp .fxc {
+    background: var(--g-sheen), var(--g-bg) !important;
+    border: 1px solid var(--g-bd) !important;
+    box-shadow: var(--g-hi), var(--g-sh) !important;
+    border-radius: 24px !important;
+    transition: transform .25s var(--ease), box-shadow .25s var(--ease);
+}
+@media (hover: hover) { .hp .fxc:hover { transform: translateY(-3px); box-shadow: var(--g-hi), 0 26px 56px -20px rgba(110, 12, 34, .45) !important } }
+.hp .fxc i, .hp .fxc .ci { background: rgba(255, 255, 255, .55) !important; border: 1px solid var(--g-bd) !important }
+html[data-theme=dark] .hp .fxc i, html[data-theme=dark] .hp .fxc .ci { background: rgba(255, 255, 255, .08) !important }
+.hp .sp > * { background: var(--g-sheen), var(--g-bg) !important; border: 1px solid var(--g-bd); border-radius: 22px; box-shadow: var(--g-hi), var(--g-sh); padding: 16px 12px }
+/* อ่านง่ายบนวอลเปเปอร์ */
+.hp .hh h1 { text-shadow: 0 1px 0 rgba(255, 255, 255, .35) }
+html[data-theme=dark] .hp .hh h1 { text-shadow: 0 2px 18px rgba(0, 0, 0, .45) }
+.hp .hh p, .hp .hh .mu, .hp .hck span { color: color-mix(in srgb, var(--tx) 78%, transparent) }
+.hp .lf { color: var(--mu) }
+/* มือถือ: เบลอเบาลงเพื่อให้เลื่อนลื่น (ทับกฎเดิมที่ปิดเบลอของแถบบน) */
+@media (max-width: 800px) {
+    .hp { --g-blur: blur(16px) saturate(170%) }
+    html .hp .hn, html[data-theme=dark] .hp .hn { -webkit-backdrop-filter: var(--g-blur) !important; backdrop-filter: var(--g-blur) !important; background: var(--g-sheen), var(--g-bg) !important }
+}
+@media (prefers-reduced-transparency: reduce) {
+    .hp { --g-bg: rgba(255, 255, 255, .92); --g-bg2: #fff }
+    html[data-theme=dark] .hp { --g-bg: rgba(24, 14, 18, .94); --g-bg2: #1c1216 }
+}
+/* หัวข้อสีทับทิมบนวอลเปเปอร์: เข้มขึ้นให้อ่านชัด */
+.hp .hh h1 em { background: linear-gradient(180deg, #a3122e, #6e0a1e) !important; -webkit-background-clip: text !important; background-clip: text !important }
+html[data-theme=dark] .hp .hh h1 em { background: linear-gradient(180deg, #ff8295, #ff4a64) !important; -webkit-background-clip: text !important; background-clip: text !important }
+html .hp .hdk, html[data-theme=dark] .hp .hdk { background: linear-gradient(180deg, rgba(92, 10, 30, .84), rgba(38, 6, 15, .88)) !important }
+.hp .hh h1 em, html[data-theme=dark] .hp .hh h1 em { text-shadow: none !important }
