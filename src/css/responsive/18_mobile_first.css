@@ -1,39 +1,138 @@
 /* 18_mobile_first.css — มือถือเป็นหลัก + รองรับ PC
    (แยกมาจาก style.css บรรทัด 4005-4041; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 /* ===== มือถือเป็นหลัก + รองรับ PC ===== */
-html { -webkit-text-size-adjust: 100%; }
-img, svg, video, canvas { max-width: 100%; }
-.b, .nv, .tabs span, .mm, select { touch-action: manipulation; }
-@media(max-width:800px) {
-    .top { flex-wrap: wrap }
-    .top input { flex: 1 1 100%; order: 9 }
-    .top .seg, .top .b { flex: 0 0 auto }
-    .tb2 input, .tb2 select { min-width: 0; flex: 1 1 140px; width: 100% }
-    .tb2 .b { flex: 1 1 auto }
-    .tabs { max-width: none !important }
-    .dg2, .dg3, .dg3b { gap: 12px }
-    .hd2 { flex-wrap: wrap }
-    .b { min-height: 44px }
-    .b.sm { min-height: 36px }
-    .mm { display: inline-block; padding: 6px 12px }
-    .cd .big { font-size: 28px }
-    #mo .cd { max-height: 90vh }
+html {
+  -webkit-text-size-adjust: 100%;
 }
-@media(max-width:700px) {
-    .sg { grid-template-columns: 1fr !important }
-    .sc { overflow-x: visible }
-    table.rt, .rt tbody { display: block; width: 100% }
-    .rt tr.rh { display: none }
-    .rt tr { display: block; background: var(--cd); border: 1px solid var(--ln); border-radius: 14px; padding: 4px 12px; margin: 0 0 10px }
-    .rt td { display: flex; justify-content: space-between; align-items: center; gap: 12px; text-align: right; white-space: normal; border: 0; border-bottom: 1px dashed var(--ln); padding: 9px 0; word-break: break-word }
-    .rt td:last-child { border-bottom: 0 }
-    .rt td[data-l]:before { content: attr(data-l); color: var(--mu); font-size: 12px; text-align: left; flex: 0 0 40% }
-    .rt td:not([data-l]) { display: block; text-align: left }
-    .rt td:empty { display: none }
-    .rt td .tc { text-align: left }
-    .rt input, .rt select { width: 58% !important; max-width: 100%; min-width: 0 }
-    .rt .b { margin: 2px 0 }
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
 }
-@media(min-width:1200px) { .mn { max-width: 1400px } }
-
-
+.b,
+.nv,
+.tabs span,
+.mm,
+select {
+  touch-action: manipulation;
+}
+@media (max-width: 800px) {
+  .top {
+    flex-wrap: wrap;
+  }
+  .top input {
+    flex: 1 1 100%;
+    order: 9;
+  }
+  .top .seg,
+  .top .b {
+    flex: 0 0 auto;
+  }
+  .tb2 input,
+  .tb2 select {
+    min-width: 0;
+    flex: 1 1 140px;
+    width: 100%;
+  }
+  .tb2 .b {
+    flex: 1 1 auto;
+  }
+  .tabs {
+    max-width: none !important;
+  }
+  .dg2,
+  .dg3,
+  .dg3b {
+    gap: 12px;
+  }
+  .hd2 {
+    flex-wrap: wrap;
+  }
+  .b {
+    min-height: 44px;
+  }
+  .b.sm {
+    min-height: 36px;
+  }
+  .mm {
+    display: inline-block;
+    padding: 6px 12px;
+  }
+  .cd .big {
+    font-size: 28px;
+  }
+  #mo .cd {
+    max-height: 90vh;
+  }
+}
+@media (max-width: 700px) {
+  .sg {
+    grid-template-columns: 1fr !important;
+  }
+  .sc {
+    overflow-x: visible;
+  }
+  table.rt,
+  .rt tbody {
+    display: block;
+    width: 100%;
+  }
+  .rt tr.rh {
+    display: none;
+  }
+  .rt tr {
+    display: block;
+    background: var(--cd);
+    border: 1px solid var(--ln);
+    border-radius: 14px;
+    padding: 4px 12px;
+    margin: 0 0 10px;
+  }
+  .rt td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    text-align: right;
+    white-space: normal;
+    border: 0;
+    border-bottom: 1px dashed var(--ln);
+    padding: 9px 0;
+    word-break: break-word;
+  }
+  .rt td:last-child {
+    border-bottom: 0;
+  }
+  .rt td[data-l]:before {
+    content: attr(data-l);
+    color: var(--mu);
+    font-size: 12px;
+    text-align: left;
+    flex: 0 0 40%;
+  }
+  .rt td:not([data-l]) {
+    display: block;
+    text-align: left;
+  }
+  .rt td:empty {
+    display: none;
+  }
+  .rt td .tc {
+    text-align: left;
+  }
+  .rt input,
+  .rt select {
+    width: 58% !important;
+    max-width: 100%;
+    min-width: 0;
+  }
+  .rt .b {
+    margin: 2px 0;
+  }
+}
+@media (min-width: 1200px) {
+  .mn {
+    max-width: 1400px;
+  }
+}

@@ -2,381 +2,385 @@
    (แยกมาจาก style.css บรรทัด 1595-1974; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 /* ===== Light theme: red & white ===== */
 
- :root {
-    --bg: #fff;
-    --cd: #fff;
-    --ln: #f3dcdc;
-    --tx: #1f2937;
-    --mu: #6b7280;
-    --ac: #dc2626;
-    color-scheme: light
+:root {
+  --bg: #fff;
+  --cd: #fff;
+  --ln: #f3dcdc;
+  --tx: #1f2937;
+  --mu: #6b7280;
+  --ac: #dc2626;
+  color-scheme: light;
 }
 
 html,
 body {
-    background: #fff;
-    color: var(--tx)
+  background: #fff;
+  color: var(--tx);
 }
 
 body {
-    background: linear-gradient(180deg, #fff1f1 0, #fff 420px), #fff
+  background: linear-gradient(180deg, #fff1f1 0, #fff 420px), #fff;
 }
 
 h2 {
-    font-size: 28px;
-    font-weight: 700
+  font-size: 28px;
+  font-weight: 700;
 }
 
 .b {
-    background: linear-gradient(135deg, #ef4444, #dc2626);
-    color: #fff;
-    box-shadow: 0 6px 18px #dc262633
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+  box-shadow: 0 6px 18px #dc262633;
 }
 
 .b2 {
-    background: #fff;
-    color: var(--tx);
-    border: 1px solid var(--ln);
-    box-shadow: none
+  background: #fff;
+  color: var(--tx);
+  border: 1px solid var(--ln);
+  box-shadow: none;
 }
 
 .b2:hover {
-    border-color: #dc2626;
-    color: #dc2626
+  border-color: #dc2626;
+  color: #dc2626;
 }
 
 .b.gr {
-    background: linear-gradient(135deg, #22c55e, #16a34a)
+  background: linear-gradient(135deg, #22c55e, #16a34a);
 }
 
 input,
 select {
-    background: #fff;
-    border: 1px solid #ecd0d0;
-    color: var(--tx)
+  background: #fff;
+  border: 1px solid #ecd0d0;
+  color: var(--tx);
 }
 
 input:focus,
 select:focus {
-    border-color: #dc2626;
-    box-shadow: 0 0 0 3px #dc262622
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px #dc262622;
 }
 
 .cd {
-    background: #fff;
-    border: 1px solid var(--ln);
-    border-radius: 20px;
-    box-shadow: 0 4px 22px #dc26260d
+  background: #fff;
+  border: 1px solid var(--ln);
+  border-radius: 20px;
+  box-shadow: 0 4px 22px #dc26260d;
 }
 
 .sb {
-    background: #fff
+  background: #fff;
 }
 
 .nv {
-    color: #4b5563
+  color: #4b5563;
 }
 
 .nv:hover {
-    background: #fff5f5
+  background: #fff5f5;
 }
 
 .nv.on {
-    background: #fef2f2;
-    border-color: #fecaca;
-    color: #b91c1c;
-    box-shadow: inset 3px 0 0 #dc2626
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+  box-shadow: inset 3px 0 0 #dc2626;
 }
 
 .logo i {
-    background: #dc2626;
-    color: #fff
+  background: #dc2626;
+  color: #fff;
 }
 
 .rm {
-    background: #fff
+  background: #fff;
 }
 
 .rm.o {
-    background: #fef2f2;
-    border-color: #fecaca;
-    color: #991b1b
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
 }
 
 .rm.m {
-    background: #fefce8;
-    border-color: #fde68a;
-    color: #a16207
+  background: #fefce8;
+  border-color: #fde68a;
+  color: #a16207;
 }
 
 .g4 .cd:hover,
 .rm:hover {
-    border-color: #f87171
+  border-color: #f87171;
 }
 
 .pl.g {
-    color: #15803d;
-    background: #dcfce7;
-    border-color: #bbf7d0
+  color: #15803d;
+  background: #dcfce7;
+  border-color: #bbf7d0;
 }
 
 .pl.y {
-    color: #a16207;
-    background: #fef9c3;
-    border-color: #fde68a
+  color: #a16207;
+  background: #fef9c3;
+  border-color: #fde68a;
 }
 
 .pl.r {
-    color: #b91c1c;
-    background: #fee2e2;
-    border-color: #fecaca
+  color: #b91c1c;
+  background: #fee2e2;
+  border-color: #fecaca;
 }
 
 .pl.p {
-    color: #6d28d9;
-    background: #ede9fe;
-    border-color: #ddd6fe
+  color: #6d28d9;
+  background: #ede9fe;
+  border-color: #ddd6fe;
 }
 
 .pl[style] {
-    background: #f3f4f6!important;
-    color: #6b7280!important;
-    border-color: #e5e7eb!important
+  background: #f3f4f6 !important;
+  color: #6b7280 !important;
+  border-color: #e5e7eb !important;
 }
 
 tr:hover td {
-    background: #fff5f5
+  background: #fff5f5;
 }
 
 .ci {
-    background: #fef2f2!important;
-    color: #dc2626!important
+  background: #fef2f2 !important;
+  color: #dc2626 !important;
 }
 
 .big,
 .ac {
-    color: #dc2626
+  color: #dc2626;
 }
 
 .amt {
-    background: #fef2f2;
-    border-color: #fecaca
+  background: #fef2f2;
+  border-color: #fecaca;
 }
 
 .bk {
-    background: #fef2f2
+  background: #fef2f2;
 }
 
 .note {
-    background: #fffbeb;
-    border-color: #fde68a;
-    color: #92400e
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #92400e;
 }
 
 .ts {
-    background: #1f2937;
-    border: 0;
-    color: #fff
+  background: #1f2937;
+  border: 0;
+  color: #fff;
 }
 
 .st b {
-    background: #dc2626;
-    color: #fff
+  background: #dc2626;
+  color: #fff;
 }
 
 .pb {
-    background: #fee2e2
+  background: #fee2e2;
 }
 
 .pb i {
-    background: linear-gradient(90deg, #f87171, #dc2626)
+  background: linear-gradient(90deg, #f87171, #dc2626);
 }
 
 .qr {
-    box-shadow: 0 0 0 6px #dc262618, 0 10px 30px #dc262622
+  box-shadow:
+    0 0 0 6px #dc262618,
+    0 10px 30px #dc262622;
 }
 
 #mo,
 #dg {
-    background: #1f293773
+  background: #1f293773;
 }
 
 #mo .cd {
-    background: #fff
+  background: #fff;
 }
 
 .av {
-    background: linear-gradient(135deg, #f87171, #dc2626);
-    color: #fff;
-    box-shadow: 0 0 0 2px #fecaca
+  background: linear-gradient(135deg, #f87171, #dc2626);
+  color: #fff;
+  box-shadow: 0 0 0 2px #fecaca;
 }
 
 .ib {
-    background: #fef2f2;
-    border-color: #fecaca;
-    box-shadow: none
+  background: #fef2f2;
+  border-color: #fecaca;
+  box-shadow: none;
 }
 
 .dm {
-    border-color: #fecaca
+  border-color: #fecaca;
 }
 
 .orb i {
-    background: radial-gradient(circle, #fecaca, transparent 65%)!important;
-    opacity: .75
+  background: radial-gradient(circle, #fecaca, transparent 65%) !important;
+  opacity: 0.75;
 }
 
 .g3 {
-    background-image: linear-gradient(#dc262614 1px, transparent 1px), linear-gradient(90deg, #dc262614 1px, transparent 1px)
+  background-image:
+    linear-gradient(#dc262614 1px, transparent 1px),
+    linear-gradient(90deg, #dc262614 1px, transparent 1px);
 }
 
 .rings i {
-    border-color: #fecaca
+  border-color: #fecaca;
 }
 
 .rings b {
-    background: #dc2626;
-    box-shadow: 0 0 14px #dc2626
+  background: #dc2626;
+  box-shadow: 0 0 14px #dc2626;
 }
 
 .ico {
-    background: #fff;
-    color: #dc2626;
-    border-color: #fecaca;
-    box-shadow: 0 10px 30px #dc262625
+  background: #fff;
+  color: #dc2626;
+  border-color: #fecaca;
+  box-shadow: 0 10px 30px #dc262625;
 }
 
 .bdg {
-    background: #fef2f2;
-    border-color: #fecaca;
-    color: #b91c1c
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
 }
 
 .lp .tb {
-    background: #ffffffe6;
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--ln)
+  background: #ffffffe6;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--ln);
 }
 
 .ht h1 .gt {
-    background: none;
-    -webkit-text-fill-color: #dc2626;
-    color: #dc2626;
-    animation: none;
-    box-shadow: inset 0 -.28em 0 #fecaca
+  background: none;
+  -webkit-text-fill-color: #dc2626;
+  color: #dc2626;
+  animation: none;
+  box-shadow: inset 0 -0.28em 0 #fecaca;
 }
 
 .b.big2:not(.b2):after {
-    background: linear-gradient(100deg, transparent, #fff7, transparent)
+  background: linear-gradient(100deg, transparent, #fff7, transparent);
 }
 
 .tabs {
-    display: flex;
-    border-bottom: 2px solid var(--ln);
-    margin-bottom: 22px
+  display: flex;
+  border-bottom: 2px solid var(--ln);
+  margin-bottom: 22px;
 }
 
 .tabs span {
-    flex: 1;
-    text-align: center;
-    padding: 12px;
-    cursor: pointer;
-    color: var(--mu);
-    font-weight: 600;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -2px
+  flex: 1;
+  text-align: center;
+  padding: 12px;
+  cursor: pointer;
+  color: var(--mu);
+  font-weight: 600;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
 }
 
 .tabs .on {
-    color: #dc2626;
-    border-color: #dc2626
+  color: #dc2626;
+  border-color: #dc2626;
 }
 
 .wrap.au {
-    max-width: none;
-    padding: 0;
-    gap: 0;
-    min-height: 100vh;
-    align-items: stretch
+  max-width: none;
+  padding: 0;
+  gap: 0;
+  min-height: 100vh;
+  align-items: stretch;
 }
 
 .wrap.au .al {
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(160deg, #7f1d1d, #dc2626 58%, #f87171);
-    color: #fff;
-    padding: 56px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, #7f1d1d, #dc2626 58%, #f87171);
+  color: #fff;
+  padding: 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .al .mu {
-    color: #fecaca
+  color: #fecaca;
 }
 
 .al .logo {
-    color: #fff
+  color: #fff;
 }
 
 .al .logo i {
-    background: #fff;
-    color: #dc2626
+  background: #fff;
+  color: #dc2626;
 }
 
 .al .ico {
-    background: #ffffff26;
-    border-color: #ffffff40;
-    color: #fff;
-    box-shadow: none
+  background: #ffffff26;
+  border-color: #ffffff40;
+  color: #fff;
+  box-shadow: none;
 }
 
 .al h1.gt {
-    background: none;
-    -webkit-text-fill-color: #fff;
-    color: #fff;
-    animation: none
+  background: none;
+  -webkit-text-fill-color: #fff;
+  color: #fff;
+  animation: none;
 }
 
 .al .rings i {
-    border-color: #ffffff30
+  border-color: #ffffff30;
 }
 
 .al .rings b {
-    background: #fff;
-    box-shadow: 0 0 14px #fff
+  background: #fff;
+  box-shadow: 0 0 14px #fff;
 }
 
 .wrap.au .gc {
-    border-radius: 0;
-    box-shadow: none;
-    transform: none;
-    background: #fff;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 56px 12%;
-    animation: none
+  border-radius: 0;
+  box-shadow: none;
+  transform: none;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 56px 12%;
+  animation: none;
 }
 
 .gc:before {
-    display: none
+  display: none;
 }
 
-@media(max-width:800px) {
-    .wrap.au {
-        min-height: auto
-    }
-    .wrap.au .al {
-        padding: 28px 20px;
-        text-align: center;
-        align-items: center
-    }
-    .wrap.au .gc {
-        padding: 24px 18px
-    }
-    .sb {
-        background: #fffffff2!important;
-        border-top: 1px solid var(--ln)
-    }
+@media (max-width: 800px) {
+  .wrap.au {
+    min-height: auto;
+  }
+  .wrap.au .al {
+    padding: 28px 20px;
+    text-align: center;
+    align-items: center;
+  }
+  .wrap.au .gc {
+    padding: 24px 18px;
+  }
+  .sb {
+    background: #fffffff2 !important;
+    border-top: 1px solid var(--ln);
+  }
 }

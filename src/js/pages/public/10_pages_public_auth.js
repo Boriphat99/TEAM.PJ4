@@ -1,48 +1,241 @@
 /* 10_pages_public_auth.js — หน้าต้อนรับ เข้าสู่ระบบ ลืมรหัสผ่าน ออกจากระบบ
    (แยกมาจาก script.js บรรทัด 900-951; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 // ---- public pages ----
-const bgL=c=>`<div class="bgL"><div class="orb px" style="--k:40;left:-8%;top:-10%;width:520px;height:520px"><i style="background:radial-gradient(circle,#0e7490cc,transparent 65%)"></i></div><div class="orb px" style="--k:-30;right:-10%;top:20%;width:620px;height:620px"><i style="background:radial-gradient(circle,#3730a3cc,transparent 65%);animation-delay:-4s"></i></div><div class="orb px" style="--k:20;left:30%;bottom:-20%;width:480px;height:480px"><i style="background:radial-gradient(circle,#0891b266,transparent 65%);animation-delay:-8s"></i></div><div class="g3"></div>${c?'<canvas id="pc"></canvas>':''}</div>`;
-const kp=()=>{const N=D.rooms.length,occ=D.rooms.filter(r=>tn(r.n)).length,cur=dper(),I=D.inv;return{N,op:Math.round(occ/N*100),ic:I.filter(i=>i.s=='paid'&&i.per==cur).reduce((t,i)=>t+tot(i),0),un:I.filter(i=>st(i)=='unpaid').length,ov:I.filter(i=>st(i)=='over').length}};
-const scr=id=>{const x=document.getElementById(id);x&&x.scrollIntoView({behavior:'smooth'})};
-const home0=()=>{const K=kp(),nm=e(D.set.name||'T&T Mansion'),AD=D.users.find(u=>u.role=='admin')||{name:'ผู้ดูแลระบบ'},OC=D.rooms.filter(r=>tn(r.n)).length;return`<div class="hp"><header class="hn np"><div class="hw hnr"><div class="logo"><img class="lgi" src="${LG}" alt=""><div>T&T MANSION<br><small class="ac">PAYMENT SYSTEM</small></div></div><nav class="hl"><a class="on" onclick="scrollTo({top:0,behavior:'smooth'})">หน้าแรก</a><a onclick="scr('hf')">ฟีเจอร์</a><a onclick="scr('hst')">ขั้นตอนชำระเงิน</a></nav><div class="hr">${TGL()}<button class="hb" onclick="go('login')">เข้าสู่ระบบ</button></div></div></header>
+const bgL = c =>
+  `<div class="bgL"><div class="orb px" style="--k:40;left:-8%;top:-10%;width:520px;height:520px"><i style="background:radial-gradient(circle,#0e7490cc,transparent 65%)"></i></div><div class="orb px" style="--k:-30;right:-10%;top:20%;width:620px;height:620px"><i style="background:radial-gradient(circle,#3730a3cc,transparent 65%);animation-delay:-4s"></i></div><div class="orb px" style="--k:20;left:30%;bottom:-20%;width:480px;height:480px"><i style="background:radial-gradient(circle,#0891b266,transparent 65%);animation-delay:-8s"></i></div><div class="g3"></div>${c ? '<canvas id="pc"></canvas>' : ''}</div>`;
+const kp = () => {
+  const N = D.rooms.length,
+    occ = D.rooms.filter(r => tn(r.n)).length,
+    cur = dper(),
+    I = D.inv;
+  return {
+    N,
+    op: Math.round((occ / N) * 100),
+    ic: I.filter(i => i.s == 'paid' && i.per == cur).reduce((t, i) => t + tot(i), 0),
+    un: I.filter(i => st(i) == 'unpaid').length,
+    ov: I.filter(i => st(i) == 'over').length,
+  };
+};
+const scr = id => {
+  const x = document.getElementById(id);
+  x && x.scrollIntoView({ behavior: 'smooth' });
+};
+const home0 = () => {
+  const K = kp(),
+    nm = e(D.set.name || 'T&T Mansion'),
+    AD = D.users.find(u => u.role == 'admin') || { name: 'ผู้ดูแลระบบ' },
+    OC = D.rooms.filter(r => tn(r.n)).length;
+  return `<div class="hp"><header class="hn np"><div class="hw hnr"><div class="logo"><img class="lgi" src="${LG}" alt=""><div>T&T MANSION<br><small class="ac">PAYMENT SYSTEM</small></div></div><nav class="hl"><a class="on" onclick="scrollTo({top:0,behavior:'smooth'})">หน้าแรก</a><a onclick="scr('hf')">ฟีเจอร์</a><a onclick="scr('hst')">ขั้นตอนชำระเงิน</a></nav><div class="hr">${TGL()}<button class="hb" onclick="go('login')">เข้าสู่ระบบ</button></div></div></header>
 <section class="hw hh"><h1>ยินดีต้อนรับสู่<br><em>ระบบชำระค่าบริการของหอพัก</em></h1>
 <div class="hc"><button class="b" onclick="go('login')">เริ่มใช้งาน →</button></div>
 <div class="hck"><span>แบบออนไลน์เรียลไทม์</span><span>ไม่ต้องติดตั้งแอป</span><span>ใช้ได้ทั้งมือถือและคอมพิวเตอร์</span><span>ยอด QR ขึ้นอัตโนมัติ</span></div>
 <small class="mu">รองรับผู้ใช้งาน 3 กลุ่ม</small><div class="hch"><span>${IC.rooms} เจ้าของหอพัก</span><span>${IC.set} ผู้ดูแลระบบ</span><span>${PI} ผู้เช่า</span></div>
-<div class="pvw"><div class="pv"><div class="pvb"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div><div class="pvx"><div class="pvd"><div class="app"><div class="sb np"><div class="logo" style="margin-bottom:14px"><img class="lgi" src="${LG}" alt=""><div>T&T MANSION<br><small class="ac">PAYMENT SYSTEM</small></div></div>${NVA.map(n=>`<div class="nv ${n[0]=='dash'?'on':''}"><i>${IC[n[0]]||n[2]}</i><span>${n[1]}</span></div>`).join('')}</div><div class="mn"><div class="top np"><input placeholder="ค้นหาห้อง ผู้เช่า หรือเลขที่บิล (กด Enter)"><span class="me">${av(AD,36)}<b>${e(AD.name)}</b></span><span class="seg"><span class="${LANG=='th'?'on':''}">TH</span><span class="${LANG=='en'?'on':''}">EN</span></span><button class="b b2 sm">ออกจากระบบ</button></div>${pg.dash()}</div></div></div></div><span class="pvf">● แดชบอร์ดผู้ดูแลระบบ</span></div>
-<div class="ph"><div class="pnt"></div><div class="phs"><div class="phtop"><span class="me">${av(AD,26)}<b>${e(AD.name)}</b></span><span class="seg"><span class="${LANG=='th'?'on':''}">TH</span><span class="${LANG=='en'?'on':''}">EN</span></span></div><b class="pht">ภาพรวมการจัดการ</b><div class="po"><div class="phr">${BLD(30)}<div><b>${nm}</b><small>หอพัก · พิษณุโลก</small></div></div><small>${OC}/${K.N} ห้อง</small><b>${K.op}%</b><div class="pb"><i style="width:${K.op}%"></i></div></div><div class="pt2"><div><small>ห้องทั้งหมด</small><b>${K.N}</b></div><div><small>รายได้เดือนนี้</small><b>฿${fm(K.ic)}</b></div><div><small>ยังไม่ชำระ</small><b>${K.un}</b></div><div><small>ผิดนัดชำระ</small><b>${K.ov}</b></div></div></div><div class="pnb">${NVA.map(n=>`<span class="${n[0]=='dash'?'on':''}"><i>${IC[n[0]]||n[2]}</i>${n[1]}</span>`).join('')}</div></div></div></section>
-<section class="hdk"><div class="hw hs3">${[['⌂',D.rooms.length,'ห้องพักที่จัดการในระบบ'],[PI,'3','กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า'],['฿','฿'+D.set.rate,'ค่าไฟต่อหน่วย คำนวณอัตโนมัติ']].map(x=>`<div><i>${IG[x[0]]||x[0]}</i><b>${x[1]}</b><small>${x[2]}</small></div>`).join('')}</div><p class="hdn">ตัวเลขอ้างอิงจากการตั้งค่าของหอพัก T&T แมนชั่น</p></section><div class="hcr">
-<section class="hw hx" id="hf"><h2>ครบทุกขั้นตอนการเก็บค่าหอพัก</h2><div class="fx">${[['⌂','ห้องพัก','จัดการห้อง สถานะ และผู้เช่า'],['▥','สัญญาเช่า','บันทึกสัญญาและเงินแรกเข้า'],['◔','มิเตอร์ไฟฟ้า','จดเลขมิเตอร์ คำนวณหน่วยไฟอัตโนมัติ'],['▤','ใบแจ้งหนี้','ออกบิลทุกห้อง พร้อมค่าปรับอัตโนมัติ'],['฿','ชำระเงิน','Dynamic PromptPay QR และแนบสลิป'],['☰','รายงาน','สรุปรายได้และสถานะการชำระเงิน']].map(f=>`<div class="fxc"><i>${IG[f[0]]||f[0]}</i><b>${f[1]}</b><small>${f[2]}</small></div>`).join('')}</div></section>
-<section class="hw hx" id="hst"><h2>ชำระเงินง่ายใน 4 ขั้นตอน</h2><div class="sp">${['ดูใบแจ้งหนี้ของห้องคุณ','สแกน QR ยอดขึ้นอัตโนมัติ','แนบสลิปโอนเงิน','ผู้ดูแลอนุมัติ รับใบเสร็จ'].map((t,i)=>`<div><b>${i+1}</b><span>${t}</span></div>`).join('')}</div><div class="hc" style="margin-top:34px"><button class="b" onclick="go('login')">เริ่มใช้งาน</button></div></section>
-</div><footer class="lf">© 2026 T&T Mansion Payment System · ${APP_V}</footer></div>`};
-const home=()=>{if(PUBD){try{return withPub(home0)}catch(x){console.error(x);PUBD=null}}return home0()};
-let LP=0;
-function lp(){cancelAnimationFrame(LP);const el=$('#lp'),cv=$('#pc');if(!el||!cv)return;const x=cv.getContext('2d'),N=innerWidth<700?28:60;let W,H;const ps=[];
- const sz=()=>{W=cv.width=innerWidth;H=cv.height=innerHeight};sz();window.onresize=sz;
- for(let i=0;i<N;i++)ps.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.8+.4,v:Math.random()*.35+.08,a:Math.random()*.6+.2});
- el.onpointermove=e=>{el.style.setProperty('--mx',(e.clientX/innerWidth*2-1).toFixed(3));el.style.setProperty('--my',(e.clientY/innerHeight*2-1).toFixed(3))};
- (function f(){if(!$('#pc'))return;x.clearRect(0,0,W,H);x.shadowColor='#ef4444';x.shadowBlur=8;for(const p of ps){p.y-=p.v;p.x+=Math.sin(p.y/60)*.15;if(p.y<-5){p.y=H+5;p.x=Math.random()*W}x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fillStyle='rgba(239,68,68,'+p.a+')';x.fill()}LP=requestAnimationFrame(f)})()}
-const fld=(id,l,ic,t='text',x='')=>`<label>${l}</label><div class="fi"><i>${IG[ic]||ic}</i><input id="${id}" type="${t}" ${t=='password'?'style="padding-right:64px"':''} ${x}>${t=='password'?`<u onclick="tg('${id}',this)">แสดง</u>`:''}</div>`;
-const tg=(id,b)=>{const el=$('#'+id);el.type=el.type=='password'?'text':'password';b.textContent=el.type=='password'?'แสดง':'ซ่อน'},fl=(m,p)=>{$('#em').value=m;$('#pw').value=p};
-const auth=(t,s,h,l,lk,lq)=>`${bgL(0)}${TGL('fx-tr')}<div class="wrap au"><div class="al"><div class="rings px" style="--k:14"><i class="r1"><b></b></i><i class="r2"><b></b></i></div><div class="logo"><img class="lgi" src="${LG}" alt=""> T&T MANSION</div><h1 class="gt">${t}</h1><p class="mu">${s}</p></div><div class="cd gc">${P=='forgot'?'':'<div class="tabs"><span class="'+(P=='login'?'on':'')+'" onclick="go(\'login\')">เข้าสู่ระบบ</span></div>'}${h}<p style="text-align:center;margin:18px 0 0" class="mu">${l} <b class="ac" style="cursor:pointer" onclick="go('${lq}')">${lk}</b></p></div></div>`;
-const login=()=>auth('ยินดีต้อนรับกลับ','เข้าสู่ระบบเพื่อตรวจสอบบิลและสถานะการชำระเงินของห้องพัก',`<div class="ah"><span class="ib">${IC.lock}</span><div><h2>เข้าสู่ระบบ</h2><small class="mu">สำหรับผู้เช่าและผู้ดูแล</small></div><b class="ac bk" onclick="go('home')">‹ หน้าหลัก</b></div>${fld('em','อีเมล','✉','email',`autocomplete="username" placeholder="name@example.com"`)}${fld('pw','รหัสผ่าน','🔑','password',`autocomplete="current-password" placeholder="••••••••" onkeydown="if(event.key=='Enter')dl()"`)}<div style="text-align:right;margin:-6px 0 12px"><span class="ac" style="cursor:pointer;font-size:13px" onclick="go('forgot')">ลืมรหัสผ่าน?</span></div><button class="b go" style="width:100%" onclick="dl()">เข้าสู่ระบบ →</button><div class="dm"><small class="mu">ทดลองใช้งาน</small><span><button class="b b2 sm" onclick="fl('admin@ttmansion.local','admin123')">ผู้ดูแล</button> <button class="b b2 sm" onclick="fl('owner@ttmansion.local','owner123')">เจ้าของ</button> <button class="b b2 sm" onclick="fl('nattapol@ttmansion.local','1234')">ผู้เช่า</button></span></div>`,'ยังไม่มีบัญชี? ติดต่อผู้ดูแลหอพักเพื่อขอสร้างบัญชี','','login');
-function dl(){const u=D.users.find(u=>u.email==$('#em').value.trim().toLowerCase()&&u.pw==$('#pw').value);if(!u)return alert('อีเมลหรือรหัสผ่านไม่ถูกต้อง');if(u.out)return alert('บัญชีนี้ย้ายออกแล้ว กรุณาติดต่อผู้ดูแล');enter(u,0,1)}
-function enter(u,pg2,how){U=u;applyPf(u);P=pg2||'x';try{localStorage.setItem('ttm_s',u.id)}catch(x){}R();if(how)tt('✓ เข้าสู่ระบบสำเร็จ · '+(RL[u.role]||'')+' '+u.name)}
-function genPw(){const c='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';let s='';const a=new Uint32Array(8);crypto.getRandomValues(a);for(const v of a)s+=c[v%c.length];return s}
-const forgot=()=>SBON?forgotSB():auth('ลืมรหัสผ่าน','ยืนยันตัวตนด้วยอีเมลและเบอร์โทรที่ลงทะเบียนไว้ แล้วตั้งรหัสผ่านใหม่',`<div class="ah"><span class="ib">${IC.key}</span><div><h2>ตั้งรหัสผ่านใหม่</h2><small class="mu">ใช้ได้เมื่อบัญชีมีเบอร์โทร</small></div><b class="ac bk" onclick="go('login')">‹ กลับ</b></div>${fld('em','อีเมล','✉','email')}${fld('rt','เบอร์โทรที่ลงทะเบียน','☎','tel')}${fld('pw','รหัสผ่านใหม่ (อย่างน้อย 6 ตัว)','🔑','password')}${fld('pw2','ยืนยันรหัสผ่านใหม่','🔑','password')}<button class="b go" style="width:100%" onclick="fp()">ตั้งรหัสผ่านใหม่ →</button><div class="note">หากบัญชียังไม่มีเบอร์โทร (เช่น ผู้ดูแลระบบ) ให้ติดต่อผู้ดูแลเพื่อรีเซ็ตรหัสผ่านให้</div>`,'จำรหัสผ่านได้แล้ว?','เข้าสู่ระบบ','login');
-function fp(){const m=$('#em').value.trim().toLowerCase(),t=$('#rt').value.replace(/\D/g,''),w=$('#pw').value,u=D.users.find(x=>x.email==m);
- if(!m||!t||!w)return alert('กรอกข้อมูลให้ครบ');if(!u||!u.tel)return alert('ไม่พบบัญชี หรือบัญชีนี้ยังไม่มีเบอร์โทร กรุณาติดต่อผู้ดูแลระบบ');
- if(u.tel.replace(/\D/g,'')!=t)return alert('เบอร์โทรไม่ตรงกับที่ลงทะเบียนไว้');if(u.out)return alert('บัญชีนี้ย้ายออกแล้ว กรุณาติดต่อผู้ดูแล');
- if(w.length<6)return alert('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัว');if(w!=$('#pw2').value)return alert('ยืนยันรหัสผ่านไม่ตรงกัน');
- u.pw=w;save();go('login');tt('✓ ตั้งรหัสผ่านใหม่สำเร็จ กรุณาเข้าสู่ระบบ')}
-function lof(r,err){ // ตัวกันเหนียว: ถ้าวาดหน้าต้อนรับไม่สำเร็จ ให้ล้างเซสชันแล้วโหลดหน้าแรกใหม่
- try{Object.keys(localStorage).filter(k=>/^sb-.*-auth-token/.test(k)||k=='ttm_s').forEach(k=>localStorage.removeItem(k))}catch(x){}
- try{sessionStorage.setItem('ttm_lo',r||'1')}catch(x){}
- try{console.error('logout render failed:',err)}catch(x){}
- location.replace(location.pathname+location.search)}
-function lok(){return !document.querySelector('#app > .app')}
-function lout(r){let bad=null;try{R()}catch(x){bad=x;PUBD=null;try{R();bad=null}catch(y){bad=y}}
- if(bad||!lok())return lof(r,bad);
- try{tt('✓ ออกจากระบบสำเร็จ'+(r?' · '+RL[r]:''))}catch(x){}
- setTimeout(()=>{if(!U&&!lok())lof(r,'late re-render')},1500)}
-function out(){const r=U&&U.role;U=null;P='home';try{localStorage.removeItem('ttm_s')}catch(x){}lout(r)}
+<div class="pvw"><div class="pv"><div class="pvb"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div><div class="pvx"><div class="pvd"><div class="app"><div class="sb np"><div class="logo" style="margin-bottom:14px"><img class="lgi" src="${LG}" alt=""><div>T&T MANSION<br><small class="ac">PAYMENT SYSTEM</small></div></div>${NVA.map(n => `<div class="nv ${n[0] == 'dash' ? 'on' : ''}"><i>${IC[n[0]] || n[2]}</i><span>${n[1]}</span></div>`).join('')}</div><div class="mn"><div class="top np"><input placeholder="ค้นหาห้อง ผู้เช่า หรือเลขที่บิล (กด Enter)"><span class="me">${av(AD, 36)}<b>${e(AD.name)}</b></span><span class="seg"><span class="${LANG == 'th' ? 'on' : ''}">TH</span><span class="${LANG == 'en' ? 'on' : ''}">EN</span></span><button class="b b2 sm">ออกจากระบบ</button></div>${pg.dash()}</div></div></div></div><span class="pvf">● แดชบอร์ดผู้ดูแลระบบ</span></div>
+<div class="ph"><div class="pnt"></div><div class="phs"><div class="phtop"><span class="me">${av(AD, 26)}<b>${e(AD.name)}</b></span><span class="seg"><span class="${LANG == 'th' ? 'on' : ''}">TH</span><span class="${LANG == 'en' ? 'on' : ''}">EN</span></span></div><b class="pht">ภาพรวมการจัดการ</b><div class="po"><div class="phr">${BLD(30)}<div><b>${nm}</b><small>หอพัก · พิษณุโลก</small></div></div><small>${OC}/${K.N} ห้อง</small><b>${K.op}%</b><div class="pb"><i style="width:${K.op}%"></i></div></div><div class="pt2"><div><small>ห้องทั้งหมด</small><b>${K.N}</b></div><div><small>รายได้เดือนนี้</small><b>฿${fm(K.ic)}</b></div><div><small>ยังไม่ชำระ</small><b>${K.un}</b></div><div><small>ผิดนัดชำระ</small><b>${K.ov}</b></div></div></div><div class="pnb">${NVA.map(n => `<span class="${n[0] == 'dash' ? 'on' : ''}"><i>${IC[n[0]] || n[2]}</i>${n[1]}</span>`).join('')}</div></div></div></section>
+<section class="hdk"><div class="hw hs3">${[
+    ['⌂', D.rooms.length, 'ห้องพักที่จัดการในระบบ'],
+    [PI, '3', 'กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า'],
+    ['฿', '฿' + D.set.rate, 'ค่าไฟต่อหน่วย คำนวณอัตโนมัติ'],
+  ]
+    .map(x => `<div><i>${IG[x[0]] || x[0]}</i><b>${x[1]}</b><small>${x[2]}</small></div>`)
+    .join(
+      ''
+    )}</div><p class="hdn">ตัวเลขอ้างอิงจากการตั้งค่าของหอพัก T&T แมนชั่น</p></section><div class="hcr">
+<section class="hw hx" id="hf"><h2>ครบทุกขั้นตอนการเก็บค่าหอพัก</h2><div class="fx">${[
+    ['⌂', 'ห้องพัก', 'จัดการห้อง สถานะ และผู้เช่า'],
+    ['▥', 'สัญญาเช่า', 'บันทึกสัญญาและเงินแรกเข้า'],
+    ['◔', 'มิเตอร์ไฟฟ้า', 'จดเลขมิเตอร์ คำนวณหน่วยไฟอัตโนมัติ'],
+    ['▤', 'ใบแจ้งหนี้', 'ออกบิลทุกห้อง พร้อมค่าปรับอัตโนมัติ'],
+    ['฿', 'ชำระเงิน', 'Dynamic PromptPay QR และแนบสลิป'],
+    ['☰', 'รายงาน', 'สรุปรายได้และสถานะการชำระเงิน'],
+  ]
+    .map(
+      f => `<div class="fxc"><i>${IG[f[0]] || f[0]}</i><b>${f[1]}</b><small>${f[2]}</small></div>`
+    )
+    .join('')}</div></section>
+<section class="hw hx" id="hst"><h2>ชำระเงินง่ายใน 4 ขั้นตอน</h2><div class="sp">${['ดูใบแจ้งหนี้ของห้องคุณ', 'สแกน QR ยอดขึ้นอัตโนมัติ', 'แนบสลิปโอนเงิน', 'ผู้ดูแลอนุมัติ รับใบเสร็จ'].map((t, i) => `<div><b>${i + 1}</b><span>${t}</span></div>`).join('')}</div><div class="hc" style="margin-top:34px"><button class="b" onclick="go('login')">เริ่มใช้งาน</button></div></section>
+</div><footer class="lf">© 2026 T&T Mansion Payment System · ${APP_V}</footer></div>`;
+};
+const home = () => {
+  if (PUBD) {
+    try {
+      return withPub(home0);
+    } catch (x) {
+      console.error(x);
+      PUBD = null;
+    }
+  }
+  return home0();
+};
+let LP = 0;
+function lp() {
+  cancelAnimationFrame(LP);
+  const el = $('#lp'),
+    cv = $('#pc');
+  if (!el || !cv) return;
+  const x = cv.getContext('2d'),
+    N = innerWidth < 700 ? 28 : 60;
+  let W, H;
+  const ps = [];
+  const sz = () => {
+    W = cv.width = innerWidth;
+    H = cv.height = innerHeight;
+  };
+  sz();
+  window.onresize = sz;
+  for (let i = 0; i < N; i++)
+    ps.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.8 + 0.4,
+      v: Math.random() * 0.35 + 0.08,
+      a: Math.random() * 0.6 + 0.2,
+    });
+  el.onpointermove = e => {
+    el.style.setProperty('--mx', ((e.clientX / innerWidth) * 2 - 1).toFixed(3));
+    el.style.setProperty('--my', ((e.clientY / innerHeight) * 2 - 1).toFixed(3));
+  };
+  (function f() {
+    if (!$('#pc')) return;
+    x.clearRect(0, 0, W, H);
+    x.shadowColor = '#ef4444';
+    x.shadowBlur = 8;
+    for (const p of ps) {
+      p.y -= p.v;
+      p.x += Math.sin(p.y / 60) * 0.15;
+      if (p.y < -5) {
+        p.y = H + 5;
+        p.x = Math.random() * W;
+      }
+      x.beginPath();
+      x.arc(p.x, p.y, p.r, 0, 7);
+      x.fillStyle = 'rgba(239,68,68,' + p.a + ')';
+      x.fill();
+    }
+    LP = requestAnimationFrame(f);
+  })();
+}
+const fld = (id, l, ic, t = 'text', x = '') =>
+  `<label>${l}</label><div class="fi"><i>${IG[ic] || ic}</i><input id="${id}" type="${t}" ${t == 'password' ? 'style="padding-right:64px"' : ''} ${x}>${t == 'password' ? `<u onclick="tg('${id}',this)">แสดง</u>` : ''}</div>`;
+const tg = (id, b) => {
+    const el = $('#' + id);
+    el.type = el.type == 'password' ? 'text' : 'password';
+    b.textContent = el.type == 'password' ? 'แสดง' : 'ซ่อน';
+  },
+  fl = (m, p) => {
+    $('#em').value = m;
+    $('#pw').value = p;
+  };
+const auth = (t, s, h, l, lk, lq) =>
+  `${bgL(0)}${TGL('fx-tr')}<div class="wrap au"><div class="al"><div class="rings px" style="--k:14"><i class="r1"><b></b></i><i class="r2"><b></b></i></div><div class="logo"><img class="lgi" src="${LG}" alt=""> T&T MANSION</div><h1 class="gt">${t}</h1><p class="mu">${s}</p></div><div class="cd gc">${P == 'forgot' ? '' : '<div class="tabs"><span class="' + (P == 'login' ? 'on' : '') + '" onclick="go(\'login\')">เข้าสู่ระบบ</span></div>'}${h}<p style="text-align:center;margin:18px 0 0" class="mu">${l} <b class="ac" style="cursor:pointer" onclick="go('${lq}')">${lk}</b></p></div></div>`;
+const login = () =>
+  auth(
+    'ยินดีต้อนรับกลับ',
+    'เข้าสู่ระบบเพื่อตรวจสอบบิลและสถานะการชำระเงินของห้องพัก',
+    `<div class="ah"><span class="ib">${IC.lock}</span><div><h2>เข้าสู่ระบบ</h2><small class="mu">สำหรับผู้เช่าและผู้ดูแล</small></div><b class="ac bk" onclick="go('home')">‹ หน้าหลัก</b></div>${fld('em', 'อีเมล', '✉', 'email', `autocomplete="username" placeholder="name@example.com"`)}${fld('pw', 'รหัสผ่าน', '🔑', 'password', `autocomplete="current-password" placeholder="••••••••" onkeydown="if(event.key=='Enter')dl()"`)}<div style="text-align:right;margin:-6px 0 12px"><span class="ac" style="cursor:pointer;font-size:13px" onclick="go('forgot')">ลืมรหัสผ่าน?</span></div><button class="b go" style="width:100%" onclick="dl()">เข้าสู่ระบบ →</button><div class="dm"><small class="mu">ทดลองใช้งาน</small><span><button class="b b2 sm" onclick="fl('admin@ttmansion.local','admin123')">ผู้ดูแล</button> <button class="b b2 sm" onclick="fl('owner@ttmansion.local','owner123')">เจ้าของ</button> <button class="b b2 sm" onclick="fl('nattapol@ttmansion.local','1234')">ผู้เช่า</button></span></div>`,
+    'ยังไม่มีบัญชี? ติดต่อผู้ดูแลหอพักเพื่อขอสร้างบัญชี',
+    '',
+    'login'
+  );
+function dl() {
+  const u = D.users.find(
+    u => u.email == $('#em').value.trim().toLowerCase() && u.pw == $('#pw').value
+  );
+  if (!u) return alert('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
+  if (u.out) return alert('บัญชีนี้ย้ายออกแล้ว กรุณาติดต่อผู้ดูแล');
+  enter(u, 0, 1);
+}
+function enter(u, pg2, how) {
+  U = u;
+  applyPf(u);
+  P = pg2 || 'x';
+  try {
+    localStorage.setItem('ttm_s', u.id);
+  } catch (x) {}
+  R();
+  if (how) tt('✓ เข้าสู่ระบบสำเร็จ · ' + (RL[u.role] || '') + ' ' + u.name);
+}
+function genPw() {
+  const c = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let s = '';
+  const a = new Uint32Array(8);
+  crypto.getRandomValues(a);
+  for (const v of a) s += c[v % c.length];
+  return s;
+}
+const forgot = () =>
+  SBON
+    ? forgotSB()
+    : auth(
+        'ลืมรหัสผ่าน',
+        'ยืนยันตัวตนด้วยอีเมลและเบอร์โทรที่ลงทะเบียนไว้ แล้วตั้งรหัสผ่านใหม่',
+        `<div class="ah"><span class="ib">${IC.key}</span><div><h2>ตั้งรหัสผ่านใหม่</h2><small class="mu">ใช้ได้เมื่อบัญชีมีเบอร์โทร</small></div><b class="ac bk" onclick="go('login')">‹ กลับ</b></div>${fld('em', 'อีเมล', '✉', 'email')}${fld('rt', 'เบอร์โทรที่ลงทะเบียน', '☎', 'tel')}${fld('pw', 'รหัสผ่านใหม่ (อย่างน้อย 6 ตัว)', '🔑', 'password')}${fld('pw2', 'ยืนยันรหัสผ่านใหม่', '🔑', 'password')}<button class="b go" style="width:100%" onclick="fp()">ตั้งรหัสผ่านใหม่ →</button><div class="note">หากบัญชียังไม่มีเบอร์โทร (เช่น ผู้ดูแลระบบ) ให้ติดต่อผู้ดูแลเพื่อรีเซ็ตรหัสผ่านให้</div>`,
+        'จำรหัสผ่านได้แล้ว?',
+        'เข้าสู่ระบบ',
+        'login'
+      );
+function fp() {
+  const m = $('#em').value.trim().toLowerCase(),
+    t = $('#rt').value.replace(/\D/g, ''),
+    w = $('#pw').value,
+    u = D.users.find(x => x.email == m);
+  if (!m || !t || !w) return alert('กรอกข้อมูลให้ครบ');
+  if (!u || !u.tel) return alert('ไม่พบบัญชี หรือบัญชีนี้ยังไม่มีเบอร์โทร กรุณาติดต่อผู้ดูแลระบบ');
+  if (u.tel.replace(/\D/g, '') != t) return alert('เบอร์โทรไม่ตรงกับที่ลงทะเบียนไว้');
+  if (u.out) return alert('บัญชีนี้ย้ายออกแล้ว กรุณาติดต่อผู้ดูแล');
+  if (w.length < 6) return alert('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัว');
+  if (w != $('#pw2').value) return alert('ยืนยันรหัสผ่านไม่ตรงกัน');
+  u.pw = w;
+  save();
+  go('login');
+  tt('✓ ตั้งรหัสผ่านใหม่สำเร็จ กรุณาเข้าสู่ระบบ');
+}
+function lof(r, err) {
+  // ตัวกันเหนียว: ถ้าวาดหน้าต้อนรับไม่สำเร็จ ให้ล้างเซสชันแล้วโหลดหน้าแรกใหม่
+  try {
+    Object.keys(localStorage)
+      .filter(k => /^sb-.*-auth-token/.test(k) || k == 'ttm_s')
+      .forEach(k => localStorage.removeItem(k));
+  } catch (x) {}
+  try {
+    sessionStorage.setItem('ttm_lo', r || '1');
+  } catch (x) {}
+  try {
+    console.error('logout render failed:', err);
+  } catch (x) {}
+  location.replace(location.pathname + location.search);
+}
+function lok() {
+  return !document.querySelector('#app > .app');
+}
+function lout(r) {
+  let bad = null;
+  try {
+    R();
+  } catch (x) {
+    bad = x;
+    PUBD = null;
+    try {
+      R();
+      bad = null;
+    } catch (y) {
+      bad = y;
+    }
+  }
+  if (bad || !lok()) return lof(r, bad);
+  try {
+    tt('✓ ออกจากระบบสำเร็จ' + (r ? ' · ' + RL[r] : ''));
+  } catch (x) {}
+  setTimeout(() => {
+    if (!U && !lok()) lof(r, 'late re-render');
+  }, 1500);
+}
+function out() {
+  const r = U && U.role;
+  U = null;
+  P = 'home';
+  try {
+    localStorage.removeItem('ttm_s');
+  } catch (x) {}
+  lout(r);
+}

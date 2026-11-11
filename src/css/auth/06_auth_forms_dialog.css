@@ -1,216 +1,222 @@
 /* 06_auth_forms_dialog.css — หน้าเข้าสู่ระบบ ช่องกรอก dialog เอกสาร
    (แยกมาจาก style.css บรรทัด 1345-1558; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 @property --a {
-    syntax: '<angle>';
-    initial-value: 0deg;
-    inherits: false
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
 }
 
 @keyframes bs {
-    to {
-        --a: 360deg
-    }
+  to {
+    --a: 360deg;
+  }
 }
 
 #app {
-    overflow-x: clip
+  overflow-x: clip;
 }
 
 .au {
-    gap: 56px
+  gap: 56px;
 }
 
 .al {
-    position: relative
+  position: relative;
 }
 
 .al h1 {
-    font-size: clamp(30px, 4vw, 46px);
-    margin: 34px 0 8px;
-    line-height: 1.2
+  font-size: clamp(30px, 4vw, 46px);
+  margin: 34px 0 8px;
+  line-height: 1.2;
 }
 
 .al .ico {
-    margin-top: 30px
+  margin-top: 30px;
 }
 
 .gc {
-    position: relative;
-    border-radius: 20px;
-    padding: 26px;
-    box-shadow: 0 30px 80px #000a, 0 0 70px #54e8ff18;
-    transform: perspective(1200px) rotateY(calc(var(--mx, 0)*4deg)) rotateX(calc(var(--my, 0)*-3deg));
-    transition: transform .25s ease-out;
-    animation: up .8s cubic-bezier(.2, .7, .2, 1) backwards
+  position: relative;
+  border-radius: 20px;
+  padding: 26px;
+  box-shadow:
+    0 30px 80px #000a,
+    0 0 70px #54e8ff18;
+  transform: perspective(1200px) rotateY(calc(var(--mx, 0) * 4deg))
+    rotateX(calc(var(--my, 0) * -3deg));
+  transition: transform 0.25s ease-out;
+  animation: up 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
 }
 
 .gc:before {
-    content: "";
-    position: absolute;
-    inset: -1px;
-    border-radius: 21px;
-    padding: 1px;
-    background: conic-gradient(from var(--a), #54e8ff, #818cf8 30%, #0b1324 55%, #54e8ff);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
-    animation: bs 6s linear infinite;
-    pointer-events: none
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 21px;
+  padding: 1px;
+  background: conic-gradient(from var(--a), #54e8ff, #818cf8 30%, #0b1324 55%, #54e8ff);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  animation: bs 6s linear infinite;
+  pointer-events: none;
 }
 
 .ah {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    margin-bottom: 18px
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 18px;
 }
 
-.ah>div {
-    flex: 1
+.ah > div {
+  flex: 1;
 }
 
 .ah h2 {
-    font-size: 22px
+  font-size: 22px;
 }
 
 .ib {
-    width: 44px;
-    height: 44px;
-    border-radius: 14px;
-    display: grid;
-    place-items: center;
-    font-size: 20px;
-    background: linear-gradient(135deg, #0c2a3a, #12335a);
-    border: 1px solid #155e75;
-    box-shadow: 0 0 24px #54e8ff22;
-    flex: none
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  background: linear-gradient(135deg, #0c2a3a, #12335a);
+  border: 1px solid #155e75;
+  box-shadow: 0 0 24px #54e8ff22;
+  flex: none;
 }
 
 .bk {
-    cursor: pointer;
-    font-size: 13px;
-    white-space: nowrap
+  cursor: pointer;
+  font-size: 13px;
+  white-space: nowrap;
 }
 
 .fi {
-    position: relative;
-    margin: 6px 0 14px
+  position: relative;
+  margin: 6px 0 14px;
 }
 
 .fi i {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-style: normal;
-    font-size: 15px;
-    opacity: .7;
-    pointer-events: none
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-style: normal;
+  font-size: 15px;
+  opacity: 0.7;
+  pointer-events: none;
 }
 
 .fi input,
 .fi select {
-    margin: 0;
-    padding-left: 42px
+  margin: 0;
+  padding-left: 42px;
 }
 
 .fi u {
-    position: absolute;
-    right: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 12px;
-    color: var(--ac);
-    cursor: pointer;
-    text-decoration: none;
-    user-select: none
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: var(--ac);
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
 }
 
 .fi:focus-within i {
-    opacity: 1
+  opacity: 1;
 }
 
 .go {
-    padding: 13px;
-    font-size: 15px;
-    margin-top: 4px
+  padding: 13px;
+  font-size: 15px;
+  margin-top: 4px;
 }
 
 .dm {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    margin-top: 16px;
-    padding: 10px 12px;
-    border: 1px dashed #1e3a5f;
-    border-radius: 12px
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 10px 12px;
+  border: 1px dashed #1e3a5f;
+  border-radius: 12px;
 }
 
-@media(max-width:800px) {
-    .au {
-        gap: 8px
-    }
-    .al {
-        text-align: center
-    }
-    .al .ico {
-        display: none
-    }
-    .al h1 {
-        font-size: 28px;
-        margin-top: 14px
-    }
-    .al .logo {
-        justify-content: center
-    }
-    .gc {
-        padding: 20px
-    }
+@media (max-width: 800px) {
+  .au {
+    gap: 8px;
+  }
+  .al {
+    text-align: center;
+  }
+  .al .ico {
+    display: none;
+  }
+  .al h1 {
+    font-size: 28px;
+    margin-top: 14px;
+  }
+  .al .logo {
+    justify-content: center;
+  }
+  .gc {
+    padding: 20px;
+  }
 }
 
 #dg {
-    position: fixed;
-    inset: 0;
-    background: #000b;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 80;
-    padding: 16px;
-    backdrop-filter: blur(4px)
+  position: fixed;
+  inset: 0;
+  background: #000b;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 80;
+  padding: 16px;
+  backdrop-filter: blur(4px);
 }
 
 #dg .cd {
-    max-width: 380px;
-    width: 100%;
-    animation: pop .2s
+  max-width: 380px;
+  width: 100%;
+  animation: pop 0.2s;
 }
 
-@media(max-width:800px) {
-    #dg {
-        align-items: center
-    }
-    #dg .cd {
-        border-radius: 20px
-    }
+@media (max-width: 800px) {
+  #dg {
+    align-items: center;
+  }
+  #dg .cd {
+    border-radius: 20px;
+  }
 }
 
 .b.gr {
-    background: linear-gradient(135deg, #22c55e, #16a34a);
-    color: #fff;
-    box-shadow: 0 6px 20px #16a34a40
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #fff;
+  box-shadow: 0 6px 20px #16a34a40;
 }
 
 .doc td,
 .doc th {
-    padding: 0;
-    border: 0;
-    white-space: normal;
-    background: none
+  padding: 0;
+  border: 0;
+  white-space: normal;
+  background: none;
 }
 
 .doc tr:hover td {
-    background: none
+  background: none;
 }
-

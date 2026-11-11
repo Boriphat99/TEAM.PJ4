@@ -1,7 +1,7 @@
 /* 03_i18n_dictionary.js — พจนานุกรมแปลภาษา ไทย/อังกฤษ (ขนาดใหญ่)
    (แยกมาจาก script.js บรรทัด 12-656; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
-        const LOCF = () => LANG == 'en' ? 'en-GB' : 'th-TH',
-            ENm = `กฎการเรียกเก็บค่าบริการของหอพัก|Dorm billing rules
+const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
+  ENm = `กฎการเรียกเก็บค่าบริการของหอพัก|Dorm billing rules
 กฎการเรียกเก็บเงิน|Billing rules
 กดค้างที่รูป (มือถือ) หรือคลิกขวา (คอมพิวเตอร์) แล้วเลือกบันทึกรูปภาพ|Long-press the image (mobile) or right-click (desktop), then choose Save image
 กดแก้ไขเพื่อเพิ่ม)|press Edit to add)
@@ -621,27 +621,35 @@
 โหมดกลางคืน|Night mode
 ตั้งค่าส่วนตัว|Personal settings
 ตัว|chars
-บัญชี|Account`.split('\n').map(l => l.split('|')).filter(x => x.length == 2 && x[0]).sort((a, b) => b[0].length - a[0].length),
-            THR = /[\u0E00-\u0E7F]/,
-            tl = t => {
-                if (!THR.test(t)) return t;
-                for (const [a, b] of ENm)
-                    if (t.includes(a)) t = t.split(a).join(b);
-                return t.replace(/(\d+) Room\b/g, '$1 rooms').replace(/\b1 (bills|persons|times|days|items|invoices|units|rooms)\b/g, (m, a) => '1 ' + a.slice(0, -1))
-            },
-            tlN = n => {
-                if (LANG != 'en') return;
-                if (n.nodeType == 3) {
-                    const v = tl(n.nodeValue);
-                    if (v !== n.nodeValue) n.nodeValue = v
-                } else if (n.nodeType == 1 && n.tagName != 'SCRIPT' && n.tagName != 'STYLE') {
-                    ['placeholder', 'title', 'alt'].forEach(a => {
-                        if (n.hasAttribute(a)) {
-                            const o = n.getAttribute(a),
-                                v = tl(o);
-                            if (v !== o) n.setAttribute(a, v)
-                        }
-                    });
-                    n.childNodes.forEach(tlN)
-                }
-            };
+บัญชี|Account`
+    .split('\n')
+    .map(l => l.split('|'))
+    .filter(x => x.length == 2 && x[0])
+    .sort((a, b) => b[0].length - a[0].length),
+  THR = /[\u0E00-\u0E7F]/,
+  tl = t => {
+    if (!THR.test(t)) return t;
+    for (const [a, b] of ENm) if (t.includes(a)) t = t.split(a).join(b);
+    return t
+      .replace(/(\d+) Room\b/g, '$1 rooms')
+      .replace(
+        /\b1 (bills|persons|times|days|items|invoices|units|rooms)\b/g,
+        (m, a) => '1 ' + a.slice(0, -1)
+      );
+  },
+  tlN = n => {
+    if (LANG != 'en') return;
+    if (n.nodeType == 3) {
+      const v = tl(n.nodeValue);
+      if (v !== n.nodeValue) n.nodeValue = v;
+    } else if (n.nodeType == 1 && n.tagName != 'SCRIPT' && n.tagName != 'STYLE') {
+      ['placeholder', 'title', 'alt'].forEach(a => {
+        if (n.hasAttribute(a)) {
+          const o = n.getAttribute(a),
+            v = tl(o);
+          if (v !== o) n.setAttribute(a, v);
+        }
+      });
+      n.childNodes.forEach(tlN);
+    }
+  };

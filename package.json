@@ -1,5 +1,8 @@
 {
   "name": "tt-mansion-payment-system",
   "private": true,
-  "scripts": { "build": "node build.js" }
+  "scripts": {
+    "build": "node build.js",
+    "format": "npx prettier --write \"src/**/*.{js,css}\" build.js \"supabase/**/*.ts\""
+  }
 }

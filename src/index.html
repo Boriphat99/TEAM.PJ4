@@ -18,7 +18,25 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&family=Noto+Serif+Thai:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script>try{var d=document.documentElement,t=localStorage.getItem('ttm_theme');if(t)d.dataset.theme=t;var mc=document.createElement('meta');mc.name='theme-color';mc.content=(t==='dark')?'#16171a':'#f8f6f5';document.head.appendChild(mc);var p=JSON.parse(localStorage.getItem('ttm_pf')||'{}');if(p.lang)d.lang=p.lang;var s=localStorage.getItem('ttm_sb');if(s==='1'||(s===null&&innerWidth<1100))d.classList.add('sb-mini')}catch(e){}</script>
+    <script>
+      // ตั้งธีม ภาษา และขนาดเมนูก่อนหน้าเว็บแสดง เพื่อไม่ให้หน้ากะพริบ
+      try {
+        var d = document.documentElement;
+        var t = localStorage.getItem('ttm_theme');
+        if (t) d.dataset.theme = t;
+
+        var mc = document.createElement('meta');
+        mc.name = 'theme-color';
+        mc.content = t === 'dark' ? '#16171a' : '#f8f6f5';
+        document.head.appendChild(mc);
+
+        var p = JSON.parse(localStorage.getItem('ttm_pf') || '{}');
+        if (p.lang) d.lang = p.lang;
+
+        var s = localStorage.getItem('ttm_sb');
+        if (s === '1' || (s === null && innerWidth < 1100)) d.classList.add('sb-mini');
+      } catch (e) {}
+    </script>
     <!-- CSS: โหลดเรียงตามเลข (ลำดับมีผลต่อการทับกันของสไตล์ ห้ามสลับ) -->
     <link rel="stylesheet" href="css/base/01_base_layout.css">
     <link rel="stylesheet" href="css/base/02_modal_responsive_print.css">

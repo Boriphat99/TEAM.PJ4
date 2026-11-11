@@ -1,100 +1,287 @@
 /* 24_responsive_devices.css — ปรับให้สวยและใช้งานง่ายทั้ง 3 อุปกรณ์
    มือถือ ≤ 800px · แท็บเล็ต 801–1099px · คอมพิวเตอร์ ≥ 1100px  (ไฟล์ใหม่ โหลดท้ายสุด จึงทับกฎเดิมได้โดยไม่ต้องแก้ไฟล์เดิม) */
-:root { --pad: clamp(14px, 3.4vw, 28px); --sab: env(safe-area-inset-bottom, 0px); --sat: env(safe-area-inset-top, 0px) }
+:root {
+  --pad: clamp(14px, 3.4vw, 28px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sat: env(safe-area-inset-top, 0px);
+}
 
 /* ---------- ทุกอุปกรณ์ ---------- */
-.mn { --padx: var(--pad); --padt: clamp(16px, 2.4vw, 24px); padding: var(--padt) var(--padx) }
+.mn {
+  --padx: var(--pad);
+  --padt: clamp(16px, 2.4vw, 24px);
+  padding: var(--padt) var(--padx);
+}
 /* แถบบนยื่นออกไปเท่าระยะเว้นขอบของเนื้อหาพอดี (เดิมใช้ค่าตายตัว -28px จึงล้นขอบ 2-3px) */
-.top { margin-top: calc(var(--padt) * -1); margin-inline: calc(var(--padx) * -1); padding-inline: var(--padx) }
-img, svg, video, canvas { max-width: 100% }
-table { max-width: 100% }
-.sc, .tw { -webkit-overflow-scrolling: touch }
-a, button, .b, .nv, .tabs span, .seg span, .thm { -webkit-tap-highlight-color: transparent }
-:focus-visible { outline: 2px solid var(--ac); outline-offset: 2px; border-radius: 8px }
+.top {
+  margin-top: calc(var(--padt) * -1);
+  margin-inline: calc(var(--padx) * -1);
+  padding-inline: var(--padx);
+}
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+table {
+  max-width: 100%;
+}
+.sc,
+.tw {
+  -webkit-overflow-scrolling: touch;
+}
+a,
+button,
+.b,
+.nv,
+.tabs span,
+.seg span,
+.thm {
+  -webkit-tap-highlight-color: transparent;
+}
+:focus-visible {
+  outline: 2px solid var(--ac);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
 
 /* ---------- คอมพิวเตอร์ / จอใหญ่ ---------- */
 @media (min-width: 1100px) {
-    .mn { --padt: 26px }
+  .mn {
+    --padt: 26px;
+  }
 }
 @media (min-width: 1700px) {
-    .mn { margin-inline: auto; width: 100% }     /* จอกว้างมาก: จัดเนื้อหากึ่งกลาง ไม่ชิดซ้าย */
+  .mn {
+    margin-inline: auto;
+    width: 100%;
+  } /* จอกว้างมาก: จัดเนื้อหากึ่งกลาง ไม่ชิดซ้าย */
 }
 
 /* ---------- แท็บเล็ต (เมนูข้างแบบไอคอน) ---------- */
 @media (min-width: 801px) and (max-width: 1099px) {
-    .top input { min-width: 0 }
-    .tb2 input, .tb2 select { min-width: 0 }
+  .top input {
+    min-width: 0;
+  }
+  .tb2 input,
+  .tb2 select {
+    min-width: 0;
+  }
 }
 
 /* ---------- มือถือ ---------- */
 @media (max-width: 800px) {
-    /* เนื้อหา: เว้นท้ายหน้าไม่ให้ถูกแถบเมนูล่างบัง (รวมพื้นที่ปลอดภัยของ iPhone) */
-    .mn { --padt: 14px; padding: var(--padt) var(--padx) calc(96px + var(--sab)) }
-    .top { margin-bottom: 12px; padding-block: 10px; padding-top: calc(10px + var(--sat)) }
+  /* เนื้อหา: เว้นท้ายหน้าไม่ให้ถูกแถบเมนูล่างบัง (รวมพื้นที่ปลอดภัยของ iPhone) */
+  .mn {
+    --padt: 14px;
+    padding: var(--padt) var(--padx) calc(96px + var(--sab));
+  }
+  .top {
+    margin-bottom: 12px;
+    padding-block: 10px;
+    padding-top: calc(10px + var(--sat));
+  }
 
-    /* แถบเมนูล่าง: ปุ่มกระจายเท่ากัน ถ้ามีหลายปุ่มเลื่อนซ้าย-ขวาได้และหยุดตรงปุ่ม */
-    .sb { padding: 6px 8px calc(6px + var(--sab)); gap: 2px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: none }
-    .sb::-webkit-scrollbar { display: none }
-    .nv { flex: 1 0 auto; min-width: 64px; padding: 7px 10px; white-space: nowrap; scroll-snap-align: center; text-align: center }
+  /* แถบเมนูล่าง: ปุ่มกระจายเท่ากัน ถ้ามีหลายปุ่มเลื่อนซ้าย-ขวาได้และหยุดตรงปุ่ม */
+  .sb {
+    padding: 6px 8px calc(6px + var(--sab));
+    gap: 2px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+  .sb::-webkit-scrollbar {
+    display: none;
+  }
+  .nv {
+    flex: 1 0 auto;
+    min-width: 64px;
+    padding: 7px 10px;
+    white-space: nowrap;
+    scroll-snap-align: center;
+    text-align: center;
+  }
 
-    /* หัวข้อส่วน + ช่องค้นหา/ปุ่ม: ขึ้นบรรทัดใหม่ ไม่บีบหัวข้อให้ตัดคำแปลกๆ */
-    .ch { flex-wrap: wrap; gap: 10px 12px }
-    .ch > h3 { flex: 1 1 100% }
-    .ch > .tb2 { flex: 1 1 100%; display: flex; gap: 10px }
-    .fh { flex-wrap: wrap; row-gap: 6px }
-    .cd { padding: 16px }
+  /* หัวข้อส่วน + ช่องค้นหา/ปุ่ม: ขึ้นบรรทัดใหม่ ไม่บีบหัวข้อให้ตัดคำแปลกๆ */
+  .ch {
+    flex-wrap: wrap;
+    gap: 10px 12px;
+  }
+  .ch > h3 {
+    flex: 1 1 100%;
+  }
+  .ch > .tb2 {
+    flex: 1 1 100%;
+    display: flex;
+    gap: 10px;
+  }
+  .fh {
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+  .cd {
+    padding: 16px;
+  }
 
-    /* หน้าต่าง popup: แผ่นเลื่อนขึ้นจากด้านล่าง ขอบบนโค้ง ขอบล่างชิดจอ */
-    #mo .cd { border-radius: 22px 22px 0 0; padding: 22px 18px calc(24px + var(--sab)); animation: tt-sheet .32s cubic-bezier(.2, .8, .2, 1) both }
-    #mc h3 { padding-right: 8px }
+  /* หน้าต่าง popup: แผ่นเลื่อนขึ้นจากด้านล่าง ขอบบนโค้ง ขอบล่างชิดจอ */
+  #mo .cd {
+    border-radius: 22px 22px 0 0;
+    padding: 22px 18px calc(24px + var(--sab));
+    animation: tt-sheet 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  #mc h3 {
+    padding-right: 8px;
+  }
 }
-@keyframes tt-sheet { from { transform: translateY(36px); opacity: 0 } to { transform: none; opacity: 1 } }
+@keyframes tt-sheet {
+  from {
+    transform: translateY(36px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
 
 /* มือถือจอแคบมาก */
 @media (max-width: 380px) {
-    .top .seg span { padding: 5px 10px }
-    .mn > h2 { font-size: 20px }
+  .top .seg span {
+    padding: 5px 10px;
+  }
+  .mn > h2 {
+    font-size: 20px;
+  }
 }
 
 /* มือถือแนวนอน: แถบเมนูล่างเตี้ยลง เหลือพื้นที่เนื้อหามากขึ้น */
 @media (max-width: 900px) and (max-height: 480px) and (orientation: landscape) {
-    .nv { flex-direction: row; gap: 6px; padding: 6px 10px; min-width: 0; flex: 0 0 auto }
-    .mn { padding-bottom: calc(64px + var(--sab)) }
+  .nv {
+    flex-direction: row;
+    gap: 6px;
+    padding: 6px 10px;
+    min-width: 0;
+    flex: 0 0 auto;
+  }
+  .mn {
+    padding-bottom: calc(64px + var(--sab));
+  }
 }
 
 /* ---------- ตาราง: ไม่ให้คอลัมน์ท้าย (สถานะ/ปุ่มจัดการ) ถูกตัดหาย ---------- */
 /* แท็บเล็ต: แต่ละแถวเป็นการ์ด เรียง 2 คอลัมน์ (ใช้ data-l ที่ mbl() ใส่ไว้ให้แล้ว) */
 @media (min-width: 701px) and (max-width: 1000px) {
-    .sc { overflow-x: visible }
-    table.rt, .rt tbody { display: block; width: 100% }
-    .rt tbody { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px }
-    .rt tr.rh { display: none }
-    .rt tr { display: block; background: var(--cd); border: 1px solid var(--ln); border-radius: 14px; padding: 4px 14px; margin: 0 }
-    .rt td { display: flex; justify-content: space-between; align-items: center; gap: 12px; text-align: right; white-space: normal; border: 0; border-bottom: 1px dashed var(--ln); padding: 9px 0; word-break: break-word }
-    .rt td:last-child { border-bottom: 0 }
-    .rt td[data-l]:before { content: attr(data-l); color: var(--mu); font-size: 12.5px; text-align: left; flex: 0 0 40% }
-    .rt td:not([data-l]) { display: block; text-align: left }
-    .rt td:empty { display: none }
-    .rt td .tc { text-align: left }
-    .rt input, .rt select { width: 58% !important; max-width: 100%; min-width: 0 }
-    .rt .b { margin: 2px 0 }
+  .sc {
+    overflow-x: visible;
+  }
+  table.rt,
+  .rt tbody {
+    display: block;
+    width: 100%;
+  }
+  .rt tbody {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .rt tr.rh {
+    display: none;
+  }
+  .rt tr {
+    display: block;
+    background: var(--cd);
+    border: 1px solid var(--ln);
+    border-radius: 14px;
+    padding: 4px 14px;
+    margin: 0;
+  }
+  .rt td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    text-align: right;
+    white-space: normal;
+    border: 0;
+    border-bottom: 1px dashed var(--ln);
+    padding: 9px 0;
+    word-break: break-word;
+  }
+  .rt td:last-child {
+    border-bottom: 0;
+  }
+  .rt td[data-l]:before {
+    content: attr(data-l);
+    color: var(--mu);
+    font-size: 12.5px;
+    text-align: left;
+    flex: 0 0 40%;
+  }
+  .rt td:not([data-l]) {
+    display: block;
+    text-align: left;
+  }
+  .rt td:empty {
+    display: none;
+  }
+  .rt td .tc {
+    text-align: left;
+  }
+  .rt input,
+  .rt select {
+    width: 58% !important;
+    max-width: 100%;
+    min-width: 0;
+  }
+  .rt .b {
+    margin: 2px 0;
+  }
 }
 /* คอมพิวเตอร์จอไม่กว้างมาก: ลดช่องไฟ และให้ปุ่มในคอลัมน์ท้ายขึ้นบรรทัดใหม่ได้ */
 @media (min-width: 1001px) and (max-width: 1499px) {
-    .mn table td, .mn table th { padding-left: 8px; padding-right: 8px }
-    .mn table td:last-child { white-space: normal }
-    .mn table td:last-child .b { margin: 2px 3px 2px 0 }
+  .mn table td,
+  .mn table th {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .mn table td:last-child {
+    white-space: normal;
+  }
+  .mn table td:last-child .b {
+    margin: 2px 3px 2px 0;
+  }
 }
-.sc { scrollbar-width: thin }
+.sc {
+  scrollbar-width: thin;
+}
 
 /* ---------- หน้าแรก (Landing) บนมือถือ ---------- */
-.hh h1 em { display: inline-block; text-wrap: balance }          /* ตัดบรรทัดสมดุล ไม่ทิ้งคำว่า "หอพัก" ไว้บรรทัดเดียว */
+.hh h1 em {
+  display: inline-block;
+  text-wrap: balance;
+} /* ตัดบรรทัดสมดุล ไม่ทิ้งคำว่า "หอพัก" ไว้บรรทัดเดียว */
 @media (max-width: 480px) {
-    .hnr { gap: 8px }
-    .hr .seg span { padding: 5px 9px }
-    .hr .thm { width: 36px; height: 36px }
-    .hr .b.sm { padding: 0 12px; font-size: 13px; min-height: 36px }
+  .hnr {
+    gap: 8px;
+  }
+  .hr .seg span {
+    padding: 5px 9px;
+  }
+  .hr .thm {
+    width: 36px;
+    height: 36px;
+  }
+  .hr .b.sm {
+    padding: 0 12px;
+    font-size: 13px;
+    min-height: 36px;
+  }
 }
 @media (max-width: 420px) {
-    .hnr .logo { font-size: 0; gap: 0 }                           /* จอแคบมาก: เหลือแต่ไอคอนโลโก้ เพื่อให้ปุ่มเข้าสู่ระบบไม่ถูกตัด */
+  .hnr .logo {
+    font-size: 0;
+    gap: 0;
+  } /* จอแคบมาก: เหลือแต่ไอคอนโลโก้ เพื่อให้ปุ่มเข้าสู่ระบบไม่ถูกตัด */
 }

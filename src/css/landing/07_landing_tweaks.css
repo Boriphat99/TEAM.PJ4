@@ -1,38 +1,38 @@
 /* 07_landing_tweaks.css — ปรับแต่งหน้าต้อนรับเพิ่มเติม
    (แยกมาจาก style.css บรรทัด 1559-1594; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 .lp {
-    position: relative
+  position: relative;
 }
 
 .lp .tb {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    padding: 18px 28px;
-    margin: 0;
-    z-index: 3
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  padding: 18px 28px;
+  margin: 0;
+  z-index: 3;
 }
 
 .lp .wrap {
-    padding: 0 20px
+  padding: 0 20px;
 }
 
 .lp .hs {
-    min-height: 100vh!important;
-    padding: 76px 0 40px
+  min-height: 100vh !important;
+  padding: 76px 0 40px;
 }
 
-@media(max-width:700px) {
-    .lp .tb {
-        padding: 14px 16px
-    }
-    .lp .hs {
-        padding-top: 110px
-    }
+@media (max-width: 700px) {
+  .lp .tb {
+    padding: 14px 16px;
+  }
+  .lp .hs {
+    padding-top: 110px;
+  }
 }
 
 .ro table .b,
 .ro .cd.nv {
-    display: none
+  display: none;
 }

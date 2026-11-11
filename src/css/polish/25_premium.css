@@ -5,777 +5,2087 @@
 
 /* ===================== 1) Design tokens ===================== */
 :root {
-    --font: 'Noto Sans Thai', 'Inter', system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
-    --font-d: 'Noto Serif Thai', 'Noto Sans Thai', Georgia, serif;
-    --bg: #faf7f4;            /* งาช้างอุ่น */
-    --bg2: #f4eee9;
-    --cd: #ffffff;
-    --ln: #ebe3de;            /* เส้นบางสีอุ่น */
-    --ln2: #ddd2cc;
-    --tx: #1b1416;            /* หมึกดำอมแดง */
-    --mu: #776b6d;
-    --ac: #a8122c;            /* แดงทับทิม */
-    --ac2: #7a0c20;           /* แดงเลือดหมู */
-    --ac3: #c62c44;           /* แดงสว่างสำหรับ hover/เส้น */
-    --acs: #f9eef0;
-    --acs2: #f2dadd;
-    --ink: #170d10;           /* สีแถบเมนูข้างแบบหรู */
-    --ink2: #24151a;
-    --sb: #ffffff;
-    --bar: rgba(250, 247, 244, .78);
-    --glow: rgba(168, 18, 44, .06);
-    --sh1: 0 1px 2px rgba(27, 20, 22, .04), 0 2px 8px -2px rgba(27, 20, 22, .05);
-    --sh2: 0 1px 2px rgba(27, 20, 22, .04), 0 18px 40px -16px rgba(27, 20, 22, .16);
-    --sh-ac: 0 10px 24px -10px rgba(122, 12, 32, .55);
-    --r: 14px;
-    --r-lg: 20px;
-    --ease: cubic-bezier(.22, .8, .24, 1);
-    --ok: #0e7a4b;  --ok-bg: #e9f6ef;  --ok-ln: #c7e8d6;
-    --wa: #8f5f00;  --wa-bg: #fcf4dd;  --wa-ln: #f1dfa6;
-    --er: #a8122c;  --er-bg: #fbecee;  --er-ln: #f2cfd5;
-    --pu: #5f2ba0;  --pu-bg: #f2ecfb;  --pu-ln: #ddd0f3;
+  --font: 'Noto Sans Thai', 'Inter', system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+  --font-d: 'Noto Serif Thai', 'Noto Sans Thai', Georgia, serif;
+  --bg: #faf7f4; /* งาช้างอุ่น */
+  --bg2: #f4eee9;
+  --cd: #ffffff;
+  --ln: #ebe3de; /* เส้นบางสีอุ่น */
+  --ln2: #ddd2cc;
+  --tx: #1b1416; /* หมึกดำอมแดง */
+  --mu: #776b6d;
+  --ac: #a8122c; /* แดงทับทิม */
+  --ac2: #7a0c20; /* แดงเลือดหมู */
+  --ac3: #c62c44; /* แดงสว่างสำหรับ hover/เส้น */
+  --acs: #f9eef0;
+  --acs2: #f2dadd;
+  --ink: #170d10; /* สีแถบเมนูข้างแบบหรู */
+  --ink2: #24151a;
+  --sb: #ffffff;
+  --bar: rgba(250, 247, 244, 0.78);
+  --glow: rgba(168, 18, 44, 0.06);
+  --sh1: 0 1px 2px rgba(27, 20, 22, 0.04), 0 2px 8px -2px rgba(27, 20, 22, 0.05);
+  --sh2: 0 1px 2px rgba(27, 20, 22, 0.04), 0 18px 40px -16px rgba(27, 20, 22, 0.16);
+  --sh-ac: 0 10px 24px -10px rgba(122, 12, 32, 0.55);
+  --r: 14px;
+  --r-lg: 20px;
+  --ease: cubic-bezier(0.22, 0.8, 0.24, 1);
+  --ok: #0e7a4b;
+  --ok-bg: #e9f6ef;
+  --ok-ln: #c7e8d6;
+  --wa: #8f5f00;
+  --wa-bg: #fcf4dd;
+  --wa-ln: #f1dfa6;
+  --er: #a8122c;
+  --er-bg: #fbecee;
+  --er-ln: #f2cfd5;
+  --pu: #5f2ba0;
+  --pu-bg: #f2ecfb;
+  --pu-ln: #ddd0f3;
 }
-html[data-theme=dark] {
-    --bg: #0c0a0b;
-    --bg2: #120e10;
-    --cd: #161214;
-    --ln: #2a2125;
-    --ln2: #3a2e33;
-    --tx: #f5f0f0;
-    --mu: #a59a9c;
-    --ac: #e3344e;
-    --ac2: #a3142d;
-    --ac3: #ff5a71;
-    --acs: rgba(227, 52, 78, .11);
-    --acs2: rgba(227, 52, 78, .2);
-    --ink: #0f0b0d;
-    --ink2: #1c1316;
-    --sb: #110d0f;
-    --bar: rgba(12, 10, 11, .72);
-    --glow: rgba(227, 52, 78, .09);
-    --sh1: 0 1px 0 rgba(255, 255, 255, .03) inset, 0 4px 16px -4px rgba(0, 0, 0, .5);
-    --sh2: 0 1px 0 rgba(255, 255, 255, .04) inset, 0 24px 48px -20px rgba(0, 0, 0, .75);
-    --sh-ac: 0 10px 28px -10px rgba(227, 52, 78, .55);
-    --ok: #4ed294;  --ok-bg: rgba(78, 210, 148, .1);  --ok-ln: rgba(78, 210, 148, .25);
-    --wa: #f2c14e;  --wa-bg: rgba(242, 193, 78, .1);  --wa-ln: rgba(242, 193, 78, .25);
-    --er: #ff6b80;  --er-bg: rgba(255, 107, 128, .1); --er-ln: rgba(255, 107, 128, .26);
-    --pu: #b997ff;  --pu-bg: rgba(185, 151, 255, .1); --pu-ln: rgba(185, 151, 255, .26);
-    scrollbar-color: #3a2e33 #0c0a0b;
+html[data-theme='dark'] {
+  --bg: #0c0a0b;
+  --bg2: #120e10;
+  --cd: #161214;
+  --ln: #2a2125;
+  --ln2: #3a2e33;
+  --tx: #f5f0f0;
+  --mu: #a59a9c;
+  --ac: #e3344e;
+  --ac2: #a3142d;
+  --ac3: #ff5a71;
+  --acs: rgba(227, 52, 78, 0.11);
+  --acs2: rgba(227, 52, 78, 0.2);
+  --ink: #0f0b0d;
+  --ink2: #1c1316;
+  --sb: #110d0f;
+  --bar: rgba(12, 10, 11, 0.72);
+  --glow: rgba(227, 52, 78, 0.09);
+  --sh1: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 4px 16px -4px rgba(0, 0, 0, 0.5);
+  --sh2: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 24px 48px -20px rgba(0, 0, 0, 0.75);
+  --sh-ac: 0 10px 28px -10px rgba(227, 52, 78, 0.55);
+  --ok: #4ed294;
+  --ok-bg: rgba(78, 210, 148, 0.1);
+  --ok-ln: rgba(78, 210, 148, 0.25);
+  --wa: #f2c14e;
+  --wa-bg: rgba(242, 193, 78, 0.1);
+  --wa-ln: rgba(242, 193, 78, 0.25);
+  --er: #ff6b80;
+  --er-bg: rgba(255, 107, 128, 0.1);
+  --er-ln: rgba(255, 107, 128, 0.26);
+  --pu: #b997ff;
+  --pu-bg: rgba(185, 151, 255, 0.1);
+  --pu-ln: rgba(185, 151, 255, 0.26);
+  scrollbar-color: #3a2e33 #0c0a0b;
 }
 
 /* ===================== 2) ตัวอักษร ===================== */
-html, body, button, input, select, textarea { font-family: var(--font) }
+html,
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--font);
+}
 body {
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-    font-feature-settings: normal;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: normal;
 }
-h1, h2, h3, h4 { color: var(--tx); letter-spacing: -.01em }
-.mn > h2, .hd2 h2 {
-    font-family: var(--font-d);
-    font-weight: 600;
-    font-size: clamp(26px, 2.4vw, 34px);
-    line-height: 1.3;
-    letter-spacing: -.005em;
+h1,
+h2,
+h3,
+h4 {
+  color: var(--tx);
+  letter-spacing: -0.01em;
 }
-.mn > h2 + .mu, .mn > h2 + p.mu { font-size: 14px; letter-spacing: .01em; margin-top: 4px }
-h3 { font-weight: 600; letter-spacing: -.005em }
-.k, .big { font-weight: 700; letter-spacing: -.025em; font-variant-numeric: tabular-nums lining-nums }
-td, th, .pl, .amt { font-variant-numeric: tabular-nums }
-::selection { background: color-mix(in srgb, var(--ac) 22%, transparent) }
+.mn > h2,
+.hd2 h2 {
+  font-family: var(--font-d);
+  font-weight: 600;
+  font-size: clamp(26px, 2.4vw, 34px);
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+}
+.mn > h2 + .mu,
+.mn > h2 + p.mu {
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  margin-top: 4px;
+}
+h3 {
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+.k,
+.big {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+td,
+th,
+.pl,
+.amt {
+  font-variant-numeric: tabular-nums;
+}
+::selection {
+  background: color-mix(in srgb, var(--ac) 22%, transparent);
+}
 
 /* ===================== 3) พื้นหลัง ===================== */
-html, body, html[data-theme=dark], html[data-theme=dark] body { background: var(--bg) }
-body, html[data-theme=dark] body {
-    background:
-        radial-gradient(1100px 520px at 100% -12%, var(--glow), transparent 60%),
-        radial-gradient(800px 420px at -10% 0%, color-mix(in srgb, var(--glow) 60%, transparent), transparent 62%),
-        var(--bg);
-    background-attachment: fixed;
+html,
+body,
+html[data-theme='dark'],
+html[data-theme='dark'] body {
+  background: var(--bg);
 }
-body::before { opacity: .22 }
+body,
+html[data-theme='dark'] body {
+  background:
+    radial-gradient(1100px 520px at 100% -12%, var(--glow), transparent 60%),
+    radial-gradient(
+      800px 420px at -10% 0%,
+      color-mix(in srgb, var(--glow) 60%, transparent),
+      transparent 62%
+    ),
+    var(--bg);
+  background-attachment: fixed;
+}
+body::before {
+  opacity: 0.22;
+}
 
 /* ===================== 4) ปุ่ม ===================== */
-.b { border-radius: 12px; font-weight: 600; letter-spacing: .01em; transition: transform .18s var(--ease), box-shadow .18s var(--ease), background-color .18s, color .18s, border-color .18s }
-.b:not(.b2):not(.gr):not(.lgb), html[data-theme=dark] .b:not(.b2):not(.gr):not(.lgb) {
-    background: linear-gradient(180deg, color-mix(in srgb, var(--ac) 92%, #fff) 0%, var(--ac) 42%, var(--ac2) 100%);
-    color: #fff;
-    border: 1px solid color-mix(in srgb, var(--ac2) 70%, #000);
-    box-shadow: 0 1px 0 rgba(255, 255, 255, .22) inset, var(--sh-ac);
+.b {
+  border-radius: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition:
+    transform 0.18s var(--ease),
+    box-shadow 0.18s var(--ease),
+    background-color 0.18s,
+    color 0.18s,
+    border-color 0.18s;
 }
-.b:not(.b2):not(.gr):not(.lgb):hover { transform: translateY(-1px); box-shadow: 0 1px 0 rgba(255, 255, 255, .22) inset, 0 14px 30px -12px color-mix(in srgb, var(--ac2) 75%, transparent) }
-.b:active { transform: translateY(0) scale(.985) }
-.b2, html[data-theme=dark] .b2 { background: var(--cd); color: var(--tx); border: 1px solid var(--ln2); box-shadow: 0 1px 1px rgba(27, 20, 22, .04) }
-html[data-theme=dark] .b2 { box-shadow: none }
-.b2:hover, html[data-theme=dark] .b2:hover { border-color: color-mix(in srgb, var(--ac) 55%, var(--ln2)); color: var(--ac); background: var(--acs) }
-.b.gr, html[data-theme=dark] .b.gr { background: linear-gradient(180deg, #17935b, #0e7a4b); border: 1px solid #0b6640; color: #fff; box-shadow: 0 1px 0 rgba(255, 255, 255, .2) inset, 0 10px 22px -10px rgba(14, 122, 75, .55) }
-.b:focus-visible, .nv:focus-visible, input:focus-visible { outline: 2px solid color-mix(in srgb, var(--ac) 60%, transparent); outline-offset: 2px }
+.b:not(.b2):not(.gr):not(.lgb),
+html[data-theme='dark'] .b:not(.b2):not(.gr):not(.lgb) {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ac) 92%, #fff) 0%,
+    var(--ac) 42%,
+    var(--ac2) 100%
+  );
+  color: #fff;
+  border: 1px solid color-mix(in srgb, var(--ac2) 70%, #000);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.22) inset,
+    var(--sh-ac);
+}
+.b:not(.b2):not(.gr):not(.lgb):hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.22) inset,
+    0 14px 30px -12px color-mix(in srgb, var(--ac2) 75%, transparent);
+}
+.b:active {
+  transform: translateY(0) scale(0.985);
+}
+.b2,
+html[data-theme='dark'] .b2 {
+  background: var(--cd);
+  color: var(--tx);
+  border: 1px solid var(--ln2);
+  box-shadow: 0 1px 1px rgba(27, 20, 22, 0.04);
+}
+html[data-theme='dark'] .b2 {
+  box-shadow: none;
+}
+.b2:hover,
+html[data-theme='dark'] .b2:hover {
+  border-color: color-mix(in srgb, var(--ac) 55%, var(--ln2));
+  color: var(--ac);
+  background: var(--acs);
+}
+.b.gr,
+html[data-theme='dark'] .b.gr {
+  background: linear-gradient(180deg, #17935b, #0e7a4b);
+  border: 1px solid #0b6640;
+  color: #fff;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.2) inset,
+    0 10px 22px -10px rgba(14, 122, 75, 0.55);
+}
+.b:focus-visible,
+.nv:focus-visible,
+input:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--ac) 60%, transparent);
+  outline-offset: 2px;
+}
 
 /* ===================== 5) ช่องกรอก ===================== */
-input, select, textarea,
-html[data-theme=dark] input, html[data-theme=dark] select, html[data-theme=dark] textarea {
-    background-color: var(--cd);
-    border: 1px solid var(--ln2);
-    border-radius: 12px;
-    color: var(--tx);
-    transition: border-color .15s, box-shadow .15s, background-color .15s;
+input,
+select,
+textarea,
+html[data-theme='dark'] input,
+html[data-theme='dark'] select,
+html[data-theme='dark'] textarea {
+  background-color: var(--cd);
+  border: 1px solid var(--ln2);
+  border-radius: 12px;
+  color: var(--tx);
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s,
+    background-color 0.15s;
 }
-html[data-theme=dark] input, html[data-theme=dark] select, html[data-theme=dark] textarea { background-color: #100c0e }
-input::placeholder, textarea::placeholder { color: color-mix(in srgb, var(--mu) 75%, transparent) }
-input:focus, select:focus, textarea:focus,
-html[data-theme=dark] input:focus, html[data-theme=dark] select:focus, html[data-theme=dark] textarea:focus {
-    border-color: var(--ac);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--ac) 14%, transparent);
-    outline: 0;
+html[data-theme='dark'] input,
+html[data-theme='dark'] select,
+html[data-theme='dark'] textarea {
+  background-color: #100c0e;
 }
-label { color: var(--mu); font-weight: 500; letter-spacing: .01em }
+input::placeholder,
+textarea::placeholder {
+  color: color-mix(in srgb, var(--mu) 75%, transparent);
+}
+input:focus,
+select:focus,
+textarea:focus,
+html[data-theme='dark'] input:focus,
+html[data-theme='dark'] select:focus,
+html[data-theme='dark'] textarea:focus {
+  border-color: var(--ac);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ac) 14%, transparent);
+  outline: 0;
+}
+label {
+  color: var(--mu);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
 
 /* ===================== 6) การ์ด ===================== */
-.cd, html[data-theme=dark] .cd {
-    background: var(--cd);
-    border: 1px solid var(--ln);
-    border-radius: var(--r-lg);
-    box-shadow: var(--sh1);
+.cd,
+html[data-theme='dark'] .cd {
+  background: var(--cd);
+  border: 1px solid var(--ln);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh1);
 }
-html[data-theme=dark] .cd { background: linear-gradient(180deg, #19141710, transparent 40%), var(--cd) }
-.g4 .cd:hover, .dg3 .cd:hover { border-color: var(--ln2); box-shadow: var(--sh2) }
+html[data-theme='dark'] .cd {
+  background: linear-gradient(180deg, #19141710, transparent 40%), var(--cd);
+}
+.g4 .cd:hover,
+.dg3 .cd:hover {
+  border-color: var(--ln2);
+  box-shadow: var(--sh2);
+}
 /* เส้นสีด้านบนการ์ดสถิติ: บางและเรียบขึ้น */
-.dg3 .cd::before, .dg3b .cd::before, .g4 .cd::before {
-    height: 2px !important;
-    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--ac) 70%, transparent) 30%, color-mix(in srgb, var(--ac) 70%, transparent) 70%, transparent) !important;
-    opacity: .9;
+.dg3 .cd::before,
+.dg3b .cd::before,
+.g4 .cd::before {
+  height: 2px !important;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--ac) 70%, transparent) 30%,
+    color-mix(in srgb, var(--ac) 70%, transparent) 70%,
+    transparent
+  ) !important;
+  opacity: 0.9;
 }
-.ci, html[data-theme=dark] .ci { background: var(--acs) !important; color: var(--ac) !important; border: 1px solid var(--acs2); border-radius: 12px }
+.ci,
+html[data-theme='dark'] .ci {
+  background: var(--acs) !important;
+  color: var(--ac) !important;
+  border: 1px solid var(--acs2);
+  border-radius: 12px;
+}
 
 /* ===================== 7) เมนูข้าง (คอมพิวเตอร์): ตามธีม — สว่าง = ขาว, มืด = ดำนิล ===================== */
 @media (min-width: 801px) {
-    /* ธีมสว่าง: พื้นขาว เส้นบางอุ่น เมนูที่เลือก = ทับทิมอ่อน */
-    .sb {
-        background: linear-gradient(180deg, #ffffff, #fdfbfa) !important;
-        border-right: 1px solid var(--ln) !important;
-        color: var(--tx);
-    }
-    .sb .logo { border-bottom: 1px solid var(--ln) !important }
-    .sb .logo div { font-family: var(--font-d); font-weight: 600; letter-spacing: .04em; color: var(--tx) }
-    .sb .logo small, .sb .logo .ac { font-family: var(--font); font-size: 10.5px; font-weight: 600; letter-spacing: .22em; color: var(--ac) !important }
-    .sb .nv { color: #5d5254; border: 1px solid transparent; background: transparent; border-radius: 12px }
-    .sb .nv i svg { opacity: .9 }
-    .sb .nv:hover { background: color-mix(in srgb, var(--acs) 70%, transparent); color: var(--tx) }
-    .sb .nv.on {
-        background: linear-gradient(90deg, var(--acs), color-mix(in srgb, var(--acs) 40%, #fff));
-        border-color: var(--acs2);
-        color: var(--ac2);
-        font-weight: 600;
-        box-shadow: 0 1px 0 #fff inset, 0 6px 16px -10px rgba(122, 12, 32, .35);
-    }
-    .sb .nv.on i svg { opacity: 1; color: var(--ac) }
-    .sb .nv::before { left: -14px; width: 3px; background: linear-gradient(180deg, var(--ac3), var(--ac2)) }
-    .sb .nv:not(.on)::before { height: 0 !important; opacity: 0 }
-    .sb .sbt { color: var(--mu); border: 1px solid var(--ln); background: transparent }
-    .sb .sbt:hover { color: var(--ac); border-color: var(--acs2); background: var(--acs) }
+  /* ธีมสว่าง: พื้นขาว เส้นบางอุ่น เมนูที่เลือก = ทับทิมอ่อน */
+  .sb {
+    background: linear-gradient(180deg, #ffffff, #fdfbfa) !important;
+    border-right: 1px solid var(--ln) !important;
+    color: var(--tx);
+  }
+  .sb .logo {
+    border-bottom: 1px solid var(--ln) !important;
+  }
+  .sb .logo div {
+    font-family: var(--font-d);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--tx);
+  }
+  .sb .logo small,
+  .sb .logo .ac {
+    font-family: var(--font);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    color: var(--ac) !important;
+  }
+  .sb .nv {
+    color: #5d5254;
+    border: 1px solid transparent;
+    background: transparent;
+    border-radius: 12px;
+  }
+  .sb .nv i svg {
+    opacity: 0.9;
+  }
+  .sb .nv:hover {
+    background: color-mix(in srgb, var(--acs) 70%, transparent);
+    color: var(--tx);
+  }
+  .sb .nv.on {
+    background: linear-gradient(90deg, var(--acs), color-mix(in srgb, var(--acs) 40%, #fff));
+    border-color: var(--acs2);
+    color: var(--ac2);
+    font-weight: 600;
+    box-shadow:
+      0 1px 0 #fff inset,
+      0 6px 16px -10px rgba(122, 12, 32, 0.35);
+  }
+  .sb .nv.on i svg {
+    opacity: 1;
+    color: var(--ac);
+  }
+  .sb .nv::before {
+    left: -14px;
+    width: 3px;
+    background: linear-gradient(180deg, var(--ac3), var(--ac2));
+  }
+  .sb .nv:not(.on)::before {
+    height: 0 !important;
+    opacity: 0;
+  }
+  .sb .sbt {
+    color: var(--mu);
+    border: 1px solid var(--ln);
+    background: transparent;
+  }
+  .sb .sbt:hover {
+    color: var(--ac);
+    border-color: var(--acs2);
+    background: var(--acs);
+  }
 
-    /* ธีมมืด: ดำนิล + แสงทับทิมจาง */
-    html[data-theme=dark] .sb {
-        background:
-            radial-gradient(420px 260px at 0% 0%, rgba(198, 44, 68, .18), transparent 70%),
-            linear-gradient(180deg, var(--ink2), var(--ink)) !important;
-        border-right: 1px solid rgba(255, 255, 255, .06) !important;
-        color: #efe6e8;
-    }
-    html[data-theme=dark] .sb .logo { border-bottom-color: rgba(255, 255, 255, .08) !important }
-    html[data-theme=dark] .sb .logo div { color: #fff }
-    html[data-theme=dark] .sb .logo small, html[data-theme=dark] .sb .logo .ac { color: #e9a7b2 !important }
-    html[data-theme=dark] .sb .nv { color: rgba(245, 236, 238, .68) }
-    html[data-theme=dark] .sb .nv:hover { background: rgba(255, 255, 255, .05); color: #fff }
-    html[data-theme=dark] .sb .nv.on {
-        background: linear-gradient(90deg, rgba(198, 44, 68, .30), rgba(198, 44, 68, .10));
-        border-color: rgba(255, 120, 140, .22);
-        color: #fff;
-        box-shadow: 0 1px 0 rgba(255, 255, 255, .06) inset, 0 8px 20px -12px rgba(0, 0, 0, .6);
-    }
-    html[data-theme=dark] .sb .nv.on i svg { color: #ff9aaa }
-    html[data-theme=dark] .sb .nv::before { background: linear-gradient(180deg, #ff7d91, var(--ac3)); box-shadow: 0 0 12px rgba(255, 90, 113, .6) }
-    html[data-theme=dark] .sb .sbt { color: rgba(245, 236, 238, .55); border-color: rgba(255, 255, 255, .09); background: rgba(255, 255, 255, .02) }
-    html[data-theme=dark] .sb .sbt:hover { color: #fff; border-color: rgba(255, 120, 140, .35); background: rgba(198, 44, 68, .14) }
-    html.sb-mini .nv::after { background: var(--tx); color: var(--bg) }
+  /* ธีมมืด: ดำนิล + แสงทับทิมจาง */
+  html[data-theme='dark'] .sb {
+    background:
+      radial-gradient(420px 260px at 0% 0%, rgba(198, 44, 68, 0.18), transparent 70%),
+      linear-gradient(180deg, var(--ink2), var(--ink)) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+    color: #efe6e8;
+  }
+  html[data-theme='dark'] .sb .logo {
+    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+  }
+  html[data-theme='dark'] .sb .logo div {
+    color: #fff;
+  }
+  html[data-theme='dark'] .sb .logo small,
+  html[data-theme='dark'] .sb .logo .ac {
+    color: #e9a7b2 !important;
+  }
+  html[data-theme='dark'] .sb .nv {
+    color: rgba(245, 236, 238, 0.68);
+  }
+  html[data-theme='dark'] .sb .nv:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+  }
+  html[data-theme='dark'] .sb .nv.on {
+    background: linear-gradient(90deg, rgba(198, 44, 68, 0.3), rgba(198, 44, 68, 0.1));
+    border-color: rgba(255, 120, 140, 0.22);
+    color: #fff;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.06) inset,
+      0 8px 20px -12px rgba(0, 0, 0, 0.6);
+  }
+  html[data-theme='dark'] .sb .nv.on i svg {
+    color: #ff9aaa;
+  }
+  html[data-theme='dark'] .sb .nv::before {
+    background: linear-gradient(180deg, #ff7d91, var(--ac3));
+    box-shadow: 0 0 12px rgba(255, 90, 113, 0.6);
+  }
+  html[data-theme='dark'] .sb .sbt {
+    color: rgba(245, 236, 238, 0.55);
+    border-color: rgba(255, 255, 255, 0.09);
+    background: rgba(255, 255, 255, 0.02);
+  }
+  html[data-theme='dark'] .sb .sbt:hover {
+    color: #fff;
+    border-color: rgba(255, 120, 140, 0.35);
+    background: rgba(198, 44, 68, 0.14);
+  }
+  html.sb-mini .nv::after {
+    background: var(--tx);
+    color: var(--bg);
+  }
 }
 
 /* ===================== 8) เมนูล่าง (มือถือ) ===================== */
 @media (max-width: 800px) {
-    .sb, html[data-theme=dark] .sb {
-        background: color-mix(in srgb, var(--cd) 90%, transparent) !important;
-        border-top: 1px solid var(--ln) !important;
-        box-shadow: 0 -10px 30px -18px rgba(27, 20, 22, .25);
-    }
-    .sb .nv { color: var(--mu) }
-    .sb .nv.on, html[data-theme=dark] .sb .nv.on { color: var(--ac); background: var(--acs); border-color: transparent; box-shadow: none }
-    .sb .nv::before { background: var(--ac) }
-    .sb .nv:not(.on)::before { transform: scaleX(0) !important }
+  .sb,
+  html[data-theme='dark'] .sb {
+    background: color-mix(in srgb, var(--cd) 90%, transparent) !important;
+    border-top: 1px solid var(--ln) !important;
+    box-shadow: 0 -10px 30px -18px rgba(27, 20, 22, 0.25);
+  }
+  .sb .nv {
+    color: var(--mu);
+  }
+  .sb .nv.on,
+  html[data-theme='dark'] .sb .nv.on {
+    color: var(--ac);
+    background: var(--acs);
+    border-color: transparent;
+    box-shadow: none;
+  }
+  .sb .nv::before {
+    background: var(--ac);
+  }
+  .sb .nv:not(.on)::before {
+    transform: scaleX(0) !important;
+  }
 }
 
 /* ===================== 9) แถบบน ===================== */
-.top input, html[data-theme=dark] .top input { background-color: var(--cd); border-color: var(--ln); border-radius: 999px; box-shadow: var(--sh1) }
-.top.is-scrolled { background: var(--bar) !important; -webkit-backdrop-filter: saturate(1.5) blur(16px); backdrop-filter: saturate(1.5) blur(16px); border-bottom-color: var(--ln) !important; box-shadow: 0 10px 30px -22px rgba(27, 20, 22, .35) }
-.me, .seg, .thm, .top .lo, html[data-theme=dark] .seg { border-color: var(--ln) !important; box-shadow: var(--sh1) }
-.seg .on, html[data-theme=dark] .seg .on { background: linear-gradient(180deg, var(--ac), var(--ac2)) !important; color: #fff !important; box-shadow: 0 4px 10px -4px color-mix(in srgb, var(--ac2) 70%, transparent) }
-.av { background: linear-gradient(140deg, var(--ac3), var(--ac2)) !important; color: #fff !important; box-shadow: 0 0 0 2px var(--cd), 0 0 0 3px var(--acs2) }
+.top input,
+html[data-theme='dark'] .top input {
+  background-color: var(--cd);
+  border-color: var(--ln);
+  border-radius: 999px;
+  box-shadow: var(--sh1);
+}
+.top.is-scrolled {
+  background: var(--bar) !important;
+  -webkit-backdrop-filter: saturate(1.5) blur(16px);
+  backdrop-filter: saturate(1.5) blur(16px);
+  border-bottom-color: var(--ln) !important;
+  box-shadow: 0 10px 30px -22px rgba(27, 20, 22, 0.35);
+}
+.me,
+.seg,
+.thm,
+.top .lo,
+html[data-theme='dark'] .seg {
+  border-color: var(--ln) !important;
+  box-shadow: var(--sh1);
+}
+.seg .on,
+html[data-theme='dark'] .seg .on {
+  background: linear-gradient(180deg, var(--ac), var(--ac2)) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 10px -4px color-mix(in srgb, var(--ac2) 70%, transparent);
+}
+.av {
+  background: linear-gradient(140deg, var(--ac3), var(--ac2)) !important;
+  color: #fff !important;
+  box-shadow:
+    0 0 0 2px var(--cd),
+    0 0 0 3px var(--acs2);
+}
 
 /* ===================== 10) ตาราง ===================== */
-table { border-collapse: separate; border-spacing: 0 }
-th, html[data-theme=dark] th {
-    font-size: 11.5px !important;
-    font-weight: 600 !important;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    color: var(--mu) !important;
-    background: color-mix(in srgb, var(--bg2) 70%, var(--cd)) !important;
-    border-bottom: 1px solid var(--ln) !important;
+table {
+  border-collapse: separate;
+  border-spacing: 0;
 }
-html[data-theme=dark] th { background: #1a1517 !important }
-th:first-child { border-top-left-radius: 12px }
-th:last-child { border-top-right-radius: 12px }
-td { border-bottom: 1px solid color-mix(in srgb, var(--ln) 75%, transparent) !important }
-tr:hover td, html[data-theme=dark] tr:hover td { background: color-mix(in srgb, var(--acs) 55%, transparent) !important }
+th,
+html[data-theme='dark'] th {
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mu) !important;
+  background: color-mix(in srgb, var(--bg2) 70%, var(--cd)) !important;
+  border-bottom: 1px solid var(--ln) !important;
+}
+html[data-theme='dark'] th {
+  background: #1a1517 !important;
+}
+th:first-child {
+  border-top-left-radius: 12px;
+}
+th:last-child {
+  border-top-right-radius: 12px;
+}
+td {
+  border-bottom: 1px solid color-mix(in srgb, var(--ln) 75%, transparent) !important;
+}
+tr:hover td,
+html[data-theme='dark'] tr:hover td {
+  background: color-mix(in srgb, var(--acs) 55%, transparent) !important;
+}
 
 /* ===================== 11) ป้ายสถานะ (คงสี แดง/เหลือง/เขียว/ม่วง ตามเอกสาร แต่ปรับโทนให้หรู) ===================== */
-.pl { font-weight: 600; font-size: 12px; letter-spacing: .01em; border-radius: 999px; padding: 4px 11px 4px 9px; border: 1px solid transparent }
-.pl.g, html[data-theme=dark] .pl.g { color: var(--ok) !important; background: var(--ok-bg) !important; border-color: var(--ok-ln) !important }
-.pl.y, html[data-theme=dark] .pl.y { color: var(--wa) !important; background: var(--wa-bg) !important; border-color: var(--wa-ln) !important }
-.pl.r, html[data-theme=dark] .pl.r { color: var(--er) !important; background: var(--er-bg) !important; border-color: var(--er-ln) !important }
-.pl.p, html[data-theme=dark] .pl.p { color: var(--pu) !important; background: var(--pu-bg) !important; border-color: var(--pu-ln) !important }
+.pl {
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.01em;
+  border-radius: 999px;
+  padding: 4px 11px 4px 9px;
+  border: 1px solid transparent;
+}
+.pl.g,
+html[data-theme='dark'] .pl.g {
+  color: var(--ok) !important;
+  background: var(--ok-bg) !important;
+  border-color: var(--ok-ln) !important;
+}
+.pl.y,
+html[data-theme='dark'] .pl.y {
+  color: var(--wa) !important;
+  background: var(--wa-bg) !important;
+  border-color: var(--wa-ln) !important;
+}
+.pl.r,
+html[data-theme='dark'] .pl.r {
+  color: var(--er) !important;
+  background: var(--er-bg) !important;
+  border-color: var(--er-ln) !important;
+}
+.pl.p,
+html[data-theme='dark'] .pl.p {
+  color: var(--pu) !important;
+  background: var(--pu-bg) !important;
+  border-color: var(--pu-ln) !important;
+}
 
 /* ===================== 12) กล่องข้อความ / แถบความคืบหน้า / หน้าต่าง ===================== */
-.note, html[data-theme=dark] .note { background: var(--wa-bg); border: 1px solid var(--wa-ln); color: var(--wa); border-radius: 14px }
-.pb, html[data-theme=dark] .pb { background: color-mix(in srgb, var(--ac) 12%, var(--bg2)); border-radius: 999px }
-.pb i { background: linear-gradient(90deg, var(--ac3), var(--ac2)) !important; border-radius: 999px }
-#mo, #dg { background: rgba(18, 10, 13, .52) !important; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px) }
-#mo .cd, html[data-theme=dark] #mo .cd { border-radius: 24px; box-shadow: 0 40px 80px -30px rgba(18, 10, 13, .6) }
-#mc h3 { font-family: var(--font-d); font-weight: 600 }
-.amt, html[data-theme=dark] .amt { background: linear-gradient(180deg, var(--acs), transparent); border-color: var(--acs2) }
-.qr { border-radius: 18px; box-shadow: 0 0 0 1px var(--ln), 0 0 0 8px var(--acs), 0 20px 40px -18px rgba(122, 12, 32, .45) !important }
+.note,
+html[data-theme='dark'] .note {
+  background: var(--wa-bg);
+  border: 1px solid var(--wa-ln);
+  color: var(--wa);
+  border-radius: 14px;
+}
+.pb,
+html[data-theme='dark'] .pb {
+  background: color-mix(in srgb, var(--ac) 12%, var(--bg2));
+  border-radius: 999px;
+}
+.pb i {
+  background: linear-gradient(90deg, var(--ac3), var(--ac2)) !important;
+  border-radius: 999px;
+}
+#mo,
+#dg {
+  background: rgba(18, 10, 13, 0.52) !important;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+#mo .cd,
+html[data-theme='dark'] #mo .cd {
+  border-radius: 24px;
+  box-shadow: 0 40px 80px -30px rgba(18, 10, 13, 0.6);
+}
+#mc h3 {
+  font-family: var(--font-d);
+  font-weight: 600;
+}
+.amt,
+html[data-theme='dark'] .amt {
+  background: linear-gradient(180deg, var(--acs), transparent);
+  border-color: var(--acs2);
+}
+.qr {
+  border-radius: 18px;
+  box-shadow:
+    0 0 0 1px var(--ln),
+    0 0 0 8px var(--acs),
+    0 20px 40px -18px rgba(122, 12, 32, 0.45) !important;
+}
 
 /* ===================== 13) หน้าต้อนรับ ===================== */
-.hn, html[data-theme=dark] .hn { background: var(--bar) !important; border-bottom: 1px solid var(--ln) !important; -webkit-backdrop-filter: saturate(1.5) blur(16px); backdrop-filter: saturate(1.5) blur(16px) }
-.hnr .logo div { font-family: var(--font-d); font-weight: 600; letter-spacing: .04em }
-.hnr .logo small, .hnr .logo .ac { font-family: var(--font); font-size: 10.5px; letter-spacing: .22em; font-weight: 600 }
-.hl a { font-weight: 500; letter-spacing: .01em; white-space: nowrap }
+.hn,
+html[data-theme='dark'] .hn {
+  background: var(--bar) !important;
+  border-bottom: 1px solid var(--ln) !important;
+  -webkit-backdrop-filter: saturate(1.5) blur(16px);
+  backdrop-filter: saturate(1.5) blur(16px);
+}
+.hnr .logo div {
+  font-family: var(--font-d);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.hnr .logo small,
+.hnr .logo .ac {
+  font-family: var(--font);
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  font-weight: 600;
+}
+.hl a {
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
 .hh h1 {
-    font-family: var(--font-d);
-    font-weight: 600;
-    line-height: 1.35;
-    letter-spacing: -.01em;
+  font-family: var(--font-d);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
 }
 .hh h1 em {
-    font-style: normal;
-    color: var(--ac);
-    background: linear-gradient(180deg, var(--ac3), var(--ac2));
-    -webkit-background-clip: text; background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-decoration: none;
-    box-shadow: none;
+  font-style: normal;
+  color: var(--ac);
+  background: linear-gradient(180deg, var(--ac3), var(--ac2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration: none;
+  box-shadow: none;
 }
-.hh h1 em::after, .hh h1 em::before { opacity: .35 }
-.hh p { color: var(--mu); font-size: 17px; line-height: 1.75 }
-.hck span, .hch span { letter-spacing: .01em }
-.hch span, .hb { border-color: var(--ln2) !important; box-shadow: var(--sh1) }
+.hh h1 em::after,
+.hh h1 em::before {
+  opacity: 0.35;
+}
+.hh p {
+  color: var(--mu);
+  font-size: 17px;
+  line-height: 1.75;
+}
+.hck span,
+.hch span {
+  letter-spacing: 0.01em;
+}
+.hch span,
+.hb {
+  border-color: var(--ln2) !important;
+  box-shadow: var(--sh1);
+}
 /* แถบสีเข้มกลางหน้า: ไล่เฉดดำนิล-แดงเลือดหมู */
-.hdk, html[data-theme=dark] .hdk {
-    background:
-        radial-gradient(900px 380px at 50% -20%, rgba(198, 44, 68, .35), transparent 65%),
-        linear-gradient(180deg, #2a0b13, #14070b) !important;
-    color: #f7eef0;
+.hdk,
+html[data-theme='dark'] .hdk {
+  background:
+    radial-gradient(900px 380px at 50% -20%, rgba(198, 44, 68, 0.35), transparent 65%),
+    linear-gradient(180deg, #2a0b13, #14070b) !important;
+  color: #f7eef0;
 }
-.hs3 b { font-family: var(--font-d); font-weight: 600; color: #ffd3da !important; letter-spacing: -.01em }
-.hs3 i { background: rgba(255, 255, 255, .06) !important; border: 1px solid rgba(255, 255, 255, .12); color: #ff9aaa !important }
-.hs3 small { color: rgba(247, 238, 240, .72) !important }
-.hx h2 { font-family: var(--font-d); font-weight: 600 }
-.pvw, .ph { box-shadow: 0 40px 90px -40px rgba(27, 20, 22, .45) !important }
+.hs3 b {
+  font-family: var(--font-d);
+  font-weight: 600;
+  color: #ffd3da !important;
+  letter-spacing: -0.01em;
+}
+.hs3 i {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ff9aaa !important;
+}
+.hs3 small {
+  color: rgba(247, 238, 240, 0.72) !important;
+}
+.hx h2 {
+  font-family: var(--font-d);
+  font-weight: 600;
+}
+.pvw,
+.ph {
+  box-shadow: 0 40px 90px -40px rgba(27, 20, 22, 0.45) !important;
+}
 
 /* ===================== 14) หน้าเข้าสู่ระบบ ===================== */
-.ah h2 { font-family: var(--font-d); font-weight: 600 }
+.ah h2 {
+  font-family: var(--font-d);
+  font-weight: 600;
+}
 
 /* ===================== 15) รายละเอียดเล็ก ๆ ===================== */
-::-webkit-scrollbar { width: 10px; height: 10px }
-::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--mu) 35%, transparent); border-radius: 999px; border: 2px solid var(--bg) }
-::-webkit-scrollbar-track { background: transparent }
-.totop { background: var(--cd) !important; border: 1px solid var(--ln) !important; color: var(--ac) !important; box-shadow: var(--sh2) !important }
-hr { border: 0; border-top: 1px solid var(--ln) }
-@media (prefers-reduced-motion: reduce) { .b, .nv, .cd { transition: none !important } }
-@media print { .sb { display: none !important } body { background: #fff !important } }
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--mu) 35%, transparent);
+  border-radius: 999px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+.totop {
+  background: var(--cd) !important;
+  border: 1px solid var(--ln) !important;
+  color: var(--ac) !important;
+  box-shadow: var(--sh2) !important;
+}
+hr {
+  border: 0;
+  border-top: 1px solid var(--ln);
+}
+@media (prefers-reduced-motion: reduce) {
+  .b,
+  .nv,
+  .cd {
+    transition: none !important;
+  }
+}
+@media print {
+  .sb {
+    display: none !important;
+  }
+  body {
+    background: #fff !important;
+  }
+}
 
 /* ฟอนต์ที่เคยกำหนดตายตัวเป็น Anuphan (ไม่ได้โหลดไว้ จึงตกไปใช้ Tahoma) — ให้ใช้ฟอนต์หลักเดียวกันทั้งระบบ */
-.doc, .doc * { font-family: var(--font) !important }
-.doc h1, .doc h2, .doc h3 { font-family: var(--font-d) !important }
-.mdd button { font-family: var(--font) }
+.doc,
+.doc * {
+  font-family: var(--font) !important;
+}
+.doc h1,
+.doc h2,
+.doc h3 {
+  font-family: var(--font-d) !important;
+}
+.mdd button {
+  font-family: var(--font);
+}
 
 /* ===================== 16) หน้าเข้าสู่ระบบ: แผงซ้ายโทนดำนิล-ทับทิม ===================== */
-.al, html[data-theme=dark] .al {
-    background:
-        radial-gradient(700px 520px at 85% 110%, rgba(198, 44, 68, .55), transparent 60%),
-        radial-gradient(600px 400px at 0% 0%, rgba(122, 12, 32, .65), transparent 65%),
-        linear-gradient(165deg, #1f0a10 0%, #3b0d18 55%, #5a1022 100%) !important;
-    color: #f7eef0;
+.al,
+html[data-theme='dark'] .al {
+  background:
+    radial-gradient(700px 520px at 85% 110%, rgba(198, 44, 68, 0.55), transparent 60%),
+    radial-gradient(600px 400px at 0% 0%, rgba(122, 12, 32, 0.65), transparent 65%),
+    linear-gradient(165deg, #1f0a10 0%, #3b0d18 55%, #5a1022 100%) !important;
+  color: #f7eef0;
 }
-.al h1, .al .gt { font-family: var(--font-d); font-weight: 600; letter-spacing: -.005em; color: #fff }
-.al p, .al .mu, .al small { color: rgba(247, 238, 240, .72) !important }
-.al .g3 { opacity: .35 }
-.al i { filter: saturate(.6) }
+.al h1,
+.al .gt {
+  font-family: var(--font-d);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: #fff;
+}
+.al p,
+.al .mu,
+.al small {
+  color: rgba(247, 238, 240, 0.72) !important;
+}
+.al .g3 {
+  opacity: 0.35;
+}
+.al i {
+  filter: saturate(0.6);
+}
 
 /* ===================== 17) สีหัวข้อ/ตัวเลขใหญ่ ให้ใช้โทเค็นเดียวกัน ===================== */
-.hh h1, .hx h2 { color: var(--tx) }
-.big, .ac { color: var(--ac) }
-html[data-theme=dark] .big, html[data-theme=dark] .ac { color: var(--ac3) }
-.cd .big { font-size: clamp(30px, 3vw, 40px) }
-.hh h1 em::after, .hh h1 em::before { display: none !important }
+.hh h1,
+.hx h2 {
+  color: var(--tx);
+}
+.big,
+.ac {
+  color: var(--ac);
+}
+html[data-theme='dark'] .big,
+html[data-theme='dark'] .ac {
+  color: var(--ac3);
+}
+.cd .big {
+  font-size: clamp(30px, 3vw, 40px);
+}
+.hh h1 em::after,
+.hh h1 em::before {
+  display: none !important;
+}
 
 /* ===================== 18) จอขนาดกลาง (แท็บเล็ต/หน้าต่างแคบ): ไม่ให้โลโก้และปุ่มตกบรรทัด ===================== */
-.hnr .logo small, .sb .logo small, .hr .b, .hl a, .top .lo .lbl, .me b { white-space: nowrap }
+.hnr .logo small,
+.sb .logo small,
+.hr .b,
+.hl a,
+.top .lo .lbl,
+.me b {
+  white-space: nowrap;
+}
 @media (max-width: 1100px) {
-    .hnr .logo small, .sb .logo small { letter-spacing: .12em; font-size: 9.5px }
-    .hl { gap: 18px }
+  .hnr .logo small,
+  .sb .logo small {
+    letter-spacing: 0.12em;
+    font-size: 9.5px;
+  }
+  .hl {
+    gap: 18px;
+  }
 }
 
 /* ===================== 19) แก้จุดทับกัน/ล้นจอ (ตรวจด้วยสคริปต์ทุกหน้า 360–1440px) ===================== */
 /* เส้นแดงหนาใต้ข้อความหัวเรื่อง (มาจากกฎธีมมืดเดิม box-shadow inset) */
-.hh h1 em, html[data-theme=dark] .hh h1 em { box-shadow: none !important; text-decoration: none !important }
+.hh h1 em,
+html[data-theme='dark'] .hh h1 em {
+  box-shadow: none !important;
+  text-decoration: none !important;
+}
 
 /* หัวเว็บหน้าแรกบนมือถือ: โลโก้ทับปุ่ม TH/EN — ซ่อนตัวหนังสือโลโก้ เหลือรูปโลโก้ และไม่ให้ปุ่มล้นจอ */
-.hnr { min-width: 0 }
-.hnr .logo { min-width: 0; flex: 0 1 auto }
+.hnr {
+  min-width: 0;
+}
+.hnr .logo {
+  min-width: 0;
+  flex: 0 1 auto;
+}
 @media (max-width: 600px) {
-    .hnr .logo div { display: none !important }
-    .hr { gap: 8px !important; flex-wrap: nowrap; min-width: 0 }
-    .hr .b, .hr .hb { padding: 0 14px !important; min-height: 38px }
+  .hnr .logo div {
+    display: none !important;
+  }
+  .hr {
+    gap: 8px !important;
+    flex-wrap: nowrap;
+    min-width: 0;
+  }
+  .hr .b,
+  .hr .hb {
+    padding: 0 14px !important;
+    min-height: 38px;
+  }
 }
 @media (max-width: 380px) {
-    .hr .seg span { padding-left: 9px !important; padding-right: 9px !important }
-    .hr .b, .hr .hb { padding: 0 11px !important; font-size: 13px }
+  .hr .seg span {
+    padding-left: 9px !important;
+    padding-right: 9px !important;
+  }
+  .hr .b,
+  .hr .hb {
+    padding: 0 11px !important;
+    font-size: 13px;
+  }
 }
 
 /* หน้าเข้าสู่ระบบบนมือถือ: ปุ่มภาษา/ธีมลอยทับโลโก้ — เว้นที่ด้านบน */
 @media (max-width: 800px) {
-    .al .logo { margin-top: 44px }
+  .al .logo {
+    margin-top: 44px;
+  }
 }
 
 /* ป้ายเลขห้องในรายการชำระล่าสุด (แดชบอร์ด) ไม่ให้แตกบรรทัดกลางคำ */
-.rch { white-space: nowrap; display: inline-block }
+.rch {
+  white-space: nowrap;
+  display: inline-block;
+}
 
 /* ตารางที่กลายเป็นการ์ดบนมือถือ/แท็บเล็ต: ช่องที่มีหลายบรรทัด (รูป ชื่อ ป้าย อีเมล ที่ตั้ง) ให้วางป้ายกำกับไว้ด้านบน
    แทนการบีบเป็นคอลัมน์แคบ ๆ ข้างป้าย ซึ่งทำให้ชื่อแตกกลางคำและป้ายสถานะทับชื่อ */
 @media (max-width: 1100px) {
-    .rt td { word-break: normal; overflow-wrap: anywhere; min-width: 0 }
-    .rt td > * { min-width: 0 }
-    .rt td[data-l]:has(.av), .rt td[data-l]:has(br), .rt td[data-l]:has(small), .rt td[data-l]:has(> div) {
-        flex-direction: column;
-        align-items: stretch;
-        text-align: left;
-        gap: 6px;
-    }
-    .rt td[data-l]:has(.av)::before, .rt td[data-l]:has(br)::before, .rt td[data-l]:has(small)::before, .rt td[data-l]:has(> div)::before { flex: none }
-    .rt td .pl { white-space: nowrap }
+  .rt td {
+    word-break: normal;
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+  .rt td > * {
+    min-width: 0;
+  }
+  .rt td[data-l]:has(.av),
+  .rt td[data-l]:has(br),
+  .rt td[data-l]:has(small),
+  .rt td[data-l]:has(> div) {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: left;
+    gap: 6px;
+  }
+  .rt td[data-l]:has(.av)::before,
+  .rt td[data-l]:has(br)::before,
+  .rt td[data-l]:has(small)::before,
+  .rt td[data-l]:has(> div)::before {
+    flex: none;
+  }
+  .rt td .pl {
+    white-space: nowrap;
+  }
 }
 
 /* ปุ่มแนบรูป + คำอธิบาย: จัดเรียงให้ตัดบรรทัดเป็นระเบียบ */
-div:has(> #tkf) { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px }
+div:has(> #tkf) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+}
 
 /* กันตัวเลข/ป้ายสถานะแตกบรรทัด */
-.pl, .seg span, .b { white-space: nowrap }
+.pl,
+.seg span,
+.b {
+  white-space: nowrap;
+}
 
 /* ===================== 20) สลิปโอนเงิน: รูปย่อในตาราง + หน้าต่างดูสลิป ===================== */
 img.slt {
-    width: 48px; height: 64px; object-fit: cover; border-radius: 8px;
-    border: 1px solid var(--ln2); background: var(--bg2); cursor: zoom-in; display: block;
-    box-shadow: var(--sh1); transition: transform .15s var(--ease), box-shadow .15s;
+  width: 48px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--ln2);
+  background: var(--bg2);
+  cursor: zoom-in;
+  display: block;
+  box-shadow: var(--sh1);
+  transition:
+    transform 0.15s var(--ease),
+    box-shadow 0.15s;
 }
-img.slt:not([src]) { background: linear-gradient(90deg, var(--bg2), var(--cd), var(--bg2)); background-size: 200% 100%; animation: slt-sh 1.2s linear infinite }
-img.slt.slt-x { animation: none; opacity: .4 }
-img.slt:hover { transform: scale(1.06); box-shadow: var(--sh2) }
-@keyframes slt-sh { to { background-position: -200% 0 } }
-.slv-img { margin: 14px 0 4px; border-radius: 16px; overflow: hidden; border: 1px solid var(--ln); background: var(--bg2); min-height: 120px; display: flex; align-items: center; justify-content: center }
-.slv-img img { width: 100%; max-height: 62vh; object-fit: contain; cursor: zoom-in; background: #fff }
-.slv-ld { padding: 40px 16px; color: var(--mu); font-size: 14px }
-.slv-none { margin: 14px 0 4px; padding: 26px 16px; text-align: center; border: 1px dashed var(--ln2); border-radius: 16px; color: var(--mu); background: var(--bg2) }
-.slv-info { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; margin-top: 14px }
-.slv-info > div { display: flex; flex-direction: column; gap: 2px; min-width: 0 }
-.slv-info small { font-size: 12px }
-.slv-info b { font-weight: 600; overflow-wrap: anywhere }
-.slv-info .pl { align-self: flex-start }
+img.slt:not([src]) {
+  background: linear-gradient(90deg, var(--bg2), var(--cd), var(--bg2));
+  background-size: 200% 100%;
+  animation: slt-sh 1.2s linear infinite;
+}
+img.slt.slt-x {
+  animation: none;
+  opacity: 0.4;
+}
+img.slt:hover {
+  transform: scale(1.06);
+  box-shadow: var(--sh2);
+}
+@keyframes slt-sh {
+  to {
+    background-position: -200% 0;
+  }
+}
+.slv-img {
+  margin: 14px 0 4px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--ln);
+  background: var(--bg2);
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.slv-img img {
+  width: 100%;
+  max-height: 62vh;
+  object-fit: contain;
+  cursor: zoom-in;
+  background: #fff;
+}
+.slv-ld {
+  padding: 40px 16px;
+  color: var(--mu);
+  font-size: 14px;
+}
+.slv-none {
+  margin: 14px 0 4px;
+  padding: 26px 16px;
+  text-align: center;
+  border: 1px dashed var(--ln2);
+  border-radius: 16px;
+  color: var(--mu);
+  background: var(--bg2);
+}
+.slv-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 16px;
+  margin-top: 14px;
+}
+.slv-info > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.slv-info small {
+  font-size: 12px;
+}
+.slv-info b {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.slv-info .pl {
+  align-self: flex-start;
+}
 
 /* ===================== 21) มือถือ: แถบบน — โปรไฟล์ชิดซ้าย, ธีม/ภาษา/ออกจากระบบชิดขวา ทุกบทบาท ===================== */
 @media (max-width: 800px) {
-    .top { justify-content: flex-end !important; flex-wrap: wrap }
-    .top > span[style*="flex:1"] { display: none }
-    /* โปรไฟล์อยู่ซ้าย · ธีม ภาษา ออกจากระบบ อยู่ขวา */
-    .top .me { margin-left: 0; margin-right: auto; order: 0 }
-    .top input { order: 9; flex: 1 1 100% }
+  .top {
+    justify-content: flex-end !important;
+    flex-wrap: wrap;
+  }
+  .top > span[style*='flex:1'] {
+    display: none;
+  }
+  /* โปรไฟล์อยู่ซ้าย · ธีม ภาษา ออกจากระบบ อยู่ขวา */
+  .top .me {
+    margin-left: 0;
+    margin-right: auto;
+    order: 0;
+  }
+  .top input {
+    order: 9;
+    flex: 1 1 100%;
+  }
 }
 
 /* ===================== 22) มือถือ/แท็บเล็ต: แถวปุ่มการทำงาน (ดูใบเสร็จ ชำระเงิน ปิด ฯลฯ) ชิดขวา ===================== */
 @media (max-width: 1100px) {
-    /* ช่องปุ่มในตารางที่กลายเป็นการ์ด */
-    .rt td:not([data-l]) { display: flex !important; justify-content: flex-end; flex-wrap: wrap; gap: 8px; text-align: right }
-    .rt td[data-l]:has(> .b) { justify-content: space-between }
-    /* แถวที่มีแต่ปุ่ม (ไม่รวมแถบตัวกรอง .fl และแท็บ) ทั้งในหน้าและในหน้าต่างป๊อปอัป */
-    .mn div:has(> .b):not(:has(> :not(.b, input[type=file], br))):not(.fl):not(.tabs):not(.seg),
-    #mc div:has(> .b):not(:has(> :not(.b, input[type=file], br))):not(.fl):not(.tabs),
-    #mc .acts { justify-content: flex-end !important; display: flex; flex-wrap: wrap }
-    /* ปุ่มเดี่ยวท้ายการ์ด */
-    .mn .cd > .b:only-of-type:last-child { display: flex; margin-left: auto; width: max-content }
+  /* ช่องปุ่มในตารางที่กลายเป็นการ์ด */
+  .rt td:not([data-l]) {
+    display: flex !important;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+    text-align: right;
+  }
+  .rt td[data-l]:has(> .b) {
+    justify-content: space-between;
+  }
+  /* แถวที่มีแต่ปุ่ม (ไม่รวมแถบตัวกรอง .fl และแท็บ) ทั้งในหน้าและในหน้าต่างป๊อปอัป */
+  .mn div:has(> .b):not(:has(> :not(.b, input[type='file'], br))):not(.fl):not(.tabs):not(.seg),
+  #mc div:has(> .b):not(:has(> :not(.b, input[type='file'], br))):not(.fl):not(.tabs),
+  #mc .acts {
+    justify-content: flex-end !important;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  /* ปุ่มเดี่ยวท้ายการ์ด */
+  .mn .cd > .b:only-of-type:last-child {
+    display: flex;
+    margin-left: auto;
+    width: max-content;
+  }
 }
 
 /* เจ้าของ (โหมดอ่านอย่างเดียว .ro): ซ่อนปุ่มแก้ไขเหมือนเดิม แต่ให้เห็นปุ่ม "ดูสลิป / ใบเสร็จ" และการ์ดลัด "สลิปโอนเงินของผู้เช่า" */
-.ro table .b.rok { display: inline-flex !important }
-.ro .cd.nv.rok { display: block !important; cursor: pointer }
+.ro table .b.rok {
+  display: inline-flex !important;
+}
+.ro .cd.nv.rok {
+  display: block !important;
+  cursor: pointer;
+}
 
 /* ===================== 23) มือถือ: ให้เลื่อนดูลื่น (โดยเฉพาะหน้าต่างดูสลิปและตารางสลิปของเจ้าของ) =====================
    สาเหตุที่เลื่อนช้าบน iPhone: พื้นหลังแบบ fixed + เบลอฉากหลัง (backdrop-filter) ใต้หน้าต่างป๊อปอัปและแถบเมนู
    + รูปย่อที่มีแอนิเมชันวิ่งตลอด ทำให้เครื่องต้องวาดหน้าจอใหม่ทุกเฟรมขณะเลื่อน */
 @media (max-width: 800px), (pointer: coarse) {
-    body, html[data-theme=dark] body { background-attachment: scroll !important }
-    body::before { display: none !important }
-    #mo, #dg { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; background: rgba(18, 10, 13, .62) !important }
-    #mo .cd { -webkit-overflow-scrolling: touch; overscroll-behavior: contain; transform: translateZ(0); box-shadow: 0 -10px 30px rgba(0, 0, 0, .25) !important }
-    .top.is-scrolled, .hn, html[data-theme=dark] .hn { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; background: color-mix(in srgb, var(--bg) 96%, transparent) !important }
-    .sb, html[data-theme=dark] .sb { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; background: var(--cd) !important }
-    img.slt, img.slt:not([src]) { animation: none !important; box-shadow: none; transition: none }
-    img.slt:hover { transform: none }
-    .cd { transition: none }
+  body,
+  html[data-theme='dark'] body {
+    background-attachment: scroll !important;
+  }
+  body::before {
+    display: none !important;
+  }
+  #mo,
+  #dg {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background: rgba(18, 10, 13, 0.62) !important;
+  }
+  #mo .cd {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    transform: translateZ(0);
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.25) !important;
+  }
+  .top.is-scrolled,
+  .hn,
+  html[data-theme='dark'] .hn {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background: color-mix(in srgb, var(--bg) 96%, transparent) !important;
+  }
+  .sb,
+  html[data-theme='dark'] .sb {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background: var(--cd) !important;
+  }
+  img.slt,
+  img.slt:not([src]) {
+    animation: none !important;
+    box-shadow: none;
+    transition: none;
+  }
+  img.slt:hover {
+    transform: none;
+  }
+  .cd {
+    transition: none;
+  }
 }
 /* เปิดหน้าต่างป๊อปอัปแล้วล็อกหน้าเว็บด้านหลังไม่ให้เลื่อนตาม */
-html:has(#mo[style*="flex"]), html:has(#mo[style*="flex"]) body { overflow: hidden }
+html:has(#mo[style*='flex']),
+html:has(#mo[style*='flex']) body {
+  overflow: hidden;
+}
 @media (max-width: 800px) {
-    .slv-img { min-height: 0 }
-    .slv-img img { max-height: 46vh }
+  .slv-img {
+    min-height: 0;
+  }
+  .slv-img img {
+    max-height: 46vh;
+  }
 }
 
 /* ===================== 24) ฟอร์มเพิ่มผู้เช่า + แจ้งเตือนเปลี่ยนรหัสผ่าน ===================== */
-.atf { display: grid; gap: 12px; margin-top: 14px }
-.atf-sec { border: 1px solid var(--ln); border-radius: 16px; padding: 14px 16px 6px; background: color-mix(in srgb, var(--bg2) 45%, var(--cd)) }
-.atf-sec > b { display: block; font-size: 13px; letter-spacing: .02em; color: var(--ac); margin-bottom: 4px }
-.atf-sec > small { display: block; margin: -4px 0 10px; line-height: 1.55 }
-.atf-pw { display: flex; gap: 8px; align-items: center }
-.atf-pw input { margin: 6px 0 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: .04em }
-.atf-pw .b { flex: none; margin-bottom: 6px }
-.atf-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px }
-@media (max-width: 420px) { .atf-2 { grid-template-columns: 1fr } }
-.atf-cred { display: grid; gap: 10px; margin-top: 14px; padding: 14px 16px; border: 1px solid var(--acs2); border-radius: 16px; background: var(--acs) }
-.atf-cred > div { display: flex; flex-direction: column; gap: 2px; min-width: 0 }
-.atf-cred b { overflow-wrap: anywhere }
-.atf-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 18px; letter-spacing: .06em; color: var(--ac) }
-.pwn { display: flex; align-items: center; justify-content: space-between; gap: 10px 14px; flex-wrap: wrap; margin: 12px 0 14px; background: var(--acs) !important; border-color: var(--acs2) !important; color: var(--tx) !important }
-.pwn .b { flex: none }
-.pwn-ico { font-size: 34px; text-align: center; margin: 4px 0 6px }
+.atf {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+.atf-sec {
+  border: 1px solid var(--ln);
+  border-radius: 16px;
+  padding: 14px 16px 6px;
+  background: color-mix(in srgb, var(--bg2) 45%, var(--cd));
+}
+.atf-sec > b {
+  display: block;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--ac);
+  margin-bottom: 4px;
+}
+.atf-sec > small {
+  display: block;
+  margin: -4px 0 10px;
+  line-height: 1.55;
+}
+.atf-pw {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.atf-pw input {
+  margin: 6px 0 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0.04em;
+}
+.atf-pw .b {
+  flex: none;
+  margin-bottom: 6px;
+}
+.atf-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 12px;
+}
+@media (max-width: 420px) {
+  .atf-2 {
+    grid-template-columns: 1fr;
+  }
+}
+.atf-cred {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--acs2);
+  border-radius: 16px;
+  background: var(--acs);
+}
+.atf-cred > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.atf-cred b {
+  overflow-wrap: anywhere;
+}
+.atf-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 18px;
+  letter-spacing: 0.06em;
+  color: var(--ac);
+}
+.pwn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 14px;
+  flex-wrap: wrap;
+  margin: 12px 0 14px;
+  background: var(--acs) !important;
+  border-color: var(--acs2) !important;
+  color: var(--tx) !important;
+}
+.pwn .b {
+  flex: none;
+}
+.pwn-ico {
+  font-size: 34px;
+  text-align: center;
+  margin: 4px 0 6px;
+}
 
 /* ===================== 25) ความลื่นและใช้งานง่าย (ไม่เปลี่ยนการทำงาน) ===================== */
 /* เปลี่ยนหน้าแล้วเฟดเข้านุ่มๆ (ใส่คลาสเฉพาะตอนเปลี่ยนหน้า จาก 27_ux_polish.js) */
-@keyframes pg-in { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
-.pg-in > * { animation: pg-in .26s var(--ease) both }
-.pg-in > *:nth-child(2) { animation-delay: .02s }
-.pg-in > *:nth-child(3) { animation-delay: .04s }
-.pg-in > *:nth-child(n+4) { animation-delay: .06s }
-@media (prefers-reduced-motion: reduce) { .pg-in > * { animation: none !important } }
+@keyframes pg-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.pg-in > * {
+  animation: pg-in 0.26s var(--ease) both;
+}
+.pg-in > *:nth-child(2) {
+  animation-delay: 0.02s;
+}
+.pg-in > *:nth-child(3) {
+  animation-delay: 0.04s;
+}
+.pg-in > *:nth-child(n + 4) {
+  animation-delay: 0.06s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pg-in > * {
+    animation: none !important;
+  }
+}
 
 /* แตะบนมือถือ: ไม่มีกรอบสีฟ้า/เทากระพริบ ปุ่มตอบสนองทันที */
-html { -webkit-tap-highlight-color: transparent; text-size-adjust: 100%; -webkit-text-size-adjust: 100% }
-button, .b, .nv, [onclick] { touch-action: manipulation }
+html {
+  -webkit-tap-highlight-color: transparent;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+button,
+.b,
+.nv,
+[onclick] {
+  touch-action: manipulation;
+}
 
 @media (max-width: 800px) {
-    /* iPhone จะซูมหน้าเว็บอัตโนมัติเมื่อแตะช่องกรอกที่ตัวอักษรเล็กกว่า 16px — กำหนด 16px เพื่อไม่ให้หน้ากระโดด */
-    input, select, textarea { font-size: 16px !important }
-    /* ปุ่มเล็กให้แตะง่ายขึ้น (อย่างน้อย ~38px) */
-    .seg span { min-height: 38px; display: inline-flex !important; align-items: center; justify-content: center; min-width: 44px }
-    .b.sm { min-height: 38px }
-    .thm, .top .lo { min-width: 42px; min-height: 42px }
-    /* เมนูล่าง: เลื่อนแนวนอนลื่น มีขอบจางบอกว่ายังเลื่อนต่อได้ */
-    .sb { scroll-behavior: smooth; scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain;
-          -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 22px), transparent); mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 22px), transparent) }
-    .sb::-webkit-scrollbar { display: none }
-    /* หน้าต่างป๊อปอัปแบบแผ่นเลื่อนขึ้นจากด้านล่าง มีขีดจับด้านบน */
-    #mo .cd { position: relative; padding-top: 26px }
-    #mo .cd::before { content: ""; position: absolute; top: 9px; left: 50%; width: 38px; height: 4px; margin-left: -19px; border-radius: 4px; background: var(--ln2) }
+  /* iPhone จะซูมหน้าเว็บอัตโนมัติเมื่อแตะช่องกรอกที่ตัวอักษรเล็กกว่า 16px — กำหนด 16px เพื่อไม่ให้หน้ากระโดด */
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+  /* ปุ่มเล็กให้แตะง่ายขึ้น (อย่างน้อย ~38px) */
+  .seg span {
+    min-height: 38px;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+  }
+  .b.sm {
+    min-height: 38px;
+  }
+  .thm,
+  .top .lo {
+    min-width: 42px;
+    min-height: 42px;
+  }
+  /* เมนูล่าง: เลื่อนแนวนอนลื่น มีขอบจางบอกว่ายังเลื่อนต่อได้ */
+  .sb {
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent 0,
+      #000 14px,
+      #000 calc(100% - 22px),
+      transparent
+    );
+    mask-image: linear-gradient(
+      90deg,
+      transparent 0,
+      #000 14px,
+      #000 calc(100% - 22px),
+      transparent
+    );
+  }
+  .sb::-webkit-scrollbar {
+    display: none;
+  }
+  /* หน้าต่างป๊อปอัปแบบแผ่นเลื่อนขึ้นจากด้านล่าง มีขีดจับด้านบน */
+  #mo .cd {
+    position: relative;
+    padding-top: 26px;
+  }
+  #mo .cd::before {
+    content: '';
+    position: absolute;
+    top: 9px;
+    left: 50%;
+    width: 38px;
+    height: 4px;
+    margin-left: -19px;
+    border-radius: 4px;
+    background: var(--ln2);
+  }
 }
 
 /* วงโฟกัสเมื่อใช้คีย์บอร์ด (ไม่แสดงตอนแตะ/คลิก) */
-:focus { outline: none }
-:focus-visible { outline: 2px solid color-mix(in srgb, var(--ac) 65%, transparent); outline-offset: 2px; border-radius: 10px }
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--ac) 65%, transparent);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
 
 /* ข้อความแจ้งผล (toast) */
-.ts, html[data-theme=dark] .ts { border-radius: 14px !important; box-shadow: 0 18px 40px -16px rgba(0, 0, 0, .45) !important; backdrop-filter: none }
+.ts,
+html[data-theme='dark'] .ts {
+  border-radius: 14px !important;
+  box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.45) !important;
+  backdrop-filter: none;
+}
 
 /* ===================== 26) หน้าต้อนรับ — "Silk & Glass" (วอลเปเปอร์ผ้าไหม + กระจก Liquid Glass แบบ iOS) =====================
    ใช้เฉพาะหน้าต้อนรับ (.hp) · รูปพื้นหลังกำหนดใน index.html (--hp-bg-*) เพราะ path ของรูปต้องอ้างจากหน้าเว็บ */
 .hp {
-    --g-bg: rgba(255, 255, 255, .56);
-    --g-bg-hi: rgba(255, 255, 255, .74);
-    --g-rim: linear-gradient(145deg, rgba(255, 255, 255, .98), rgba(255, 255, 255, .28) 32%, rgba(255, 255, 255, .06) 58%, rgba(255, 255, 255, .6));
-    --g-in: inset 0 1px 0 rgba(255, 255, 255, .95), inset 0 0 24px rgba(255, 255, 255, .28);
-    --g-sh: 0 1px 1px rgba(40, 12, 20, .04), 0 24px 56px -28px rgba(70, 10, 28, .34);
-    --g-blur: blur(30px) saturate(150%);
-    --ink-panel: rgba(18, 11, 14, .82);
-    --hp-tx: #1b1416; --hp-mu: #6f6466;
-    position: relative; isolation: isolate; background: transparent !important; color: var(--hp-tx);
+  --g-bg: rgba(255, 255, 255, 0.56);
+  --g-bg-hi: rgba(255, 255, 255, 0.74);
+  --g-rim: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.98),
+    rgba(255, 255, 255, 0.28) 32%,
+    rgba(255, 255, 255, 0.06) 58%,
+    rgba(255, 255, 255, 0.6)
+  );
+  --g-in: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 0 24px rgba(255, 255, 255, 0.28);
+  --g-sh: 0 1px 1px rgba(40, 12, 20, 0.04), 0 24px 56px -28px rgba(70, 10, 28, 0.34);
+  --g-blur: blur(30px) saturate(150%);
+  --ink-panel: rgba(18, 11, 14, 0.82);
+  --hp-tx: #1b1416;
+  --hp-mu: #6f6466;
+  position: relative;
+  isolation: isolate;
+  background: transparent !important;
+  color: var(--hp-tx);
 }
-html[data-theme=dark] .hp {
-    --g-bg: rgba(26, 18, 22, .46);
-    --g-bg-hi: rgba(34, 24, 29, .62);
-    --g-rim: linear-gradient(145deg, rgba(255, 255, 255, .34), rgba(255, 255, 255, .06) 35%, rgba(255, 255, 255, .02) 60%, rgba(255, 255, 255, .18));
-    --g-in: inset 0 1px 0 rgba(255, 255, 255, .12), inset 0 0 22px rgba(255, 255, 255, .03);
-    --g-sh: 0 28px 64px -30px rgba(0, 0, 0, .85);
-    --ink-panel: rgba(12, 8, 10, .62);
-    --hp-tx: #f6f1f1; --hp-mu: #ab9fa2;
+html[data-theme='dark'] .hp {
+  --g-bg: rgba(26, 18, 22, 0.46);
+  --g-bg-hi: rgba(34, 24, 29, 0.62);
+  --g-rim: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.34),
+    rgba(255, 255, 255, 0.06) 35%,
+    rgba(255, 255, 255, 0.02) 60%,
+    rgba(255, 255, 255, 0.18)
+  );
+  --g-in: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 0 22px rgba(255, 255, 255, 0.03);
+  --g-sh: 0 28px 64px -30px rgba(0, 0, 0, 0.85);
+  --ink-panel: rgba(12, 8, 10, 0.62);
+  --hp-tx: #f6f1f1;
+  --hp-mu: #ab9fa2;
 }
 /* ---- วอลเปเปอร์ติดจอ (เลเยอร์ position:fixed แยก ไม่ใช้ background-attachment:fixed ที่ทำให้มือถือหน่วง) ---- */
-.hp::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: var(--hp-bg-l, #fbf8f4) center / cover no-repeat; transform: translateZ(0) }
-html[data-theme=dark] .hp::before { background-image: var(--hp-bg-d, none); background-color: #0d0a0b }
-@media (max-aspect-ratio: 1/1) {
-    .hp::before { background-image: var(--hp-bg-lm, var(--hp-bg-l)); background-position: center bottom }
-    html[data-theme=dark] .hp::before { background-image: var(--hp-bg-dm, var(--hp-bg-d)) }
+.hp::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--hp-bg-l, #fbf8f4) center / cover no-repeat;
+  transform: translateZ(0);
 }
-html:has(.hp) body, html[data-theme=dark]:has(.hp) body { background: transparent !important }
-html:has(.hp) { background: #fbf8f4 } html[data-theme=dark]:has(.hp) { background: #0d0a0b }
-.hp .hh, .hp .hcr, .hp .lf, .hp .hx { background: transparent !important }
+html[data-theme='dark'] .hp::before {
+  background-image: var(--hp-bg-d, none);
+  background-color: #0d0a0b;
+}
+@media (max-aspect-ratio: 1/1) {
+  .hp::before {
+    background-image: var(--hp-bg-lm, var(--hp-bg-l));
+    background-position: center bottom;
+  }
+  html[data-theme='dark'] .hp::before {
+    background-image: var(--hp-bg-dm, var(--hp-bg-d));
+  }
+}
+html:has(.hp) body,
+html[data-theme='dark']:has(.hp) body {
+  background: transparent !important;
+}
+html:has(.hp) {
+  background: #fbf8f4;
+}
+html[data-theme='dark']:has(.hp) {
+  background: #0d0a0b;
+}
+.hp .hh,
+.hp .hcr,
+.hp .lf,
+.hp .hx {
+  background: transparent !important;
+}
 
 /* ---- สูตรกระจก: พื้นโปร่ง + เบลอ + ขอบสะท้อนแสงไล่เฉด (ขอบทำด้วย ::after + mask) ---- */
-.hp .hn, .hp .fxc, .hp .sp > div, .hp .pv, .hp .hdk, .hp .hch span, .hp .hr .seg, .hp .hr .thm, .hp .hr .hb {
-    -webkit-backdrop-filter: var(--g-blur) !important; backdrop-filter: var(--g-blur) !important;
-    background: var(--g-bg) !important; border: 0 !important;
-    box-shadow: var(--g-in), var(--g-sh) !important;
-    position: relative;
+.hp .hn,
+.hp .fxc,
+.hp .sp > div,
+.hp .pv,
+.hp .hdk,
+.hp .hch span,
+.hp .hr .seg,
+.hp .hr .thm,
+.hp .hr .hb {
+  -webkit-backdrop-filter: var(--g-blur) !important;
+  backdrop-filter: var(--g-blur) !important;
+  background: var(--g-bg) !important;
+  border: 0 !important;
+  box-shadow: var(--g-in), var(--g-sh) !important;
+  position: relative;
 }
-.hp .hn::after, .hp .fxc::after, .hp .sp > div::after, .hp .pv::after, .hp .hdk::after, .hp .hch span::after, .hp .hr .hb::after {
-    content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none;
-    background: var(--g-rim);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
-    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+.hp .hn::after,
+.hp .fxc::after,
+.hp .sp > div::after,
+.hp .pv::after,
+.hp .hdk::after,
+.hp .hch span::after,
+.hp .hr .hb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: var(--g-rim);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
 }
 
 /* ---- แถบเมนูบน: เกาะลอยบางๆ ---- */
-html .hp .hn, html[data-theme=dark] .hp .hn { border-radius: 0 0 20px 20px }
-@media (min-width: 801px) {
-    html .hp .hn { top: 14px !important; margin: 14px auto 0; width: min(1120px, calc(100% - 40px)); border-radius: 20px }
-    .hp .hnr { min-height: 60px }
+html .hp .hn,
+html[data-theme='dark'] .hp .hn {
+  border-radius: 0 0 20px 20px;
 }
-.hp .hn .logo div { color: var(--hp-tx) }
-.hp .hl a { color: var(--hp-mu) !important; font-weight: 500; font-size: 14px; letter-spacing: .01em; position: relative }
-.hp .hl a:hover { color: var(--hp-tx) !important }
-.hp .hl a.on { color: var(--hp-tx) !important }
-.hp .hl a.on::after { content: ""; position: absolute; left: 50%; bottom: -8px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--ac) }
-.hp .hr .seg, .hp .hr .thm, .hp .hr .hb { box-shadow: var(--g-in), 0 6px 18px -12px rgba(70, 10, 28, .4) !important }
-.hp .hr .hb { color: var(--hp-tx) !important; font-weight: 600 }
-.hp .hr .seg .on { background: linear-gradient(180deg, #2a1a1f, #120b0e) !important; color: #fff !important; box-shadow: 0 4px 10px -4px rgba(0, 0, 0, .45) !important }
-html[data-theme=dark] .hp .hr .seg .on { background: linear-gradient(180deg, #fff, #ece4e6) !important; color: #1b1416 !important }
+@media (min-width: 801px) {
+  html .hp .hn {
+    top: 14px !important;
+    margin: 14px auto 0;
+    width: min(1120px, calc(100% - 40px));
+    border-radius: 20px;
+  }
+  .hp .hnr {
+    min-height: 60px;
+  }
+}
+.hp .hn .logo div {
+  color: var(--hp-tx);
+}
+.hp .hl a {
+  color: var(--hp-mu) !important;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  position: relative;
+}
+.hp .hl a:hover {
+  color: var(--hp-tx) !important;
+}
+.hp .hl a.on {
+  color: var(--hp-tx) !important;
+}
+.hp .hl a.on::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  border-radius: 50%;
+  background: var(--ac);
+}
+.hp .hr .seg,
+.hp .hr .thm,
+.hp .hr .hb {
+  box-shadow:
+    var(--g-in),
+    0 6px 18px -12px rgba(70, 10, 28, 0.4) !important;
+}
+.hp .hr .hb {
+  color: var(--hp-tx) !important;
+  font-weight: 600;
+}
+.hp .hr .seg .on {
+  background: linear-gradient(180deg, #2a1a1f, #120b0e) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 10px -4px rgba(0, 0, 0, 0.45) !important;
+}
+html[data-theme='dark'] .hp .hr .seg .on {
+  background: linear-gradient(180deg, #fff, #ece4e6) !important;
+  color: #1b1416 !important;
+}
 
 /* ---- Hero: หัวข้อบางสง่า ---- */
-.hp .hh { padding-top: clamp(56px, 9vh, 110px) !important }
+.hp .hh {
+  padding-top: clamp(56px, 9vh, 110px) !important;
+}
 .hp .hh h1 {
-    font-family: var(--font-d); font-weight: 500 !important;
-    font-size: clamp(34px, 4.6vw, 66px) !important; line-height: 1.24 !important; letter-spacing: -.012em;
-    color: var(--hp-tx) !important; text-shadow: none !important; margin-bottom: 26px;
+  font-family: var(--font-d);
+  font-weight: 500 !important;
+  font-size: clamp(34px, 4.6vw, 66px) !important;
+  line-height: 1.24 !important;
+  letter-spacing: -0.012em;
+  color: var(--hp-tx) !important;
+  text-shadow: none !important;
+  margin-bottom: 26px;
 }
-.hp .hh h1 em { font-style: normal; font-weight: 500; background: linear-gradient(180deg, #a3122e 10%, #6a0a1d 90%) !important; -webkit-background-clip: text !important; background-clip: text !important; -webkit-text-fill-color: transparent; text-shadow: none !important; padding: 0 .04em }
-html[data-theme=dark] .hp .hh h1 em { background: linear-gradient(180deg, #ffb0bc 0%, #ff5a71 85%) !important; -webkit-background-clip: text !important; background-clip: text !important }
-.hp .hh h1 em::before, .hp .hh h1 em::after { display: none !important }
+.hp .hh h1 em {
+  font-style: normal;
+  font-weight: 500;
+  background: linear-gradient(180deg, #a3122e 10%, #6a0a1d 90%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none !important;
+  padding: 0 0.04em;
+}
+html[data-theme='dark'] .hp .hh h1 em {
+  background: linear-gradient(180deg, #ffb0bc 0%, #ff5a71 85%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+}
+.hp .hh h1 em::before,
+.hp .hh h1 em::after {
+  display: none !important;
+}
 /* ปุ่มหลัก: ทับทิมเงาแก้ว */
-.hp .hh .hc .b, .hp .hx .hc .b {
-    padding: 15px 30px !important; font-size: 15px !important; letter-spacing: .02em; border-radius: 999px !important;
-    background: linear-gradient(180deg, #c21d3a 0%, #8f0f27 55%, #6c0a1d 100%) !important; border: 0 !important; color: #fff !important;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), inset 0 -3px 8px rgba(40, 0, 10, .35), 0 18px 40px -16px rgba(130, 14, 36, .75), 0 0 0 1px rgba(120, 10, 30, .4) !important;
+.hp .hh .hc .b,
+.hp .hx .hc .b {
+  padding: 15px 30px !important;
+  font-size: 15px !important;
+  letter-spacing: 0.02em;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, #c21d3a 0%, #8f0f27 55%, #6c0a1d 100%) !important;
+  border: 0 !important;
+  color: #fff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -3px 8px rgba(40, 0, 10, 0.35),
+    0 18px 40px -16px rgba(130, 14, 36, 0.75),
+    0 0 0 1px rgba(120, 10, 30, 0.4) !important;
 }
-.hp .hh .hc .b:hover, .hp .hx .hc .b:hover { transform: translateY(-2px); filter: brightness(1.06) }
-.hp .hck { gap: 8px 22px !important; margin-top: 26px !important }
-.hp .hck span { color: var(--hp-mu) !important; font-size: 13.5px; font-weight: 500 }
-.hp .hh > small.mu { color: var(--hp-mu) !important; font-size: 13px !important; letter-spacing: .02em; font-weight: 500 }
-.hp .hch { gap: 10px !important }
-.hp .hch span { color: var(--hp-tx) !important; font-weight: 500 !important; border-radius: 999px !important; padding: 10px 18px !important }
-.hp .hch span svg { color: var(--ac) }
+.hp .hh .hc .b:hover,
+.hp .hx .hc .b:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+}
+.hp .hck {
+  gap: 8px 22px !important;
+  margin-top: 26px !important;
+}
+.hp .hck span {
+  color: var(--hp-mu) !important;
+  font-size: 13.5px;
+  font-weight: 500;
+}
+.hp .hh > small.mu {
+  color: var(--hp-mu) !important;
+  font-size: 13px !important;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+.hp .hch {
+  gap: 10px !important;
+}
+.hp .hch span {
+  color: var(--hp-tx) !important;
+  font-weight: 500 !important;
+  border-radius: 999px !important;
+  padding: 10px 18px !important;
+}
+.hp .hch span svg {
+  color: var(--ac);
+}
 
 /* ---- ภาพตัวอย่างหน้าจอ: กรอบกระจกหนา เอียงเล็กน้อยแบบเวทีโชว์สินค้า ---- */
-.hp .pvw { perspective: 2400px }
-.hp .pv { padding: 10px !important; border-radius: 26px !important; background: var(--g-bg-hi) !important; transform: rotateX(7deg) translateZ(0); transform-origin: 50% 0; box-shadow: var(--g-in), 0 60px 120px -50px rgba(70, 10, 28, .55), 0 30px 60px -40px rgba(0, 0, 0, .25) !important }
-.hp .pv > * { border-radius: 16px; overflow: hidden }
-.hp .ph { box-shadow: 0 0 0 1px rgba(255, 255, 255, .5), 0 50px 90px -30px rgba(40, 6, 16, .6) !important }
-@media (max-width: 800px) { .hp .pv { transform: none } }
+.hp .pvw {
+  perspective: 2400px;
+}
+.hp .pv {
+  padding: 10px !important;
+  border-radius: 26px !important;
+  background: var(--g-bg-hi) !important;
+  transform: rotateX(7deg) translateZ(0);
+  transform-origin: 50% 0;
+  box-shadow:
+    var(--g-in),
+    0 60px 120px -50px rgba(70, 10, 28, 0.55),
+    0 30px 60px -40px rgba(0, 0, 0, 0.25) !important;
+}
+.hp .pv > * {
+  border-radius: 16px;
+  overflow: hidden;
+}
+.hp .ph {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.5),
+    0 50px 90px -30px rgba(40, 6, 16, 0.6) !important;
+}
+@media (max-width: 800px) {
+  .hp .pv {
+    transform: none;
+  }
+}
 
 /* ---- แถบสถิติ: แผงกระจกสีนิล ตัวเลขตัวใหญ่แบบมีเชิง ---- */
-html .hp .hdk, html[data-theme=dark] .hp .hdk {
-    background: radial-gradient(700px 260px at 50% 0%, rgba(194, 29, 58, .28), transparent 70%), var(--ink-panel) !important;
-    margin: 0 auto; width: min(1120px, calc(100% - 40px)); border-radius: 30px; color: #f4eeee;
-    --g-rim: linear-gradient(145deg, rgba(255, 255, 255, .4), rgba(255, 255, 255, .05) 40%, rgba(255, 140, 160, .25));
+html .hp .hdk,
+html[data-theme='dark'] .hp .hdk {
+  background:
+    radial-gradient(700px 260px at 50% 0%, rgba(194, 29, 58, 0.28), transparent 70%),
+    var(--ink-panel) !important;
+  margin: 0 auto;
+  width: min(1120px, calc(100% - 40px));
+  border-radius: 30px;
+  color: #f4eeee;
+  --g-rim: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0.05) 40%,
+    rgba(255, 140, 160, 0.25)
+  );
 }
-@media (max-width: 800px) { html .hp .hdk { width: calc(100% - 24px); border-radius: 26px } }
-.hp .hs3 b { font-family: var(--font-d); font-weight: 500 !important; font-size: clamp(40px, 4.4vw, 60px) !important; color: #fff !important; letter-spacing: -.02em }
-.hp .hs3 small { color: rgba(244, 238, 238, .66) !important; letter-spacing: .02em }
-.hp .hs3 i { background: rgba(255, 255, 255, .07) !important; border: 1px solid rgba(255, 255, 255, .16) !important; color: #ff9aab !important; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14) }
-.hp .hs3 > div + div { border-color: rgba(255, 255, 255, .1) !important }
-.hp .hdn { color: rgba(244, 238, 238, .45) !important }
+@media (max-width: 800px) {
+  html .hp .hdk {
+    width: calc(100% - 24px);
+    border-radius: 26px;
+  }
+}
+.hp .hs3 b {
+  font-family: var(--font-d);
+  font-weight: 500 !important;
+  font-size: clamp(40px, 4.4vw, 60px) !important;
+  color: #fff !important;
+  letter-spacing: -0.02em;
+}
+.hp .hs3 small {
+  color: rgba(244, 238, 238, 0.66) !important;
+  letter-spacing: 0.02em;
+}
+.hp .hs3 i {
+  background: rgba(255, 255, 255, 0.07) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  color: #ff9aab !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+.hp .hs3 > div + div {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+.hp .hdn {
+  color: rgba(244, 238, 238, 0.45) !important;
+}
 
 /* ---- การ์ดฟีเจอร์: กระจกขาว ไอคอนทรงกลมทับทิม ---- */
-.hp .hx h2 { font-family: var(--font-d); font-weight: 500 !important; font-size: clamp(28px, 3vw, 42px) !important; letter-spacing: -.01em; color: var(--hp-tx) !important }
-.hp .fxc { border-radius: 26px !important; padding: 26px 24px !important; transition: transform .3s var(--ease), box-shadow .3s var(--ease) }
-@media (hover: hover) { .hp .fxc:hover { transform: translateY(-4px); box-shadow: var(--g-in), 0 34px 70px -30px rgba(90, 12, 32, .5) !important } }
-.hp .fxc i { width: 46px !important; height: 46px !important; border-radius: 50% !important; display: grid !important; place-items: center;
-    background: linear-gradient(160deg, #c8203e, #7a0c22) !important; color: #fff !important; border: 0 !important;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45), 0 10px 22px -10px rgba(130, 14, 36, .7) !important }
-.hp .fxc i svg { color: #fff !important; stroke: currentColor }
-.hp .fxc b { font-size: 17px !important; font-weight: 600 !important; color: var(--hp-tx) !important; margin-top: 14px }
-.hp .fxc small { color: var(--hp-mu) !important; font-size: 14px !important; line-height: 1.6 }
+.hp .hx h2 {
+  font-family: var(--font-d);
+  font-weight: 500 !important;
+  font-size: clamp(28px, 3vw, 42px) !important;
+  letter-spacing: -0.01em;
+  color: var(--hp-tx) !important;
+}
+.hp .fxc {
+  border-radius: 26px !important;
+  padding: 26px 24px !important;
+  transition:
+    transform 0.3s var(--ease),
+    box-shadow 0.3s var(--ease);
+}
+@media (hover: hover) {
+  .hp .fxc:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      var(--g-in),
+      0 34px 70px -30px rgba(90, 12, 32, 0.5) !important;
+  }
+}
+.hp .fxc i {
+  width: 46px !important;
+  height: 46px !important;
+  border-radius: 50% !important;
+  display: grid !important;
+  place-items: center;
+  background: linear-gradient(160deg, #c8203e, #7a0c22) !important;
+  color: #fff !important;
+  border: 0 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 10px 22px -10px rgba(130, 14, 36, 0.7) !important;
+}
+.hp .fxc i svg {
+  color: #fff !important;
+  stroke: currentColor;
+}
+.hp .fxc b {
+  font-size: 17px !important;
+  font-weight: 600 !important;
+  color: var(--hp-tx) !important;
+  margin-top: 14px;
+}
+.hp .fxc small {
+  color: var(--hp-mu) !important;
+  font-size: 14px !important;
+  line-height: 1.6;
+}
 
 /* ---- ขั้นตอนชำระเงิน: เลขทรงกลมทับทิม ---- */
-.hp .sp > div { border-radius: 24px !important; padding: 22px 16px !important }
-.hp .sp > div b { background: linear-gradient(160deg, #c8203e, #7a0c22) !important; color: #fff !important; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45), 0 0 0 6px rgba(200, 32, 62, .1), 0 10px 22px -10px rgba(130, 14, 36, .7) !important; font-family: var(--font-d); font-weight: 600 }
-.hp .sp > div span { color: var(--hp-tx) !important; font-weight: 500 }
-.hp .lf { color: var(--hp-mu) !important; font-size: 12.5px; letter-spacing: .02em }
+.hp .sp > div {
+  border-radius: 24px !important;
+  padding: 22px 16px !important;
+}
+.hp .sp > div b {
+  background: linear-gradient(160deg, #c8203e, #7a0c22) !important;
+  color: #fff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 0 0 6px rgba(200, 32, 62, 0.1),
+    0 10px 22px -10px rgba(130, 14, 36, 0.7) !important;
+  font-family: var(--font-d);
+  font-weight: 600;
+}
+.hp .sp > div span {
+  color: var(--hp-tx) !important;
+  font-weight: 500;
+}
+.hp .lf {
+  color: var(--hp-mu) !important;
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
 
 /* ---- มือถือ: เบลอน้อยลงเพื่อความลื่น (ทับกฎเดิมที่ปิดเบลอแถบบน) ---- */
 @media (max-width: 800px) {
-    .hp { --g-blur: blur(18px) saturate(145%) }
-    html .hp .hn, html[data-theme=dark] .hp .hn { -webkit-backdrop-filter: var(--g-blur) !important; backdrop-filter: var(--g-blur) !important; background: var(--g-bg) !important }
-    .hp .hck span { font-size: 12.5px }
+  .hp {
+    --g-blur: blur(18px) saturate(145%);
+  }
+  html .hp .hn,
+  html[data-theme='dark'] .hp .hn {
+    -webkit-backdrop-filter: var(--g-blur) !important;
+    backdrop-filter: var(--g-blur) !important;
+    background: var(--g-bg) !important;
+  }
+  .hp .hck span {
+    font-size: 12.5px;
+  }
 }
 @media (prefers-reduced-transparency: reduce) {
-    .hp { --g-bg: rgba(255, 255, 255, .94); --g-bg-hi: #fff }
-    html[data-theme=dark] .hp { --g-bg: rgba(26, 18, 22, .95); --g-bg-hi: #1c1418 }
+  .hp {
+    --g-bg: rgba(255, 255, 255, 0.94);
+    --g-bg-hi: #fff;
+  }
+  html[data-theme='dark'] .hp {
+    --g-bg: rgba(26, 18, 22, 0.95);
+    --g-bg-hi: #1c1418;
+  }
 }
 /* แผงสถิติในธีมสว่าง: สีนิลเข้มใส ไม่ขุ่น */
-html:not([data-theme=dark]) .hp .hdk { background: radial-gradient(700px 260px at 50% 0%, rgba(194, 29, 58, .32), transparent 70%), linear-gradient(180deg, rgba(30, 14, 19, .93), rgba(18, 9, 12, .95)) !important }
+html:not([data-theme='dark']) .hp .hdk {
+  background:
+    radial-gradient(700px 260px at 50% 0%, rgba(194, 29, 58, 0.32), transparent 70%),
+    linear-gradient(180deg, rgba(30, 14, 19, 0.93), rgba(18, 9, 12, 0.95)) !important;
+}
 
 /* ===================== 27) หน้าในระบบ + หน้าเข้าสู่ระบบ: Silk & Glass =====================
    ใช้วอลเปเปอร์ชุดเดียวกับหน้าต้อนรับ แต่ซ้อนชั้นสีจางทับ เพื่อให้ตัวเลข/ตารางอ่านชัด
    คอมพิวเตอร์: เมนูข้างลอยเป็นกระจก + การ์ดกระจกเบลอ
    มือถือ/จอสัมผัส: ไม่เบลอทีละการ์ด (ให้เลื่อนลื่น) ใช้การ์ดโปร่งแสงแทน · เมนูล่างลอยแบบ iOS */
 :root {
-    --s-veil: linear-gradient(180deg, rgba(250, 247, 244, .22), rgba(250, 247, 244, .42));
-    --s-card: rgba(255, 255, 255, .74);
-    --s-card-m: rgba(255, 255, 255, .88);
-    --s-edge: rgba(255, 255, 255, .78);
-    --s-in: inset 0 1px 0 rgba(255, 255, 255, .9);
-    --s-sh: 0 1px 2px rgba(40, 12, 20, .04), 0 18px 44px -30px rgba(70, 10, 28, .32);
-    --s-bar: rgba(255, 255, 255, .66);
-    --s-bar-m: rgba(255, 255, 255, .93);
-    --s-blur: blur(22px) saturate(160%);
+  --s-veil: linear-gradient(180deg, rgba(250, 247, 244, 0.22), rgba(250, 247, 244, 0.42));
+  --s-card: rgba(255, 255, 255, 0.74);
+  --s-card-m: rgba(255, 255, 255, 0.88);
+  --s-edge: rgba(255, 255, 255, 0.78);
+  --s-in: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --s-sh: 0 1px 2px rgba(40, 12, 20, 0.04), 0 18px 44px -30px rgba(70, 10, 28, 0.32);
+  --s-bar: rgba(255, 255, 255, 0.66);
+  --s-bar-m: rgba(255, 255, 255, 0.93);
+  --s-blur: blur(22px) saturate(160%);
 }
-html[data-theme=dark] {
-    --s-veil: linear-gradient(180deg, rgba(10, 8, 9, .18), rgba(10, 8, 9, .4));
-    --s-card: rgba(26, 19, 22, .66);
-    --s-card-m: rgba(24, 18, 21, .9);
-    --s-edge: rgba(255, 255, 255, .08);
-    --s-in: inset 0 1px 0 rgba(255, 255, 255, .06);
-    --s-sh: 0 22px 50px -30px rgba(0, 0, 0, .9);
-    --s-bar: rgba(22, 16, 19, .6);
-    --s-bar-m: rgba(20, 15, 17, .94);
+html[data-theme='dark'] {
+  --s-veil: linear-gradient(180deg, rgba(10, 8, 9, 0.18), rgba(10, 8, 9, 0.4));
+  --s-card: rgba(26, 19, 22, 0.66);
+  --s-card-m: rgba(24, 18, 21, 0.9);
+  --s-edge: rgba(255, 255, 255, 0.08);
+  --s-in: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --s-sh: 0 22px 50px -30px rgba(0, 0, 0, 0.9);
+  --s-bar: rgba(22, 16, 19, 0.6);
+  --s-bar-m: rgba(20, 15, 17, 0.94);
 }
 
 /* วอลเปเปอร์ (ชั้น fixed แยก ไม่ใช้ background-attachment:fixed จึงไม่หน่วงตอนเลื่อน) */
-.app::before, .au::before {
-    content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; transform: translateZ(0);
-    background: var(--s-veil), var(--hp-bg-l, none) center / cover no-repeat, var(--bg);
+.app::before,
+.au::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  transform: translateZ(0);
+  background:
+    var(--s-veil),
+    var(--hp-bg-l, none) center / cover no-repeat,
+    var(--bg);
 }
-html[data-theme=dark] .app::before, html[data-theme=dark] .au::before { background-image: var(--s-veil), var(--hp-bg-d, none) }
+html[data-theme='dark'] .app::before,
+html[data-theme='dark'] .au::before {
+  background-image: var(--s-veil), var(--hp-bg-d, none);
+}
 @media (max-width: 800px) {
-    .app::before, .au::before { background-image: var(--s-veil), var(--hp-bg-lm, var(--hp-bg-l, none)); background-position: center bottom }
-    html[data-theme=dark] .app::before, html[data-theme=dark] .au::before { background-image: var(--s-veil), var(--hp-bg-dm, var(--hp-bg-d, none)) }
+  .app::before,
+  .au::before {
+    background-image: var(--s-veil), var(--hp-bg-lm, var(--hp-bg-l, none));
+    background-position: center bottom;
+  }
+  html[data-theme='dark'] .app::before,
+  html[data-theme='dark'] .au::before {
+    background-image: var(--s-veil), var(--hp-bg-dm, var(--hp-bg-d, none));
+  }
 }
-#app:has(.au) .bgL { display: none }
-.app, .au { position: relative; z-index: 0 }  /* ชั้นซ้อนของตัวเอง ให้วอลเปเปอร์อยู่เหนือพื้นของ body */
+#app:has(.au) .bgL {
+  display: none;
+}
+.app,
+.au {
+  position: relative;
+  z-index: 0;
+} /* ชั้นซ้อนของตัวเอง ให้วอลเปเปอร์อยู่เหนือพื้นของ body */
 
 /* การ์ด: โปร่งแสง ขอบสว่างบาง (ไม่ทับการ์ดที่มีสีเฉพาะ เพราะใช้ความเจาะจงต่ำ) */
-:where(.app) .cd, html[data-theme=dark] :where(.app) .cd {
-    background: var(--s-card);
-    border-color: var(--s-edge);
-    box-shadow: var(--s-in), var(--s-sh);
+:where(.app) .cd,
+html[data-theme='dark'] :where(.app) .cd {
+  background: var(--s-card);
+  border-color: var(--s-edge);
+  box-shadow: var(--s-in), var(--s-sh);
 }
-:where(.app) .cd .cd { background: color-mix(in srgb, var(--cd) 70%, transparent) }
-:where(.app) table th { background-color: color-mix(in srgb, var(--cd) 55%, transparent) }
+:where(.app) .cd .cd {
+  background: color-mix(in srgb, var(--cd) 70%, transparent);
+}
+:where(.app) table th {
+  background-color: color-mix(in srgb, var(--cd) 55%, transparent);
+}
 
 /* ---------- คอมพิวเตอร์ (เมาส์) ---------- */
 @media (min-width: 801px) and (hover: hover) and (pointer: fine) {
-    :where(.app) .cd { -webkit-backdrop-filter: var(--s-blur); backdrop-filter: var(--s-blur) }
-    :where(.app) .cd .cd { -webkit-backdrop-filter: none; backdrop-filter: none }
-    .top.is-scrolled, html[data-theme=dark] .top.is-scrolled {
-        background: var(--s-bar) !important; -webkit-backdrop-filter: var(--s-blur); backdrop-filter: var(--s-blur);
-        border-bottom-color: var(--s-edge) !important;
-    }
-    #mo .cd, html[data-theme=dark] #mo .cd {
-        background: color-mix(in srgb, var(--cd) 90%, transparent);
-        -webkit-backdrop-filter: blur(30px) saturate(160%); backdrop-filter: blur(30px) saturate(160%);
-        border: 1px solid var(--s-edge); box-shadow: var(--s-in), 0 40px 90px -30px rgba(18, 10, 13, .6)
-    }
+  :where(.app) .cd {
+    -webkit-backdrop-filter: var(--s-blur);
+    backdrop-filter: var(--s-blur);
+  }
+  :where(.app) .cd .cd {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .top.is-scrolled,
+  html[data-theme='dark'] .top.is-scrolled {
+    background: var(--s-bar) !important;
+    -webkit-backdrop-filter: var(--s-blur);
+    backdrop-filter: var(--s-blur);
+    border-bottom-color: var(--s-edge) !important;
+  }
+  #mo .cd,
+  html[data-theme='dark'] #mo .cd {
+    background: color-mix(in srgb, var(--cd) 90%, transparent);
+    -webkit-backdrop-filter: blur(30px) saturate(160%);
+    backdrop-filter: blur(30px) saturate(160%);
+    border: 1px solid var(--s-edge);
+    box-shadow:
+      var(--s-in),
+      0 40px 90px -30px rgba(18, 10, 13, 0.6);
+  }
 }
 
 /* ---------- เมนูข้างลอย (แท็บเล็ต + คอมพิวเตอร์) — ยังเป็นขาวในธีมสว่าง ดำนิลในธีมมืด ---------- */
 @media (min-width: 801px) {
-    .app .sb, html[data-theme=dark] .app .sb {
-        top: 14px; height: calc(100vh - 28px); margin: 14px 0 14px 14px;
-        border-radius: 24px; border: 1px solid var(--s-edge) !important;
-        box-shadow: var(--s-in), 0 30px 60px -36px rgba(70, 10, 28, .4) !important;
-    }
-    .app .sb { background: linear-gradient(180deg, rgba(255, 255, 255, .9), rgba(253, 251, 250, .82)) !important }
-    html[data-theme=dark] .app .sb {
-        background:
-            radial-gradient(420px 260px at 0% 0%, rgba(198, 44, 68, .2), transparent 70%),
-            linear-gradient(180deg, rgba(28, 20, 24, .9), rgba(14, 10, 12, .9)) !important;
-        box-shadow: var(--s-in), 0 30px 60px -30px rgba(0, 0, 0, .9) !important;
-    }
-    .app .sb .nv::before { left: -8px }
+  .app .sb,
+  html[data-theme='dark'] .app .sb {
+    top: 14px;
+    height: calc(100vh - 28px);
+    margin: 14px 0 14px 14px;
+    border-radius: 24px;
+    border: 1px solid var(--s-edge) !important;
+    box-shadow:
+      var(--s-in),
+      0 30px 60px -36px rgba(70, 10, 28, 0.4) !important;
+  }
+  .app .sb {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.9),
+      rgba(253, 251, 250, 0.82)
+    ) !important;
+  }
+  html[data-theme='dark'] .app .sb {
+    background:
+      radial-gradient(420px 260px at 0% 0%, rgba(198, 44, 68, 0.2), transparent 70%),
+      linear-gradient(180deg, rgba(28, 20, 24, 0.9), rgba(14, 10, 12, 0.9)) !important;
+    box-shadow:
+      var(--s-in),
+      0 30px 60px -30px rgba(0, 0, 0, 0.9) !important;
+  }
+  .app .sb .nv::before {
+    left: -8px;
+  }
 }
 @media (min-width: 801px) and (hover: hover) and (pointer: fine) {
-    .app .sb, html[data-theme=dark] .app .sb { -webkit-backdrop-filter: var(--s-blur); backdrop-filter: var(--s-blur) }
+  .app .sb,
+  html[data-theme='dark'] .app .sb {
+    -webkit-backdrop-filter: var(--s-blur);
+    backdrop-filter: var(--s-blur);
+  }
 }
-@media (min-width: 801px) and (max-height: 640px) { .app .sb { height: calc(100vh - 20px); top: 10px; margin-block: 10px } }
+@media (min-width: 801px) and (max-height: 640px) {
+  .app .sb {
+    height: calc(100vh - 20px);
+    top: 10px;
+    margin-block: 10px;
+  }
+}
 
 /* ---------- แท็บเล็ต: จัดกริดใหม่ให้ไม่บีบ ---------- */
 @media (min-width: 801px) and (max-width: 1099px) {
-    .dg3, .dg3b { grid-template-columns: repeat(2, minmax(0, 1fr)) !important }
-    .dg3 > :last-child:nth-child(odd), .dg3b > :last-child:nth-child(odd) { grid-column: 1 / -1 }
-    .ri { grid-template-columns: repeat(2, minmax(0, 1fr)) !important }
-    .row { flex-wrap: wrap }
-    .row > .cd { flex: 1 1 100% !important; min-width: 0 }
+  .dg3,
+  .dg3b {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .dg3 > :last-child:nth-child(odd),
+  .dg3b > :last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+  .ri {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .row {
+    flex-wrap: wrap;
+  }
+  .row > .cd {
+    flex: 1 1 100% !important;
+    min-width: 0;
+  }
 }
 @media (min-width: 1100px) and (max-width: 1280px) {
-    .row > .cd:first-child { flex: 1.5 1 0 !important; min-width: 0 }
-    .row > .cd { min-width: 0 }
+  .row > .cd:first-child {
+    flex: 1.5 1 0 !important;
+    min-width: 0;
+  }
+  .row > .cd {
+    min-width: 0;
+  }
 }
 
 /* ---------- มือถือ: เมนูล่างลอยแบบ iOS (ไม่เบลอ เพื่อให้เลื่อนลื่น) ---------- */
 @media (max-width: 800px) {
-    :where(.app) .cd, html[data-theme=dark] :where(.app) .cd { background: var(--s-card-m) }
-    .app .sb, html[data-theme=dark] .app .sb {
-        left: 10px !important; right: 10px !important; bottom: calc(10px + var(--sab)) !important; width: auto !important;
-        border-radius: 22px !important; border: 1px solid var(--s-edge) !important;
-        background: var(--s-bar-m) !important;
-        box-shadow: var(--s-in), 0 16px 40px -14px rgba(40, 12, 20, .38), 0 2px 6px rgba(0, 0, 0, .06) !important;
-        padding-bottom: 6px !important;
-    }
-    html[data-theme=dark] .app .sb { box-shadow: var(--s-in), 0 18px 44px -12px rgba(0, 0, 0, .8) !important }
-    .app .sb .nv.on, html[data-theme=dark] .app .sb .nv.on { border-radius: 16px }
-    .app .mn { padding-bottom: calc(108px + var(--sab)) !important }
+  :where(.app) .cd,
+  html[data-theme='dark'] :where(.app) .cd {
+    background: var(--s-card-m);
+  }
+  .app .sb,
+  html[data-theme='dark'] .app .sb {
+    left: 10px !important;
+    right: 10px !important;
+    bottom: calc(10px + var(--sab)) !important;
+    width: auto !important;
+    border-radius: 22px !important;
+    border: 1px solid var(--s-edge) !important;
+    background: var(--s-bar-m) !important;
+    box-shadow:
+      var(--s-in),
+      0 16px 40px -14px rgba(40, 12, 20, 0.38),
+      0 2px 6px rgba(0, 0, 0, 0.06) !important;
+    padding-bottom: 6px !important;
+  }
+  html[data-theme='dark'] .app .sb {
+    box-shadow:
+      var(--s-in),
+      0 18px 44px -12px rgba(0, 0, 0, 0.8) !important;
+  }
+  .app .sb .nv.on,
+  html[data-theme='dark'] .app .sb .nv.on {
+    border-radius: 16px;
+  }
+  .app .mn {
+    padding-bottom: calc(108px + var(--sab)) !important;
+  }
 }
 
 /* ---------- หน้าเข้าสู่ระบบ ---------- */
-.au .al, html[data-theme=dark] .au .al {
-    background:
-        radial-gradient(700px 520px at 85% 110%, rgba(198, 44, 68, .5), transparent 60%),
-        radial-gradient(600px 400px at 0% 0%, rgba(122, 12, 32, .55), transparent 65%),
-        linear-gradient(165deg, rgba(31, 10, 16, .9) 0%, rgba(59, 13, 24, .86) 55%, rgba(90, 16, 34, .84) 100%) !important;
+.au .al,
+html[data-theme='dark'] .au .al {
+  background:
+    radial-gradient(700px 520px at 85% 110%, rgba(198, 44, 68, 0.5), transparent 60%),
+    radial-gradient(600px 400px at 0% 0%, rgba(122, 12, 32, 0.55), transparent 65%),
+    linear-gradient(
+      165deg,
+      rgba(31, 10, 16, 0.9) 0%,
+      rgba(59, 13, 24, 0.86) 55%,
+      rgba(90, 16, 34, 0.84) 100%
+    ) !important;
 }
-.au .cd.gc, html[data-theme=dark] .au .cd.gc {
-    background: var(--s-card) !important; border-color: var(--s-edge) !important;
-    box-shadow: var(--s-in) !important;
+.au .cd.gc,
+html[data-theme='dark'] .au .cd.gc {
+  background: var(--s-card) !important;
+  border-color: var(--s-edge) !important;
+  box-shadow: var(--s-in) !important;
 }
 @media (hover: hover) and (pointer: fine) {
-    .au .al { -webkit-backdrop-filter: blur(14px) saturate(140%); backdrop-filter: blur(14px) saturate(140%) }
-    .au .cd.gc { -webkit-backdrop-filter: var(--s-blur); backdrop-filter: var(--s-blur) }
+  .au .al {
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(14px) saturate(140%);
+  }
+  .au .cd.gc {
+    -webkit-backdrop-filter: var(--s-blur);
+    backdrop-filter: var(--s-blur);
+  }
 }
 @media (max-width: 800px) {
-    .au .cd.gc, html[data-theme=dark] .au .cd.gc { background: var(--s-card-m) !important }
+  .au .cd.gc,
+  html[data-theme='dark'] .au .cd.gc {
+    background: var(--s-card-m) !important;
+  }
 }
 
 /* ผู้ที่ตั้งค่า "ลดความโปร่งใส" ในเครื่อง: ใช้พื้นทึบ */
 @media (prefers-reduced-transparency: reduce) {
-    :root { --s-card: #fff; --s-card-m: #fff; --s-bar: #fff; --s-bar-m: #fff }
-    html[data-theme=dark] { --s-card: #161214; --s-card-m: #161214; --s-bar: #161214; --s-bar-m: #161214 }
-    :where(.app) .cd, .app .sb, .top.is-scrolled, .au .cd.gc { -webkit-backdrop-filter: none !important; backdrop-filter: none !important }
+  :root {
+    --s-card: #fff;
+    --s-card-m: #fff;
+    --s-bar: #fff;
+    --s-bar-m: #fff;
+  }
+  html[data-theme='dark'] {
+    --s-card: #161214;
+    --s-card-m: #161214;
+    --s-bar: #161214;
+    --s-bar-m: #161214;
+  }
+  :where(.app) .cd,
+  .app .sb,
+  .top.is-scrolled,
+  .au .cd.gc {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
 }
-@media print { .app::before, .au::before { display: none } }
+@media print {
+  .app::before,
+  .au::before {
+    display: none;
+  }
+}

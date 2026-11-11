@@ -3,229 +3,229 @@
 /* landing: real dashboard preview + phone */
 
 .pvw {
-    max-width: 1010px
+  max-width: 1010px;
 }
 
 .pv {
-    max-width: none
+  max-width: none;
 }
 
 .pvd p {
-    max-width: none;
-    margin: 0;
-    font-size: inherit;
-    line-height: normal;
-    color: var(--mu)
+  max-width: none;
+  margin: 0;
+  font-size: inherit;
+  line-height: normal;
+  color: var(--mu);
 }
 
 .pvd h2 {
-    text-align: left
+  text-align: left;
 }
 
 .pvx {
-    height: 520px;
-    overflow: hidden;
-    background: #fff7f7
+  height: 520px;
+  overflow: hidden;
+  background: #fff7f7;
 }
 
 .pvd {
-    zoom: .85;
-    pointer-events: none;
-    user-select: none
+  zoom: 0.85;
+  pointer-events: none;
+  user-select: none;
 }
 
 .pva {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    width: 1180px;
-    text-align: left
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  width: 1180px;
+  text-align: left;
 }
 
 .pvsb {
-    padding: 20px 14px;
-    border-right: 1px solid var(--ln);
-    background: #fff;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    font-size: 14px
+  padding: 20px 14px;
+  border-right: 1px solid var(--ln);
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
 }
 
 .pvmn {
-    padding: 22px 26px;
-    min-width: 0
+  padding: 22px 26px;
+  min-width: 0;
 }
 
 .pvd .dg3 {
-    grid-template-columns: 1.15fr 1fr 1.15fr!important
+  grid-template-columns: 1.15fr 1fr 1.15fr !important;
 }
 
 .pvd .dg3b,
 .pvd .ri {
-    grid-template-columns: repeat(3, 1fr)!important
+  grid-template-columns: repeat(3, 1fr) !important;
 }
 
 .pvd .dg2 {
-    grid-template-columns: 1fr 1fr!important
+  grid-template-columns: 1fr 1fr !important;
 }
 
 .pvf {
-    top: 12px
+  top: 12px;
 }
 
 .ph {
-    width: 210px;
-    height: 410px;
-    right: -34px;
-    bottom: -60px;
-    border-width: 7px;
-    border-radius: 34px;
-    text-align: left;
-    background: #f9fafb
+  width: 210px;
+  height: 410px;
+  right: -34px;
+  bottom: -60px;
+  border-width: 7px;
+  border-radius: 34px;
+  text-align: left;
+  background: #f9fafb;
 }
 
 .pnt {
-    position: absolute;
-    top: 6px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 70px;
-    height: 18px;
-    background: #111827;
-    border-radius: 99px;
-    z-index: 2
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 18px;
+  background: #111827;
+  border-radius: 99px;
+  z-index: 2;
 }
 
 .phh2 {
-    background: linear-gradient(160deg, #991b1b, #dc2626);
-    color: #fff;
-    padding: 30px 12px 14px
+  background: linear-gradient(160deg, #991b1b, #dc2626);
+  color: #fff;
+  padding: 30px 12px 14px;
 }
 
 .phc {
-    background: #ffffff26;
-    border-radius: 12px;
-    padding: 8px 10px;
-    margin: 10px 0;
-    display: grid;
-    font-size: 12px
+  background: #ffffff26;
+  border-radius: 12px;
+  padding: 8px 10px;
+  margin: 10px 0;
+  display: grid;
+  font-size: 12px;
 }
 
 .phc small {
-    opacity: .8;
-    font-size: 10px
+  opacity: 0.8;
+  font-size: 10px;
 }
 
 .phi {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 4px;
-    text-align: center;
-    font-size: 9px
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  text-align: center;
+  font-size: 9px;
 }
 
 .phi span {
-    display: grid;
-    gap: 3px;
-    justify-items: center
+  display: grid;
+  gap: 3px;
+  justify-items: center;
 }
 
 .phi i {
-    font-style: normal;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background: #fff;
-    color: #dc2626;
-    display: grid;
-    place-items: center;
-    font-size: 13px
+  font-style: normal;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #fff;
+  color: #dc2626;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
 }
 
 .phb2 {
-    padding: 10px;
-    display: grid;
-    gap: 8px
+  padding: 10px;
+  display: grid;
+  gap: 8px;
 }
 
 .pt2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
 }
 
-.pt2>div,
+.pt2 > div,
 .po {
-    background: #fff;
-    border: 1px solid var(--ln);
-    border-radius: 12px;
-    padding: 8px 10px;
-    overflow: hidden
+  background: #fff;
+  border: 1px solid var(--ln);
+  border-radius: 12px;
+  padding: 8px 10px;
+  overflow: hidden;
 }
 
 .pt2 small,
 .po small {
-    display: block;
-    font-size: 9px;
-    color: #6b7280
+  display: block;
+  font-size: 9px;
+  color: #6b7280;
 }
 
 .pt2 b {
-    font-size: 14px
+  font-size: 14px;
 }
 
 .po b {
-    float: right;
-    color: #dc2626;
-    font-size: 12px
+  float: right;
+  color: #dc2626;
+  font-size: 12px;
 }
 
 .pnb {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    justify-content: space-around;
-    background: #fff;
-    border-top: 1px solid var(--ln);
-    padding: 6px 0 8px;
-    font-size: 9px;
-    text-align: center;
-    color: #6b7280
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  background: #fff;
+  border-top: 1px solid var(--ln);
+  padding: 6px 0 8px;
+  font-size: 9px;
+  text-align: center;
+  color: #6b7280;
 }
 
 .pnb .on {
-    color: #dc2626;
-    font-weight: 700
+  color: #dc2626;
+  font-weight: 700;
 }
 
-@media(max-width:1100px) {
-    .pvd {
-        zoom: .62
-    }
-    .pvx {
-        height: 400px
-    }
-    .pvw {
-        max-width: 780px
-    }
+@media (max-width: 1100px) {
+  .pvd {
+    zoom: 0.62;
+  }
+  .pvx {
+    height: 400px;
+  }
+  .pvw {
+    max-width: 780px;
+  }
 }
 
-@media(max-width:800px) {
-    .pv {
-        display: none
-    }
-    .pvw {
-        margin-top: 30px;
-        height: 430px
-    }
-    .ph {
-        position: relative;
-        right: auto;
-        bottom: auto;
-        margin: 0 auto;
-        width: 200px;
-        height: 400px
-    }
+@media (max-width: 800px) {
+  .pv {
+    display: none;
+  }
+  .pvw {
+    margin-top: 30px;
+    height: 430px;
+  }
+  .ph {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    margin: 0 auto;
+    width: 200px;
+    height: 400px;
+  }
 }

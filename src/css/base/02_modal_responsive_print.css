@@ -1,126 +1,125 @@
 /* 02_modal_responsive_print.css — Modal, QR, มือถือ (800px), พิมพ์, keyframes พื้นฐาน
    (แยกมาจาก style.css บรรทัด 316-439; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 #mo {
-    position: fixed;
-    inset: 0;
-    background: #000a;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 50;
-    padding: 16px
+  position: fixed;
+  inset: 0;
+  background: #000a;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 16px;
 }
 
 #mo .cd {
-    max-width: 420px;
-    width: 100%;
-    max-height: 90vh;
-    overflow: auto;
-    background: #0b1324
+  max-width: 420px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: auto;
+  background: #0b1324;
 }
 
 .big {
-    font-size: 34px;
-    font-weight: 700;
-    color: var(--ac)
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--ac);
 }
 
 .qr {
-    background: #fff;
-    border-radius: 12px;
-    padding: 8px;
-    width: 240px;
-    margin: 10px auto
+  background: #fff;
+  border-radius: 12px;
+  padding: 8px;
+  width: 240px;
+  margin: 10px auto;
 }
 
 .qr svg {
-    width: 100%;
-    height: auto
+  width: 100%;
+  height: auto;
 }
 
 .row {
-    display: flex;
-    gap: 12px
+  display: flex;
+  gap: 12px;
 }
 
-.row>* {
-    flex: 1
+.row > * {
+  flex: 1;
 }
 
 .bd {
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 0
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
 }
 
-@media(max-width:800px) {
-    .app,
-    .au {
-        grid-template-columns: 1fr
-    }
-    .sb {
-        flex-direction: row;
-        overflow-x: auto;
-        border: 0
-    }
-    .nv {
-        white-space: nowrap
-    }
-    .g4 {
-        grid-template-columns: 1fr 1fr
-    }
-    .rg {
-        grid-template-columns: repeat(3, 1fr)
-    }
-    .mn {
-        padding: 16px
-    }
-    .au {
-        gap: 10px
-    }
+@media (max-width: 800px) {
+  .app,
+  .au {
+    grid-template-columns: 1fr;
+  }
+  .sb {
+    flex-direction: row;
+    overflow-x: auto;
+    border: 0;
+  }
+  .nv {
+    white-space: nowrap;
+  }
+  .g4 {
+    grid-template-columns: 1fr 1fr;
+  }
+  .rg {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .mn {
+    padding: 16px;
+  }
+  .au {
+    gap: 10px;
+  }
 }
 
 @media print {
-    body * {
-        visibility: hidden
-    }
-    #mo,
-    #mo * {
-        visibility: visible
-    }
-    #mo {
-        position: absolute;
-        background: #fff
-    }
-    #mo .cd {
-        background: #fff;
-        color: #000;
-        border: 0
-    }
-    .np {
-        display: none
-    }
+  body * {
+    visibility: hidden;
+  }
+  #mo,
+  #mo * {
+    visibility: visible;
+  }
+  #mo {
+    position: absolute;
+    background: #fff;
+  }
+  #mo .cd {
+    background: #fff;
+    color: #000;
+    border: 0;
+  }
+  .np {
+    display: none;
+  }
 }
 
 @keyframes fi {
-    from {
-        opacity: 0;
-        transform: translateY(8px)
-    }
-    to {
-        opacity: 1;
-        transform: none
-    }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes pop {
-    from {
-        opacity: 0;
-        transform: scale(.96)
-    }
-    to {
-        opacity: 1;
-        transform: none
-    }
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
-

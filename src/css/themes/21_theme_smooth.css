@@ -2,28 +2,59 @@
    (ไฟล์ใหม่ โหลดต่อจาก 20 · ทำงานคู่กับ applyTheme() ใน js/18_shell_render_v2_helpers.js) */
 
 /* ให้สกรอลบาร์/ช่องฟอร์มของเบราว์เซอร์เปลี่ยนตามธีมด้วย */
-html { color-scheme: light }
-html[data-theme=dark] { color-scheme: dark }
+html {
+  color-scheme: light;
+}
+html[data-theme='dark'] {
+  color-scheme: dark;
+}
 
 /* 1) วิธีหลัก: View Transitions — ภาพหน้าเดิมค้างไว้ แล้วภาพธีมใหม่ค่อยๆ ซ้อนขึ้นมา
       ทั้งหน้าเปลี่ยนพร้อมกันด้วยเวลาและจังหวะเดียวกัน (พื้นหลังไล่สี เงา การ์ด ตัวหนังสือ ไม่กระตุก) */
-html.theme-vt::view-transition-old(root) { animation: none; mix-blend-mode: normal }
-html.theme-vt::view-transition-new(root) { animation: tt-theme-in .6s cubic-bezier(.4, 0, .2, 1) both; mix-blend-mode: normal }
-@keyframes tt-theme-in { from { opacity: 0 } to { opacity: 1 } }
+html.theme-vt::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+html.theme-vt::view-transition-new(root) {
+  animation: tt-theme-in 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+  mix-blend-mode: normal;
+}
+@keyframes tt-theme-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 
 /* 2) สำรอง (เบราว์เซอร์ไม่รองรับ): transition ชุดเดียวกันทุกองค์ประกอบ
       เดิมแต่ละอย่างใช้เวลาต่างกัน (.28s/.30s/.38s) จึงดูไล่กันเป็นช่วงๆ ตอนนี้ใช้เวลาและ easing เท่ากันหมด */
-html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after {
-    transition-property: background-color, border-color, color, fill, stroke, box-shadow, opacity !important;
-    transition-duration: .45s !important;
-    transition-timing-function: cubic-bezier(.4, 0, .2, 1) !important;
-    transition-delay: 0s !important;
+html.theme-anim *,
+html.theme-anim *::before,
+html.theme-anim *::after {
+  transition-property:
+    background-color, border-color, color, fill, stroke, box-shadow, opacity !important;
+  transition-duration: 0.45s !important;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition-delay: 0s !important;
 }
 /* ไอคอนดวงอาทิตย์/พระจันทร์ในปุ่มสลับธีมหมุนนุ่มๆ */
-html.theme-anim .thm svg, .thm svg { transition: transform .5s cubic-bezier(.4, 0, .2, 1), opacity .35s ease !important }
+html.theme-anim .thm svg,
+.thm svg {
+  transition:
+    transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.35s ease !important;
+}
 
 /* ลดการเคลื่อนไหว: เปลี่ยนทันที ไม่มีแอนิเมชัน */
 @media (prefers-reduced-motion: reduce) {
-    html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after { transition: none !important }
-    html.theme-vt::view-transition-new(root) { animation: none }
+  html.theme-anim *,
+  html.theme-anim *::before,
+  html.theme-anim *::after {
+    transition: none !important;
+  }
+  html.theme-vt::view-transition-new(root) {
+    animation: none;
+  }
 }

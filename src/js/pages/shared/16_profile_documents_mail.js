@@ -1,60 +1,380 @@
 /* 16_profile_documents_mail.js — โปรไฟล์/รูป, เอกสารใบแจ้งหนี้-ใบเสร็จ, อีเมล, สัญญา, ส่งออก CSV
    (แยกมาจาก script.js บรรทัด 1153-1210; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
-pg.prof=()=>{const ad=U.role!='tenant';return`<h2>โปรไฟล์ของฉัน</h2><p class="mu">ดูและแก้ไขข้อมูลส่วนตัว</p><div class="pf" style="margin-top:14px"><div class="cd" style="text-align:center;display:grid;gap:10px;justify-items:center;align-content:start">${av(U,120)}<h3>${e(U.name)}</h3><span class="pl ${ad?'p':'g'}">${U.role=='owner'?'เจ้าของกิจการ':ad?'ผู้ดูแลระบบ':'ผู้เช่า'}</span>${ad?'':`<p class="mu" style="margin:0">${U.room?'ห้อง '+U.room:'รอผู้ดูแลจัดห้อง'}<br>เงินแรกเข้า ฿${fm(D.set.dep)}</p>`}<input type="file" id="pf" accept="image/jpeg,image/png,image/webp" hidden onchange="pa(this)"><div><button class="b" onclick="$('#pf').click()">เปลี่ยนรูปโปรไฟล์</button>${U.av?` <button class="b b2" onclick="pr()">ลบรูป</button>`:''}</div><small class="mu">JPG / PNG / WebP · ไม่เกิน 5MB · ครอปรูปได้ก่อนบันทึก</small></div>
-<div style="display:grid;gap:14px"><div class="cd"><h3>การแสดงผล</h3><br><div class="bd" style="margin-bottom:16px"><b>ภาษา</b><span class="seg"><span class="${LANG=='th'?'on':''}" onclick="setPf('lang','th')">TH</span><span class="${LANG=='en'?'on':''}" onclick="setPf('lang','en')">EN</span></span></div><div class="bd"><b>${document.documentElement.dataset.theme=='dark'?'โหมดกลางคืน':'โหมดกลางวัน'}</b><div class="tsw ${document.documentElement.dataset.theme=='dark'?'on':''}" role="switch" onclick="setPf('theme','${document.documentElement.dataset.theme=='dark'?'light':'dark'}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><i></i></div></div></div><div class="cd"><h3>ข้อมูลส่วนตัว</h3><br><label>ชื่อ - นามสกุล</label><input id="p_n" value="${e(U.name)}"><div class="row"><div><label>เบอร์โทร</label><input id="p_t" value="${e(U.tel||'')}" placeholder="08x-xxx-xxxx"></div><div><label>อีเมล</label><input id="p_e" value="${e(U.email)}"></div></div><label>เพศ</label><select id="p_g">${['','ชาย','หญิง','อื่นๆ'].map(v=>`<option value="${v}" ${U.g==v?'selected':''}>${v||'ไม่ระบุ'}</option>`).join('')}</select>${ad?'':`<label>ห้องพัก (แก้ไขได้โดยผู้ดูแล)</label><input value="${U.room||'รอผู้ดูแลจัดห้อง'}" disabled>`}<button class="b" onclick="ps()">บันทึกข้อมูล</button></div>
-<div class="cd"><h3>เปลี่ยนรหัสผ่าน</h3><br><label>รหัสผ่านปัจจุบัน</label><input id="p_o" type="password"><div class="row"><div><label>รหัสผ่านใหม่ (อย่างน้อย 6 ตัว)</label><input id="p_w" type="password"></div><div><label>ยืนยันรหัสผ่านใหม่</label><input id="p_c" type="password"></div></div><button class="b b2" onclick="pc()">เปลี่ยนรหัสผ่าน</button></div></div></div>`};
-let CR=null;
-function pa(el){const f=el.files[0];el.value='';if(!f)return;if(!/^image\/(jpeg|png|webp)$/.test(f.type))return alert('รองรับเฉพาะไฟล์ JPG / PNG / WebP');if(f.size>5*1024*1024)return alert('ไฟล์ใหญ่เกิน 5MB กรุณาเลือกรูปที่เล็กกว่านี้');
- const rd=new FileReader;rd.onload=()=>{const m=new Image;m.onload=()=>{const z=Math.max(280/m.width,280/m.height);CR={m,s:z,min:z,x:(280-m.width*z)/2,y:(280-m.height*z)/2};
-  mo(`<h3>ครอปรูปโปรไฟล์</h3><small class="mu">ลากเพื่อจัดตำแหน่ง · เลื่อนแถบเพื่อซูม</small><canvas id="cvx" width="280" height="280" style="width:100%;max-width:280px;display:block;margin:12px auto;border-radius:12px;touch-action:none;cursor:grab"></canvas><label>ซูม</label><input id="czs" type="range" min="1" max="4" step="0.01" value="1" oninput="crz(this.value)"><button class="b" onclick="crs()">ใช้รูปนี้</button> <button class="b b2" onclick="CR=null;cm()">ยกเลิก</button>`);
-  const c=$('#cvx');c.onpointerdown=e=>{c.setPointerCapture(e.pointerId);CR.d=[e.clientX,e.clientY]};c.onpointermove=e=>{if(!CR||!CR.d)return;const k=280/c.getBoundingClientRect().width;CR.x+=(e.clientX-CR.d[0])*k;CR.y+=(e.clientY-CR.d[1])*k;CR.d=[e.clientX,e.clientY];crd()};c.onpointerup=c.onpointercancel=()=>{if(CR)CR.d=null};crd()};m.src=rd.result};rd.readAsDataURL(f)}
-function crd(){const c=$('#cvx');if(!c||!CR)return;const x=c.getContext('2d'),m=CR.m;CR.x=Math.min(0,Math.max(280-m.width*CR.s,CR.x));CR.y=Math.min(0,Math.max(280-m.height*CR.s,CR.y));x.clearRect(0,0,280,280);x.drawImage(m,CR.x,CR.y,m.width*CR.s,m.height*CR.s);x.fillStyle='rgba(0,0,0,.58)';x.beginPath();x.rect(0,0,280,280);x.moveTo(270,140);x.arc(140,140,130,0,Math.PI*2,true);x.closePath();x.fill('evenodd');x.strokeStyle='#fff';x.lineWidth=2;x.beginPath();x.arc(140,140,130,0,Math.PI*2);x.stroke()}
-function crz(v){const o=CR.s;CR.s=CR.min*v;const k=CR.s/o;CR.x=140-(140-CR.x)*k;CR.y=140-(140-CR.y)*k;crd()}
-function crs(){const o=document.createElement('canvas');o.width=o.height=256;o.getContext('2d').drawImage(CR.m,(10-CR.x)/CR.s,(10-CR.y)/CR.s,260/CR.s,260/CR.s,0,0,256,256);U.av=o.toDataURL('image/jpeg',.85);CR=null;lg('เปลี่ยนรูปโปรไฟล์');save();cm();R();tt('✓ เปลี่ยนรูปโปรไฟล์แล้ว')}
-function pr(){cf('ลบรูปโปรไฟล์?',()=>{delete U.av;lg('ลบรูปโปรไฟล์');save();R();tt('✓ ลบรูปแล้ว')})}
-function ps(){const n=$('#p_n').value.trim(),m=$('#p_e').value.trim().toLowerCase(),t=$('#p_t').value.trim();
- if(!n||!m)return alert('กรอกชื่อและอีเมล');if(!/^\S+@\S+$/.test(m))return alert('รูปแบบอีเมลไม่ถูกต้อง');if(D.users.some(x=>x.id!=U.id&&x.email==m))return alert('อีเมลนี้ถูกใช้แล้ว');
- if(t&&!/^[0-9\-+ ]{9,15}$/.test(t))return alert('เบอร์โทรไม่ถูกต้อง');Object.assign(U,{name:n,email:m,tel:t,g:$('#p_g').value});lg('แก้ไขโปรไฟล์');save();R();tt('✓ บันทึกข้อมูลแล้ว')}
-function pc(){const o=$('#p_o').value,w=$('#p_w').value;if(o!=U.pw)return alert('รหัสผ่านปัจจุบันไม่ถูกต้อง');if(w.length<6)return alert('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัว');if(w!=$('#p_c').value)return alert('ยืนยันรหัสผ่านไม่ตรงกัน');
- U.pw=w;lg('เปลี่ยนรหัสผ่าน');save();R();alert('เปลี่ยนรหัสผ่านสำเร็จ\nครั้งต่อไปให้เข้าสู่ระบบด้วยรหัสผ่านใหม่')}
+pg.prof = () => {
+  const ad = U.role != 'tenant';
+  return `<h2>โปรไฟล์ของฉัน</h2><p class="mu">ดูและแก้ไขข้อมูลส่วนตัว</p><div class="pf" style="margin-top:14px"><div class="cd" style="text-align:center;display:grid;gap:10px;justify-items:center;align-content:start">${av(U, 120)}<h3>${e(U.name)}</h3><span class="pl ${ad ? 'p' : 'g'}">${U.role == 'owner' ? 'เจ้าของกิจการ' : ad ? 'ผู้ดูแลระบบ' : 'ผู้เช่า'}</span>${ad ? '' : `<p class="mu" style="margin:0">${U.room ? 'ห้อง ' + U.room : 'รอผู้ดูแลจัดห้อง'}<br>เงินแรกเข้า ฿${fm(D.set.dep)}</p>`}<input type="file" id="pf" accept="image/jpeg,image/png,image/webp" hidden onchange="pa(this)"><div><button class="b" onclick="$('#pf').click()">เปลี่ยนรูปโปรไฟล์</button>${U.av ? ` <button class="b b2" onclick="pr()">ลบรูป</button>` : ''}</div><small class="mu">JPG / PNG / WebP · ไม่เกิน 5MB · ครอปรูปได้ก่อนบันทึก</small></div>
+<div style="display:grid;gap:14px"><div class="cd"><h3>การแสดงผล</h3><br><div class="bd" style="margin-bottom:16px"><b>ภาษา</b><span class="seg"><span class="${LANG == 'th' ? 'on' : ''}" onclick="setPf('lang','th')">TH</span><span class="${LANG == 'en' ? 'on' : ''}" onclick="setPf('lang','en')">EN</span></span></div><div class="bd"><b>${document.documentElement.dataset.theme == 'dark' ? 'โหมดกลางคืน' : 'โหมดกลางวัน'}</b><div class="tsw ${document.documentElement.dataset.theme == 'dark' ? 'on' : ''}" role="switch" onclick="setPf('theme','${document.documentElement.dataset.theme == 'dark' ? 'light' : 'dark'}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><i></i></div></div></div><div class="cd"><h3>ข้อมูลส่วนตัว</h3><br><label>ชื่อ - นามสกุล</label><input id="p_n" value="${e(U.name)}"><div class="row"><div><label>เบอร์โทร</label><input id="p_t" value="${e(U.tel || '')}" placeholder="08x-xxx-xxxx"></div><div><label>อีเมล</label><input id="p_e" value="${e(U.email)}"></div></div><label>เพศ</label><select id="p_g">${['', 'ชาย', 'หญิง', 'อื่นๆ'].map(v => `<option value="${v}" ${U.g == v ? 'selected' : ''}>${v || 'ไม่ระบุ'}</option>`).join('')}</select>${ad ? '' : `<label>ห้องพัก (แก้ไขได้โดยผู้ดูแล)</label><input value="${U.room || 'รอผู้ดูแลจัดห้อง'}" disabled>`}<button class="b" onclick="ps()">บันทึกข้อมูล</button></div>
+<div class="cd"><h3>เปลี่ยนรหัสผ่าน</h3><br><label>รหัสผ่านปัจจุบัน</label><input id="p_o" type="password"><div class="row"><div><label>รหัสผ่านใหม่ (อย่างน้อย 6 ตัว)</label><input id="p_w" type="password"></div><div><label>ยืนยันรหัสผ่านใหม่</label><input id="p_c" type="password"></div></div><button class="b b2" onclick="pc()">เปลี่ยนรหัสผ่าน</button></div></div></div>`;
+};
+let CR = null;
+function pa(el) {
+  const f = el.files[0];
+  el.value = '';
+  if (!f) return;
+  if (!/^image\/(jpeg|png|webp)$/.test(f.type)) return alert('รองรับเฉพาะไฟล์ JPG / PNG / WebP');
+  if (f.size > 5 * 1024 * 1024) return alert('ไฟล์ใหญ่เกิน 5MB กรุณาเลือกรูปที่เล็กกว่านี้');
+  const rd = new FileReader();
+  rd.onload = () => {
+    const m = new Image();
+    m.onload = () => {
+      const z = Math.max(280 / m.width, 280 / m.height);
+      CR = { m, s: z, min: z, x: (280 - m.width * z) / 2, y: (280 - m.height * z) / 2 };
+      mo(
+        `<h3>ครอปรูปโปรไฟล์</h3><small class="mu">ลากเพื่อจัดตำแหน่ง · เลื่อนแถบเพื่อซูม</small><canvas id="cvx" width="280" height="280" style="width:100%;max-width:280px;display:block;margin:12px auto;border-radius:12px;touch-action:none;cursor:grab"></canvas><label>ซูม</label><input id="czs" type="range" min="1" max="4" step="0.01" value="1" oninput="crz(this.value)"><button class="b" onclick="crs()">ใช้รูปนี้</button> <button class="b b2" onclick="CR=null;cm()">ยกเลิก</button>`
+      );
+      const c = $('#cvx');
+      c.onpointerdown = e => {
+        c.setPointerCapture(e.pointerId);
+        CR.d = [e.clientX, e.clientY];
+      };
+      c.onpointermove = e => {
+        if (!CR || !CR.d) return;
+        const k = 280 / c.getBoundingClientRect().width;
+        CR.x += (e.clientX - CR.d[0]) * k;
+        CR.y += (e.clientY - CR.d[1]) * k;
+        CR.d = [e.clientX, e.clientY];
+        crd();
+      };
+      c.onpointerup = c.onpointercancel = () => {
+        if (CR) CR.d = null;
+      };
+      crd();
+    };
+    m.src = rd.result;
+  };
+  rd.readAsDataURL(f);
+}
+function crd() {
+  const c = $('#cvx');
+  if (!c || !CR) return;
+  const x = c.getContext('2d'),
+    m = CR.m;
+  CR.x = Math.min(0, Math.max(280 - m.width * CR.s, CR.x));
+  CR.y = Math.min(0, Math.max(280 - m.height * CR.s, CR.y));
+  x.clearRect(0, 0, 280, 280);
+  x.drawImage(m, CR.x, CR.y, m.width * CR.s, m.height * CR.s);
+  x.fillStyle = 'rgba(0,0,0,.58)';
+  x.beginPath();
+  x.rect(0, 0, 280, 280);
+  x.moveTo(270, 140);
+  x.arc(140, 140, 130, 0, Math.PI * 2, true);
+  x.closePath();
+  x.fill('evenodd');
+  x.strokeStyle = '#fff';
+  x.lineWidth = 2;
+  x.beginPath();
+  x.arc(140, 140, 130, 0, Math.PI * 2);
+  x.stroke();
+}
+function crz(v) {
+  const o = CR.s;
+  CR.s = CR.min * v;
+  const k = CR.s / o;
+  CR.x = 140 - (140 - CR.x) * k;
+  CR.y = 140 - (140 - CR.y) * k;
+  crd();
+}
+function crs() {
+  const o = document.createElement('canvas');
+  o.width = o.height = 256;
+  o.getContext('2d').drawImage(
+    CR.m,
+    (10 - CR.x) / CR.s,
+    (10 - CR.y) / CR.s,
+    260 / CR.s,
+    260 / CR.s,
+    0,
+    0,
+    256,
+    256
+  );
+  U.av = o.toDataURL('image/jpeg', 0.85);
+  CR = null;
+  lg('เปลี่ยนรูปโปรไฟล์');
+  save();
+  cm();
+  R();
+  tt('✓ เปลี่ยนรูปโปรไฟล์แล้ว');
+}
+function pr() {
+  cf('ลบรูปโปรไฟล์?', () => {
+    delete U.av;
+    lg('ลบรูปโปรไฟล์');
+    save();
+    R();
+    tt('✓ ลบรูปแล้ว');
+  });
+}
+function ps() {
+  const n = $('#p_n').value.trim(),
+    m = $('#p_e').value.trim().toLowerCase(),
+    t = $('#p_t').value.trim();
+  if (!n || !m) return alert('กรอกชื่อและอีเมล');
+  if (!/^\S+@\S+$/.test(m)) return alert('รูปแบบอีเมลไม่ถูกต้อง');
+  if (D.users.some(x => x.id != U.id && x.email == m)) return alert('อีเมลนี้ถูกใช้แล้ว');
+  if (t && !/^[0-9\-+ ]{9,15}$/.test(t)) return alert('เบอร์โทรไม่ถูกต้อง');
+  Object.assign(U, { name: n, email: m, tel: t, g: $('#p_g').value });
+  lg('แก้ไขโปรไฟล์');
+  save();
+  R();
+  tt('✓ บันทึกข้อมูลแล้ว');
+}
+function pc() {
+  const o = $('#p_o').value,
+    w = $('#p_w').value;
+  if (o != U.pw) return alert('รหัสผ่านปัจจุบันไม่ถูกต้อง');
+  if (w.length < 6) return alert('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัว');
+  if (w != $('#p_c').value) return alert('ยืนยันรหัสผ่านไม่ตรงกัน');
+  U.pw = w;
+  lg('เปลี่ยนรหัสผ่าน');
+  save();
+  R();
+  alert('เปลี่ยนรหัสผ่านสำเร็จ\nครั้งต่อไปให้เข้าสู่ระบบด้วยรหัสผ่านใหม่');
+}
 
-const B=n=>'฿'+Number(n).toLocaleString(LOCF(),{minimumFractionDigits:2,maximumFractionDigits:2});
-function docHTML(i,k,nl){if(k=='rcp')return rcpHTML(i);const S=D.set,inv=k=='inv',c=inv?'#a8122c':'#16a34a',u=tu(i)||{},nm=S.name||'T&T Mansion',
- f=inv?0:(i.fine||0),T=inv?base(i):tot(i),rows=[['ค่าเช่าห้อง',i.rent],['ค่าไฟฟ้า ('+i.pv+' - '+(i.pv+i.u)+') ใช้ '+i.u+' หน่วย × '+S.rate,i.el]];
- if(i.x)rows.push([i.xn||'ค่าใช้จ่ายเพิ่มเติม',i.x]);if(f)rows.push(['ค่าปรับล่าช้า',f]);
- const H=(l,v,b)=>`<tr><td style="padding:6px 0;color:#64748b;vertical-align:top">${e(l)}</td><td style="padding:6px 0 6px 12px;text-align:right;${b?'font-weight:700;color:#0f172a':'color:#0f172a'}">${v}</td></tr>`,
- url=/^https?:\/\//.test(S.url||'')?e(S.url):'';
- return`<div class="doc" style="font-family:Tahoma,Arial,sans-serif;max-width:480px;margin:0 auto;background:#fff;color:#0f172a;border-radius:16px;overflow:hidden;border:1px solid #e2e8f0;text-align:left">
-<div style="background:${c};color:#fff;text-align:center;padding:24px 16px"><div style="font-size:26px;font-weight:700">${inv?'ใบแจ้งหนี้':'ใบเสร็จรับเงิน'}</div><div>${e(nm)}</div></div>
-<div style="padding:20px;font-size:14px"><table style="width:100%;border-collapse:collapse">${H('ผู้เช่า','คุณ '+e(u.name||'-')+' ห้อง '+i.room,1)}${H('เลขที่บิล',i.id,1)}${H('รอบบิล',mon(i.per),1)}${H(inv?'ครบกำหนด':'วันที่ชำระ',inv?dt(due(i)):dt(i.paid),1)}</table>
-<div style="border-top:1px solid #e2e8f0;margin:12px 0"></div><div style="font-weight:700">รายละเอียด</div><table style="width:100%;border-collapse:collapse">${rows.map(r=>H(r[0],B(r[1]))).join('')}</table>
-<div style="background:${inv?'#f9eef0':'#dcfce7'};border-radius:12px;text-align:center;padding:16px;margin:16px 0"><div style="color:#64748b">${inv?'ยอดชำระทั้งสิ้น':'ยอดที่ชำระ'}</div><div style="font-size:32px;font-weight:700;color:${c}">${B(T)}</div></div>
-${inv?`<div style="font-weight:700">ช่องทางการชำระเงิน</div><div style="color:#475569;margin:6px 0">ชำระผ่าน PromptPay QR ในระบบ แล้วแนบสลิปโอนเงิน${S.pp?'<br>PromptPay: <b style="color:#0f172a">'+e(S.pp)+'</b>':''}<br>หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div><div style="color:#b45309;font-size:12px">ชำระหลังวันที่ ${S.due} ของเดือนถัดไป มีค่าปรับวันละ 50 บาท สูงสุด ${S.max} บาท</div>${url&&!nl?`<a href="${url}" style="display:block;background:${c};color:#fff;text-align:center;text-decoration:none;padding:12px;border-radius:10px;margin-top:14px;font-weight:700">ดูใบแจ้งหนี้ / ชำระเงิน</a>`:''}`
-:`<div style="background:#f1f5f9;border-radius:10px;padding:12px;color:#166534">✓ ได้รับชำระเงินเรียบร้อยแล้ว<br><span style="color:#475569">วิธีชำระ: ${i.mt=='qr'?'โอนเงิน (PromptPay)':'เงินสด'}</span></div><div style="color:#475569;margin-top:12px">ผู้รับเงิน: ${e(S.payee||nm)}</div>`}
-<div style="color:#94a3b8;font-size:12px;text-align:center;margin-top:16px">${S.addr?e(S.addr)+'<br>':''}${S.tel?'โทร '+e(S.tel)+'<br>':''}ขอบคุณที่ใช้บริการ ${e(nm)}</div></div></div>`}
-const vi=id=>{const i=gi(id),can=U&&U.role=='tenant'&&i.s=='unpaid'&&mine(i),can2=U&&U.role=='tenant'&&i.s=='pending'&&i.mt!='cash'&&mine(i);mo(docHTML(i,'inv',1)+'<br><div class="np" style="display:flex;gap:8px;flex-wrap:wrap">'+(can?`<button class="b" onclick="pm('${id}')">ชำระเงิน</button>`:'')+(can2?`<button class="b" onclick="pm('${id}')">แก้ไข/ส่งสลิปใหม่</button>`:'')+'<button class="b b2" onclick="cm()">ปิด</button></div>')};
-async function mail(k,i,re){const u=tu(i);if(!u)return;D.mail=D.mail||[];const S=D.set,sj=(k=='inv'?'ใบแจ้งหนี้ ':'ใบเสร็จรับเงิน ')+mon(i.per)+' ห้อง '+i.room+' - '+(S.name||'T&T Mansion');
- const m=re||{t:Date.now(),to:u.email,sj,k,inv:i.id,st:'sending'};if(!re){D.mail.unshift(m);D.mail=D.mail.slice(0,100)}m.to=u.email;
- if(!(S.ejs&&S.ejt&&S.ejk)){m.st='wait';m.er='ยังไม่ได้ตั้งค่า EmailJS ในหน้าตั้งค่า';save();if(P=='rep')R();return}
- try{const r=await fetch('https://api.emailjs.com/api/v1.0/email/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({service_id:S.ejs,template_id:S.ejt,user_id:S.ejk,template_params:{to_email:u.email,to_name:u.name,subject:sj,message_html:docHTML(i,k)}})});
-  if(!r.ok)throw new Error(await r.text());m.st='ok';m.er='';m.t=Date.now()}catch(x){m.st='fail';m.er=String(x.message||x).slice(0,120)}
- save();if(P=='rep')R()}
-function pv(x){const m=D.mail[x],i=gi(m.inv);mo(`<small class="mu">ถึง ${e(m.to)}<br>เรื่อง ${e(m.sj)}</small><br><br>${docHTML(i,m.k)}<br><button class="b b2" onclick="cm()">ปิด</button>`)}
-function rs2(x){const m=D.mail[x];m.st='sending';R();mail(m.k,gi(m.inv),m)}
-pg.con=()=>{const ad=U.role=='admin',t=D.users.filter(u=>u.role=='tenant'&&u.room&&(U.role!='tenant'||u.id==U.id)).sort((a,b)=>!!a.out-!!b.out||a.room-b.room);
-return`<h2>สัญญาเช่า</h2><input type="file" id="cpi" accept="application/pdf" hidden onchange="cpf(this)"><p class="mu">เงินแรกเข้า ฿${fm(D.set.dep)} (มัดจำ + ค่าเช่าล่วงหน้า) บันทึกครั้งเดียว ณ วันเริ่มสัญญา</p><div class="cd sc" style="margin-top:14px"><table><tr><th>ห้อง</th><th>ผู้เช่า</th><th>เริ่มสัญญา</th><th>สิ้นสุด</th><th>เงินแรกเข้า</th><th>สถานะ</th><th>ไฟล์สัญญา (PDF)</th>${ad?'<th></th>':''}</tr>${t.map(u=>`<tr><td>${u.room}</td><td>${e(u.name)}</td><td>${dt(u.cs||u.id)}</td><td>${u.ce?dt(u.ce):'ไม่กำหนด'}</td><td>฿${fm(D.set.dep)}</td><td>${u.out?'<span class="pl r">สิ้นสุดสัญญา</span>':'<span class="pl g">มีผลบังคับใช้</span>'}</td><td>${pdfc(u.room,ad)}</td>${ad?`<td><button class="b b2 sm" onclick="ec(${u.id})">แก้ไขวันที่</button></td>`:''}</tr>`).join('')||'<tr><td colspan=8 class=mu>ไม่มีข้อมูล</td></tr>'}</table></div>`};
-const iv=ts=>ts?new Date(ts-new Date(ts).getTimezoneOffset()*6e4).toISOString().slice(0,10):'';
-function ec(id){const u=D.users.find(x=>x.id==id);mo(`<h3>สัญญาเช่า ห้อง ${u.room}</h3><label>วันเริ่มสัญญา</label><input id="c_s" type="date" value="${iv(u.cs||u.id)}"><label>วันสิ้นสุดสัญญา (เว้นว่างได้)</label><input id="c_e" type="date" value="${iv(u.ce)}"><button class="b" onclick="sc2(${id})">บันทึก</button> <button class="b b2" onclick="cm()">ยกเลิก</button>`)}
-function sc2(id){const u=D.users.find(x=>x.id==id),a=$('#c_s').value,b=$('#c_e').value;if(!a)return alert('ระบุวันเริ่มสัญญา');if(b&&b<a)return alert('วันสิ้นสุดต้องไม่ก่อนวันเริ่มสัญญา');u.cs=new Date(a).getTime();if(b)u.ce=new Date(b).getTime();else delete u.ce;lg('แก้ไขสัญญา ห้อง '+u.room);save();cm();R();tt('✓ บันทึกสัญญาแล้ว')}
-function th(id){const u=D.users.find(x=>x.id==id),l=D.inv.filter(i=>i.uid?i.uid==id:i.room==u.room).sort((a,b)=>b.per.localeCompare(a.per));mo(`<h3>ประวัติชำระ ${e(u.name)}</h3><small class="mu">ห้อง ${u.room}</small><div class="sc"><table><tr><th>รอบบิล</th><th>ยอด</th><th>สถานะ</th><th>วันที่ชำระ</th></tr>${l.map(i=>`<tr><td>${mon(i.per)}</td><td>฿${fm(tot(i))}</td><td>${pill(i)}</td><td>${i.paid?dt(i.paid):'-'}</td></tr>`).join('')||'<tr><td colspan=4 class=mu>ยังไม่มีบิล</td></tr>'}</table></div><br><button class="b b2" onclick="cm()">ปิด</button>`)}
-async function xc(){const h=['เลขที่บิล','ห้อง','ผู้เช่า','รอบบิล','ค่าเช่า','ค่าไฟ','อื่นๆ','ค่าปรับ','ยอดสุทธิ','สถานะ','วิธีชำระ'],q=v=>'"'+String(v??'').replace(/"/g,'""')+'"',rows=D.inv.map(i=>[i.id,i.room,(tu(i)||{}).name,i.per,i.rent,i.el,i.x||0,tot(i)-base(i),tot(i),SL[st(i)][0],i.mt||'']),txt='\ufeff'+[h,...rows].map(x=>x.map(q).join(',')).join('\n'),blob=new Blob([txt],{type:'text/csv;charset=utf-8'});let dl=null;try{dl=window.claude&&await claude.use('downloads')}catch(x){}
-if(dl){try{await dl.save({filename:'ttm-report.csv',data:blob});tt('✓ ส่งออกแล้ว');return}catch(x){if(x&&x.code=='declined')return}}
-const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ttm-report.csv';a.click()}
-function cwh(ev){const w=ev.target.closest&&ev.target.closest('.cw');document.querySelectorAll('.cw.on').forEach(x=>{if(x!==w){x.classList.remove('on');x.querySelector('.tp').style.display='none';x.querySelectorAll('.hv,.hd').forEach(n=>n.setAttribute('opacity',0))}});if(!w)return;
- const sv=w.querySelector('svg'),r=sv.getBoundingClientRect(),v=JSON.parse(w.dataset.v),l=JSON.parse(w.dataset.l),n=v.length,mx=Math.max(...v,1),px=(ev.clientX-r.left)/r.width*600,X=i=>70+520*(n>1?i/(n-1):.5);
- let k=0,bd=1e9;for(let i=0;i<n;i++){const d=Math.abs(X(i)-px);if(d<bd){bd=d;k=i}}
- const cx=X(k),cy=8+166*(1-v[k]/mx),hv=w.querySelector('.hv'),hd=w.querySelector('.hd'),tp=w.querySelector('.tp');
- hv.setAttribute('x1',cx);hv.setAttribute('x2',cx);hv.setAttribute('opacity',1);hd.setAttribute('cx',cx);hd.setAttribute('cy',cy);hd.setAttribute('opacity',1);
- tp.innerHTML=`<b>${l[k]}</b><div><i style="background:${w.dataset.c}"></i>${w.dataset.n} <b>฿${fm(v[k])}</b></div>`;tp.style.display='block';w.classList.add('on');
- const tw=tp.offsetWidth,lx=cx/600*r.width;tp.style.left=Math.max(0,Math.min(r.width-tw,lx-tw/2))+'px';tp.style.top=Math.max(0,cy/200*r.height-tp.offsetHeight-14)+'px'}
-['pointermove','pointerdown'].forEach(t=>document.addEventListener(t,cwh));document.addEventListener('mouseout',ev=>{if(!ev.relatedTarget)cwh({target:document.body})});
+const B = n =>
+  '฿' + Number(n).toLocaleString(LOCF(), { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+function docHTML(i, k, nl) {
+  if (k == 'rcp') return rcpHTML(i);
+  const S = D.set,
+    inv = k == 'inv',
+    c = inv ? '#a8122c' : '#16a34a',
+    u = tu(i) || {},
+    nm = S.name || 'T&T Mansion',
+    f = inv ? 0 : i.fine || 0,
+    T = inv ? base(i) : tot(i),
+    rows = [
+      ['ค่าเช่าห้อง', i.rent],
+      ['ค่าไฟฟ้า (' + i.pv + ' - ' + (i.pv + i.u) + ') ใช้ ' + i.u + ' หน่วย × ' + S.rate, i.el],
+    ];
+  if (i.x) rows.push([i.xn || 'ค่าใช้จ่ายเพิ่มเติม', i.x]);
+  if (f) rows.push(['ค่าปรับล่าช้า', f]);
+  const H = (l, v, b) =>
+      `<tr><td style="padding:6px 0;color:#64748b;vertical-align:top">${e(l)}</td><td style="padding:6px 0 6px 12px;text-align:right;${b ? 'font-weight:700;color:#0f172a' : 'color:#0f172a'}">${v}</td></tr>`,
+    url = /^https?:\/\//.test(S.url || '') ? e(S.url) : '';
+  return `<div class="doc" style="font-family:Tahoma,Arial,sans-serif;max-width:480px;margin:0 auto;background:#fff;color:#0f172a;border-radius:16px;overflow:hidden;border:1px solid #e2e8f0;text-align:left">
+<div style="background:${c};color:#fff;text-align:center;padding:24px 16px"><div style="font-size:26px;font-weight:700">${inv ? 'ใบแจ้งหนี้' : 'ใบเสร็จรับเงิน'}</div><div>${e(nm)}</div></div>
+<div style="padding:20px;font-size:14px"><table style="width:100%;border-collapse:collapse">${H('ผู้เช่า', 'คุณ ' + e(u.name || '-') + ' ห้อง ' + i.room, 1)}${H('เลขที่บิล', i.id, 1)}${H('รอบบิล', mon(i.per), 1)}${H(inv ? 'ครบกำหนด' : 'วันที่ชำระ', inv ? dt(due(i)) : dt(i.paid), 1)}</table>
+<div style="border-top:1px solid #e2e8f0;margin:12px 0"></div><div style="font-weight:700">รายละเอียด</div><table style="width:100%;border-collapse:collapse">${rows.map(r => H(r[0], B(r[1]))).join('')}</table>
+<div style="background:${inv ? '#f9eef0' : '#dcfce7'};border-radius:12px;text-align:center;padding:16px;margin:16px 0"><div style="color:#64748b">${inv ? 'ยอดชำระทั้งสิ้น' : 'ยอดที่ชำระ'}</div><div style="font-size:32px;font-weight:700;color:${c}">${B(T)}</div></div>
+${
+  inv
+    ? `<div style="font-weight:700">ช่องทางการชำระเงิน</div><div style="color:#475569;margin:6px 0">ชำระผ่าน PromptPay QR ในระบบ แล้วแนบสลิปโอนเงิน${S.pp ? '<br>PromptPay: <b style="color:#0f172a">' + e(S.pp) + '</b>' : ''}<br>หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div><div style="color:#b45309;font-size:12px">ชำระหลังวันที่ ${S.due} ของเดือนถัดไป มีค่าปรับวันละ 50 บาท สูงสุด ${S.max} บาท</div>${url && !nl ? `<a href="${url}" style="display:block;background:${c};color:#fff;text-align:center;text-decoration:none;padding:12px;border-radius:10px;margin-top:14px;font-weight:700">ดูใบแจ้งหนี้ / ชำระเงิน</a>` : ''}`
+    : `<div style="background:#f1f5f9;border-radius:10px;padding:12px;color:#166534">✓ ได้รับชำระเงินเรียบร้อยแล้ว<br><span style="color:#475569">วิธีชำระ: ${i.mt == 'qr' ? 'โอนเงิน (PromptPay)' : 'เงินสด'}</span></div><div style="color:#475569;margin-top:12px">ผู้รับเงิน: ${e(S.payee || nm)}</div>`
+}
+<div style="color:#94a3b8;font-size:12px;text-align:center;margin-top:16px">${S.addr ? e(S.addr) + '<br>' : ''}${S.tel ? 'โทร ' + e(S.tel) + '<br>' : ''}ขอบคุณที่ใช้บริการ ${e(nm)}</div></div></div>`;
+}
+const vi = id => {
+  const i = gi(id),
+    can = U && U.role == 'tenant' && i.s == 'unpaid' && mine(i),
+    can2 = U && U.role == 'tenant' && i.s == 'pending' && i.mt != 'cash' && mine(i);
+  mo(
+    docHTML(i, 'inv', 1) +
+      '<br><div class="np" style="display:flex;gap:8px;flex-wrap:wrap">' +
+      (can ? `<button class="b" onclick="pm('${id}')">ชำระเงิน</button>` : '') +
+      (can2 ? `<button class="b" onclick="pm('${id}')">แก้ไข/ส่งสลิปใหม่</button>` : '') +
+      '<button class="b b2" onclick="cm()">ปิด</button></div>'
+  );
+};
+async function mail(k, i, re) {
+  const u = tu(i);
+  if (!u) return;
+  D.mail = D.mail || [];
+  const S = D.set,
+    sj =
+      (k == 'inv' ? 'ใบแจ้งหนี้ ' : 'ใบเสร็จรับเงิน ') +
+      mon(i.per) +
+      ' ห้อง ' +
+      i.room +
+      ' - ' +
+      (S.name || 'T&T Mansion');
+  const m = re || { t: Date.now(), to: u.email, sj, k, inv: i.id, st: 'sending' };
+  if (!re) {
+    D.mail.unshift(m);
+    D.mail = D.mail.slice(0, 100);
+  }
+  m.to = u.email;
+  if (!(S.ejs && S.ejt && S.ejk)) {
+    m.st = 'wait';
+    m.er = 'ยังไม่ได้ตั้งค่า EmailJS ในหน้าตั้งค่า';
+    save();
+    if (P == 'rep') R();
+    return;
+  }
+  try {
+    const r = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        service_id: S.ejs,
+        template_id: S.ejt,
+        user_id: S.ejk,
+        template_params: {
+          to_email: u.email,
+          to_name: u.name,
+          subject: sj,
+          message_html: docHTML(i, k),
+        },
+      }),
+    });
+    if (!r.ok) throw new Error(await r.text());
+    m.st = 'ok';
+    m.er = '';
+    m.t = Date.now();
+  } catch (x) {
+    m.st = 'fail';
+    m.er = String(x.message || x).slice(0, 120);
+  }
+  save();
+  if (P == 'rep') R();
+}
+function pv(x) {
+  const m = D.mail[x],
+    i = gi(m.inv);
+  mo(
+    `<small class="mu">ถึง ${e(m.to)}<br>เรื่อง ${e(m.sj)}</small><br><br>${docHTML(i, m.k)}<br><button class="b b2" onclick="cm()">ปิด</button>`
+  );
+}
+function rs2(x) {
+  const m = D.mail[x];
+  m.st = 'sending';
+  R();
+  mail(m.k, gi(m.inv), m);
+}
+pg.con = () => {
+  const ad = U.role == 'admin',
+    t = D.users
+      .filter(u => u.role == 'tenant' && u.room && (U.role != 'tenant' || u.id == U.id))
+      .sort((a, b) => !!a.out - !!b.out || a.room - b.room);
+  return `<h2>สัญญาเช่า</h2><input type="file" id="cpi" accept="application/pdf" hidden onchange="cpf(this)"><p class="mu">เงินแรกเข้า ฿${fm(D.set.dep)} (มัดจำ + ค่าเช่าล่วงหน้า) บันทึกครั้งเดียว ณ วันเริ่มสัญญา</p><div class="cd sc" style="margin-top:14px"><table><tr><th>ห้อง</th><th>ผู้เช่า</th><th>เริ่มสัญญา</th><th>สิ้นสุด</th><th>เงินแรกเข้า</th><th>สถานะ</th><th>ไฟล์สัญญา (PDF)</th>${ad ? '<th></th>' : ''}</tr>${t.map(u => `<tr><td>${u.room}</td><td>${e(u.name)}</td><td>${dt(u.cs || u.id)}</td><td>${u.ce ? dt(u.ce) : 'ไม่กำหนด'}</td><td>฿${fm(D.set.dep)}</td><td>${u.out ? '<span class="pl r">สิ้นสุดสัญญา</span>' : '<span class="pl g">มีผลบังคับใช้</span>'}</td><td>${pdfc(u.room, ad)}</td>${ad ? `<td><button class="b b2 sm" onclick="ec(${u.id})">แก้ไขวันที่</button></td>` : ''}</tr>`).join('') || '<tr><td colspan=8 class=mu>ไม่มีข้อมูล</td></tr>'}</table></div>`;
+};
+const iv = ts =>
+  ts ? new Date(ts - new Date(ts).getTimezoneOffset() * 6e4).toISOString().slice(0, 10) : '';
+function ec(id) {
+  const u = D.users.find(x => x.id == id);
+  mo(
+    `<h3>สัญญาเช่า ห้อง ${u.room}</h3><label>วันเริ่มสัญญา</label><input id="c_s" type="date" value="${iv(u.cs || u.id)}"><label>วันสิ้นสุดสัญญา (เว้นว่างได้)</label><input id="c_e" type="date" value="${iv(u.ce)}"><button class="b" onclick="sc2(${id})">บันทึก</button> <button class="b b2" onclick="cm()">ยกเลิก</button>`
+  );
+}
+function sc2(id) {
+  const u = D.users.find(x => x.id == id),
+    a = $('#c_s').value,
+    b = $('#c_e').value;
+  if (!a) return alert('ระบุวันเริ่มสัญญา');
+  if (b && b < a) return alert('วันสิ้นสุดต้องไม่ก่อนวันเริ่มสัญญา');
+  u.cs = new Date(a).getTime();
+  if (b) u.ce = new Date(b).getTime();
+  else delete u.ce;
+  lg('แก้ไขสัญญา ห้อง ' + u.room);
+  save();
+  cm();
+  R();
+  tt('✓ บันทึกสัญญาแล้ว');
+}
+function th(id) {
+  const u = D.users.find(x => x.id == id),
+    l = D.inv
+      .filter(i => (i.uid ? i.uid == id : i.room == u.room))
+      .sort((a, b) => b.per.localeCompare(a.per));
+  mo(
+    `<h3>ประวัติชำระ ${e(u.name)}</h3><small class="mu">ห้อง ${u.room}</small><div class="sc"><table><tr><th>รอบบิล</th><th>ยอด</th><th>สถานะ</th><th>วันที่ชำระ</th></tr>${l.map(i => `<tr><td>${mon(i.per)}</td><td>฿${fm(tot(i))}</td><td>${pill(i)}</td><td>${i.paid ? dt(i.paid) : '-'}</td></tr>`).join('') || '<tr><td colspan=4 class=mu>ยังไม่มีบิล</td></tr>'}</table></div><br><button class="b b2" onclick="cm()">ปิด</button>`
+  );
+}
+async function xc() {
+  const h = [
+      'เลขที่บิล',
+      'ห้อง',
+      'ผู้เช่า',
+      'รอบบิล',
+      'ค่าเช่า',
+      'ค่าไฟ',
+      'อื่นๆ',
+      'ค่าปรับ',
+      'ยอดสุทธิ',
+      'สถานะ',
+      'วิธีชำระ',
+    ],
+    q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"',
+    rows = D.inv.map(i => [
+      i.id,
+      i.room,
+      (tu(i) || {}).name,
+      i.per,
+      i.rent,
+      i.el,
+      i.x || 0,
+      tot(i) - base(i),
+      tot(i),
+      SL[st(i)][0],
+      i.mt || '',
+    ]),
+    txt = '\ufeff' + [h, ...rows].map(x => x.map(q).join(',')).join('\n'),
+    blob = new Blob([txt], { type: 'text/csv;charset=utf-8' });
+  let dl = null;
+  try {
+    dl = window.claude && (await claude.use('downloads'));
+  } catch (x) {}
+  if (dl) {
+    try {
+      await dl.save({ filename: 'ttm-report.csv', data: blob });
+      tt('✓ ส่งออกแล้ว');
+      return;
+    } catch (x) {
+      if (x && x.code == 'declined') return;
+    }
+  }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'ttm-report.csv';
+  a.click();
+}
+function cwh(ev) {
+  const w = ev.target.closest && ev.target.closest('.cw');
+  document.querySelectorAll('.cw.on').forEach(x => {
+    if (x !== w) {
+      x.classList.remove('on');
+      x.querySelector('.tp').style.display = 'none';
+      x.querySelectorAll('.hv,.hd').forEach(n => n.setAttribute('opacity', 0));
+    }
+  });
+  if (!w) return;
+  const sv = w.querySelector('svg'),
+    r = sv.getBoundingClientRect(),
+    v = JSON.parse(w.dataset.v),
+    l = JSON.parse(w.dataset.l),
+    n = v.length,
+    mx = Math.max(...v, 1),
+    px = ((ev.clientX - r.left) / r.width) * 600,
+    X = i => 70 + 520 * (n > 1 ? i / (n - 1) : 0.5);
+  let k = 0,
+    bd = 1e9;
+  for (let i = 0; i < n; i++) {
+    const d = Math.abs(X(i) - px);
+    if (d < bd) {
+      bd = d;
+      k = i;
+    }
+  }
+  const cx = X(k),
+    cy = 8 + 166 * (1 - v[k] / mx),
+    hv = w.querySelector('.hv'),
+    hd = w.querySelector('.hd'),
+    tp = w.querySelector('.tp');
+  hv.setAttribute('x1', cx);
+  hv.setAttribute('x2', cx);
+  hv.setAttribute('opacity', 1);
+  hd.setAttribute('cx', cx);
+  hd.setAttribute('cy', cy);
+  hd.setAttribute('opacity', 1);
+  tp.innerHTML = `<b>${l[k]}</b><div><i style="background:${w.dataset.c}"></i>${w.dataset.n} <b>฿${fm(v[k])}</b></div>`;
+  tp.style.display = 'block';
+  w.classList.add('on');
+  const tw = tp.offsetWidth,
+    lx = (cx / 600) * r.width;
+  tp.style.left = Math.max(0, Math.min(r.width - tw, lx - tw / 2)) + 'px';
+  tp.style.top = Math.max(0, (cy / 200) * r.height - tp.offsetHeight - 14) + 'px';
+}
+['pointermove', 'pointerdown'].forEach(t => document.addEventListener(t, cwh));
+document.addEventListener('mouseout', ev => {
+  if (!ev.relatedTarget) cwh({ target: document.body });
+});
