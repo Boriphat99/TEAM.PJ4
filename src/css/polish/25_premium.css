@@ -3308,3 +3308,20 @@ html[data-theme='dark'] .au .al {
 .au .al p.mu {
   color: rgba(255, 255, 255, 0.9) !important;
 }
+/* หัวข้อ/คำอธิบายหน้าที่วางบนรูปตรงๆ (ไม่อยู่ในการ์ด): เข้มขึ้น + เรืองขาวรอบตัวอักษร อ่านชัดทุกจุดของรูป */
+html:not([data-theme='dark']) .app .mn :is(h2, p.mu, .mu):not(.cd *):not(.top *):not(#mo *) {
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 0.95),
+    0 0 2px rgba(255, 255, 255, 0.9);
+}
+html:not([data-theme='dark']) .app .mn :is(p.mu, small.mu):not(.cd *):not(.top *):not(#mo *) {
+  color: #4a3a3f !important;
+}
+html[data-theme='dark'] .app .mn :is(h2, p.mu, .mu):not(.cd *):not(.top *):not(#mo *) {
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.75),
+    0 0 12px rgba(0, 0, 0, 0.55);
+}
+html[data-theme='dark'] .app .mn :is(p.mu, small.mu):not(.cd *):not(.top *):not(#mo *) {
+  color: #e2d8db !important;
+}
