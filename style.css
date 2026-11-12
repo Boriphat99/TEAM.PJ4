@@ -9204,3 +9204,276 @@ html[data-theme='dark'] .ap-dev .pv {
   }
 }
 
+/* ===================== 30) ปรับตามแนวงานฝึกงาน Botnoi =====================
+   หน้าต้อนรับ: รูปหอพักคมชัดติดจอตลอด + ฟิล์มเข้มบางๆ · ตัวหนังสือบนรูปเป็นสีขาวมีเงานุ่ม
+                ทุกกล่องเป็นกระจกใส (Liquid Glass) · แถบเมนู/ท้ายหน้าเป็นกระจกฝ้า
+   หน้าในระบบธีมสว่าง: รูปเดียวกันแบบเบลอฟุ้ง + ฟิล์มขาวนวล (วอลเปเปอร์แบบ iOS) ตัวหนังสือเข้มอ่านง่าย
+   หน้าในระบบธีมมืด: รูปคมชัด + ฟิล์มดำ
+   สลับธีม: ธีมใหม่ขยายออกเป็นวงกลมจากจุดที่กด */
+
+/* ---------- หน้าต้อนรับ ---------- */
+html:has(.apl),
+html[data-theme='dark']:has(.apl) {
+  background: #0b0709 !important;
+}
+html:has(.apl) body,
+html[data-theme='dark']:has(.apl) body {
+  background: transparent !important;
+}
+.apl {
+  position: relative;
+  z-index: 0;
+  background: transparent;
+  --ap-film: linear-gradient(
+    180deg,
+    rgba(18, 10, 14, 0.44),
+    rgba(18, 10, 14, 0.24) 45%,
+    rgba(18, 10, 14, 0.5)
+  );
+  --ap-glass: rgba(255, 255, 255, 0.72);
+  --ap-glass-solid: rgba(255, 255, 255, 0.9);
+  --ap-glass-ln: rgba(255, 255, 255, 0.65);
+  --ap-glass-in: inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 0 rgba(255, 255, 255, 0.25);
+  --ap-glass-sh: 0 10px 40px rgba(0, 0, 0, 0.1);
+  --ap-mu: #4b5563;
+}
+html[data-theme='dark'] .apl {
+  --ap-film: linear-gradient(
+    180deg,
+    rgba(5, 3, 4, 0.74),
+    rgba(5, 3, 4, 0.62) 45%,
+    rgba(5, 3, 4, 0.84)
+  );
+  --ap-glass: rgba(30, 30, 32, 0.48);
+  --ap-glass-solid: rgba(28, 26, 28, 0.86);
+  --ap-glass-ln: rgba(255, 255, 255, 0.12);
+  --ap-glass-in: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --ap-glass-sh: 0 10px 40px rgba(0, 0, 0, 0.35);
+  --ap-mu: #cbd5e1;
+}
+.apl::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  transform: translateZ(0);
+  background:
+    var(--ap-film),
+    var(--hp-bg-d) 78% center / cover no-repeat,
+    #1a1013;
+}
+@media (max-aspect-ratio: 1/1) {
+  .apl::before {
+    background:
+      var(--ap-film),
+      var(--hp-bg-dm, var(--hp-bg-d)) center bottom / cover no-repeat,
+      #1a1013;
+  }
+}
+.apl .ap-hero,
+.apl .ap-sec,
+.apl .ap-stats,
+.apl .ap-steps {
+  background: none !important;
+}
+
+/* ตัวหนังสือที่วางบนรูปตรงๆ: ขาว + เงานุ่ม อ่านออกทุกจุดของรูป */
+.apl .ap-hero h1,
+.apl .ap-sec > .ap-in > h2,
+.apl .ap-sub,
+.apl .ap-lead,
+.apl .ap-who > small,
+.apl .ap-note {
+  color: #fff;
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.6),
+    0 2px 18px rgba(0, 0, 0, 0.4);
+}
+.apl .ap-sub,
+.apl .ap-lead {
+  color: rgba(255, 255, 255, 0.92);
+}
+.apl .ap-note,
+.apl .ap-who > small {
+  color: rgba(255, 255, 255, 0.82);
+}
+.apl .ap-hero h1 em {
+  background: linear-gradient(90deg, #ff9aac, #ffd6de);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.45));
+}
+
+/* กระจกใส (Liquid Glass) */
+.apl .ap-nav,
+.apl .ap-foot {
+  background: rgba(255, 255, 255, 0.72);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+html[data-theme='dark'] .apl .ap-nav,
+html[data-theme='dark'] .apl .ap-foot {
+  background: rgba(20, 20, 22, 0.5);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.apl .ap-foot {
+  border-top: 1px solid;
+}
+.apl :is(.ap-tile, .ap-ol li, .ap-st > div, .ap-who span, .ap-ck, .ap-more) {
+  position: relative;
+  isolation: isolate;
+  background: var(--ap-glass);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid var(--ap-glass-ln);
+  box-shadow: var(--ap-glass-in), var(--ap-glass-sh);
+  color: var(--ap-tx);
+  text-shadow: none;
+}
+/* ไฮไลต์เฉียงแบบกระจกโค้ง */
+.apl :is(.ap-tile, .ap-ol li, .ap-st > div)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0) 70%,
+    rgba(255, 255, 255, 0.22) 100%
+  );
+}
+html[data-theme='dark'] .apl :is(.ap-tile, .ap-ol li, .ap-st > div)::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 45%,
+    transparent 75%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+}
+.apl .ap-tile small,
+.apl .ap-st small {
+  color: var(--ap-mu);
+}
+.apl .ap-ck {
+  color: var(--ap-tx);
+}
+/* ลิงก์ "ดูฟีเจอร์" เป็นปุ่มกระจก */
+.apl .ap-more {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 24px;
+  border-radius: 980px;
+  color: var(--ap-ac) !important;
+  text-decoration: none !important;
+}
+.apl .ap-more:hover {
+  filter: brightness(1.05);
+}
+/* ตัวเลขเด่นอยู่ในการ์ดกระจก */
+.apl .ap-st > div {
+  border-radius: 28px;
+  padding: 30px 24px;
+}
+.apl .ap-st b {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: var(--ap-ac);
+}
+.apl .ap-ol li {
+  background: var(--ap-glass);
+}
+/* ภาพหน้าจอระบบ: ด้านในเป็นวอลเปเปอร์ย่อส่วน เหมือนหน้าในระบบจริง */
+.apl .ap-dev .pvx {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 251, 244, 0.5),
+      rgba(255, 255, 255, 0.32) 50%,
+      rgba(248, 243, 235, 0.55)
+    ),
+    var(--hp-bg-blur, none) center / cover no-repeat,
+    #fbf4ef !important;
+}
+html[data-theme='dark'] .apl .ap-dev .pvx {
+  background:
+    linear-gradient(180deg, rgba(5, 3, 4, 0.74), rgba(5, 3, 4, 0.62) 45%, rgba(5, 3, 4, 0.84)),
+    var(--hp-bg-d, none) 78% center / cover no-repeat,
+    #120b0e !important;
+}
+.apl .ap-dev .pvd {
+  background: transparent !important;
+}
+
+/* จอสัมผัส/มือถือ: ไม่เบลอทีละกล่อง (ให้เลื่อนลื่น) ใช้กระจกทึบขึ้นแทน */
+@media (hover: none), (max-width: 800px) {
+  .apl :is(.ap-tile, .ap-ol li, .ap-st > div, .ap-who span, .ap-more) {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--ap-glass-solid);
+  }
+}
+
+/* ---------- หน้าในระบบ + เข้าสู่ระบบ ธีมสว่าง: วอลเปเปอร์เบลอฟุ้ง + ฟิล์มขาวนวล ---------- */
+html:not([data-theme='dark']) {
+  --s-veil-blur: linear-gradient(
+    180deg,
+    rgba(255, 251, 244, 0.5),
+    rgba(255, 255, 255, 0.32) 50%,
+    rgba(248, 243, 235, 0.55)
+  );
+  --s-card: rgba(255, 255, 255, 0.82);
+  --s-card-m: rgba(255, 255, 255, 0.9);
+}
+html:not([data-theme='dark']) .app::before,
+html:not([data-theme='dark']) .au::before {
+  background-image: var(--s-veil-blur), var(--hp-bg-blur, var(--hp-bg-l));
+  background-position: center, center;
+  background-size: cover, cover;
+}
+@media (max-width: 800px) {
+  html:not([data-theme='dark']) .app::before,
+  html:not([data-theme='dark']) .au::before {
+    background-image: var(--s-veil-blur), var(--hp-bg-blur-m, var(--hp-bg-blur));
+    background-position: center, center;
+  }
+}
+/* ธีมมืด: ฟิล์มดำแบบเดียวกับหน้าต้อนรับ */
+html[data-theme='dark'] {
+  --s-veil: linear-gradient(
+    180deg,
+    rgba(5, 3, 4, 0.76),
+    rgba(5, 3, 4, 0.66) 45%,
+    rgba(5, 3, 4, 0.84)
+  );
+}
+
+/* ---------- สลับธีม: วงกลมขยายจากจุดที่กด ---------- */
+@supports (clip-path: circle(1px at 0 0)) {
+  html.theme-vt::view-transition-new(root) {
+    animation: tt-theme-circle 0.62s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+}
+@keyframes tt-theme-circle {
+  from {
+    clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 0px));
+  }
+  to {
+    clip-path: circle(var(--vt-r, 150vmax) at var(--vt-x, 50%) var(--vt-y, 0px));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.theme-vt::view-transition-new(root) {
+    animation: none;
+  }
+}
+

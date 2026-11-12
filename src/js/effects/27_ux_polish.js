@@ -176,3 +176,20 @@
 
   afterRender();
 })();
+
+/* จำตำแหน่งที่กดล่าสุด ให้การสลับธีมขยายเป็นวงกลมออกจากปุ่มที่กด (ดู 25_premium.css หมวด 30) */
+(function () {
+  const r = document.documentElement;
+  document.addEventListener(
+    'pointerdown',
+    e => {
+      const x = e.clientX,
+        y = e.clientY,
+        rad = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+      r.style.setProperty('--vt-x', x + 'px');
+      r.style.setProperty('--vt-y', y + 'px');
+      r.style.setProperty('--vt-r', Math.ceil(rad) + 'px');
+    },
+    { capture: true, passive: true }
+  );
+})();
