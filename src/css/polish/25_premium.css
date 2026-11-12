@@ -3325,3 +3325,79 @@ html[data-theme='dark'] .app .mn :is(h2, p.mu, .mu):not(.cd *):not(.top *):not(#
 html[data-theme='dark'] .app .mn :is(p.mu, small.mu):not(.cd *):not(.top *):not(#mo *) {
   color: #e2d8db !important;
 }
+
+/* ===================== 33) หน้าต้อนรับใช้ฟอนต์ชุดเดียวกับหน้าในระบบ =====================
+   หัวข้อ = Noto Serif Thai 600 (เหมือนหัวข้อหน้าในระบบ) · เนื้อหา = Noto Sans Thai · ปุ่ม = Anuphan 600 (เหมือนปุ่มในระบบ) */
+.apl {
+  font-family:
+    'Noto Sans Thai',
+    Inter,
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+.apl .ap-hero h1,
+.apl .ap-sec h2 {
+  font-family: 'Noto Serif Thai', 'Noto Sans Thai', Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+.apl .ap-hero h1 {
+  font-size: clamp(28px, 3.6vw, 46px);
+  line-height: 1.3;
+}
+.apl .ap-sec h2 {
+  font-size: clamp(22px, 2.4vw, 30px);
+  line-height: 1.35;
+}
+.apl .ap-sub,
+.apl .ap-lead {
+  font-size: clamp(14px, 1.3vw, 16px);
+  font-weight: 400;
+}
+.apl .ap-tile b,
+.apl .ap-ol span {
+  font-weight: 600;
+}
+.apl .ap-tile b {
+  font-size: 16px;
+}
+.apl .ap-btn,
+.apl .ap-more,
+.apl .ap-login {
+  font-family: Anuphan, 'Noto Sans Thai', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+}
+.apl .ap-st b,
+.apl .ap-ol b {
+  font-family: 'Noto Serif Thai', 'Noto Sans Thai', serif;
+  font-weight: 600;
+}
+.apl .ap-logo span {
+  font-family: 'Noto Serif Thai', serif;
+  font-weight: 600;
+}
+@media (max-width: 734px) {
+  .apl .ap-hero h1 {
+    font-size: 26px;
+  }
+  .apl .ap-sec h2 {
+    font-size: 21px;
+  }
+  .apl .ap-tile b {
+    font-size: 15px;
+  }
+}
+
+/* ===================== 34) มือถือ: แจ้งเตือนสั้น (toast) กว้างพอให้อยู่บรรทัดเดียว ===================== */
+@media (max-width: 800px) {
+  .ts {
+    width: max-content !important;
+    max-width: calc(100vw - 32px) !important;
+    white-space: normal;
+    text-align: left;
+    line-height: 1.45;
+  }
+}
