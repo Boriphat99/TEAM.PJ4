@@ -621,7 +621,12 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 โหมดกลางคืน|Night mode
 ตั้งค่าส่วนตัว|Personal settings
 ตัว|chars
-บัญชี|Account`
+บัญชี|Account
+ทุกอย่างของหอพัก|Everything for your dorm
+ในหน้าจอเดียว|on one screen
+ดูฟีเจอร์ ›|See features ›
+เก็บค่าเช่า ค่าไฟ และออกใบเสร็จ ครบในที่เดียว|Rent, electricity and receipts, all in one place
+แดชบอร์ดสรุปห้องพัก รายได้ และสถานะการชำระเงินแบบเรียลไทม์|A real-time dashboard of rooms, revenue and payment status`
     .split('\n')
     .map(l => l.split('|'))
     .filter(x => x.length == 2 && x[0])

@@ -2095,7 +2095,12 @@ html[data-theme='dark'] .au .cd.gc {
    หน้าต้อนรับ: ทึบตรงกลางด้านบน (ฝั่งข้อความ) จางที่ขอบ (เห็นวิว) · มือถือ: ทึบด้านบน จางด้านล่าง */
 :root {
   --ph-veil-x:
-    radial-gradient(ellipse 58% 62% at 50% 30%, rgba(253, 248, 246, 0.86), rgba(253, 248, 246, 0.6) 55%, rgba(253, 248, 246, 0.18) 100%),
+    radial-gradient(
+      ellipse 58% 62% at 50% 30%,
+      rgba(253, 248, 246, 0.86),
+      rgba(253, 248, 246, 0.6) 55%,
+      rgba(253, 248, 246, 0.18) 100%
+    ),
     linear-gradient(180deg, rgba(253, 248, 246, 0) 55%, rgba(253, 248, 246, 0.35) 100%);
   --ph-veil-y: linear-gradient(
     180deg,
@@ -2108,7 +2113,12 @@ html[data-theme='dark'] .au .cd.gc {
 }
 html[data-theme='dark'] {
   --ph-veil-x:
-    radial-gradient(ellipse 58% 62% at 50% 30%, rgba(11, 7, 9, 0.84), rgba(11, 7, 9, 0.62) 55%, rgba(11, 7, 9, 0.3) 100%),
+    radial-gradient(
+      ellipse 58% 62% at 50% 30%,
+      rgba(11, 7, 9, 0.84),
+      rgba(11, 7, 9, 0.62) 55%,
+      rgba(11, 7, 9, 0.3) 100%
+    ),
     linear-gradient(180deg, rgba(11, 7, 9, 0) 55%, rgba(11, 7, 9, 0.45) 100%);
   --ph-veil-y: linear-gradient(
     180deg,
@@ -2124,19 +2134,27 @@ html[data-theme='dark'] {
 html[data-theme='dark'] .hp::before {
   background-image: var(--ph-veil-x), var(--hp-bg-l);
   background-size: cover;
-  background-position: center, center, 72% center;
+  background-position:
+    center,
+    center,
+    72% center;
   background-repeat: no-repeat;
   image-rendering: auto;
 }
 html[data-theme='dark'] .hp::before {
   background-image: var(--ph-veil-x), var(--hp-bg-d);
-  background-position: center, center, 80% center;
+  background-position:
+    center,
+    center,
+    80% center;
 }
 @media (max-aspect-ratio: 1/1) {
   .hp::before,
   html[data-theme='dark'] .hp::before {
     background-image: var(--ph-veil-y), var(--hp-bg-lm, var(--hp-bg-l));
-    background-position: center, center bottom;
+    background-position:
+      center,
+      center bottom;
   }
   html[data-theme='dark'] .hp::before {
     background-image: var(--ph-veil-y), var(--hp-bg-dm, var(--hp-bg-d));
@@ -2146,18 +2164,24 @@ html[data-theme='dark'] .hp::before {
 /* หน้าในระบบ + เข้าสู่ระบบ: ภาพเดียวกัน แต่ชั้นสีทึบกว่า เพราะมีตัวเลข/ตารางเยอะ */
 .app::before,
 .au::before {
-  background-position: center, 72% center;
+  background-position:
+    center,
+    72% center;
 }
 html[data-theme='dark'] .app::before,
 html[data-theme='dark'] .au::before {
-  background-position: center, 80% center;
+  background-position:
+    center,
+    80% center;
 }
 @media (max-width: 800px) {
   .app::before,
   .au::before,
   html[data-theme='dark'] .app::before,
   html[data-theme='dark'] .au::before {
-    background-position: center, center bottom;
+    background-position:
+      center,
+      center bottom;
   }
 }
 
@@ -2177,4 +2201,536 @@ html[data-theme='dark'] .app .top .me {
 /* ข้อความรองบนหน้าต้อนรับธีมมืด: สว่างขึ้นให้อ่านง่ายบนภาพถ่าย */
 html[data-theme='dark'] .hp {
   --hp-mu: #c9bdc0;
+}
+
+/* ===================== 29) หน้าต้อนรับแบบเว็บไซต์ Apple (.apl) =====================
+   แถบเมนูบางโปร่ง · ภาพหอพักเต็มจอ · หัวข้อตัวใหญ่ · ส่วนเนื้อหาพื้นเรียบสลับสี · การ์ดมุมมน */
+.apl {
+  --ap-tx: #1d1d1f;
+  --ap-mu: #6e6e73;
+  --ap-bg: #ffffff;
+  --ap-bg2: #f5f5f7;
+  --ap-tile: #f5f5f7;
+  --ap-ln: rgba(0, 0, 0, 0.08);
+  --ap-ac: #a8122c;
+  --ap-ac2: #d12e4a;
+  --ap-nav: rgba(255, 255, 255, 0.74);
+  --ap-veil: 255, 255, 255;
+  min-height: 100vh;
+  color: var(--ap-tx);
+  background: var(--ap-bg);
+  font-family:
+    'Noto Sans Thai',
+    'Inter',
+    -apple-system,
+    'SF Pro Text',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+html[data-theme='dark'] .apl {
+  --ap-tx: #f5f5f7;
+  --ap-mu: #a1a1a6;
+  --ap-bg: #000000;
+  --ap-bg2: #101011;
+  --ap-tile: #1c1c1e;
+  --ap-ln: rgba(255, 255, 255, 0.1);
+  --ap-ac: #ff5c77;
+  --ap-ac2: #ff8a9c;
+  --ap-nav: rgba(22, 22, 23, 0.72);
+  --ap-veil: 0, 0, 0;
+}
+html:has(.apl),
+html:has(.apl) body {
+  background: #fff !important;
+}
+html[data-theme='dark']:has(.apl),
+html[data-theme='dark']:has(.apl) body {
+  background: #000 !important;
+}
+.ap-in {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 0 22px;
+}
+
+/* แถบเมนู */
+.ap-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: 52px;
+  background: var(--ap-nav);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--ap-ln);
+}
+.ap-nav .ap-in {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.ap-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--ap-tx);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+.ap-logo .lgi {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+}
+.ap-links {
+  display: flex;
+  gap: 28px;
+  margin: 0 auto;
+}
+.ap-links a {
+  cursor: pointer;
+  font-size: 13.5px;
+  color: var(--ap-tx);
+  opacity: 0.8;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.ap-links a:hover {
+  opacity: 1;
+}
+.ap-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ap-tools .tgl {
+  transform: scale(0.88);
+  transform-origin: right center;
+}
+.ap-login {
+  border: 0;
+  cursor: pointer;
+  font: 600 13px/1 inherit;
+  font-family: inherit;
+  color: #fff;
+  background: var(--ap-ac);
+  padding: 8px 15px;
+  border-radius: 980px;
+  white-space: nowrap;
+}
+html[data-theme='dark'] .ap-login {
+  background: #c21d3a;
+}
+
+/* ส่วนเปิด: ภาพหอพักเต็มจอ ข้อความอยู่ด้านบน */
+.ap-hero {
+  position: relative;
+  min-height: calc(100svh - 52px);
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  padding: clamp(48px, 9vh, 110px) 22px 0;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(var(--ap-veil), 0.95) 0%,
+      rgba(var(--ap-veil), 0.86) 30%,
+      rgba(var(--ap-veil), 0.55) 44%,
+      rgba(var(--ap-veil), 0) 66%,
+      rgba(var(--ap-veil), 0) 88%,
+      rgba(var(--ap-veil), 1) 100%
+    ),
+    var(--hp-bg-d) 80% 70% / cover no-repeat;
+}
+@media (max-aspect-ratio: 1/1) {
+  .ap-hero {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(var(--ap-veil), 0.95) 0%,
+        rgba(var(--ap-veil), 0.85) 34%,
+        rgba(var(--ap-veil), 0.25) 58%,
+        rgba(var(--ap-veil), 0) 72%,
+        rgba(var(--ap-veil), 1) 100%
+      ),
+      var(--hp-bg-dm, var(--hp-bg-d)) center bottom / cover no-repeat;
+  }
+}
+.ap-hero h1 {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(38px, 6.2vw, 80px);
+  line-height: 1.14;
+  color: var(--ap-tx);
+  letter-spacing: 0;
+}
+.ap-hero h1 em {
+  font-style: normal;
+  background: linear-gradient(90deg, var(--ap-ac), var(--ap-ac2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.ap-sub {
+  margin: 18px auto 0;
+  max-width: 680px;
+  font-size: clamp(18px, 2.1vw, 25px);
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--ap-mu);
+}
+.ap-cta {
+  display: flex;
+  gap: 26px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+.ap-btn {
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--ap-ac);
+  padding: 13px 26px;
+  border-radius: 980px;
+  transition:
+    transform 0.2s,
+    filter 0.2s;
+}
+html[data-theme='dark'] .ap-btn {
+  background: #c21d3a;
+}
+.ap-btn:hover {
+  filter: brightness(1.08);
+}
+.ap-btn:active {
+  transform: scale(0.97);
+}
+.ap-more {
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--ap-ac);
+  text-decoration: none;
+}
+.ap-more:hover {
+  text-decoration: underline;
+}
+.ap-ck {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 20px;
+  margin-top: 26px;
+  font-size: 14px;
+  color: var(--ap-mu);
+}
+.ap-ck span::before {
+  content: '✓';
+  margin-right: 6px;
+  color: var(--ap-ac);
+  font-weight: 700;
+}
+
+/* ส่วนเนื้อหา */
+.ap-sec {
+  padding: clamp(80px, 11vw, 140px) 0;
+  text-align: center;
+  background: var(--ap-bg);
+}
+.ap-stats,
+.ap-steps {
+  background: var(--ap-bg2);
+}
+.ap-sec h2 {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(32px, 4.8vw, 56px);
+  line-height: 1.18;
+  color: var(--ap-tx);
+}
+.ap-lead {
+  margin: 18px auto 0;
+  max-width: 640px;
+  font-size: clamp(17px, 1.8vw, 21px);
+  line-height: 1.5;
+  color: var(--ap-mu);
+}
+.ap-who {
+  margin-top: 30px;
+}
+.ap-who small {
+  display: block;
+  font-size: 13px;
+  color: var(--ap-mu);
+  margin-bottom: 10px;
+}
+.ap-who div {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.ap-who span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 15px;
+  border-radius: 980px;
+  background: var(--ap-tile);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ap-tx);
+}
+.ap-who span svg {
+  width: 16px;
+  height: 16px;
+  color: var(--ap-ac);
+}
+/* ภาพหน้าจอระบบ */
+.ap-dev {
+  margin-top: 56px;
+}
+.ap-dev .pvw {
+  margin: 0 auto;
+  max-width: 980px;
+}
+.ap-dev .pv {
+  transform: translateZ(0);
+  contain: paint;
+  border-radius: 22px;
+  border: 1px solid var(--ap-ln);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.06),
+    0 40px 90px -30px rgba(0, 0, 0, 0.35);
+  text-align: left;
+}
+html[data-theme='dark'] .ap-dev .pv {
+  box-shadow: 0 40px 100px -30px rgba(255, 60, 90, 0.18);
+}
+.ap-dev .pvd .app::before {
+  display: none;
+}
+
+/* ตัวเลขเด่น */
+.ap-st {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+.ap-st b {
+  display: block;
+  font-size: clamp(44px, 6vw, 72px);
+  font-weight: 700;
+  line-height: 1.1;
+  background: linear-gradient(180deg, var(--ap-tx), var(--ap-mu));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.ap-st small {
+  display: block;
+  margin-top: 8px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ap-mu);
+}
+.ap-note {
+  margin: 40px 0 0;
+  font-size: 12px;
+  color: var(--ap-mu);
+}
+
+/* การ์ดฟีเจอร์ */
+.ap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 56px;
+}
+.ap-tile {
+  text-align: left;
+  background: var(--ap-tile);
+  border-radius: 28px;
+  padding: 34px 30px 36px;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.ap-tile:hover {
+  transform: scale(1.015);
+}
+.ap-tile i {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  font-style: normal;
+  font-size: 22px;
+  color: var(--ap-ac);
+  background: color-mix(in srgb, var(--ap-ac) 12%, transparent);
+}
+.ap-tile i svg {
+  width: 24px;
+  height: 24px;
+}
+.ap-tile b {
+  display: block;
+  margin-top: 22px;
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--ap-tx);
+}
+.ap-tile small {
+  display: block;
+  margin-top: 6px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ap-mu);
+}
+
+/* ขั้นตอน */
+.ap-ol {
+  list-style: none;
+  padding: 0;
+  margin: 56px 0 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.ap-ol li {
+  background: var(--ap-bg);
+  border-radius: 24px;
+  padding: 30px 22px;
+}
+.ap-ol b {
+  display: block;
+  font-size: 52px;
+  font-weight: 700;
+  line-height: 1;
+  background: linear-gradient(90deg, var(--ap-ac), var(--ap-ac2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.ap-ol span {
+  display: block;
+  margin-top: 14px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--ap-tx);
+}
+.ap-steps .ap-cta {
+  margin-top: 48px;
+}
+.ap-foot {
+  background: var(--ap-bg2);
+  border-top: 1px solid var(--ap-ln);
+  padding: 22px 0 calc(22px + env(safe-area-inset-bottom, 0px));
+  font-size: 12px;
+  color: var(--ap-mu);
+  text-align: center;
+}
+
+/* ค่อยๆ ปรากฏเมื่อเลื่อนถึง (เฉพาะเบราว์เซอร์ที่รองรับ ถ้าไม่รองรับจะแสดงทันที) */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .ap-r {
+      animation: apIn linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+  }
+}
+@keyframes apIn {
+  from {
+    opacity: 0;
+    transform: translateY(36px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* แท็บเล็ต / มือถือ */
+@media (max-width: 900px) {
+  .ap-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ap-ol {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 734px) {
+  .ap-links {
+    display: none;
+  }
+  .ap-tools {
+    margin-left: auto;
+  }
+  .ap-st {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .ap-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .ap-tile {
+    padding: 26px 24px 28px;
+    border-radius: 24px;
+  }
+  .ap-ol {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .ap-cta {
+    gap: 18px;
+  }
+  .ap-dev {
+    margin-top: 40px;
+  }
+}
+/* แก้รายละเอียดหน้าต้อนรับแบบ Apple */
+.ap-dev .pvw {
+  box-shadow: none !important;
+  background: none !important;
+}
+.ap-ck {
+  width: fit-content;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px 18px;
+  border-radius: 980px;
+  color: var(--ap-tx);
+  background: rgba(var(--ap-veil), 0.72);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid var(--ap-ln);
+}
+.ap-logo span {
+  white-space: nowrap;
+}
+@media (max-width: 734px) {
+  .ap-ck {
+    border-radius: 20px;
+    padding: 12px 16px;
+    gap: 6px 14px;
+    font-size: 13px;
+  }
+}
+@media (max-width: 420px) {
+  .ap-logo span {
+    display: none;
+  }
 }

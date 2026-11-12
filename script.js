@@ -646,7 +646,12 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 โหมดกลางคืน|Night mode
 ตั้งค่าส่วนตัว|Personal settings
 ตัว|chars
-บัญชี|Account`
+บัญชี|Account
+ทุกอย่างของหอพัก|Everything for your dorm
+ในหน้าจอเดียว|on one screen
+ดูฟีเจอร์ ›|See features ›
+เก็บค่าเช่า ค่าไฟ และออกใบเสร็จ ครบในที่เดียว|Rent, electricity and receipts, all in one place
+แดชบอร์ดสรุปห้องพัก รายได้ และสถานะการชำระเงินแบบเรียลไทม์|A real-time dashboard of rooms, revenue and payment status`
     .split('\n')
     .map(l => l.split('|'))
     .filter(x => x.length == 2 && x[0])
@@ -1031,36 +1036,76 @@ const home0 = () => {
     nm = e(D.set.name || 'T&T Mansion'),
     AD = D.users.find(u => u.role == 'admin') || { name: 'ผู้ดูแลระบบ' },
     OC = D.rooms.filter(r => tn(r.n)).length;
-  return `<div class="hp"><header class="hn np"><div class="hw hnr"><div class="logo"><img class="lgi" src="${LG}" alt=""><div>T&T MANSION<br><small class="ac">PAYMENT SYSTEM</small></div></div><nav class="hl"><a class="on" onclick="scrollTo({top:0,behavior:'smooth'})">หน้าแรก</a><a onclick="scr('hf')">ฟีเจอร์</a><a onclick="scr('hst')">ขั้นตอนชำระเงิน</a></nav><div class="hr">${TGL()}<button class="hb" onclick="go('login')">เข้าสู่ระบบ</button></div></div></header>
-<section class="hw hh"><h1>ยินดีต้อนรับสู่<br><em>ระบบชำระค่าบริการของหอพัก</em></h1>
-<div class="hc"><button class="b" onclick="go('login')">เริ่มใช้งาน →</button></div>
-<div class="hck"><span>แบบออนไลน์เรียลไทม์</span><span>ไม่ต้องติดตั้งแอป</span><span>ใช้ได้ทั้งมือถือและคอมพิวเตอร์</span><span>ยอด QR ขึ้นอัตโนมัติ</span></div>
-<small class="mu">รองรับผู้ใช้งาน 3 กลุ่ม</small><div class="hch"><span>${IC.rooms} เจ้าของหอพัก</span><span>${IC.set} ผู้ดูแลระบบ</span><span>${PI} ผู้เช่า</span></div>
-<div class="pvw"><div class="pv"><div class="pvb"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div><div class="pvx"><div class="pvd"><div class="app"><div class="sb np"><div class="logo" style="margin-bottom:14px"><img class="lgi" src="${LG}" alt=""><div>T&T MANSION<br><small class="ac">PAYMENT SYSTEM</small></div></div>${NVA.map(n => `<div class="nv ${n[0] == 'dash' ? 'on' : ''}"><i>${IC[n[0]] || n[2]}</i><span>${n[1]}</span></div>`).join('')}</div><div class="mn"><div class="top np"><input placeholder="ค้นหาห้อง ผู้เช่า หรือเลขที่บิล (กด Enter)"><span class="me">${av(AD, 36)}<b>${e(AD.name)}</b></span><span class="seg"><span class="${LANG == 'th' ? 'on' : ''}">TH</span><span class="${LANG == 'en' ? 'on' : ''}">EN</span></span><button class="b b2 sm">ออกจากระบบ</button></div>${pg.dash()}</div></div></div></div><span class="pvf">● แดชบอร์ดผู้ดูแลระบบ</span></div>
-<div class="ph"><div class="pnt"></div><div class="phs"><div class="phtop"><span class="me">${av(AD, 26)}<b>${e(AD.name)}</b></span><span class="seg"><span class="${LANG == 'th' ? 'on' : ''}">TH</span><span class="${LANG == 'en' ? 'on' : ''}">EN</span></span></div><b class="pht">ภาพรวมการจัดการ</b><div class="po"><div class="phr">${BLD(30)}<div><b>${nm}</b><small>หอพัก · พิษณุโลก</small></div></div><small>${OC}/${K.N} ห้อง</small><b>${K.op}%</b><div class="pb"><i style="width:${K.op}%"></i></div></div><div class="pt2"><div><small>ห้องทั้งหมด</small><b>${K.N}</b></div><div><small>รายได้เดือนนี้</small><b>฿${fm(K.ic)}</b></div><div><small>ยังไม่ชำระ</small><b>${K.un}</b></div><div><small>ผิดนัดชำระ</small><b>${K.ov}</b></div></div></div><div class="pnb">${NVA.map(n => `<span class="${n[0] == 'dash' ? 'on' : ''}"><i>${IC[n[0]] || n[2]}</i>${n[1]}</span>`).join('')}</div></div></div></section>
-<section class="hdk"><div class="hw hs3">${[
-    ['⌂', D.rooms.length, 'ห้องพักที่จัดการในระบบ'],
-    [PI, '3', 'กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า'],
-    ['฿', '฿' + D.set.rate, 'ค่าไฟต่อหน่วย คำนวณอัตโนมัติ'],
-  ]
-    .map(x => `<div><i>${IG[x[0]] || x[0]}</i><b>${x[1]}</b><small>${x[2]}</small></div>`)
-    .join(
-      ''
-    )}</div><p class="hdn">ตัวเลขอ้างอิงจากการตั้งค่าของหอพัก T&T แมนชั่น</p></section><div class="hcr">
-<section class="hw hx" id="hf"><h2>ครบทุกขั้นตอนการเก็บค่าหอพัก</h2><div class="fx">${[
+  // หน้าต้อนรับแบบเว็บไซต์ Apple: แถบเมนูบาง · ภาพเต็มจอ · หัวข้อใหญ่ · การ์ดมุมมน
+  const feats = [
     ['⌂', 'ห้องพัก', 'จัดการห้อง สถานะ และผู้เช่า'],
     ['▥', 'สัญญาเช่า', 'บันทึกสัญญาและเงินแรกเข้า'],
     ['◔', 'มิเตอร์ไฟฟ้า', 'จดเลขมิเตอร์ คำนวณหน่วยไฟอัตโนมัติ'],
     ['▤', 'ใบแจ้งหนี้', 'ออกบิลทุกห้อง พร้อมค่าปรับอัตโนมัติ'],
     ['฿', 'ชำระเงิน', 'Dynamic PromptPay QR และแนบสลิป'],
     ['☰', 'รายงาน', 'สรุปรายได้และสถานะการชำระเงิน'],
-  ]
-    .map(
-      f => `<div class="fxc"><i>${IG[f[0]] || f[0]}</i><b>${f[1]}</b><small>${f[2]}</small></div>`
-    )
-    .join('')}</div></section>
-<section class="hw hx" id="hst"><h2>ชำระเงินง่ายใน 4 ขั้นตอน</h2><div class="sp">${['ดูใบแจ้งหนี้ของห้องคุณ', 'สแกน QR ยอดขึ้นอัตโนมัติ', 'แนบสลิปโอนเงิน', 'ผู้ดูแลอนุมัติ รับใบเสร็จ'].map((t, i) => `<div><b>${i + 1}</b><span>${t}</span></div>`).join('')}</div><div class="hc" style="margin-top:34px"><button class="b" onclick="go('login')">เริ่มใช้งาน</button></div></section>
-</div><footer class="lf">© 2026 T&T Mansion Payment System · ${APP_V}</footer></div>`;
+  ];
+  const stats = [
+    [D.rooms.length, 'ห้องพักที่จัดการในระบบ'],
+    ['3', 'กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า'],
+    ['฿' + D.set.rate, 'ค่าไฟต่อหน่วย คำนวณอัตโนมัติ'],
+  ];
+  const steps = [
+    'ดูใบแจ้งหนี้ของห้องคุณ',
+    'สแกน QR ยอดขึ้นอัตโนมัติ',
+    'แนบสลิปโอนเงิน',
+    'ผู้ดูแลอนุมัติ รับใบเสร็จ',
+  ];
+  return `<div class="apl">
+<header class="ap-nav np"><div class="ap-in">
+  <a class="ap-logo" onclick="scrollTo({top:0,behavior:'smooth'})"><img class="lgi" src="${LG}" alt=""><span>T&T MANSION</span></a>
+  <nav class="ap-links"><a onclick="scrollTo({top:0,behavior:'smooth'})">หน้าแรก</a><a onclick="scr('hf')">ฟีเจอร์</a><a onclick="scr('hst')">ขั้นตอนชำระเงิน</a></nav>
+  <div class="ap-tools">${TGL()}<button class="ap-login" onclick="go('login')">เข้าสู่ระบบ</button></div>
+</div></header>
+
+<section class="ap-hero">
+  <div class="ap-hero-tx">
+    <h1>ยินดีต้อนรับสู่<br><em>ระบบชำระค่าบริการของหอพัก</em></h1>
+    <p class="ap-sub">เก็บค่าเช่า ค่าไฟ และออกใบเสร็จ ครบในที่เดียว</p>
+    <div class="ap-cta"><button class="ap-btn" onclick="go('login')">เริ่มใช้งาน</button><a class="ap-more" onclick="scr('hf')">ดูฟีเจอร์ ›</a></div>
+    <div class="ap-ck"><span>แบบออนไลน์เรียลไทม์</span><span>ไม่ต้องติดตั้งแอป</span><span>ใช้ได้ทั้งมือถือและคอมพิวเตอร์</span><span>ยอด QR ขึ้นอัตโนมัติ</span></div>
+  </div>
+</section>
+
+<section class="ap-sec ap-show">
+  <div class="ap-in">
+    <h2 class="ap-r">ทุกอย่างของหอพัก<br>ในหน้าจอเดียว</h2>
+    <p class="ap-lead ap-r">แดชบอร์ดสรุปห้องพัก รายได้ และสถานะการชำระเงินแบบเรียลไทม์</p>
+    <div class="ap-who ap-r"><small>รองรับผู้ใช้งาน 3 กลุ่ม</small><div><span>${IC.rooms} เจ้าของหอพัก</span><span>${IC.set} ผู้ดูแลระบบ</span><span>${PI} ผู้เช่า</span></div></div>
+    <div class="ap-dev ap-r"><div class="pvw"><div class="pv"><div class="pvb"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div><div class="pvx"><div class="pvd"><div class="app"><div class="sb np"><div class="logo" style="margin-bottom:14px"><img class="lgi" src="${LG}" alt=""><div>T&T MANSION<br><small class="ac">PAYMENT SYSTEM</small></div></div>${NVA.map(n => `<div class="nv ${n[0] == 'dash' ? 'on' : ''}"><i>${IC[n[0]] || n[2]}</i><span>${n[1]}</span></div>`).join('')}</div><div class="mn"><div class="top np"><input placeholder="ค้นหาห้อง ผู้เช่า หรือเลขที่บิล (กด Enter)"><span class="me">${av(AD, 36)}<b>${e(AD.name)}</b></span><span class="seg"><span class="${LANG == 'th' ? 'on' : ''}">TH</span><span class="${LANG == 'en' ? 'on' : ''}">EN</span></span><button class="b b2 sm">ออกจากระบบ</button></div>${pg.dash()}</div></div></div></div><span class="pvf">● แดชบอร์ดผู้ดูแลระบบ</span></div>
+<div class="ph"><div class="pnt"></div><div class="phs"><div class="phtop"><span class="me">${av(AD, 26)}<b>${e(AD.name)}</b></span><span class="seg"><span class="${LANG == 'th' ? 'on' : ''}">TH</span><span class="${LANG == 'en' ? 'on' : ''}">EN</span></span></div><b class="pht">ภาพรวมการจัดการ</b><div class="po"><div class="phr">${BLD(30)}<div><b>${nm}</b><small>หอพัก · พิษณุโลก</small></div></div><small>${OC}/${K.N} ห้อง</small><b>${K.op}%</b><div class="pb"><i style="width:${K.op}%"></i></div></div><div class="pt2"><div><small>ห้องทั้งหมด</small><b>${K.N}</b></div><div><small>รายได้เดือนนี้</small><b>฿${fm(K.ic)}</b></div><div><small>ยังไม่ชำระ</small><b>${K.un}</b></div><div><small>ผิดนัดชำระ</small><b>${K.ov}</b></div></div></div><div class="pnb">${NVA.map(n => `<span class="${n[0] == 'dash' ? 'on' : ''}"><i>${IC[n[0]] || n[2]}</i>${n[1]}</span>`).join('')}</div></div></div></div>
+  </div>
+</section>
+
+<section class="ap-sec ap-stats">
+  <div class="ap-in">
+    <div class="ap-st">${stats.map(x => `<div class="ap-r"><b>${x[0]}</b><small>${x[1]}</small></div>`).join('')}</div>
+    <p class="ap-note">ตัวเลขอ้างอิงจากการตั้งค่าของหอพัก T&T แมนชั่น</p>
+  </div>
+</section>
+
+<section class="ap-sec ap-feat" id="hf">
+  <div class="ap-in">
+    <h2 class="ap-r">ครบทุกขั้นตอนการเก็บค่าหอพัก</h2>
+    <div class="ap-grid">${feats.map(f => `<div class="ap-tile ap-r"><i>${IG[f[0]] || f[0]}</i><b>${f[1]}</b><small>${f[2]}</small></div>`).join('')}</div>
+  </div>
+</section>
+
+<section class="ap-sec ap-steps" id="hst">
+  <div class="ap-in">
+    <h2 class="ap-r">ชำระเงินง่ายใน 4 ขั้นตอน</h2>
+    <ol class="ap-ol">${steps.map((t, i) => `<li class="ap-r"><b>${i + 1}</b><span>${t}</span></li>`).join('')}</ol>
+    <div class="ap-cta ap-r"><button class="ap-btn" onclick="go('login')">เริ่มใช้งาน</button></div>
+  </div>
+</section>
+
+<footer class="ap-foot"><div class="ap-in">© 2026 T&T Mansion Payment System · ${APP_V}</div></footer>
+</div>`;
 };
 const home = () => {
   if (PUBD) {
