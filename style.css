@@ -9747,4 +9747,34 @@ html[data-theme='dark'] .au .cd.gc {
     background: rgba(16, 11, 13, 0.8) !important;
   }
 }
+/* หน้าเข้าสู่ระบบ: เอาวงแหวนหมุนออก แผงซ้ายโปร่งใส เห็นรูปหอพักเต็มๆ */
+.au .al .rings,
+.au .al .rings * {
+  display: none !important;
+}
+.au .al,
+html[data-theme='dark'] .au .al {
+  background: linear-gradient(90deg, rgba(20, 8, 12, 0.42), rgba(20, 8, 12, 0.12)) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+.au .al::before,
+.au .al::after {
+  display: none !important;
+}
+.au .al h1,
+.au .al p {
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.6),
+    0 2px 18px rgba(0, 0, 0, 0.4);
+}
+.au .al h1,
+.au .al .logo {
+  color: #fff !important;
+}
+.au .al p,
+.au .al p.mu {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
 
