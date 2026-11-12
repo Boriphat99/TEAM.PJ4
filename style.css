@@ -9590,3 +9590,161 @@ html[data-theme='dark'] {
   }
 }
 
+/* ===================== 32) รูปหอพักเห็นชัดทุกหน้าในระบบ + ตัวหนังสือหน้าต้อนรับเล็กลง =====================
+   ทุกหน้าในระบบใช้รูปคมชัดรูปเดียวกับหน้าต้อนรับ ฟิล์มบางลง (สว่าง: ขาวนวล / มืด: ดำ) การ์ดเป็นกระจก */
+html:not([data-theme='dark']) .app::before,
+html:not([data-theme='dark']) .au::before {
+  background:
+    linear-gradient(180deg, rgba(255, 250, 247, 0.4), rgba(255, 250, 247, 0.56)),
+    var(--hp-bg-d) 78% center / cover no-repeat,
+    #f6eee9;
+}
+html[data-theme='dark'] .app::before,
+html[data-theme='dark'] .au::before {
+  background:
+    linear-gradient(180deg, rgba(6, 4, 5, 0.5), rgba(6, 4, 5, 0.66)),
+    var(--hp-bg-d) 78% center / cover no-repeat,
+    #120b0e;
+}
+@media (max-width: 800px) {
+  html:not([data-theme='dark']) .app::before,
+  html:not([data-theme='dark']) .au::before {
+    background:
+      linear-gradient(180deg, rgba(255, 250, 247, 0.5), rgba(255, 250, 247, 0.62)),
+      var(--hp-bg-dm, var(--hp-bg-d)) center bottom / cover no-repeat,
+      #f6eee9;
+  }
+  html[data-theme='dark'] .app::before,
+  html[data-theme='dark'] .au::before {
+    background:
+      linear-gradient(180deg, rgba(6, 4, 5, 0.56), rgba(6, 4, 5, 0.7)),
+      var(--hp-bg-dm, var(--hp-bg-d)) center bottom / cover no-repeat,
+      #120b0e;
+  }
+}
+/* การ์ด: กระจกโปร่งขึ้นให้เห็นรูปด้านหลัง แต่ตัวเลขยังอ่านชัด */
+html:not([data-theme='dark']) {
+  --s-card: rgba(255, 255, 255, 0.78);
+  --s-card-m: rgba(255, 255, 255, 0.86);
+}
+html[data-theme='dark'] {
+  --s-card: rgba(22, 16, 19, 0.58);
+  --s-card-m: rgba(22, 16, 19, 0.8);
+}
+/* เมนูข้าง: กระจกโปร่ง เห็นรูป */
+@media (min-width: 801px) {
+  .app .sb {
+    background: rgba(255, 255, 255, 0.7) !important;
+  }
+  html[data-theme='dark'] .app .sb {
+    background: rgba(18, 12, 15, 0.62) !important;
+  }
+}
+/* หัวข้อหน้าที่วางบนรูปตรงๆ */
+.app .mn > h2,
+.app .mn > p.mu,
+.app .mn > .ph2 {
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
+}
+html[data-theme='dark'] .app .mn > h2,
+html[data-theme='dark'] .app .mn > p.mu,
+html[data-theme='dark'] .app .mn > .ph2 {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+/* หน้าเข้าสู่ระบบ: แผงซ้ายโปร่งให้เห็นรูป */
+.au .al,
+html[data-theme='dark'] .au .al {
+  background:
+    radial-gradient(600px 420px at 85% 110%, rgba(198, 44, 68, 0.35), transparent 60%),
+    linear-gradient(
+      165deg,
+      rgba(31, 10, 16, 0.72) 0%,
+      rgba(59, 13, 24, 0.62) 60%,
+      rgba(90, 16, 34, 0.55) 100%
+    ) !important;
+}
+
+/* ---------- หน้าต้อนรับ: ตัวหนังสือเล็กลง ---------- */
+.apl .ap-hero h1 {
+  font-size: clamp(30px, 4.2vw, 54px);
+  line-height: 1.22;
+}
+.apl .ap-sub {
+  font-size: clamp(15px, 1.5vw, 19px);
+}
+.apl .ap-sec h2 {
+  font-size: clamp(24px, 3vw, 36px);
+}
+.apl .ap-btn {
+  font-size: 15px;
+  padding: 11px 22px;
+}
+.apl .ap-more {
+  font-size: 15px;
+  padding: 10px 20px;
+}
+.apl .ap-ck {
+  font-size: 13px;
+}
+.apl .ap-st b {
+  font-size: clamp(32px, 4vw, 48px);
+}
+.apl .ap-st small,
+.apl .ap-tile small {
+  font-size: 13.5px;
+}
+.apl .ap-tile b {
+  font-size: 17px;
+}
+.apl .ap-ol b {
+  font-size: 38px;
+}
+.apl .ap-ol span {
+  font-size: 14.5px;
+}
+.ap-links a {
+  font-size: 13px;
+}
+@media (max-width: 734px) {
+  .apl .ap-hero h1 {
+    font-size: 27px;
+  }
+  .apl .ap-sec h2 {
+    font-size: 22px;
+  }
+  .apl .ap-st b {
+    font-size: 26px;
+  }
+  .apl .ap-tile b {
+    font-size: 15px;
+  }
+  .apl .ap-ol b {
+    font-size: 32px;
+  }
+}
+/* หน้าเข้าสู่ระบบ: แผงฟอร์มด้านขวาเป็นกระจกใส เห็นรูปด้านหลัง (ช่องกรอกยังทึบ อ่านง่าย) */
+.au .cd.gc {
+  background: rgba(255, 255, 255, 0.56) !important;
+}
+html[data-theme='dark'] .au .cd.gc {
+  background: rgba(16, 11, 13, 0.5) !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  .au .cd.gc {
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    backdrop-filter: blur(16px) saturate(150%);
+  }
+  .au .al {
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+}
+@media (max-width: 800px) {
+  .au .cd.gc {
+    background: rgba(255, 255, 255, 0.84) !important;
+  }
+  html[data-theme='dark'] .au .cd.gc {
+    background: rgba(16, 11, 13, 0.8) !important;
+  }
+}
+
