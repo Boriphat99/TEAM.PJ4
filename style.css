@@ -10770,3 +10770,17 @@ html[data-theme='dark'] .thm svg {
   }
 }
 
+/* ===================== 41) หัวข้อหน้าต้อนรับ 2 บรรทัดเสมอ (ไทยและอังกฤษ) =====================
+   บรรทัดละข้อความ ห้ามตัดคำ · ขนาดตัวอักษรย่อตามความกว้างจอให้พอดีบรรทัด */
+.apl .ap-hero h1 {
+  white-space: nowrap;
+  font-size: clamp(20px, 6.3vw, 46px) !important;
+}
+.apl .ap-hero h1 em {
+  display: inline-block;
+  white-space: nowrap;
+}
+html[lang='en'] .apl .ap-hero h1 {
+  font-size: clamp(19px, 6.1vw, 46px) !important;
+}
+

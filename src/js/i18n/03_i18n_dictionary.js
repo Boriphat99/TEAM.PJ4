@@ -293,7 +293,7 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 รอบบิล|Billing cycle
 รอผู้ดูแลจัดห้อง|Waiting for admin to assign a room
 รอผู้ดูแลตรวจสอบ|Waiting for admin review
-ระบบชำระค่าบริการของหอพัก|Dormitory service payment system
+ระบบชำระค่าบริการของหอพัก|Dormitory Payment System
 ระบุวันเริ่มสัญญา|Enter the contract start date
 ระยะเช่าเฉลี่ย|Avg. rental period
 รับชำระเงิน|Receive payments
