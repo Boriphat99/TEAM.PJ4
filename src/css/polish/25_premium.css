@@ -3830,3 +3830,256 @@ html[data-theme='dark'] .au .al {
       var(--bg) !important;
   }
 }
+
+/* ===================== 38) ไม่ใช้เอฟเฟกต์เรืองแสง =====================
+   เอาขอบเรือง/เงาฟุ้งรอบตัวหนังสือและเงาสีของปุ่มออกทั้งหมด ใช้ฟิล์มพื้นหลังช่วยให้อ่านง่ายแทน */
+.app .mn :is(h1, h2, h3, p, small, span, b, .mu),
+html[data-theme='dark'] .app .mn :is(h1, h2, h3, p, small, span, b, .mu),
+.app .top .me,
+.au .al :is(h1, p),
+.apl :is(h1, h2, p, small, span, b) {
+  text-shadow: none !important;
+}
+/* ตัวหนังสือขาวบนภาพ (หน้าต้อนรับ/เข้าสู่ระบบ): เงาแคบคม 1px ไม่ฟุ้ง */
+.apl .ap-hero h1,
+.apl .ap-sec > .ap-in > h2,
+.apl .ap-sub,
+.apl .ap-lead,
+.apl .ap-who > small,
+.apl .ap-note,
+.au .al h1,
+.au .al p {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45) !important;
+}
+.apl .ap-hero h1 em {
+  filter: none !important;
+  text-shadow: none !important;
+}
+/* ปุ่ม: เงาเทาบางแทนเงาสีแดงฟุ้ง */
+:where(.app, .au, #mo, #dg) .b:not(.b2):not(.b3),
+.apl .ap-btn,
+.apl .ap-login {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 1px 2px rgba(0, 0, 0, 0.12) !important;
+}
+/* ช่องกรอกตอนโฟกัส: เส้นขอบชัด ไม่มีวงฟุ้ง */
+:where(.app, .au, #mo) :is(input, select, textarea):focus {
+  box-shadow: 0 0 0 1px var(--ac) !important;
+}
+/* ภาพหน้าจอตัวอย่างธีมมืด: เงาดำธรรมดา ไม่เรืองแดง */
+html[data-theme='dark'] .apl .ap-dev .pv {
+  box-shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* ===================== 39) การแจ้งเตือน =====================
+   แจ้งเตือนสั้น (toast): แคปซูลกระจกฝ้า มีไอคอนตามประเภท เลื่อนลงจากด้านบน แล้วจางหาย
+   กล่องข้อความ/ยืนยัน (#dg): การ์ดกลางจอ ไอคอนวงกลมตามประเภท ปุ่มเต็มความกว้างบนมือถือ */
+.ts,
+html[data-theme='dark'] .ts {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  top: calc(14px + env(safe-area-inset-top, 0px)) !important;
+  bottom: auto !important;
+  transform: translateX(-50%);
+  z-index: 10050 !important;
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
+  width: max-content !important;
+  max-width: min(440px, calc(100vw - 28px)) !important;
+  padding: 10px 18px 10px 12px !important;
+  border-radius: 999px !important;
+  font: 500 14px/1.45 var(--font) !important;
+  color: var(--tx) !important;
+  background: rgba(255, 252, 248, 0.86) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 10px 30px -10px rgba(40, 15, 20, 0.3) !important;
+  animation: tsIn 0.38s cubic-bezier(0.2, 0.9, 0.25, 1.1) both !important;
+  text-align: left !important;
+}
+html[data-theme='dark'] .ts {
+  background: rgba(34, 22, 32, 0.86) !important;
+  border-color: rgba(255, 230, 225, 0.1) !important;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7) !important;
+}
+.ts.out {
+  animation: tsOut 0.3s ease forwards !important;
+}
+.ts::before {
+  display: none !important;
+}
+.ts > i {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--ac);
+}
+.ts > i svg {
+  width: 15px;
+  height: 15px;
+}
+.ts[data-k='ok'] > i {
+  background: #16a065;
+}
+.ts[data-k='er'] > i {
+  background: #d13a50;
+}
+.ts[data-k='wa'] > i {
+  background: #d08a1c;
+}
+.ts[data-k='in'] > i {
+  background: #6b5b8f;
+}
+@keyframes tsIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+@keyframes tsOut {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -12px) scale(0.97);
+  }
+}
+@media (max-width: 800px) {
+  .ts {
+    top: calc(10px + env(safe-area-inset-top, 0px)) !important;
+    border-radius: 18px !important;
+  }
+}
+
+/* กล่องข้อความ/ยืนยัน */
+#dg {
+  background: rgba(20, 10, 15, 0.38) !important;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+}
+#dg > .cd,
+html[data-theme='dark'] #dg > .cd {
+  width: min(380px, 100%) !important;
+  max-width: 380px !important;
+  padding: 26px 22px 20px !important;
+  border-radius: 22px !important;
+  text-align: center;
+  background: rgba(255, 252, 248, 0.97) !important;
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 30px 70px -24px rgba(40, 10, 20, 0.45) !important;
+  animation: dgIn 0.28s cubic-bezier(0.2, 0.9, 0.25, 1.1) both;
+}
+html[data-theme='dark'] #dg > .cd {
+  background: rgba(30, 19, 28, 0.97) !important;
+  border-color: rgba(255, 230, 225, 0.1) !important;
+  box-shadow: 0 30px 70px -24px rgba(0, 0, 0, 0.9) !important;
+}
+#dg .dgi {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  color: var(--ac);
+  background: var(--acs);
+}
+#dg .dgi svg {
+  width: 26px;
+  height: 26px;
+}
+#dg[data-k='ok'] .dgi {
+  color: #12895a;
+  background: #e6f5ee;
+}
+#dg[data-k='wa'] .dgi {
+  color: #b5730f;
+  background: #fbf0dc;
+}
+#dg[data-k='in'] .dgi {
+  color: #6b5b8f;
+  background: #efeaf7;
+}
+html[data-theme='dark'] #dg[data-k='ok'] .dgi {
+  color: #4fd39a;
+  background: rgba(79, 211, 154, 0.12);
+}
+html[data-theme='dark'] #dg[data-k='wa'] .dgi {
+  color: #f0b453;
+  background: rgba(240, 180, 83, 0.12);
+}
+html[data-theme='dark'] #dg[data-k='in'] .dgi {
+  color: #b9a8e6;
+  background: rgba(185, 168, 230, 0.12);
+}
+#dg > .cd > p {
+  margin: 0 0 20px !important;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--tx);
+}
+#dg > .cd > div {
+  justify-content: center !important;
+  gap: 10px !important;
+}
+#dg > .cd > div .b {
+  flex: 1;
+  min-height: 44px;
+  border-radius: 12px !important;
+  font-size: 15px;
+}
+@keyframes dgIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* เอาแสงเรืองที่เหลือออก: แถบชี้เมนูที่เลือก, วงรอบรูปโปรไฟล์ */
+.app .sb .nv::before,
+html[data-theme='dark'] .app .sb .nv::before {
+  box-shadow: none !important;
+  filter: none !important;
+}
+.app .top .me,
+.app .top .me .av,
+.app .av,
+html[data-theme='dark'] .app .top .me,
+html[data-theme='dark'] .app .top .me .av,
+html[data-theme='dark'] .app .av {
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.85),
+    0 1px 3px rgba(0, 0, 0, 0.18) !important;
+  filter: none !important;
+}
+html[data-theme='dark'] .app .top .me .av,
+html[data-theme='dark'] .app .av {
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.12),
+    0 1px 3px rgba(0, 0, 0, 0.4) !important;
+}
+.app .top .me::before,
+.app .top .me::after {
+  display: none !important;
+}
+html[data-theme='dark'] .app .top .me {
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.12),
+    0 1px 3px rgba(0, 0, 0, 0.4) !important;
+}

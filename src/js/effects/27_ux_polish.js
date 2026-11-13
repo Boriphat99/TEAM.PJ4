@@ -193,3 +193,70 @@
     { capture: true, passive: true }
   );
 })();
+
+/* การแจ้งเตือน: เพิ่มไอคอน + ประเภท (สำเร็จ/ผิดพลาด/เตือน/ข้อมูล) ให้ toast และกล่องข้อความ (ดู 25_premium.css หมวด 39)
+   ไม่เปลี่ยนข้อความหรือการทำงานเดิม แค่ตกแต่ง */
+(function () {
+  const ICO = {
+    ok: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+    er: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M7 7l10 10M17 7L7 17"/></svg>',
+    wa: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 7.5v6"/><circle cx="12" cy="17" r="0.6" fill="currentColor"/></svg>',
+    in: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 11v6"/><circle cx="12" cy="7.5" r="0.6" fill="currentColor"/></svg>',
+    q: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M9.2 9a3 3 0 1 1 4.3 2.7c-.9.4-1.5 1.2-1.5 2.2v.4"/><circle cx="12" cy="17.6" r="0.6" fill="currentColor"/></svg>',
+  };
+  const kind = m => {
+    const s = String(m || '');
+    if (/ไม่สำเร็จ|ล้มเหลว|ผิดพลาด|ไม่ถูกต้อง|ผิด|error|failed|incorrect|invalid/i.test(s))
+      return 'er';
+    if (/^\s*[✓✔]|สำเร็จ|เรียบร้อย|บันทึก|แล้ว|saved|success|done/i.test(s)) return 'ok';
+    if (/กรุณา|โปรด|ต้อง|ไม่ได้|ไม่พบ|ยังไม่|เกิน|please|required|must|not found/i.test(s))
+      return 'wa';
+    return 'in';
+  };
+  if (typeof tt === 'function') {
+    const TS = new MutationObserver(ms => {
+      for (const m of ms)
+        for (const n of m.addedNodes) {
+          if (
+            n.nodeType !== 1 ||
+            !n.classList ||
+            !n.classList.contains('ts') ||
+            n.querySelector('i')
+          )
+            continue;
+          const txt = n.textContent.replace(/^\s*[✓✔⚠]\s*/, '');
+          const k = n.dataset.k || kind(n.textContent);
+          n.dataset.k = k;
+          n.textContent = '';
+          const i = document.createElement('i');
+          i.innerHTML = ICO[k];
+          const s = document.createElement('span');
+          s.textContent = txt;
+          n.append(i, s);
+          setTimeout(() => n.classList.add('out'), 2650);
+        }
+    });
+    TS.observe(document.body, { childList: true });
+  }
+  if (typeof dg === 'function') {
+    const DG = document.getElementById('dg');
+    if (DG)
+      new MutationObserver(() => {
+        const c = DG.querySelector(':scope > .cd');
+        if (!c || c.querySelector('.dgi')) return;
+        const p = c.querySelector('p');
+        const isQ = !!DG.querySelector('#dn');
+        const msg = p ? p.textContent : '';
+        const k = isQ
+          ? /ลบ|ยกเลิก|ย้ายออก|ปฏิเสธ|รีเซ็ต|delete|remove/i.test(msg)
+            ? 'wa'
+            : 'q'
+          : kind(msg);
+        DG.dataset.k = k === 'q' ? 'in' : k;
+        const i = document.createElement('div');
+        i.className = 'dgi';
+        i.innerHTML = ICO[k];
+        c.prepend(i);
+      }).observe(DG, { childList: true });
+  }
+})();
