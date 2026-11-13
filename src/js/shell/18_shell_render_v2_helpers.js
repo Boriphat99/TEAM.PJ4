@@ -112,7 +112,7 @@ function applyTheme(v) {
       mt.name = 'theme-color';
       document.head.appendChild(mt);
     }
-    mt.content = v == 'dark' ? '#16171a' : '#f8f6f5';
+    mt.content = v == 'dark' ? '#110f1d' : '#fbf6f0';
     syncThemeUI();
   };
   const calm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;

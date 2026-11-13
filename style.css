@@ -10784,3 +10784,790 @@ html[lang='en'] .apl .ap-hero h1 {
   font-size: clamp(19px, 6.1vw, 46px) !important;
 }
 
+/* ===================== 42) ธีม "Golden Hour" (สว่าง) / "Twilight" (มืด) — ดึงสีจากภาพอาคาร T&T =====================
+   แนวทางเดียวกับงาน Botnoi: ธีมสว่างกับธีมมืดใช้ "รูปเดียวกัน" แต่ต่างกันที่ฟิล์มและกระจก
+   · ธีมสว่าง (Golden Hour): ฟิล์มครีมอุ่น · กระจกขาวนวล · สีหลักแดงเลือดหมู (ผนังอาคาร) · ทอง (ขอบอาคาร/ไฟ)
+   · ธีมมืด (Twilight): ฟิล์มม่วงคราม (ท้องฟ้าพลบค่ำ) · กระจกเข้มอมม่วง · สีหลักชมพูอิฐสว่าง · ทองแสงไฟ
+   · หน้าต้อนรับ: ส่วนบนเห็นอาคารคมชัด ด้านล่างเป็นภาพเดียวกันแบบนุ่ม (ตัวหนังสือไม่ตีกับป้ายในภาพ)
+   · มือถือ: หน้าในระบบใช้ภาพนุ่มขึ้นเล็กน้อย การ์ดทึบ อ่านง่าย ไม่หน่วง
+   ไม่เปลี่ยนการทำงานใด ๆ — ปรับเฉพาะสีและพื้นผิว */
+:root,
+html:not([data-theme='dark']) {
+  --bg: #f6efe7;
+  --bg2: #efe6dc;
+  --cd: #fffdfa;
+  --tx: #1f1a1c;
+  --mu: #5a5052;
+  --ln: rgba(84, 56, 50, 0.12);
+  --ln2: rgba(84, 56, 50, 0.2);
+  --ac: #8e2436; /* แดงเลือดหมู ผนังอาคาร */
+  --ac2: #721b2b;
+  --ac3: #ab3449;
+  --acs: #f8eded;
+  --acs2: #f1dcde;
+  --gd: #946318; /* ทองขอบอาคาร (อ่านได้บนพื้นขาว) */
+  --gd-bg: #fbf1de;
+  --ok: #1d7a4c;
+  --ok-bg: #e8f5ed;
+  --ok-ln: #cbe6d6;
+  --wa: #8a5900;
+  --wa-bg: #fcf3dc;
+  --wa-ln: #efdcaa;
+  --er: #b3262f;
+  --er-bg: #fcecec;
+  --er-ln: #f3d0d2;
+  --pu: #5a46a6; /* ม่วงท้องฟ้า */
+  --pu-bg: #efecfa;
+  --pu-ln: #dad3f2;
+  --s-card: rgba(255, 253, 250, 0.8);
+  --s-card-m: rgba(255, 253, 250, 0.95);
+  --s-edge: rgba(255, 255, 255, 0.86);
+  --s-in: inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  --s-sh: 0 1px 2px rgba(60, 30, 25, 0.05), 0 14px 34px -18px rgba(80, 40, 30, 0.3);
+  --tw-blur: blur(24px) saturate(165%);
+  --gh-film: linear-gradient(
+    180deg,
+    rgba(255, 250, 244, 0.84) 0%,
+    rgba(255, 248, 241, 0.6) 30%,
+    rgba(253, 244, 236, 0.46) 64%,
+    rgba(250, 240, 232, 0.6) 100%
+  );
+  --gh-film-m: linear-gradient(
+    180deg,
+    rgba(255, 250, 244, 0.92) 0%,
+    rgba(255, 248, 241, 0.74) 24%,
+    rgba(253, 244, 236, 0.62) 60%,
+    rgba(250, 240, 232, 0.68) 100%
+  );
+  --gh-bar: rgba(255, 251, 246, 0.74);
+  --gh-modal: rgba(255, 253, 250, 0.97);
+  --gh-field: rgba(255, 255, 255, 0.94);
+  --gh-th: rgba(142, 36, 54, 0.045);
+  --gh-btn: linear-gradient(180deg, #a3304a, #8e2436 55%, #78202f);
+  --gh-btn2: rgba(255, 255, 255, 0.8);
+  --gh-nav-on: linear-gradient(90deg, #f1dcde, #f8eded);
+  --gh-nav-on-tx: #8e2436;
+}
+html[data-theme='dark'] {
+  --bg: #0e0c17;
+  --bg2: #14111f;
+  --cd: #181526;
+  --tx: #f5f1ed;
+  --mu: #b4adbf;
+  --ln: rgba(226, 216, 255, 0.09);
+  --ln2: rgba(226, 216, 255, 0.15);
+  --ac: #f6868f; /* ชมพูอิฐ อ่านชัดบนพื้นเข้ม */
+  --ac2: #c4404f;
+  --ac3: #ff99a3;
+  --acs: rgba(242, 122, 135, 0.12);
+  --acs2: rgba(242, 122, 135, 0.2);
+  --gd: #f1c26c; /* แสงไฟทอง */
+  --gd-bg: rgba(241, 194, 108, 0.12);
+  --ok: #5fd39d;
+  --ok-bg: rgba(95, 211, 157, 0.11);
+  --ok-ln: rgba(95, 211, 157, 0.26);
+  --wa: #f3c565;
+  --wa-bg: rgba(243, 197, 101, 0.11);
+  --wa-ln: rgba(243, 197, 101, 0.26);
+  --er: #ff7d88;
+  --er-bg: rgba(255, 125, 136, 0.11);
+  --er-ln: rgba(255, 125, 136, 0.27);
+  --pu: #b9a8ff;
+  --pu-bg: rgba(185, 168, 255, 0.11);
+  --pu-ln: rgba(185, 168, 255, 0.27);
+  --s-card: rgba(24, 21, 38, 0.6);
+  --s-card-m: rgba(22, 19, 34, 0.95);
+  --s-edge: rgba(226, 216, 255, 0.1);
+  --s-in: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  --s-sh: 0 18px 42px -20px rgba(0, 0, 0, 0.85);
+  --tw-blur: blur(26px) saturate(150%);
+  --gh-film: linear-gradient(
+    180deg,
+    rgba(12, 10, 24, 0.9) 0%,
+    rgba(14, 11, 28, 0.74) 30%,
+    rgba(16, 12, 30, 0.62) 64%,
+    rgba(11, 9, 22, 0.8) 100%
+  );
+  --gh-film-m: linear-gradient(
+    180deg,
+    rgba(12, 10, 24, 0.94) 0%,
+    rgba(14, 11, 28, 0.8) 24%,
+    rgba(16, 12, 30, 0.68) 60%,
+    rgba(11, 9, 22, 0.8) 100%
+  );
+  --gh-bar: rgba(17, 15, 29, 0.74);
+  --gh-modal: rgba(22, 19, 34, 0.97);
+  --gh-field: rgba(0, 0, 0, 0.26);
+  --gh-th: rgba(226, 216, 255, 0.045);
+  --gh-btn: linear-gradient(180deg, #d4566a, #bf4257 55%, #a5344a);
+  --gh-btn2: rgba(255, 255, 255, 0.07);
+  --gh-nav-on: linear-gradient(90deg, rgba(242, 122, 135, 0.2), rgba(242, 122, 135, 0.08));
+  --gh-nav-on-tx: #ff9ea8;
+}
+html:has(.app),
+html:has(.au) {
+  background: var(--bg) !important;
+}
+
+/* ---------- พื้นหลังหน้าในระบบ + เข้าสู่ระบบ ---------- */
+html:not([data-theme='dark']) body .app::before,
+html[data-theme='dark'] body .app::before {
+  background:
+    var(--gh-film),
+    var(--hp-bg-d) 50% 58% / cover no-repeat,
+    var(--bg) !important;
+}
+@media (max-width: 800px) {
+  html:not([data-theme='dark']) body .app::before,
+  html[data-theme='dark'] body .app::before {
+    background:
+      var(--gh-film-m),
+      var(--hp-bg-soft-m, var(--hp-bg-dm)) center 42% / cover no-repeat,
+      var(--bg) !important;
+  }
+}
+/* หน้าเข้าสู่ระบบ: เห็นอาคารชัดกว่าหน้าในระบบ (เป็นหน้าแรกที่ผู้ใช้เห็น) */
+html:not([data-theme='dark']) body .au::before {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(44, 24, 34, 0.3),
+      rgba(44, 24, 34, 0.12) 45%,
+      rgba(44, 24, 34, 0.4)
+    ),
+    var(--hp-bg-d) 50% 58% / cover no-repeat,
+    var(--bg) !important;
+}
+html[data-theme='dark'] body .au::before {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(12, 10, 24, 0.78),
+      rgba(14, 11, 28, 0.6) 45%,
+      rgba(11, 9, 22, 0.82)
+    ),
+    var(--hp-bg-d) 50% 58% / cover no-repeat,
+    var(--bg) !important;
+}
+@media (max-width: 800px) {
+  html:not([data-theme='dark']) body .au::before {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(44, 24, 34, 0.62),
+        rgba(44, 24, 34, 0.3) 34%,
+        rgba(44, 24, 34, 0.42)
+      ),
+      var(--hp-bg-dm, var(--hp-bg-d)) center 40% / cover no-repeat,
+      var(--bg) !important;
+  }
+  html[data-theme='dark'] body .au::before {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(12, 10, 24, 0.86),
+        rgba(14, 11, 28, 0.66) 40%,
+        rgba(11, 9, 22, 0.84)
+      ),
+      var(--hp-bg-dm, var(--hp-bg-d)) center 40% / cover no-repeat,
+      var(--bg) !important;
+  }
+}
+.au .al,
+html[data-theme='dark'] .au .al {
+  background: linear-gradient(90deg, rgba(30, 16, 26, 0.58), rgba(30, 16, 26, 0.12)) !important;
+}
+html[data-theme='dark'] .au .al {
+  background: linear-gradient(90deg, rgba(10, 8, 22, 0.6), rgba(10, 8, 22, 0.1)) !important;
+}
+
+/* ---------- การ์ดกระจก ---------- */
+:where(.app) .cd,
+html[data-theme='dark'] :where(.app) .cd {
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0) 42%), var(--s-card);
+  border: 1px solid var(--s-edge);
+  box-shadow: var(--s-in), var(--s-sh);
+}
+html[data-theme='dark'] :where(.app) .cd {
+  background:
+    linear-gradient(160deg, rgba(200, 185, 255, 0.06), rgba(255, 255, 255, 0) 42%), var(--s-card);
+}
+html:not([data-theme='dark']) :where(.app) .cd {
+  box-shadow:
+    var(--s-in),
+    0 0 0 1px rgba(110, 60, 50, 0.05),
+    var(--s-sh);
+}
+@media (max-width: 800px) {
+  :where(.app) .cd,
+  html[data-theme='dark'] :where(.app) .cd,
+  .au .cd.gc,
+  html[data-theme='dark'] .au .cd.gc {
+    background: var(--s-card-m) !important;
+  }
+}
+
+/* ---------- เมนูข้าง / แถบบน / เมนูล่าง ---------- */
+@media (min-width: 801px) {
+  .app .sb,
+  html[data-theme='dark'] .app .sb {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 252, 248, 0.8),
+      rgba(255, 249, 243, 0.68)
+    ) !important;
+    border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  }
+  html[data-theme='dark'] .app .sb {
+    background: linear-gradient(180deg, rgba(22, 19, 36, 0.74), rgba(16, 14, 28, 0.66)) !important;
+    border-color: rgba(226, 216, 255, 0.08) !important;
+  }
+}
+@media (max-width: 800px) {
+  .app .top,
+  html[data-theme='dark'] .app .top {
+    background: var(--gh-bar) !important;
+    border-bottom: 1px solid var(--ln) !important;
+  }
+  .app .sb,
+  html[data-theme='dark'] .app .sb {
+    background: var(--gh-bar) !important;
+    border-top: 1px solid var(--ln) !important;
+  }
+}
+.app .sb .nv.on,
+html[data-theme='dark'] .app .sb .nv.on {
+  background: var(--gh-nav-on) !important;
+  color: var(--gh-nav-on-tx) !important;
+}
+.app .sb .nv.on :is(i, svg, span),
+html[data-theme='dark'] .app .sb .nv.on :is(i, svg, span) {
+  color: var(--gh-nav-on-tx) !important;
+}
+/* "PAYMENT SYSTEM" ใต้โลโก้ เป็นสีทอง */
+.app .sb .logo small.ac,
+.apl .ap-dev .logo small.ac {
+  color: var(--gd) !important;
+  letter-spacing: 0.14em;
+}
+
+/* ---------- ปุ่ม ---------- */
+:where(.app, .au, #mo, #dg) .b:not(.b2):not(.b3):not(.sm.b2) {
+  background: var(--gh-btn) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 6px 16px -8px rgba(60, 20, 30, 0.45) !important;
+}
+html[data-theme='dark'] :where(.app, .au, #mo, #dg) .b:not(.b2):not(.b3):not(.sm.b2) {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 6px 16px -8px rgba(0, 0, 0, 0.6) !important;
+}
+:where(.app, .au, #mo, #dg) .b.b2 {
+  background: var(--gh-btn2) !important;
+  border: 1px solid var(--ln2) !important;
+  color: var(--tx) !important;
+}
+
+/* ---------- ช่องกรอก ---------- */
+:where(.app, .au, #mo)
+  :is(input:not([type='checkbox']):not([type='radio']):not([type='range']), select, textarea),
+html[data-theme='dark']
+  :where(.app, .au, #mo)
+  :is(input:not([type='checkbox']):not([type='radio']):not([type='range']), select, textarea) {
+  background-color: var(--gh-field);
+  border-color: var(--ln2);
+  color: var(--tx);
+}
+html[data-theme='dark'] :where(.app, .au, #mo) :is(input, textarea)::placeholder {
+  color: rgba(245, 241, 237, 0.42);
+}
+html[data-theme='dark'] :where(.app, .au, #mo) select option {
+  background: #181526;
+  color: #f5f1ed;
+}
+
+/* ---------- ป๊อปอัป ---------- */
+#mo .cd,
+html[data-theme='dark'] #mo .cd {
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 40%), var(--gh-modal);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 30px 80px -24px rgba(60, 25, 30, 0.45);
+}
+html[data-theme='dark'] #mo .cd {
+  background:
+    linear-gradient(160deg, rgba(200, 185, 255, 0.07), rgba(255, 255, 255, 0) 40%), var(--gh-modal);
+  border-color: rgba(226, 216, 255, 0.1);
+  box-shadow: 0 30px 80px -24px rgba(0, 0, 0, 0.9);
+}
+html[data-theme='dark'] #mo {
+  background: rgba(8, 6, 18, 0.55);
+}
+
+/* ---------- ตาราง ---------- */
+.app table th,
+html[data-theme='dark'] .app table th {
+  background-color: var(--gh-th) !important;
+  color: var(--mu);
+}
+
+/* ---------- แจ้งเตือนสั้น (toast) ---------- */
+html[data-theme='dark'] .ts {
+  background: rgba(24, 21, 38, 0.88) !important;
+  border-color: rgba(226, 216, 255, 0.1) !important;
+}
+.ts[data-k='ok'] > i {
+  background: #1d8a55;
+}
+.ts[data-k='er'] > i {
+  background: #c23240;
+}
+.ts[data-k='wa'] > i {
+  background: #c98a1e;
+}
+.ts[data-k='in'] > i {
+  background: #5a46a6;
+}
+
+/* ---------- ตัวเลขเด่น / ไฮไลต์ ---------- */
+.app .live .pl,
+.app .tag-gd {
+  color: var(--gd) !important;
+  background: var(--gd-bg) !important;
+}
+::selection {
+  background: color-mix(in srgb, var(--ac) 24%, transparent);
+}
+
+/* ===================== หน้าต้อนรับ ===================== */
+.apl {
+  --ap-ac: #8e2436;
+  --ap-ac2: #c0475c;
+  /* ฟิล์มส่วนเนื้อหา (บนภาพนุ่ม) */
+  --ap-film: linear-gradient(
+    180deg,
+    rgba(40, 22, 34, 0.52),
+    rgba(40, 22, 34, 0.44) 50%,
+    rgba(40, 22, 34, 0.56)
+  );
+  /* ฟิล์มส่วนบนสุด (บนภาพคมชัด) เข้มตรงกลางบริเวณหัวข้อ */
+  --ap-hero-film:
+    radial-gradient(
+      ellipse 58% 46% at 50% 22%,
+      rgba(36, 18, 30, 0.72),
+      rgba(36, 18, 30, 0.22) 70%,
+      rgba(36, 18, 30, 0) 100%
+    ),
+    linear-gradient(180deg, rgba(36, 18, 30, 0.4), rgba(36, 18, 30, 0.12) 50%, rgba(36, 18, 30, 0));
+  --ap-glass: rgba(255, 252, 248, 0.74);
+  --ap-glass-solid: rgba(255, 252, 248, 0.93);
+  --ap-glass-ln: rgba(255, 255, 255, 0.7);
+  --ap-glass-sh: 0 12px 36px -12px rgba(40, 15, 20, 0.28);
+  --ap-tx: #1f1a1c;
+  --ap-mu: #4f4648;
+}
+html[data-theme='dark'] .apl {
+  --ap-ac: #ff8f9b;
+  --ap-ac2: #ffb3a1;
+  --ap-film: linear-gradient(
+    180deg,
+    rgba(12, 10, 26, 0.74),
+    rgba(14, 11, 28, 0.64) 50%,
+    rgba(10, 8, 22, 0.8)
+  );
+  --ap-hero-film:
+    radial-gradient(
+      ellipse 58% 46% at 50% 22%,
+      rgba(10, 8, 24, 0.82),
+      rgba(10, 8, 24, 0.4) 70%,
+      rgba(10, 8, 24, 0.2) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(12, 10, 26, 0.66),
+      rgba(14, 11, 28, 0.48) 50%,
+      rgba(14, 11, 28, 0.3)
+    );
+  --ap-glass: rgba(24, 21, 38, 0.56);
+  --ap-glass-solid: rgba(24, 21, 38, 0.9);
+  --ap-glass-ln: rgba(226, 216, 255, 0.12);
+  --ap-glass-sh: 0 12px 40px -12px rgba(0, 0, 0, 0.6);
+  --ap-tx: #f5f1ed;
+  --ap-mu: #c4bdcf;
+}
+html:has(.apl),
+html[data-theme='dark']:has(.apl) {
+  background: #1b1018 !important;
+}
+html[data-theme='dark']:has(.apl) {
+  background: #0c0a17 !important;
+}
+/* ฉากหลังติดจอ: ภาพเดียวกันแบบนุ่ม */
+.apl::before,
+html[data-theme='dark'] .apl::before {
+  background:
+    var(--ap-film),
+    var(--hp-bg-soft, var(--hp-bg-d)) 50% 58% / cover no-repeat,
+    #1b1018 !important;
+}
+@media (max-aspect-ratio: 1/1) {
+  .apl::before,
+  html[data-theme='dark'] .apl::before {
+    background:
+      var(--ap-film),
+      var(--hp-bg-soft-m, var(--hp-bg-dm)) center 42% / cover no-repeat,
+      #1b1018 !important;
+  }
+}
+/* ส่วนบนสุด: อาคารคมชัด แล้วค่อย ๆ จางเข้าหาภาพนุ่มด้านล่าง */
+.apl .ap-hero {
+  position: relative;
+  isolation: isolate;
+}
+.apl .ap-hero::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 0;
+  top: -80px;
+  bottom: 0;
+  pointer-events: none;
+  background:
+    var(--ap-hero-film),
+    var(--hp-bg-d) 0% 50% / cover no-repeat;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 58%, transparent 96%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 58%, transparent 96%);
+}
+@media (max-aspect-ratio: 1/1) {
+  .apl .ap-hero::before {
+    background:
+      var(--ap-hero-film),
+      var(--hp-bg-hero-m, var(--hp-bg-d)) 50% 50% / cover no-repeat;
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 50%, transparent 92%);
+    mask-image: linear-gradient(180deg, #000 0%, #000 50%, transparent 92%);
+  }
+}
+/* หัวข้อบรรทัดที่สอง: ไล่สีแสงพระอาทิตย์ตก (ทอง → พีช) */
+.apl .ap-hero h1 em,
+html[data-theme='dark'] .apl .ap-hero h1 em {
+  background: linear-gradient(90deg, #ffd58f, #ffb59c 55%, #ff9fae);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: none;
+}
+/* แถบเมนูบน + ท้ายหน้า */
+.apl .ap-nav,
+.apl .ap-foot {
+  background: rgba(255, 251, 246, 0.74);
+  border-color: rgba(255, 255, 255, 0.55);
+}
+html[data-theme='dark'] .apl .ap-nav,
+html[data-theme='dark'] .apl .ap-foot {
+  background: rgba(16, 14, 28, 0.62);
+  border-color: rgba(226, 216, 255, 0.08);
+}
+/* ปุ่มหลักหน้าต้อนรับ */
+.apl .ap-btn,
+.apl .ap-login {
+  background: linear-gradient(180deg, #a83450, #8e2436 60%, #7a1f2f) !important;
+  color: #fff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 8px 20px -10px rgba(30, 10, 15, 0.6) !important;
+}
+html[data-theme='dark'] .apl .ap-btn,
+html[data-theme='dark'] .apl .ap-login {
+  background: linear-gradient(180deg, #d4566a, #bf4257 60%, #a5344a) !important;
+}
+/* ตัวเลขเด่น/ไอคอนในการ์ด */
+.apl .ap-st b {
+  color: var(--ap-ac);
+}
+.apl .ap-tile i {
+  color: var(--ap-ac);
+}
+/* ภาพหน้าจอระบบในหน้าต้อนรับ: วอลเปเปอร์ย่อส่วนแบบเดียวกับหน้าในระบบจริง */
+.apl .ap-dev .pvx {
+  background:
+    var(--gh-film),
+    var(--hp-bg-d, none) 50% 58% / cover no-repeat,
+    var(--bg) !important;
+}
+html[data-theme='dark'] .apl .ap-dev .pvx {
+  background:
+    var(--gh-film),
+    var(--hp-bg-d, none) 50% 58% / cover no-repeat,
+    var(--bg) !important;
+}
+html[data-theme='dark'] .ap-dev .pv {
+  box-shadow: 0 40px 100px -30px rgba(0, 0, 0, 0.7);
+}
+
+/* หน้าเข้าสู่ระบบ: แผงฟอร์มยังโปร่งเห็นอาคาร แต่เป็นครีมอุ่น (ไม่อมชมพู) / ม่วงคราม */
+@media (min-width: 801px) {
+  .au .cd.gc {
+    background: rgba(255, 251, 246, 0.8) !important;
+  }
+  html[data-theme='dark'] .au .cd.gc {
+    background: rgba(14, 12, 26, 0.58) !important;
+  }
+}
+@media (min-width: 801px) and (hover: hover) and (pointer: fine) {
+  .au .cd.gc {
+    -webkit-backdrop-filter: blur(18px) saturate(115%);
+    backdrop-filter: blur(18px) saturate(115%);
+  }
+}
+@media (max-width: 800px) {
+  .au .cd.gc {
+    background: rgba(255, 252, 248, 0.95) !important;
+  }
+  html[data-theme='dark'] .au .cd.gc {
+    background: rgba(16, 14, 28, 0.92) !important;
+  }
+}
+
+/* ---------- สีของกราฟ/ตัวเลขที่ระบบใส่มากับหน้า (สีชุดเดิม) → ใช้สีชุดใหม่ตามธีม ---------- */
+:root,
+html:not([data-theme='dark']) {
+  --ch-gold: #c4913a; /* แท่งกราฟสีทอง */
+  --ch-or: #b9541f;
+  --ch-gr: #b5aba6;
+  --ch-trk: #f1e3e1;
+}
+html[data-theme='dark'] {
+  --ch-gold: #f1c26c;
+  --ch-or: #f4a46a;
+  --ch-gr: #6f6782;
+  --ch-trk: rgba(242, 122, 135, 0.16);
+}
+:where(.app, #mo) :is([style*='color:#dc2626'], [style*='color:#ef4444']) {
+  color: var(--ac) !important;
+}
+:where(.app, #mo) :is([style*='color:#b91c1c'], [style*='color:#fb7185']) {
+  color: var(--er) !important;
+}
+:where(.app, #mo) [style*='color:#f59e0b'] {
+  color: var(--gd) !important;
+}
+:where(.app, #mo) [style*='color:#ea580c'] {
+  color: var(--ch-or) !important;
+}
+:where(.app, #mo) [style*='color:#9ca3af'] {
+  color: var(--mu) !important;
+}
+:where(.app, #mo) :is([style*='background:#dc2626'], [style*='background:#ef4444']) {
+  background: var(--ac) !important;
+}
+:where(.app, #mo) [style*='background:#b91c1c'] {
+  background: var(--er) !important;
+}
+:where(.app, #mo) [style*='background:#f59e0b'] {
+  background: var(--ch-gold) !important;
+}
+:where(.app, #mo) [style*='background:#ea580c'] {
+  background: var(--ch-or) !important;
+}
+:where(.app, #mo) [style*='background:#9ca3af'] {
+  background: var(--ch-gr) !important;
+}
+:where(.app, #mo) [style*='border-color:#f59e0b'] {
+  border-color: var(--wa-ln) !important;
+}
+html svg :is([stroke='#dc2626'], [stroke='#ef4444']) {
+  stroke: var(--ac) !important;
+}
+html svg :is(circle, path)[fill='#dc2626'] {
+  fill: var(--ac) !important;
+}
+html svg stop[stop-color='#dc2626'] {
+  stop-color: var(--ac) !important;
+}
+html svg [stroke='#f59e0b'] {
+  stroke: var(--ch-gold) !important;
+}
+html svg :is(circle, path)[fill='#f59e0b'] {
+  fill: var(--ch-gold) !important;
+}
+html svg stop[stop-color='#f59e0b'] {
+  stop-color: var(--ch-gold) !important;
+}
+html svg [stroke='#ea580c'] {
+  stroke: var(--ch-or) !important;
+}
+html svg [stroke='#b91c1c'] {
+  stroke: var(--er) !important;
+}
+html svg [stroke='#9ca3af'] {
+  stroke: var(--ch-gr) !important;
+}
+html svg circle[stroke='#fee2e2'] {
+  stroke: var(--ch-trk) !important;
+}
+html svg line[stroke='#f3dcdc'] {
+  stroke: var(--ln2) !important;
+}
+html svg text[fill='#1f2937'] {
+  fill: var(--tx) !important;
+}
+html svg text:is([fill='#6b7280'], [fill='#9ca3af']) {
+  fill: var(--mu) !important;
+}
+html[data-theme='dark'] svg circle[fill='#fff'] {
+  fill: var(--cd) !important;
+}
+
+/* ---------- ชิ้นส่วนเล็ก ๆ ที่ยังเป็นสีแดง/น้ำตาลชุดเดิม ---------- */
+.tabs .on,
+html[data-theme='dark'] .tabs .on {
+  color: var(--ac) !important;
+  border-color: var(--ac) !important;
+}
+.dy,
+html[data-theme='dark'] .dy {
+  color: var(--ac);
+  background: var(--acs);
+  border-color: var(--acs2);
+}
+.sq .hot,
+html[data-theme='dark'] .sq .hot {
+  background: var(--er-bg) !important;
+}
+.sq .hot :is(small, .k),
+html[data-theme='dark'] .sq .hot :is(small, .k) {
+  color: var(--er) !important;
+}
+.live,
+html[data-theme='dark'] .live {
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--ac) 7%, transparent), transparent 62%),
+    var(--s-card) !important;
+}
+.mt3 > div {
+  background: rgba(255, 255, 255, 0.72);
+  border-color: var(--ln);
+}
+.mt3 > div b {
+  color: var(--ac);
+}
+html[data-theme='dark'] :is(.mt3 > div, .po, .pt2 > div, .hch span, .rc2, .tg, .ln2) {
+  background: rgba(226, 216, 255, 0.05);
+  border-color: var(--ln);
+}
+html[data-theme='dark'] .rm {
+  background: rgba(226, 216, 255, 0.04);
+}
+.rm.o,
+html[data-theme='dark'] .rm.o {
+  background: var(--acs);
+  border-color: var(--acs2);
+  color: var(--ac);
+}
+.rm.m,
+html[data-theme='dark'] .rm.m {
+  background: var(--wa-bg);
+  border-color: var(--wa-ln);
+  color: var(--wa);
+}
+.pchip,
+html[data-theme='dark'] .pchip {
+  background: var(--acs);
+  border-color: var(--acs2);
+  color: var(--ac);
+}
+.ib,
+html[data-theme='dark'] .ib {
+  background: var(--acs);
+  border-color: var(--acs2);
+  color: var(--ac);
+}
+.au .dm {
+  border-color: var(--acs2);
+}
+.tl3,
+html[data-theme='dark'] .tl3 {
+  background: var(--wa-bg);
+  border-color: var(--wa-ln);
+}
+.tl3 .k,
+.tl3 .k small {
+  color: var(--wa) !important;
+}
+.tl4,
+html[data-theme='dark'] .tl4 {
+  background: var(--er-bg);
+  border-color: var(--er-ln);
+}
+.tl4 .k {
+  color: var(--er) !important;
+}
+.s4c .cd[style*='#fff1f1'],
+html[data-theme='dark'] .s4c .cd[style*='#fff1f1'] {
+  background: linear-gradient(var(--acs), var(--acs)), var(--s-card) !important;
+}
+html[data-theme='dark'] .pb i,
+.pb i {
+  background: linear-gradient(90deg, var(--ac3), var(--ac2)) !important;
+}
+html[data-theme='dark'] .pb i {
+  background: linear-gradient(90deg, var(--ac), var(--ac2)) !important;
+}
+html[data-theme='dark'] .av,
+html[data-theme='dark'] .app .av {
+  background: linear-gradient(140deg, #d65a6c, #a8344a) !important;
+}
+html[data-theme='dark'] tr:hover td {
+  background: rgba(226, 216, 255, 0.05) !important;
+}
+html[data-theme='dark'] .mm:hover,
+html[data-theme='dark'] .mdd button:hover {
+  background: var(--acs);
+}
+html[data-theme='dark'] .mdd button:hover {
+  color: var(--ac);
+}
+.ci {
+  color: var(--ac);
+}
+html[data-theme='dark'] .ci {
+  color: var(--ac3);
+}
+/* LINE: หัวกล่องคงสีแบรนด์ แต่ตัวหนังสือสีเขียวบนพื้นขาวเข้มขึ้นให้อ่านง่าย */
+html:not([data-theme='dark']) .lid {
+  color: #057a38 !important;
+}
+
+/* ---------- ตัวหนังสือรองที่เล็ก/จาง → เข้มขึ้นเล็กน้อย ---------- */
+.seg span:not(.on),
+html[data-theme='dark'] .seg span:not(.on) {
+  color: var(--mu) !important;
+}
+.apl .ap-nav .seg span:not(.on) {
+  color: var(--ap-mu) !important;
+}
+@media (max-width: 800px) {
+  .app .sb .nv:not(.on) :is(span, i, svg) {
+    color: var(--mu) !important;
+  }
+  .app .sb,
+  html[data-theme='dark'] .app .sb {
+    background: color-mix(in srgb, var(--gh-bar) 70%, var(--bg)) !important;
+  }
+}
+.apl :is(.ap-note, .ap-who > small) {
+  color: rgba(255, 255, 255, 0.94) !important;
+}
+:where(.app, #mo)
+  :is([style*='color:#15803d'], [style*='color:#16a34a'], [style*='color:#166534']) {
+  color: var(--ok) !important;
+}
+:where(.app, #mo) :is([style*='color:#a16207'], [style*='color:#b45309']) {
+  color: var(--wa) !important;
+}
+
