@@ -3401,3 +3401,161 @@ html[data-theme='dark'] .app .mn :is(p.mu, small.mu):not(.cd *):not(.top *):not(
     line-height: 1.45;
   }
 }
+
+/* ===================== 35) ภาพพื้นหลังใหม่ (อาคารแมนชั่น T&T) — จัดตำแหน่งให้เห็นป้ายชื่อ ===================== */
+.apl::before {
+  background-position:
+    center,
+    50% 60%,
+    center !important;
+}
+html:not([data-theme='dark']) .app::before,
+html:not([data-theme='dark']) .au::before,
+html[data-theme='dark'] .app::before,
+html[data-theme='dark'] .au::before {
+  background-position:
+    center,
+    50% 60%,
+    center;
+}
+@media (max-aspect-ratio: 1/1) {
+  .apl::before {
+    background-position:
+      center,
+      center 40%,
+      center !important;
+  }
+}
+@media (max-width: 800px) {
+  html:not([data-theme='dark']) .app::before,
+  html:not([data-theme='dark']) .au::before,
+  html[data-theme='dark'] .app::before,
+  html[data-theme='dark'] .au::before {
+    background-position:
+      center,
+      center 40%,
+      center;
+  }
+}
+
+/* ===================== 36) มือถือ: ให้สะอาดตาขึ้นกับภาพใหม่ =====================
+   ภาพมีป้าย "แมนชั่น T&T" ตัวใหญ่ → การ์ดบนมือถือทึบขึ้นไม่ให้ตัวหนังสือในภาพโผล่ทะลุ
+   ด้านบนจอ (แถบเมนู/หัวข้อ) ไล่สีให้นวลขึ้น อ่านหัวข้อง่าย · ด้านล่างยังเห็นอาคารชัด */
+@media (max-width: 800px) {
+  html:not([data-theme='dark']) {
+    --s-card-m: rgba(255, 255, 255, 0.985);
+  }
+  html[data-theme='dark'] {
+    --s-card-m: rgba(22, 16, 19, 0.97);
+  }
+  :where(.app) .cd,
+  html[data-theme='dark'] :where(.app) .cd,
+  .au .cd.gc,
+  html[data-theme='dark'] .au .cd.gc {
+    background: var(--s-card-m) !important;
+  }
+  html:not([data-theme='dark']) .app::before {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255, 250, 247, 0.9) 0%,
+        rgba(255, 250, 247, 0.62) 22%,
+        rgba(255, 250, 247, 0.4) 55%,
+        rgba(255, 250, 247, 0.3) 100%
+      ),
+      var(--hp-bg-dm, var(--hp-bg-d)) center 40% / cover no-repeat,
+      #f6eee9;
+  }
+  html[data-theme='dark'] .app::before {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(8, 5, 6, 0.9) 0%,
+        rgba(8, 5, 6, 0.7) 22%,
+        rgba(8, 5, 6, 0.55) 55%,
+        rgba(8, 5, 6, 0.5) 100%
+      ),
+      var(--hp-bg-dm, var(--hp-bg-d)) center 40% / cover no-repeat,
+      #120b0e;
+  }
+  /* หัวข้อหน้า: ระยะห่างจากขอบเท่าการ์ด */
+  .app .mn > h2,
+  .app .mn > p.mu {
+    padding-left: 2px;
+  }
+}
+/* หน้าต้อนรับบนมือถือ: ด้านบนนวลขึ้น ให้หัวข้อ/ปุ่มไม่ทับกับป้ายในภาพจนรก */
+@media (max-aspect-ratio: 1/1) {
+  .apl {
+    --ap-film: linear-gradient(
+      180deg,
+      rgba(18, 10, 14, 0.72) 0%,
+      rgba(18, 10, 14, 0.6) 34%,
+      rgba(18, 10, 14, 0.3) 60%,
+      rgba(18, 10, 14, 0.45) 100%
+    );
+  }
+  html[data-theme='dark'] .apl {
+    --ap-film: linear-gradient(
+      180deg,
+      rgba(5, 3, 4, 0.86) 0%,
+      rgba(5, 3, 4, 0.74) 34%,
+      rgba(5, 3, 4, 0.5) 60%,
+      rgba(5, 3, 4, 0.7) 100%
+    );
+  }
+}
+/* จอคอม: ป้าย "แมนชั่น T&T" อยู่กลางภาพ ตรงกับหัวข้อ → นวลบริเวณหัวข้อให้ตัวหนังสือไม่ตีกับป้าย */
+@media (min-aspect-ratio: 1/1) {
+  .apl {
+    --ap-film:
+      radial-gradient(
+        ellipse 54% 44% at 50% 24%,
+        rgba(18, 10, 14, 0.78),
+        rgba(18, 10, 14, 0.25) 70%,
+        rgba(18, 10, 14, 0) 100%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(18, 10, 14, 0.4),
+        rgba(18, 10, 14, 0.2) 45%,
+        rgba(18, 10, 14, 0.5)
+      );
+  }
+  html[data-theme='dark'] .apl {
+    --ap-film:
+      radial-gradient(
+        ellipse 54% 44% at 50% 24%,
+        rgba(5, 3, 4, 0.82),
+        rgba(5, 3, 4, 0.3) 70%,
+        rgba(5, 3, 4, 0) 100%
+      ),
+      linear-gradient(180deg, rgba(5, 3, 4, 0.72), rgba(5, 3, 4, 0.6) 45%, rgba(5, 3, 4, 0.82));
+  }
+}
+@media (min-width: 801px) {
+  html:not([data-theme='dark']) .app::before {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255, 250, 247, 0.86) 0%,
+        rgba(255, 250, 247, 0.6) 26%,
+        rgba(255, 250, 247, 0.42) 60%,
+        rgba(255, 250, 247, 0.5) 100%
+      ),
+      var(--hp-bg-d) 50% 60% / cover no-repeat,
+      #f6eee9;
+  }
+  html[data-theme='dark'] .app::before {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(6, 4, 5, 0.86) 0%,
+        rgba(6, 4, 5, 0.66) 26%,
+        rgba(6, 4, 5, 0.52) 60%,
+        rgba(6, 4, 5, 0.66) 100%
+      ),
+      var(--hp-bg-d) 50% 60% / cover no-repeat,
+      #120b0e;
+  }
+}
