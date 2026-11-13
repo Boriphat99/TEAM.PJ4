@@ -41,7 +41,18 @@ let out = html
     '\n    <script src="script.js?v=' + ver + '"></script>'
   )
   .replace(/<!-- (CSS|JS):[^>]*-->\s*/g, '')
-  .replace(/\.\.\/static\//g, 'static/');
+  .replace(/\.\.\/static\//g, 'static/')
+  // รูปพื้นหลังใน static/ ต่อท้าย ?v=<hash ของรูป> — เปลี่ยนรูปแล้วเบราว์เซอร์คอมจะโหลดรูปใหม่ ไม่ค้างรูปเก่าในแคช
+  .replace(/url\('static\/([^')?]+\.(?:webp|png|jpg))'\)/g, (m, f) => {
+    const fp = path.join(OUT, 'static', f);
+    if (!fs.existsSync(fp)) return m;
+    const h = require('crypto')
+      .createHash('sha1')
+      .update(fs.readFileSync(fp))
+      .digest('hex')
+      .slice(0, 8);
+    return "url('static/" + f + '?v=' + h + "')";
+  });
 fs.writeFileSync(path.join(OUT, 'index.html'), out);
 console.log(
   `build สำเร็จ: CSS ${css.length} ไฟล์ + JS ${js.length} ไฟล์ -> style.css, script.js, index.html`
