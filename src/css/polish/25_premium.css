@@ -4083,3 +4083,220 @@ html[data-theme='dark'] .app .top .me {
     0 0 0 2px rgba(255, 255, 255, 0.12),
     0 1px 3px rgba(0, 0, 0, 0.4) !important;
 }
+
+/* ===================== 40) ปุ่มเปลี่ยนภาษา + เปลี่ยนธีม แบบงาน Botnoi =====================
+   ธีม: ปุ่มกลมโปร่ง ไอคอนเดียว (สว่าง = พระจันทร์ / มืด = พระอาทิตย์) หมุนสลับนุ่มๆ · โฮเวอร์มีพื้นจาง
+   ภาษา: แคปซูลบาง มีตัวเลื่อนสีขาวไหลไปหาภาษาที่เลือก */
+.thm,
+html[data-theme='dark'] .thm,
+.app .top .thm,
+.apl .ap-tools .thm,
+.hp .hr .thm,
+.au .thm {
+  position: relative;
+  display: inline-grid !important;
+  place-items: center;
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--mu) !important;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    transform 0.15s;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+.thm:hover {
+  background: rgba(0, 0, 0, 0.06) !important;
+  color: var(--tx) !important;
+}
+html[data-theme='dark'] .thm:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+.thm:active {
+  transform: scale(0.92);
+}
+.thm::before,
+.thm::after {
+  display: none !important;
+}
+.thm svg {
+  grid-area: 1 / 1;
+  width: 19px !important;
+  height: 19px !important;
+  display: block !important;
+  opacity: 1;
+  transition:
+    transform 0.5s cubic-bezier(0.3, 1.4, 0.5, 1),
+    opacity 0.3s ease !important;
+}
+/* ธีมสว่าง: แสดงพระจันทร์ (กดเพื่อไปโหมดมืด) */
+html:not([data-theme='dark']) .thm svg:first-of-type {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.4);
+}
+html:not([data-theme='dark']) .thm svg:last-of-type {
+  opacity: 1;
+  transform: none;
+}
+/* ธีมมืด: แสดงพระอาทิตย์ (กดเพื่อไปโหมดสว่าง) */
+html[data-theme='dark'] .thm svg:first-of-type {
+  opacity: 1;
+  transform: none;
+}
+html[data-theme='dark'] .thm svg:last-of-type {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.4);
+}
+/* บนภาพ (หน้าต้อนรับ/เข้าสู่ระบบ) ไอคอนสีขาว */
+.apl .ap-tools .thm,
+.au .tgl .thm {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+html:not([data-theme='dark']) .apl .ap-tools .thm {
+  color: var(--tx) !important;
+}
+.au .tgl .thm:hover,
+.apl .ap-tools .thm:hover {
+  background: rgba(255, 255, 255, 0.16) !important;
+}
+
+/* ภาษา: แคปซูลบาง + ตัวเลื่อน */
+.seg,
+html[data-theme='dark'] .seg {
+  position: relative !important;
+  display: inline-grid !important;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 0 !important;
+  padding: 3px !important;
+  border-radius: 999px !important;
+  border: 0 !important;
+  background: rgba(0, 0, 0, 0.06) !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  isolation: isolate;
+}
+html[data-theme='dark'] .seg {
+  background: rgba(255, 255, 255, 0.09) !important;
+}
+.seg::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute;
+  z-index: -1;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  border-radius: 999px;
+  background: #fff;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.12),
+    0 2px 6px -2px rgba(0, 0, 0, 0.12);
+  transition: transform 0.32s cubic-bezier(0.3, 1.3, 0.5, 1);
+}
+html[data-theme='dark'] .seg::before {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+}
+.seg:has(> span:nth-child(2).on)::before,
+.seg.to-en::before {
+  transform: translateX(100%);
+}
+.seg.to-th::before {
+  transform: translateX(0) !important;
+}
+.seg::after {
+  display: none !important;
+}
+.seg > span,
+html[data-theme='dark'] .seg > span {
+  position: relative;
+  min-width: 34px;
+  height: 30px;
+  display: grid !important;
+  place-items: center;
+  padding: 0 10px !important;
+  border-radius: 999px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--mu) !important;
+  font:
+    600 12.5px/1 Anuphan,
+    var(--font) !important;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: color 0.25s;
+}
+.seg > span.on,
+html[data-theme='dark'] .seg > span.on {
+  color: var(--tx) !important;
+}
+.seg.to-en > span:first-child,
+.seg.to-th > span:last-child {
+  color: var(--mu) !important;
+}
+.seg.to-en > span:last-child,
+.seg.to-th > span:first-child {
+  color: var(--tx) !important;
+}
+/* บนภาพ: แคปซูลกระจกขาว */
+.au .tgl .seg,
+html[data-theme='dark'] .au .tgl .seg {
+  background: rgba(255, 255, 255, 0.18) !important;
+}
+.au .tgl .seg > span {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+.au .tgl .seg > span.on {
+  color: var(--tx) !important;
+}
+html[data-theme='dark'] .au .tgl .seg > span.on {
+  color: #fff !important;
+}
+/* ระยะห่างระหว่างภาษา/ธีม */
+.tgl {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+/* ชนะกฎเก่า: ปุ่มภาษาที่เลือกไม่ใช่พื้นแดงแล้ว (ใช้ตัวเลื่อนแทน) · ไอคอนธีมสีเดียวกับตัวหนังสือ */
+html .seg > span.on,
+html[data-theme='dark'] .seg > span.on,
+html .hp .hr .seg > span.on,
+html[data-theme='dark'] .hp .hr .seg > span.on {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+html .thm svg,
+html[data-theme='dark'] .thm svg {
+  color: inherit !important;
+  filter: none !important;
+}
+/* หน้าเข้าสู่ระบบบนมือถือ: ปุ่มภาษา/ธีมอยู่บนภาพส่วนเข้ม → ใช้สีขาว */
+@media (max-width: 800px) {
+  html:not([data-theme='dark']) #app:has(.au) .tgl .seg {
+    background: rgba(255, 255, 255, 0.2) !important;
+  }
+  html:not([data-theme='dark']) #app:has(.au) .tgl .seg > span:not(.on) {
+    color: rgba(255, 255, 255, 0.9) !important;
+  }
+  html:not([data-theme='dark']) #app:has(.au) .tgl .thm {
+    color: #fff !important;
+  }
+}

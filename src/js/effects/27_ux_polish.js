@@ -260,3 +260,19 @@
       }).observe(DG, { childList: true });
   }
 })();
+
+/* เปลี่ยนภาษา: เลื่อนตัวเลือกในแคปซูลไปก่อน แล้วค่อยเปลี่ยนภาษา (หน้าเว็บวาดใหม่) — ดู 25_premium.css หมวด 40 */
+(function () {
+  if (typeof setPf !== 'function') return;
+  const orig = setPf;
+  setPf = function (k, v) {
+    if (k === 'lang' && v !== (typeof LANG !== 'undefined' ? LANG : v)) {
+      document.querySelectorAll('.seg').forEach(s => {
+        s.classList.remove('to-en', 'to-th');
+        s.classList.add(v === 'en' ? 'to-en' : 'to-th');
+      });
+      return setTimeout(() => orig(k, v), 230);
+    }
+    return orig(k, v);
+  };
+})();
