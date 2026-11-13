@@ -10029,3 +10029,274 @@ html[data-theme='dark'] .au::before {
   }
 }
 
+/* ===================== 37) โทนสี "Twilight Mansion" — ดึงสีจากภาพอาคาร =====================
+   แดงอิฐ (ผนังอาคาร) · ครีมอุ่น (ผนังขาว) · ทองอำพัน (แสงไฟ) · ม่วงพลบค่ำ (ท้องฟ้า)
+   กระจกฝ้าอุ่น เบลอนุ่ม ขอบสว่างบาง · ตัวหนังสือคอนทราสต์สูง อ่านง่าย */
+:root {
+  --ac: #9b1b30;
+  --ac2: #741425;
+  --ac3: #bf3048;
+  --acs: #fbeff0;
+  --acs2: #f3dadd;
+  --gd: #b9822d; /* ทองอำพัน */
+  --gd-bg: #fbf2e1;
+  --tx: #21161a;
+  --mu: #6d5f63;
+  --ln: rgba(120, 80, 70, 0.14);
+  --ln2: rgba(120, 80, 70, 0.22);
+  --s-card: rgba(255, 252, 248, 0.72);
+  --s-card-m: rgba(255, 252, 248, 0.97);
+  --s-edge: rgba(255, 255, 255, 0.85);
+  --s-sh: 0 1px 1px rgba(60, 20, 25, 0.04), 0 12px 32px -14px rgba(90, 30, 40, 0.28);
+  --s-in: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+  --tw-veil: linear-gradient(
+    180deg,
+    rgba(255, 247, 238, 0.88) 0%,
+    rgba(255, 244, 236, 0.58) 28%,
+    rgba(250, 236, 230, 0.4) 62%,
+    rgba(246, 232, 236, 0.55) 100%
+  );
+  --tw-blur: blur(26px) saturate(170%);
+}
+html[data-theme='dark'] {
+  --ac: #e5485f;
+  --ac2: #b51f38;
+  --ac3: #ff6b80;
+  --acs: rgba(229, 72, 95, 0.12);
+  --acs2: rgba(229, 72, 95, 0.22);
+  --gd: #e8b766;
+  --gd-bg: rgba(232, 183, 102, 0.12);
+  --tx: #f7f1ee;
+  --mu: #b8aaae;
+  --ln: rgba(255, 235, 230, 0.09);
+  --ln2: rgba(255, 235, 230, 0.15);
+  --s-card: rgba(28, 18, 26, 0.6);
+  --s-card-m: rgba(26, 17, 24, 0.95);
+  --s-edge: rgba(255, 230, 225, 0.1);
+  --s-sh: 0 16px 40px -18px rgba(0, 0, 0, 0.85);
+  --s-in: inset 0 1px 0 rgba(255, 240, 235, 0.07);
+  --tw-veil: linear-gradient(
+    180deg,
+    rgba(14, 8, 14, 0.9) 0%,
+    rgba(18, 10, 18, 0.66) 28%,
+    rgba(16, 9, 15, 0.5) 62%,
+    rgba(12, 7, 11, 0.72) 100%
+  );
+}
+
+/* พื้นหลังหน้าในระบบ + เข้าสู่ระบบ: ฟิล์มโทนพลบค่ำอุ่น */
+html:not([data-theme='dark']) .app::before,
+html[data-theme='dark'] .app::before,
+html:not([data-theme='dark']) .au::before,
+html[data-theme='dark'] .au::before {
+  background:
+    var(--tw-veil),
+    var(--hp-bg-d) 50% 60% / cover no-repeat,
+    var(--bg) !important;
+}
+@media (max-width: 800px) {
+  html:not([data-theme='dark']) .app::before,
+  html[data-theme='dark'] .app::before,
+  html:not([data-theme='dark']) .au::before,
+  html[data-theme='dark'] .au::before {
+    background:
+      var(--tw-veil),
+      var(--hp-bg-dm, var(--hp-bg-d)) center 40% / cover no-repeat,
+      var(--bg) !important;
+  }
+}
+
+/* การ์ดกระจกฝ้าอุ่น */
+:where(.app) .cd,
+html[data-theme='dark'] :where(.app) .cd {
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 45%), var(--s-card);
+  border: 1px solid var(--s-edge);
+  border-radius: 18px;
+  box-shadow: var(--s-in), var(--s-sh);
+}
+html[data-theme='dark'] :where(.app) .cd {
+  background:
+    linear-gradient(160deg, rgba(255, 220, 230, 0.05), rgba(255, 255, 255, 0) 45%), var(--s-card);
+}
+@media (min-width: 801px) and (hover: hover) {
+  :where(.app) .cd {
+    -webkit-backdrop-filter: var(--tw-blur);
+    backdrop-filter: var(--tw-blur);
+  }
+}
+
+/* เมนูข้าง (คอม): กระจกฝ้า */
+@media (min-width: 801px) {
+  .app .sb {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 252, 248, 0.78),
+      rgba(255, 248, 243, 0.66)
+    ) !important;
+    -webkit-backdrop-filter: var(--tw-blur);
+    backdrop-filter: var(--tw-blur);
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  }
+  html[data-theme='dark'] .app .sb {
+    background: linear-gradient(180deg, rgba(30, 18, 28, 0.72), rgba(20, 12, 19, 0.66)) !important;
+    border-color: rgba(255, 230, 225, 0.08) !important;
+  }
+}
+.app .sb .nv.on,
+html[data-theme='dark'] .app .sb .nv.on {
+  background: linear-gradient(90deg, var(--acs2), var(--acs)) !important;
+  color: var(--ac) !important;
+}
+
+/* แถบบน + เมนูล่างบนมือถือ: เบลอจริง (มีแค่ 2 ชิ้น ไม่หน่วง) */
+@media (max-width: 800px) {
+  .app .top {
+    background: rgba(255, 249, 244, 0.72) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(170%);
+    backdrop-filter: blur(18px) saturate(170%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.6) !important;
+  }
+  html[data-theme='dark'] .app .top {
+    background: rgba(20, 12, 19, 0.7) !important;
+    border-bottom-color: rgba(255, 230, 225, 0.07) !important;
+  }
+  .app .sb,
+  html[data-theme='dark'] .app .sb {
+    background: rgba(255, 250, 246, 0.78) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+  }
+  html[data-theme='dark'] .app .sb {
+    background: rgba(24, 14, 22, 0.78) !important;
+  }
+}
+
+/* ปุ่มหลัก: แดงอิฐไล่เฉด + เงานุ่ม */
+:where(.app, .au, #mo) .b:not(.b2):not(.b3):not(.sm.b2) {
+  background: linear-gradient(180deg, var(--ac3), var(--ac) 55%, var(--ac2)) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 8px 18px -8px color-mix(in srgb, var(--ac) 70%, transparent) !important;
+}
+/* ปุ่มรอง: กระจก */
+:where(.app, .au, #mo) .b.b2 {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border: 1px solid var(--ln2) !important;
+  color: var(--tx) !important;
+}
+html[data-theme='dark'] :where(.app, .au, #mo) .b.b2 {
+  background: rgba(255, 240, 240, 0.06) !important;
+}
+
+/* ตัวเลขเด่น/ยอดเงิน: แดงอิฐเข้ม อ่านชัด */
+.app .cd .big,
+.app .cd b.ac,
+.app .amt .big {
+  color: var(--ac) !important;
+}
+
+/* ป้ายสถานะ "LIVE"/ไฮไลต์เล็ก ใช้ทองอำพัน */
+.app .live .pl,
+.app .tag-gd {
+  color: var(--gd) !important;
+  background: var(--gd-bg) !important;
+}
+
+/* หัวข้อหน้าบนภาพ: สีหมึกเข้ม/ขาวนวล + ขอบเรืองบางๆ */
+.app .mn > h2 {
+  color: var(--tx);
+}
+
+/* ช่องกรอก: พื้นทึบ อ่านง่าย ขอบนุ่ม โฟกัสเป็นวงแดงอิฐจาง */
+:where(.app, .au, #mo)
+  :is(input:not([type='checkbox']):not([type='radio']):not([type='range']), select, textarea) {
+  background-color: rgba(255, 255, 255, 0.92);
+  border-color: var(--ln2);
+}
+html[data-theme='dark']
+  :where(.app, .au, #mo)
+  :is(input:not([type='checkbox']):not([type='radio']):not([type='range']), select, textarea) {
+  background-color: rgba(255, 240, 240, 0.05);
+}
+:where(.app, .au, #mo) :is(input, select, textarea):focus {
+  border-color: var(--ac3) !important;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ac) 16%, transparent) !important;
+}
+
+/* ป๊อปอัป: กระจกฝ้าหนา + เงาลึก */
+#mo .cd,
+html[data-theme='dark'] #mo .cd {
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 40%),
+    rgba(255, 252, 248, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 22px;
+  box-shadow: 0 30px 80px -24px rgba(50, 15, 25, 0.5);
+}
+html[data-theme='dark'] #mo .cd {
+  background:
+    linear-gradient(160deg, rgba(255, 220, 230, 0.06), rgba(255, 255, 255, 0) 40%),
+    rgba(26, 16, 24, 0.95);
+  border-color: rgba(255, 230, 225, 0.1);
+  box-shadow: 0 30px 80px -24px rgba(0, 0, 0, 0.9);
+}
+#mo {
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+/* ตาราง: หัวตารางโปร่งอุ่น แถวคั่นบาง */
+.app table th {
+  background-color: rgba(155, 27, 48, 0.05) !important;
+  color: var(--mu);
+}
+html[data-theme='dark'] .app table th {
+  background-color: rgba(255, 220, 230, 0.04) !important;
+}
+.app table td {
+  border-color: var(--ln) !important;
+}
+/* ปรับธีมสว่างให้คมขึ้น: การ์ดทึบขึ้นเล็กน้อย เส้นขอบ/เงาชัดขึ้น ตัวหนังสือรองเข้มขึ้น */
+:root {
+  --s-card: rgba(255, 252, 248, 0.82);
+  --mu: #5f5155;
+}
+html:not([data-theme='dark']) :where(.app) .cd {
+  box-shadow:
+    var(--s-in),
+    0 0 0 1px rgba(120, 60, 60, 0.06),
+    0 14px 34px -16px rgba(90, 30, 40, 0.32);
+}
+/* หน้าเข้าสู่ระบบธีมสว่าง: ฟิล์มบางกว่าหน้าในระบบ ให้เห็นอาคาร + แผงซ้ายเข้มขึ้นให้ตัวหนังสือขาวชัด */
+html:not([data-theme='dark']) .au::before {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 247, 238, 0.35),
+      rgba(255, 244, 236, 0.2) 50%,
+      rgba(246, 232, 236, 0.35)
+    ),
+    var(--hp-bg-d) 50% 60% / cover no-repeat,
+    var(--bg) !important;
+}
+.au .al,
+html[data-theme='dark'] .au .al {
+  background: linear-gradient(90deg, rgba(30, 12, 20, 0.62), rgba(30, 12, 20, 0.2)) !important;
+}
+@media (max-width: 800px) {
+  html:not([data-theme='dark']) .au::before {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(40, 16, 24, 0.55),
+        rgba(40, 16, 24, 0.25) 30%,
+        rgba(255, 247, 238, 0.3)
+      ),
+      var(--hp-bg-dm, var(--hp-bg-d)) center 40% / cover no-repeat,
+      var(--bg) !important;
+  }
+}
+
