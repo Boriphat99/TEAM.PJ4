@@ -487,6 +487,7 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 อธิบายปัญหาโดยย่อ|Briefly describe the problem
 อนุมัติ|Approve
 ออกจากระบบ|Sign out
+ต้องการออกจากระบบใช่หรือไม่?|Do you want to sign out?
 ออกจากห้อง|from the room
 ออกบิลทุกห้อง พร้อมค่าปรับอัตโนมัติ|Issue invoices for every room with automatic late fees
 ออกบิลวันที่|Issue invoices on day
@@ -1274,6 +1275,12 @@ function lout(r) {
   setTimeout(() => {
     if (!U && !lok()) lof(r, 'late re-render');
   }, 1500);
+}
+// ปุ่มออกจากระบบ: ถามยืนยันก่อน กันกดพลาดแล้วหลุดออกทันที
+function askOut() {
+  cf('ต้องการออกจากระบบใช่หรือไม่?', () => out());
+  const y = $('#dy');
+  if (y) y.textContent = 'ออกจากระบบ';
 }
 function out() {
   const r = U && U.role;
@@ -2845,10 +2852,10 @@ pg.help = () => {
     ad = U.role == 'admin',
     tk = (D.tk = D.tk || []).filter(t => ad || t.uid == U.id).sort((a, b) => b.t - a.t),
     id = (S.line || '').trim();
-  return `<div class="hd2"><i class="ci" style="width:44px;height:44px;font-size:20px">◍</i><div><h2>ศูนย์ช่วยเหลือ</h2><p class="mu" style="margin:2px 0">ส่งคำขอ — เราจะตอบกลับโดยเร็วที่สุด</p></div></div>
-<div style="max-width:780px"><h3 style="margin:18px 0 4px">ช่องทางการติดต่อ</h3><p class="mu" style="margin:0 0 12px">ติดต่อเราผ่านช่องทางที่คุณสะดวก</p>
+  return `<div class="hd2"><div><h2>ศูนย์ช่วยเหลือ</h2><p class="mu" style="margin:2px 0">ส่งคำขอ — เราจะตอบกลับโดยเร็วที่สุด</p></div></div>
+<div class="hlp" style="max-width:780px"><h3 style="margin:18px 0 4px">ช่องทางการติดต่อ</h3><p class="mu" style="margin:0 0 12px">ติดต่อเราผ่านช่องทางที่คุณสะดวก</p>
 <div class="ln2"><div class="lnh"><i class="lni"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.5 1.4 4.7 3.7 6.2-.2.8-.7 2.7-.8 3.1 0 0-.1.3.2.4.2.1.4 0 .4 0 .5-.1 3-2 4.1-2.8.8.1 1.6.2 2.4.2 5.5 0 10-3.6 10-8S17.5 3 12 3z"/></svg></i><b>LINE Official Account</b></div><div class="lnb"><div class="lq">${S.lineqr ? `<img src="${S.lineqr}" alt="QR LINE">` : 'พื้นที่ใส่ QR LINE<br>' + (ad ? '(กดแก้ไขเพื่อเพิ่ม)' : '(ผู้ดูแลยังไม่ได้เพิ่ม)')}</div><div class="lnx"><h3 class="lid">${id ? e(id) : 'ยังไม่ได้ตั้งค่า LINE ID'}</h3><small class="mu lns">LINE Official Account · ${PN()}</small><p class="mu lnt">สแกน QR หรือค้นหา LINE ID เพื่อเพิ่มเพื่อน</p><div class="lna">${id ? `<a class="b lgb" target="_blank" rel="noopener" href="https://line.me/R/ti/p/${encodeURIComponent(id)}">เพิ่มเพื่อนใน LINE</a>` : ''}${ad ? '<button class="b b2 sm" onclick="le()">แก้ไข QR / LINE ID</button>' : ''}</div></div></div></div>
-${ad ? '' : contactCard()}${ad ? '' : `<h3 style="margin:28px 0 12px">ส่งคำขอใหม่</h3><div class="cd"><label>หมวดหมู่</label><select id="tkc"><option value="">เลือกหมวดหมู่</option>${['ปัญหาการชำระเงิน', 'ใบแจ้งหนี้ / ค่าไฟ', 'ซ่อมบำรุง', 'บัญชีผู้ใช้', 'อื่นๆ'].map(x => `<option>${x}</option>`).join('')}</select><label>หัวข้อ</label><input id="tkt" placeholder="อธิบายปัญหาโดยย่อ" maxlength="100"><label>รายละเอียด</label><textarea id="tkb" rows="4" placeholder="กรุณาอธิบายปัญหาอย่างละเอียด..."></textarea><label>แนบรูปภาพ (ไม่บังคับ)</label><div style="margin:6px 0"><input type="file" id="tkf" accept="image/jpeg,image/png,image/webp" multiple hidden onchange="tki(this)"><button class="b b2 sm" onclick="$('#tkf').click()">🖼 แนบรูปภาพ</button> <small class="mu">สูงสุด 5 รูป (JPEG, PNG, WebP) · ไม่เกิน 5MB ต่อรูป</small></div><div id="tkp" class="fl"></div><div style="text-align:right"><button class="b" onclick="tks()">✈ ส่งคำขอ</button></div></div>`}
+${ad ? '' : contactCard()}${ad ? '' : `<h3 style="margin:28px 0 12px">ส่งคำขอใหม่</h3><div class="cd"><label>หมวดหมู่</label><select id="tkc"><option value="">เลือกหมวดหมู่</option>${['ปัญหาการชำระเงิน', 'ใบแจ้งหนี้ / ค่าไฟ', 'ซ่อมบำรุง', 'บัญชีผู้ใช้', 'อื่นๆ'].map(x => `<option>${x}</option>`).join('')}</select><label>หัวข้อ</label><input id="tkt" placeholder="อธิบายปัญหาโดยย่อ" maxlength="100"><label>รายละเอียด</label><textarea id="tkb" rows="4" placeholder="กรุณาอธิบายปัญหาอย่างละเอียด..."></textarea><label>แนบรูปภาพ (ไม่บังคับ)</label><div style="margin:6px 0"><input type="file" id="tkf" accept="image/jpeg,image/png,image/webp" multiple hidden onchange="tki(this)"><button class="b b2 sm" onclick="$('#tkf').click()">แนบรูปภาพ</button> <small class="mu">สูงสุด 5 รูป (JPEG, PNG, WebP) · ไม่เกิน 5MB ต่อรูป</small></div><div id="tkp" class="fl"></div><div style="text-align:right"><button class="b" onclick="tks()">ส่งคำขอ</button></div></div>`}
 <h3 style="margin:28px 0 12px">${ad ? 'คำขอจากผู้ใช้ (ช่วยเหลือผู้ส่งคำขอ)' : 'คำขอของฉัน'}</h3>${
     tk
       .map(
@@ -2864,7 +2871,7 @@ ${ad ? '' : contactCard()}${ad ? '' : `<h3 style="margin:28px 0 12px">ส่ง�
                   )
                   .join('')}</select>`
               : `<span class="pl ${TKS[t.s][1]}">${TKS[t.s][0]}</span>`
-          }</div><p style="white-space:pre-line;margin:10px 0">${e(t.body)}</p>${(t.imgs || []).map((x, i) => `<img class="tmb" src="${x}" onclick="tkv('${t.id}',${i})"> `).join('')}${t.reply ? `<div class="note" style="margin-top:10px">💬 ตอบกลับจากผู้ดูแลระบบ${t.rby ? ' (' + e(t.rby) + ')' : ''}<br>${e(t.reply)}</div>` : ''}${ad ? `<textarea id="rp_${t.id}" rows="2" placeholder="พิมพ์ข้อความตอบกลับ…" style="margin-top:10px">${e(t.reply || '')}</textarea><div style="text-align:right"><button class="b sm" onclick="tkrp('${t.id}')">ส่งคำตอบ</button></div>` : ''}</div>`
+          }</div><p style="white-space:pre-line;margin:10px 0">${e(t.body)}</p>${(t.imgs || []).map((x, i) => `<img class="tmb" src="${x}" onclick="tkv('${t.id}',${i})"> `).join('')}${t.reply ? `<div class="note" style="margin-top:10px">ตอบกลับจากผู้ดูแลระบบ${t.rby ? ' (' + e(t.rby) + ')' : ''}<br>${e(t.reply)}</div>` : ''}${ad ? `<textarea id="rp_${t.id}" rows="2" placeholder="พิมพ์ข้อความตอบกลับ…" style="margin-top:10px">${e(t.reply || '')}</textarea><div style="text-align:right"><button class="b sm" onclick="tkrp('${t.id}')">ส่งคำตอบ</button></div>` : ''}</div>`
       )
       .join('') || '<div class="cd mu" style="text-align:center">ยังไม่มีคำขอ</div>'
   }</div>`;
@@ -3339,7 +3346,7 @@ function R0() {
             ['prof', 'โปรไฟล์', '◉'],
           ];
   if (!nv.some(n => n[0] == P)) P = nv[0][0];
-  a.innerHTML = `<div class="app"><div class="sb np"><div class="logo" style="margin-bottom:14px"><img class="lgi" src="${LG}" alt=""><div>T&T MANSION<br><small class="ac">PAYMENT SYSTEM</small></div></div>${nv.map(n => `<div class="nv ${P == n[0] ? 'on' : ''}" onclick="go('${n[0]}')" data-tip="${T2(n[1])}"><i>${IC[n[0]] || n[2]}</i><span>${n[1]}</span></div>`).join('')}<button class="sbt np" type="button" onclick="toggleSb()" data-tip="${T2('ย่อ/ขยายเมนู')}">${IC.chev}<span>ย่อเมนู</span></button></div><div class="mn${ow ? ' ro' : ''}"><div class="top np">${ad ? `<input placeholder="ค้นหาห้อง ผู้เช่า หรือเลขที่บิล (กด Enter)" value="${e(Q)}" onkeydown="if(event.key=='Enter'){Q=this.value;F='all';go('pay')}">` : '<span style="flex:1"></span>'}<span class="me" onclick="go('prof')" data-tip="${T2('โปรไฟล์ของฉัน')}">${av(U, 36)}<b>${e(U.name)}</b></span>${THB()}<span class="seg"><span class="${LANG == 'th' ? 'on' : ''}" onclick="setPf('lang','th')">TH</span><span class="${LANG == 'en' ? 'on' : ''}" onclick="setPf('lang','en')">EN</span></span><button class="b b2 sm lo" onclick="out()" data-tip="${T2('ออกจากระบบ')}">${IC.out}<span class="lbl">ออกจากระบบ</span></button></div>${pg[P]()}<p class="mu np" style="text-align:center;font-size:11px;margin:28px 0 0">เวอร์ชันระบบ ${APP_V}</p></div></div>`;
+  a.innerHTML = `<div class="app"><div class="sb np"><div class="logo" style="margin-bottom:14px"><img class="lgi" src="${LG}" alt=""><div>T&T MANSION<br><small class="ac">PAYMENT SYSTEM</small></div></div>${nv.map(n => `<div class="nv ${P == n[0] ? 'on' : ''}" onclick="go('${n[0]}')" data-tip="${T2(n[1])}"><i>${IC[n[0]] || n[2]}</i><span>${n[1]}</span></div>`).join('')}<button class="sbt np" type="button" onclick="toggleSb()" data-tip="${T2('ย่อ/ขยายเมนู')}">${IC.chev}<span>ย่อเมนู</span></button></div><div class="mn${ow ? ' ro' : ''}"><div class="top np">${ad ? `<input placeholder="ค้นหาห้อง ผู้เช่า หรือเลขที่บิล (กด Enter)" value="${e(Q)}" onkeydown="if(event.key=='Enter'){Q=this.value;F='all';go('pay')}">` : '<span style="flex:1"></span>'}<span class="me" onclick="go('prof')" data-tip="${T2('โปรไฟล์ของฉัน')}">${av(U, 36)}<b>${e(U.name)}</b></span>${THB()}<span class="seg"><span class="${LANG == 'th' ? 'on' : ''}" onclick="setPf('lang','th')">TH</span><span class="${LANG == 'en' ? 'on' : ''}" onclick="setPf('lang','en')">EN</span></span><button class="b b2 sm lo" onclick="askOut()" data-tip="${T2('ออกจากระบบ')}">${IC.out}<span class="lbl">ออกจากระบบ</span></button></div>${pg[P]()}<p class="mu np" style="text-align:center;font-size:11px;margin:28px 0 0">เวอร์ชันระบบ ${APP_V}</p></div></div>`;
 }
 
 /* 19_supabase_boot.js — Supabase: เริ่มต้น เข้าสู่ระบบ รีเซ็ต

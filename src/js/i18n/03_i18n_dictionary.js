@@ -462,6 +462,7 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 อธิบายปัญหาโดยย่อ|Briefly describe the problem
 อนุมัติ|Approve
 ออกจากระบบ|Sign out
+ต้องการออกจากระบบใช่หรือไม่?|Do you want to sign out?
 ออกจากห้อง|from the room
 ออกบิลทุกห้อง พร้อมค่าปรับอัตโนมัติ|Issue invoices for every room with automatic late fees
 ออกบิลวันที่|Issue invoices on day

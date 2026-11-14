@@ -264,6 +264,12 @@ function lout(r) {
     if (!U && !lok()) lof(r, 'late re-render');
   }, 1500);
 }
+// ปุ่มออกจากระบบ: ถามยืนยันก่อน กันกดพลาดแล้วหลุดออกทันที
+function askOut() {
+  cf('ต้องการออกจากระบบใช่หรือไม่?', () => out());
+  const y = $('#dy');
+  if (y) y.textContent = 'ออกจากระบบ';
+}
 function out() {
   const r = U && U.role;
   U = null;
