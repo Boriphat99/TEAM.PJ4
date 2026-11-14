@@ -5256,3 +5256,74 @@ html[data-theme='dark'] .ln2 {
     background: color-mix(in srgb, var(--cd) 88%, transparent);
   }
 }
+
+/* ===================== 44) ภาพพื้นหลังแบบเดิม ทั้งคอมและมือถือ =====================
+   ใช้รูปอาคาร T&T คมชัดรูปเดียว ติดจอทั้งหน้า (เอาภาพส่วนบนที่แยกไว้และภาพแบบนุ่มออก)
+   ตำแหน่งรูปเท่าเดิม: คอม 50% 60% · มือถือ center 40% · คงสีฟิล์มของธีม Golden Hour / Twilight */
+.apl .ap-hero::before {
+  display: none !important;
+}
+@media (min-aspect-ratio: 1/1) {
+  .apl {
+    --ap-film:
+      radial-gradient(
+        ellipse 54% 44% at 50% 24%,
+        rgba(40, 22, 34, 0.74),
+        rgba(40, 22, 34, 0.24) 70%,
+        rgba(40, 22, 34, 0) 100%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(40, 22, 34, 0.42),
+        rgba(40, 22, 34, 0.26) 45%,
+        rgba(40, 22, 34, 0.52)
+      );
+  }
+  html[data-theme='dark'] .apl {
+    --ap-film:
+      radial-gradient(
+        ellipse 54% 44% at 50% 24%,
+        rgba(10, 8, 24, 0.82),
+        rgba(10, 8, 24, 0.32) 70%,
+        rgba(10, 8, 24, 0) 100%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(12, 10, 26, 0.74),
+        rgba(14, 11, 28, 0.62) 45%,
+        rgba(10, 8, 22, 0.84)
+      );
+  }
+  .apl::before,
+  html[data-theme='dark'] .apl::before {
+    background:
+      var(--ap-film),
+      var(--hp-bg-d) 50% 60% / cover no-repeat,
+      #1b1018 !important;
+  }
+}
+@media (max-aspect-ratio: 1/1) {
+  .apl::before,
+  html[data-theme='dark'] .apl::before {
+    background:
+      var(--ap-film),
+      var(--hp-bg-dm, var(--hp-bg-d)) center 40% / cover no-repeat,
+      #1b1018 !important;
+  }
+}
+html:not([data-theme='dark']) body .app::before,
+html[data-theme='dark'] body .app::before {
+  background:
+    var(--gh-film),
+    var(--hp-bg-d) 50% 60% / cover no-repeat,
+    var(--bg) !important;
+}
+@media (max-width: 800px) {
+  html:not([data-theme='dark']) body .app::before,
+  html[data-theme='dark'] body .app::before {
+    background:
+      var(--m-film),
+      var(--hp-bg-dm, var(--hp-bg-d)) center 40% / cover no-repeat,
+      var(--bg) !important;
+  }
+}
