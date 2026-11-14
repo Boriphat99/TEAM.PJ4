@@ -11571,3 +11571,132 @@ html[data-theme='dark'] .seg span:not(.on) {
   color: var(--wa) !important;
 }
 
+/* ===================== 43) มือถือ: ไม่ใช้ภาพเบลอติดจอ =====================
+   ภาพเบลอที่ค้างอยู่หลังเนื้อหาดูเหมือนรูปโหลดไม่เสร็จ → บนมือถือ:
+   · หน้าในระบบ: รูปอาคาร "คมชัด" เป็นภาพหัวหน้า (เลื่อนไปพร้อมเนื้อหา) แล้วค่อย ๆ จางเป็นพื้นสีเรียบ
+   · แถบบน/เมนูล่าง: ทึบ ไม่เห็นเนื้อหาซ้อนทะลุ
+   · หน้าต้อนรับ: ส่วนบนเห็นอาคารคมชัด ด้านล่างเป็นพื้นไล่สีพลบค่ำ (ไม่มีรูปเบลอ) */
+:root,
+html:not([data-theme='dark']) {
+  --m-page: linear-gradient(180deg, #f7f0e8 0%, #f4ece4 60%, #f1e8df 100%);
+  --m-page-c: #f4ece4;
+  --m-banner-film: linear-gradient(
+    180deg,
+    rgba(250, 244, 237, 0.5) 0%,
+    rgba(250, 244, 237, 0.62) 45%,
+    rgba(247, 240, 232, 0.8) 100%
+  );
+  --m-bar: rgba(252, 248, 243, 0.97);
+  --ap-page:
+    radial-gradient(120% 45% at 100% 0%, rgba(255, 168, 120, 0.2), transparent 70%),
+    radial-gradient(110% 45% at 0% 100%, rgba(150, 118, 210, 0.2), transparent 70%),
+    linear-gradient(180deg, #3d2231 0%, #4b2534 50%, #2e1925 100%);
+  --ap-page-c: #3d2231;
+}
+html[data-theme='dark'] {
+  --m-page: linear-gradient(180deg, #120f20 0%, #0f0d1b 60%, #0c0a16 100%);
+  --m-page-c: #0f0d1b;
+  --m-banner-film: linear-gradient(
+    180deg,
+    rgba(12, 10, 26, 0.6) 0%,
+    rgba(14, 11, 30, 0.52) 45%,
+    rgba(15, 13, 27, 0.8) 100%
+  );
+  --m-bar: rgba(17, 15, 29, 0.97);
+  --ap-page:
+    radial-gradient(120% 45% at 100% 0%, rgba(255, 150, 120, 0.1), transparent 70%),
+    radial-gradient(110% 45% at 0% 100%, rgba(130, 110, 220, 0.14), transparent 70%),
+    linear-gradient(180deg, #171230 0%, #141026 50%, #0d0a18 100%);
+  --ap-page-c: #141026;
+}
+@media (max-width: 800px) {
+  html:has(.app),
+  html[data-theme='dark']:has(.app) {
+    background: var(--m-page-c) !important;
+  }
+  .app,
+  html[data-theme='dark'] .app {
+    background: var(--m-page) !important;
+    min-height: 100vh;
+  }
+  /* รูปอาคารเป็นภาพหัวหน้า เลื่อนไปพร้อมหน้า (ไม่ค้างติดจอ) */
+  html:not([data-theme='dark']) body .app::before,
+  html[data-theme='dark'] body .app::before {
+    position: absolute !important;
+    inset: 0 0 auto 0 !important;
+    height: 430px;
+    transform: none !important;
+    background:
+      var(--m-banner-film),
+      var(--hp-bg-d) 100% 0% / auto 740px no-repeat !important;
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 50%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 0%, #000 50%, transparent 100%);
+  }
+  /* แถบบน + เมนูล่าง: ทึบ */
+  .app .top,
+  html[data-theme='dark'] .app .top {
+    background: var(--m-bar) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    border-bottom: 1px solid var(--ln) !important;
+    box-shadow: 0 6px 18px -14px rgba(40, 20, 20, 0.35) !important;
+  }
+  .app .sb,
+  html[data-theme='dark'] .app .sb {
+    background: var(--m-bar) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    border-top: 1px solid var(--ln) !important;
+    box-shadow: 0 -6px 18px -14px rgba(40, 20, 20, 0.35) !important;
+  }
+  html[data-theme='dark'] .app .top {
+    box-shadow: 0 6px 18px -12px rgba(0, 0, 0, 0.8) !important;
+  }
+  html[data-theme='dark'] .app .sb {
+    box-shadow: 0 -6px 18px -12px rgba(0, 0, 0, 0.8) !important;
+  }
+  /* การ์ดทึบเต็มที่ */
+  :where(.app) .cd,
+  html[data-theme='dark'] :where(.app) .cd {
+    background: var(--cd) !important;
+  }
+}
+/* หน้าต้อนรับ (จอแนวตั้ง): ไม่มีรูปเบลอติดจอ ใช้พื้นไล่สีพลบค่ำแทน */
+@media (max-aspect-ratio: 1/1) {
+  html:has(.apl),
+  html[data-theme='dark']:has(.apl) {
+    background: var(--ap-page-c) !important;
+  }
+  .apl,
+  html[data-theme='dark'] .apl {
+    background: var(--ap-page) !important;
+  }
+  .apl::before,
+  html[data-theme='dark'] .apl::before {
+    display: none !important;
+  }
+  .apl .ap-nav,
+  html[data-theme='dark'] .apl .ap-nav {
+    background: color-mix(in srgb, var(--ap-page-c) 92%, transparent) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+  html:not([data-theme='dark']) .apl .ap-nav {
+    background: rgba(252, 248, 243, 0.96) !important;
+    border-color: rgba(84, 56, 50, 0.1) !important;
+  }
+}
+@media (max-width: 800px) {
+  /* กล่องข้อความแจ้ง: พื้นทึบ ไม่ให้ภาพหัวหน้าโผล่ทะลุตัวหนังสือ */
+  .app .note,
+  html[data-theme='dark'] .app .note {
+    background: linear-gradient(var(--wa-bg), var(--wa-bg)), var(--cd) !important;
+  }
+}
+@media (max-width: 800px) {
+  /* ป้ายเล็ก/ไอคอนหัวหน้าที่วางบนภาพหัวหน้า: พื้นทึบ อ่านชัด */
+  .app :is(.pchip, .hd2 .ci, .mn > .ci, .hd2 > i),
+  html[data-theme='dark'] .app :is(.pchip, .hd2 .ci, .mn > .ci, .hd2 > i) {
+    background: linear-gradient(var(--acs2), var(--acs2)), var(--cd) !important;
+  }
+}
+
