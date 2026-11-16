@@ -18,8 +18,7 @@ async function sbPush() {
     now = sbRows(),
     old = SBX.snap,
     ad = U.role == 'admin';
-  let mailTrig = false,
-    payChg = false;
+  let payChg = false;
   const ok = (t, k) =>
     ad ||
     (t == 'users'
@@ -66,14 +65,10 @@ async function sbPush() {
           if (r.error.code == '23505') await upd(t, k, row);
           else throw r.error;
         }
-        if (t == 'invoices') mailTrig = true;
         if (t == 'payments') payChg = true;
       } else if (JSON.stringify(or[k]) !== JSON.stringify(row)) {
         await upd(t, k, row);
-        if (t == 'payments') {
-          payChg = true;
-          if (row.verify_status == 'approved') mailTrig = true;
-        }
+        if (t == 'payments') payChg = true;
       }
     }
     if (ad)
@@ -102,15 +97,6 @@ async function sbPush() {
     setTimeout(() => {
       if (U) sbRefresh();
     }, 1200); // โหลดเลขใบเสร็จที่ฐานข้อมูลออกให้
-  if (mailTrig && ad)
-    c.functions
-      .invoke('resend-email', { body: { sweep: true } })
-      .then(() =>
-        setTimeout(() => {
-          if (U) sbRefresh();
-        }, 3000)
-      )
-      .catch(() => {});
 }
 function sbAudit(a) {
   if (SBX.cl && SBX.uid && U)

@@ -36,7 +36,6 @@ function ap(id, y) {
     i.paid = Date.now();
     i.rc = nrc();
     lg('อนุมัติ ' + id);
-    mail('rcp', i);
     save();
     R();
     return;
@@ -73,7 +72,6 @@ function cs(id) {
     i.rc = nrc();
     lg('รับเงินสด ' + id);
     save();
-    mail('rcp', i);
     R();
   });
 }

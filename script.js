@@ -40,12 +40,10 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 กลับ|Back
 กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า|user groups: owner · admin · tenant
 กลุ่ม|groups
-กล่องอีเมลอัตโนมัติ|Automatic email box
 การดำเนินการด่วน|Quick actions
 การแสดงผล|Display
 กำลังดำเนินการ|In progress
 กำลังสร้างรูปใบเสร็จ|Creating receipt image
-กำลังส่ง|Sending
 ของเดือนถัดไป มีค่าปรับวันละ|of next month; late fee per day:
 ของเดือนถัดไป|of next month
 ของเดือน|of month
@@ -125,7 +123,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ดูทั้งหมด|View all
 ดูรายละเอียด|Details
 ดูห้อง|View room
-ดูอีเมล|View email
 ดูและแก้ไขข้อมูลส่วนตัว|View and edit your personal information
 ดูใบแจ้งหนี้ของห้องคุณ|View your room's invoice
 ดูใบแจ้งหนี้ / ชำระเงิน|View invoice / pay
@@ -205,7 +202,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 กรอกรหัสผ่านใหม่ของคุณ|Enter your new password
 เชื่อมต่อ Supabase ไม่สำเร็จ:|Could not connect to Supabase:
 บันทึกไม่สำเร็จ:|Could not save:
-กำลังส่งอีเมลอีกครั้ง…|Sending the email again…
 อัปโหลดสลิปไม่สำเร็จ:|Slip upload failed:
 อัปโหลดไม่สำเร็จ:|Upload failed:
 อัปโหลดรูปไม่สำเร็จ:|Image upload failed:
@@ -267,7 +263,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ยังไม่มีประวัติ|No history yet
 ยังไม่มีรายการ|No items yet
 ยังไม่มีรูป|No image yet
-ยังไม่มีอีเมล|No emails yet
 ยังไม่มีใบเรียกเก็บเงิน|No invoices yet
 ยังไม่มีไฟล์|No file yet
 ยังไม่ได้กรอกเลขมิเตอร์ใหม่|New meter reading not entered
@@ -302,7 +297,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 รอจัดห้อง|Awaiting room
 รอดำเนินการ|Pending
 รอตรวจสอบ|Under review
-รอตั้งค่า|Awaiting setup
 รอบบิลปัจจุบัน|Current billing cycle
 รอบบิล|Billing cycle
 รอผู้ดูแลจัดห้อง|Waiting for admin to assign a room
@@ -396,7 +390,7 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ลบ|Delete
 ลากเพื่อจัดตำแหน่ง · เลื่อนแถบเพื่อซูม|Drag to position · slide to zoom
 ลำดับ|No.
-ลิงก์เว็บระบบ (ใส่ในอีเมล)|System link (included in emails)
+ลิงก์เว็บระบบ|System link
 ลืมรหัสผ่าน|Forgot password
 วันครบกำหนดชำระ|Payment due day
 วันที่ชำระ|Payment date
@@ -434,11 +428,8 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ส่งคำขอแล้ว เราจะตอบกลับโดยเร็วที่สุด|Request sent. We will reply as soon as possible
 ส่งคำขอใหม่|New request
 ส่งคำขอ|Send request
-ส่งซ้ำ|Resend
 ส่งออกแล้ว|Exported
 ส่งออก|Export
-ส่งแล้ว|Sent
-ส่งไม่สำเร็จ|Send failed
 หญิง|Female
 หน่วยไฟที่เรียกเก็บ|Electricity units billed
 หน่วย|units
@@ -453,7 +444,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 หัวข้อ|Subject
 หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์|To pay in cash, please pay at the front counter
 หากบัญชียังไม่มีเบอร์โทร (เช่น ผู้ดูแลระบบ) ให้ติดต่อผู้ดูแลเพื่อรีเซ็ตรหัสผ่านให้|If the account has no phone number (e.g. administrator), contact the admin to reset the password
-ห้อง · เพิ่มคิวส่งอีเมลแล้ว|Room · email queued
 ห้อง รอบ|Room, cycle
 ห้องทั้งหมด|Total rooms
 ห้องที่จ่ายช้า|Late-paying rooms
@@ -583,7 +573,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ใช้งาน|Active
 ใช้|Use
 ในระบบ แล้วแนบสลิปโอนเงิน|in the system, then attach the transfer slip
-ในหน้าตั้งค่า|on the Settings page
 ใบที่ชำระแล้ว|Paid invoices
 ใบเรียกเก็บชำระแล้ว|invoices paid
 ใบเรียกเก็บที่ออก|invoices issued
@@ -593,7 +582,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ใบเสร็จ|Receipt
 ใบแจ้งหนี้ของฉัน|My invoices
 ใบแจ้งหนี้ประจำเดือน|Monthly invoices
-ใบแจ้งหนี้ส่งเมื่อออกบิล · ใบเสร็จส่งเมื่อยืนยันการชำระ|Invoices are sent when issued · receipts when payment is confirmed
 ใบแจ้งหนี้ / ค่าไฟ|Invoice / electricity
 ใบแจ้งหนี้|Invoice
 ใบ|bills
@@ -757,7 +745,6 @@ if (SBON) {
     users: [],
     log: [],
     inv: [],
-    mail: [],
     tk: [],
     news: [],
     contacts: [],
@@ -1303,7 +1290,6 @@ function ap(id, y) {
     i.paid = Date.now();
     i.rc = nrc();
     lg('อนุมัติ ' + id);
-    mail('rcp', i);
     save();
     R();
     return;
@@ -1340,7 +1326,6 @@ function cs(id) {
     i.rc = nrc();
     lg('รับเงินสด ' + id);
     save();
-    mail('rcp', i);
     R();
   });
 }
@@ -1702,27 +1687,19 @@ const pg = {
             `<tr><td>${mon(k)}</td><td>${g[k].n}</td><td>฿${fm(g[k].t)}</td><td class="ac">฿${fm(g[k].p)}</td><td>฿${fm(g[k].w)}</td><td>฿${fm(g[k].u)}</td></tr>`
         )
         .join('') || '<tr><td colspan=6 class=mu>ยังไม่มีข้อมูล</td></tr>'
-    }</table></div>${U.role == 'owner' ? rcTable() : ''}<div class="cd" style="margin-top:14px"><h3>กล่องอีเมลอัตโนมัติ</h3><small class="mu">ใบแจ้งหนี้ส่งเมื่อออกบิล · ใบเสร็จส่งเมื่อยืนยันการชำระ</small><div class="sc"><table><tr><th>เวลา</th><th>ถึง</th><th>เรื่อง</th><th>สถานะ</th><th></th></tr>${
-      (D.mail || [])
-        .slice(0, 15)
-        .map(
-          (m, x) =>
-            `<tr><td>${new Date(m.t).toLocaleString(LOCF())}</td><td>${e(m.to)}</td><td>${e(m.sj)}</td><td>${m.st == 'ok' ? '<span class="pl g">ส่งแล้ว</span>' : m.st == 'fail' ? '<span class="pl r">ส่งไม่สำเร็จ</span>' : m.st == 'wait' ? '<span class="pl y">รอตั้งค่า</span>' : '<span class="pl y">กำลังส่ง</span>'}${m.er ? `<br><small class="mu">${e(m.er)}</small>` : ''}</td><td><button class="b b2 sm" onclick="pv(${x})">ดูอีเมล</button> ${m.st != 'ok' && m.st != 'sending' ? `<button class="b sm" onclick="rs2(${x})">ส่งซ้ำ</button>` : ''}</td></tr>`
-        )
-        .join('') || '<tr><td colspan=5 class=mu>ยังไม่มีอีเมล</td></tr>'
-    }</table></div></div><div class="cd" style="margin-top:14px"><h3>Audit Log</h3><br>${D.log.map(l => `<div class="bd mu"><span>${e(l.by)} · ${e(l.a)}</span><span>${new Date(l.t).toLocaleString(LOCF())}</span></div>`).join('') || '<span class="mu">ยังไม่มีบันทึก</span>'}</div>`;
+    }</table></div>${U.role == 'owner' ? rcTable() : ''}<div class="cd" style="margin-top:14px"><h3>Audit Log</h3><br>${D.log.map(l => `<div class="bd mu"><span>${e(l.by)} · ${e(l.a)}</span><span>${new Date(l.t).toLocaleString(LOCF())}</span></div>`).join('') || '<span class="mu">ยังไม่มีบันทึก</span>'}</div>`;
   },
   set() {
     const s = D.set,
       f = (k, l, u) =>
         `<div class="cd"><label>${l}</label><div style="display:flex;align-items:center;gap:8px"><input id="s_${k}" value="${e(s[k] ?? '')}"><small class="mu">${u}</small></div></div>`;
-    return `<h2>ตั้งค่าระบบ</h2><p class="mu">แก้ไขกฎการคำนวณค่าบริการ</p><div class="cd" style="margin-top:14px"><h3>กฎการเรียกเก็บเงิน</h3><small class="mu">แก้ไขแล้วกดบันทึก ระบบจะใช้กับใบแจ้งหนี้รอบถัดไป</small><div class="g4 sg" style="grid-template-columns:repeat(3,1fr)">${f('rent', 'ค่าเช่าห้องพัก', 'บาท/เดือน')}${f('rate', 'ค่าไฟฟ้า', 'บาท/หน่วย')}${f('dep', 'เงินแรกเข้า', 'บาท')}${f('due', 'วันครบกำหนดชำระ', 'ของเดือน')}${f('max', 'ค่าปรับสูงสุด', 'บาท')}${f('pp', 'PromptPay (เบอร์/เลข ปชช.)', 'บัญชี SCB')}${f('tax', 'เลขประจำตัวผู้เสียภาษี', '')}${f('name', 'ชื่อหอพัก (บนเอกสาร)', '')}${f('payee', 'ชื่อผู้รับเงิน', '')}${f('tel', 'เบอร์ติดต่อ', '')}${f('addr', 'ที่อยู่', '')}${f('url', 'ลิงก์เว็บระบบ (ใส่ในอีเมล)', '')}${f('ejs', 'EmailJS Service ID', '')}${f('ejt', 'EmailJS Template ID', '')}${f('ejk', 'EmailJS Public Key', '')}</div><button class="b" onclick="ss()">บันทึกการตั้งค่า</button></div>`;
+    return `<h2>ตั้งค่าระบบ</h2><p class="mu">แก้ไขกฎการคำนวณค่าบริการ</p><div class="cd" style="margin-top:14px"><h3>กฎการเรียกเก็บเงิน</h3><small class="mu">แก้ไขแล้วกดบันทึก ระบบจะใช้กับใบแจ้งหนี้รอบถัดไป</small><div class="g4 sg" style="grid-template-columns:repeat(3,1fr)">${f('rent', 'ค่าเช่าห้องพัก', 'บาท/เดือน')}${f('rate', 'ค่าไฟฟ้า', 'บาท/หน่วย')}${f('dep', 'เงินแรกเข้า', 'บาท')}${f('due', 'วันครบกำหนดชำระ', 'ของเดือน')}${f('max', 'ค่าปรับสูงสุด', 'บาท')}${f('pp', 'PromptPay (เบอร์/เลข ปชช.)', 'บัญชี SCB')}${f('tax', 'เลขประจำตัวผู้เสียภาษี', '')}${f('name', 'ชื่อหอพัก (บนเอกสาร)', '')}${f('payee', 'ชื่อผู้รับเงิน', '')}${f('tel', 'เบอร์ติดต่อ', '')}${f('addr', 'ที่อยู่', '')}${f('url', 'ลิงก์เว็บระบบ', '')}</div><button class="b" onclick="ss()">บันทึกการตั้งค่า</button></div>`;
   },
 };
 function ss() {
   const s = D.set;
   ['rent', 'rate', 'dep', 'due', 'max'].forEach(k => (s[k] = +$('#s_' + k).value || 0));
-  ['pp', 'tax', 'name', 'payee', 'tel', 'addr', 'url', 'ejs', 'ejt', 'ejk'].forEach(
+  ['pp', 'tax', 'name', 'payee', 'tel', 'addr', 'url'].forEach(
     k => (s[k] = $('#s_' + k).value.trim())
   );
   lg('แก้ไขการตั้งค่า');
@@ -2115,8 +2092,7 @@ function iss2() {
   if (c) {
     lg('ออกบิล ' + c + ' ห้อง รอบ ' + PER);
     save();
-    D.inv.slice(-c).forEach(i => mail('inv', i));
-    tt('✓ ออกใบแจ้งหนี้ ' + c + ' ห้อง · เพิ่มคิวส่งอีเมลแล้ว');
+    tt('✓ ออกใบแจ้งหนี้ ' + c + ' ห้อง');
     R();
   } else alert('ยังไม่ได้กรอกเลขมิเตอร์ใหม่');
 }
@@ -2399,7 +2375,7 @@ async function si(id) {
   }
 }
 
-/* 16_profile_documents_mail.js — โปรไฟล์/รูป, เอกสารใบแจ้งหนี้-ใบเสร็จ, อีเมล, สัญญา, ส่งออก CSV
+/* 16_profile_documents.js — โปรไฟล์/รูป, เอกสารใบแจ้งหนี้-ใบเสร็จ, สัญญา, ส่งออก CSV
    (แยกมาจาก script.js บรรทัด 1153-1210; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 pg.prof = () => {
   const ad = U.role != 'tenant';
@@ -2577,71 +2553,6 @@ const vi = id => {
       '<button class="b b2" onclick="cm()">ปิด</button></div>'
   );
 };
-async function mail(k, i, re) {
-  const u = tu(i);
-  if (!u) return;
-  D.mail = D.mail || [];
-  const S = D.set,
-    sj =
-      (k == 'inv' ? 'ใบแจ้งหนี้ ' : 'ใบเสร็จรับเงิน ') +
-      mon(i.per) +
-      ' ห้อง ' +
-      i.room +
-      ' - ' +
-      (S.name || 'T&T Mansion');
-  const m = re || { t: Date.now(), to: u.email, sj, k, inv: i.id, st: 'sending' };
-  if (!re) {
-    D.mail.unshift(m);
-    D.mail = D.mail.slice(0, 100);
-  }
-  m.to = u.email;
-  if (!(S.ejs && S.ejt && S.ejk)) {
-    m.st = 'wait';
-    m.er = 'ยังไม่ได้ตั้งค่า EmailJS ในหน้าตั้งค่า';
-    save();
-    if (P == 'rep') R();
-    return;
-  }
-  try {
-    const r = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        service_id: S.ejs,
-        template_id: S.ejt,
-        user_id: S.ejk,
-        template_params: {
-          to_email: u.email,
-          to_name: u.name,
-          subject: sj,
-          message_html: docHTML(i, k),
-        },
-      }),
-    });
-    if (!r.ok) throw new Error(await r.text());
-    m.st = 'ok';
-    m.er = '';
-    m.t = Date.now();
-  } catch (x) {
-    m.st = 'fail';
-    m.er = String(x.message || x).slice(0, 120);
-  }
-  save();
-  if (P == 'rep') R();
-}
-function pv(x) {
-  const m = D.mail[x],
-    i = gi(m.inv);
-  mo(
-    `<small class="mu">ถึง ${e(m.to)}<br>เรื่อง ${e(m.sj)}</small><br><br>${docHTML(i, m.k)}<br><button class="b b2" onclick="cm()">ปิด</button>`
-  );
-}
-function rs2(x) {
-  const m = D.mail[x];
-  m.st = 'sending';
-  R();
-  mail(m.k, gi(m.inv), m);
-}
 pg.con = () => {
   const ad = U.role == 'admin',
     t = D.users
@@ -3452,7 +3363,7 @@ async function sbLoad() {
   if (!me) throw new Error('ไม่พบข้อมูลบัญชีในระบบ');
   const ad = me.role == 'admin',
     stf = me.role != 'tenant';
-  const [st, us, tn_, rm_, ct, mr, iv, it, pm_, tk, nw, lgs, ml] = await Promise.all([
+  const [st, us, tn_, rm_, ct, mr, iv, it, pm_, tk, nw, lgs] = await Promise.all([
     q('app_settings', x => x),
     q('users', x => x),
     q('tenants', x => x),
@@ -3465,7 +3376,6 @@ async function sbLoad() {
     q('support_tickets', x => x.order('created_at', { ascending: false })),
     q('news', x => x.order('created_at', { ascending: false })),
     stf ? q('audit_logs', x => x.order('created_at', { ascending: false }).limit(50)) : [],
-    ad ? q('email_queue', x => x.order('created_at', { ascending: false }).limit(100)) : [],
   ]);
   const S = st[0] || {},
     rn = id => {
@@ -3633,16 +3543,6 @@ async function sbLoad() {
     _id: n.id,
   }));
   D.log = lgs.map(l => ({ t: tsv(l.created_at), by: l.actor_name, a: l.action }));
-  D.mail = ml.map(m => ({
-    t: tsv(m.sent_at || m.created_at),
-    to: m.to_email,
-    sj: m.subject,
-    k: m.kind == 'invoice' ? 'inv' : 'rcp',
-    inv: (iv.find(x => x.id == m.invoice_id) || {}).code,
-    st: { pending: 'sending', sent: 'ok', failed: 'fail', wait: 'wait' }[m.status],
-    er: m.error || '',
-    _id: m.id,
-  }));
   D.contacts = [];
   if (!ad) {
     const r = await c.rpc('get_contacts');
@@ -3845,8 +3745,7 @@ async function sbPush() {
     now = sbRows(),
     old = SBX.snap,
     ad = U.role == 'admin';
-  let mailTrig = false,
-    payChg = false;
+  let payChg = false;
   const ok = (t, k) =>
     ad ||
     (t == 'users'
@@ -3893,14 +3792,10 @@ async function sbPush() {
           if (r.error.code == '23505') await upd(t, k, row);
           else throw r.error;
         }
-        if (t == 'invoices') mailTrig = true;
         if (t == 'payments') payChg = true;
       } else if (JSON.stringify(or[k]) !== JSON.stringify(row)) {
         await upd(t, k, row);
-        if (t == 'payments') {
-          payChg = true;
-          if (row.verify_status == 'approved') mailTrig = true;
-        }
+        if (t == 'payments') payChg = true;
       }
     }
     if (ad)
@@ -3929,15 +3824,6 @@ async function sbPush() {
     setTimeout(() => {
       if (U) sbRefresh();
     }, 1200); // โหลดเลขใบเสร็จที่ฐานข้อมูลออกให้
-  if (mailTrig && ad)
-    c.functions
-      .invoke('resend-email', { body: { sweep: true } })
-      .then(() =>
-        setTimeout(() => {
-          if (U) sbRefresh();
-        }, 3000)
-      )
-      .catch(() => {});
 }
 function sbAudit(a) {
   if (SBX.cl && SBX.uid && U)
@@ -4113,11 +3999,6 @@ if (SBON) {
     R();
     tt('✓ บันทึกข้อมูลผู้เช่าแล้ว');
   };
-  {
-    const _s = pg.set;
-    pg.set = () =>
-      _s().replace(/<div class="cd"><label>EmailJS[^<]*<\/label>.*?<\/div><\/div>/g, '');
-  }
   ss = function () {
     const s = D.set;
     ['rent', 'rate', 'dep', 'due', 'max'].forEach(k => (s[k] = +$('#s_' + k).value || 0));
@@ -4127,21 +4008,6 @@ if (SBON) {
     lg('แก้ไขการตั้งค่า');
     save();
     tt('✓ บันทึกแล้ว');
-  };
-  mail = async function () {}; // อีเมลส่งโดยเซิร์ฟเวอร์ (trigger + Edge Function resend-email)
-  rs2 = async function (x) {
-    const m = D.mail[x];
-    const r = await SBX.cl
-      .from('email_queue')
-      .update({ status: 'pending', error: null, send_after: new Date().toISOString() })
-      .eq('id', m._id);
-    if (r.error) return alert(r.error.message);
-    tt('กำลังส่งอีเมลอีกครั้ง…');
-    try {
-      await SBX.cl.functions.invoke('resend-email', { body: { sweep: true } });
-    } catch (x) {}
-    await sbLoad();
-    R();
   };
   sub = async function (id) {
     const i = gi(id),

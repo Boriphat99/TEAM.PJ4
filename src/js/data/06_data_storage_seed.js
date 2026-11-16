@@ -50,7 +50,6 @@ if (SBON) {
     users: [],
     log: [],
     inv: [],
-    mail: [],
     tk: [],
     news: [],
     contacts: [],

@@ -16,7 +16,7 @@ async function sbLoad() {
   if (!me) throw new Error('ไม่พบข้อมูลบัญชีในระบบ');
   const ad = me.role == 'admin',
     stf = me.role != 'tenant';
-  const [st, us, tn_, rm_, ct, mr, iv, it, pm_, tk, nw, lgs, ml] = await Promise.all([
+  const [st, us, tn_, rm_, ct, mr, iv, it, pm_, tk, nw, lgs] = await Promise.all([
     q('app_settings', x => x),
     q('users', x => x),
     q('tenants', x => x),
@@ -29,7 +29,6 @@ async function sbLoad() {
     q('support_tickets', x => x.order('created_at', { ascending: false })),
     q('news', x => x.order('created_at', { ascending: false })),
     stf ? q('audit_logs', x => x.order('created_at', { ascending: false }).limit(50)) : [],
-    ad ? q('email_queue', x => x.order('created_at', { ascending: false }).limit(100)) : [],
   ]);
   const S = st[0] || {},
     rn = id => {
@@ -197,16 +196,6 @@ async function sbLoad() {
     _id: n.id,
   }));
   D.log = lgs.map(l => ({ t: tsv(l.created_at), by: l.actor_name, a: l.action }));
-  D.mail = ml.map(m => ({
-    t: tsv(m.sent_at || m.created_at),
-    to: m.to_email,
-    sj: m.subject,
-    k: m.kind == 'invoice' ? 'inv' : 'rcp',
-    inv: (iv.find(x => x.id == m.invoice_id) || {}).code,
-    st: { pending: 'sending', sent: 'ok', failed: 'fail', wait: 'wait' }[m.status],
-    er: m.error || '',
-    _id: m.id,
-  }));
   D.contacts = [];
   if (!ad) {
     const r = await c.rpc('get_contacts');

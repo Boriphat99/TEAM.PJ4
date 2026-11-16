@@ -164,11 +164,6 @@ if (SBON) {
     R();
     tt('✓ บันทึกข้อมูลผู้เช่าแล้ว');
   };
-  {
-    const _s = pg.set;
-    pg.set = () =>
-      _s().replace(/<div class="cd"><label>EmailJS[^<]*<\/label>.*?<\/div><\/div>/g, '');
-  }
   ss = function () {
     const s = D.set;
     ['rent', 'rate', 'dep', 'due', 'max'].forEach(k => (s[k] = +$('#s_' + k).value || 0));
@@ -178,21 +173,6 @@ if (SBON) {
     lg('แก้ไขการตั้งค่า');
     save();
     tt('✓ บันทึกแล้ว');
-  };
-  mail = async function () {}; // อีเมลส่งโดยเซิร์ฟเวอร์ (trigger + Edge Function resend-email)
-  rs2 = async function (x) {
-    const m = D.mail[x];
-    const r = await SBX.cl
-      .from('email_queue')
-      .update({ status: 'pending', error: null, send_after: new Date().toISOString() })
-      .eq('id', m._id);
-    if (r.error) return alert(r.error.message);
-    tt('กำลังส่งอีเมลอีกครั้ง…');
-    try {
-      await SBX.cl.functions.invoke('resend-email', { body: { sweep: true } });
-    } catch (x) {}
-    await sbLoad();
-    R();
   };
   sub = async function (id) {
     const i = gi(id),

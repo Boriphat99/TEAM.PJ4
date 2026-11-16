@@ -15,12 +15,10 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 กลับ|Back
 กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า|user groups: owner · admin · tenant
 กลุ่ม|groups
-กล่องอีเมลอัตโนมัติ|Automatic email box
 การดำเนินการด่วน|Quick actions
 การแสดงผล|Display
 กำลังดำเนินการ|In progress
 กำลังสร้างรูปใบเสร็จ|Creating receipt image
-กำลังส่ง|Sending
 ของเดือนถัดไป มีค่าปรับวันละ|of next month; late fee per day:
 ของเดือนถัดไป|of next month
 ของเดือน|of month
@@ -100,7 +98,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ดูทั้งหมด|View all
 ดูรายละเอียด|Details
 ดูห้อง|View room
-ดูอีเมล|View email
 ดูและแก้ไขข้อมูลส่วนตัว|View and edit your personal information
 ดูใบแจ้งหนี้ของห้องคุณ|View your room's invoice
 ดูใบแจ้งหนี้ / ชำระเงิน|View invoice / pay
@@ -180,7 +177,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 กรอกรหัสผ่านใหม่ของคุณ|Enter your new password
 เชื่อมต่อ Supabase ไม่สำเร็จ:|Could not connect to Supabase:
 บันทึกไม่สำเร็จ:|Could not save:
-กำลังส่งอีเมลอีกครั้ง…|Sending the email again…
 อัปโหลดสลิปไม่สำเร็จ:|Slip upload failed:
 อัปโหลดไม่สำเร็จ:|Upload failed:
 อัปโหลดรูปไม่สำเร็จ:|Image upload failed:
@@ -242,7 +238,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ยังไม่มีประวัติ|No history yet
 ยังไม่มีรายการ|No items yet
 ยังไม่มีรูป|No image yet
-ยังไม่มีอีเมล|No emails yet
 ยังไม่มีใบเรียกเก็บเงิน|No invoices yet
 ยังไม่มีไฟล์|No file yet
 ยังไม่ได้กรอกเลขมิเตอร์ใหม่|New meter reading not entered
@@ -277,7 +272,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 รอจัดห้อง|Awaiting room
 รอดำเนินการ|Pending
 รอตรวจสอบ|Under review
-รอตั้งค่า|Awaiting setup
 รอบบิลปัจจุบัน|Current billing cycle
 รอบบิล|Billing cycle
 รอผู้ดูแลจัดห้อง|Waiting for admin to assign a room
@@ -371,7 +365,7 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ลบ|Delete
 ลากเพื่อจัดตำแหน่ง · เลื่อนแถบเพื่อซูม|Drag to position · slide to zoom
 ลำดับ|No.
-ลิงก์เว็บระบบ (ใส่ในอีเมล)|System link (included in emails)
+ลิงก์เว็บระบบ|System link
 ลืมรหัสผ่าน|Forgot password
 วันครบกำหนดชำระ|Payment due day
 วันที่ชำระ|Payment date
@@ -409,11 +403,8 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ส่งคำขอแล้ว เราจะตอบกลับโดยเร็วที่สุด|Request sent. We will reply as soon as possible
 ส่งคำขอใหม่|New request
 ส่งคำขอ|Send request
-ส่งซ้ำ|Resend
 ส่งออกแล้ว|Exported
 ส่งออก|Export
-ส่งแล้ว|Sent
-ส่งไม่สำเร็จ|Send failed
 หญิง|Female
 หน่วยไฟที่เรียกเก็บ|Electricity units billed
 หน่วย|units
@@ -428,7 +419,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 หัวข้อ|Subject
 หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์|To pay in cash, please pay at the front counter
 หากบัญชียังไม่มีเบอร์โทร (เช่น ผู้ดูแลระบบ) ให้ติดต่อผู้ดูแลเพื่อรีเซ็ตรหัสผ่านให้|If the account has no phone number (e.g. administrator), contact the admin to reset the password
-ห้อง · เพิ่มคิวส่งอีเมลแล้ว|Room · email queued
 ห้อง รอบ|Room, cycle
 ห้องทั้งหมด|Total rooms
 ห้องที่จ่ายช้า|Late-paying rooms
@@ -558,7 +548,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ใช้งาน|Active
 ใช้|Use
 ในระบบ แล้วแนบสลิปโอนเงิน|in the system, then attach the transfer slip
-ในหน้าตั้งค่า|on the Settings page
 ใบที่ชำระแล้ว|Paid invoices
 ใบเรียกเก็บชำระแล้ว|invoices paid
 ใบเรียกเก็บที่ออก|invoices issued
@@ -568,7 +557,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ใบเสร็จ|Receipt
 ใบแจ้งหนี้ของฉัน|My invoices
 ใบแจ้งหนี้ประจำเดือน|Monthly invoices
-ใบแจ้งหนี้ส่งเมื่อออกบิล · ใบเสร็จส่งเมื่อยืนยันการชำระ|Invoices are sent when issued · receipts when payment is confirmed
 ใบแจ้งหนี้ / ค่าไฟ|Invoice / electricity
 ใบแจ้งหนี้|Invoice
 ใบ|bills

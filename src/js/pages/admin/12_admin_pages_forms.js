@@ -217,27 +217,19 @@ const pg = {
             `<tr><td>${mon(k)}</td><td>${g[k].n}</td><td>฿${fm(g[k].t)}</td><td class="ac">฿${fm(g[k].p)}</td><td>฿${fm(g[k].w)}</td><td>฿${fm(g[k].u)}</td></tr>`
         )
         .join('') || '<tr><td colspan=6 class=mu>ยังไม่มีข้อมูล</td></tr>'
-    }</table></div>${U.role == 'owner' ? rcTable() : ''}<div class="cd" style="margin-top:14px"><h3>กล่องอีเมลอัตโนมัติ</h3><small class="mu">ใบแจ้งหนี้ส่งเมื่อออกบิล · ใบเสร็จส่งเมื่อยืนยันการชำระ</small><div class="sc"><table><tr><th>เวลา</th><th>ถึง</th><th>เรื่อง</th><th>สถานะ</th><th></th></tr>${
-      (D.mail || [])
-        .slice(0, 15)
-        .map(
-          (m, x) =>
-            `<tr><td>${new Date(m.t).toLocaleString(LOCF())}</td><td>${e(m.to)}</td><td>${e(m.sj)}</td><td>${m.st == 'ok' ? '<span class="pl g">ส่งแล้ว</span>' : m.st == 'fail' ? '<span class="pl r">ส่งไม่สำเร็จ</span>' : m.st == 'wait' ? '<span class="pl y">รอตั้งค่า</span>' : '<span class="pl y">กำลังส่ง</span>'}${m.er ? `<br><small class="mu">${e(m.er)}</small>` : ''}</td><td><button class="b b2 sm" onclick="pv(${x})">ดูอีเมล</button> ${m.st != 'ok' && m.st != 'sending' ? `<button class="b sm" onclick="rs2(${x})">ส่งซ้ำ</button>` : ''}</td></tr>`
-        )
-        .join('') || '<tr><td colspan=5 class=mu>ยังไม่มีอีเมล</td></tr>'
-    }</table></div></div><div class="cd" style="margin-top:14px"><h3>Audit Log</h3><br>${D.log.map(l => `<div class="bd mu"><span>${e(l.by)} · ${e(l.a)}</span><span>${new Date(l.t).toLocaleString(LOCF())}</span></div>`).join('') || '<span class="mu">ยังไม่มีบันทึก</span>'}</div>`;
+    }</table></div>${U.role == 'owner' ? rcTable() : ''}<div class="cd" style="margin-top:14px"><h3>Audit Log</h3><br>${D.log.map(l => `<div class="bd mu"><span>${e(l.by)} · ${e(l.a)}</span><span>${new Date(l.t).toLocaleString(LOCF())}</span></div>`).join('') || '<span class="mu">ยังไม่มีบันทึก</span>'}</div>`;
   },
   set() {
     const s = D.set,
       f = (k, l, u) =>
         `<div class="cd"><label>${l}</label><div style="display:flex;align-items:center;gap:8px"><input id="s_${k}" value="${e(s[k] ?? '')}"><small class="mu">${u}</small></div></div>`;
-    return `<h2>ตั้งค่าระบบ</h2><p class="mu">แก้ไขกฎการคำนวณค่าบริการ</p><div class="cd" style="margin-top:14px"><h3>กฎการเรียกเก็บเงิน</h3><small class="mu">แก้ไขแล้วกดบันทึก ระบบจะใช้กับใบแจ้งหนี้รอบถัดไป</small><div class="g4 sg" style="grid-template-columns:repeat(3,1fr)">${f('rent', 'ค่าเช่าห้องพัก', 'บาท/เดือน')}${f('rate', 'ค่าไฟฟ้า', 'บาท/หน่วย')}${f('dep', 'เงินแรกเข้า', 'บาท')}${f('due', 'วันครบกำหนดชำระ', 'ของเดือน')}${f('max', 'ค่าปรับสูงสุด', 'บาท')}${f('pp', 'PromptPay (เบอร์/เลข ปชช.)', 'บัญชี SCB')}${f('tax', 'เลขประจำตัวผู้เสียภาษี', '')}${f('name', 'ชื่อหอพัก (บนเอกสาร)', '')}${f('payee', 'ชื่อผู้รับเงิน', '')}${f('tel', 'เบอร์ติดต่อ', '')}${f('addr', 'ที่อยู่', '')}${f('url', 'ลิงก์เว็บระบบ (ใส่ในอีเมล)', '')}${f('ejs', 'EmailJS Service ID', '')}${f('ejt', 'EmailJS Template ID', '')}${f('ejk', 'EmailJS Public Key', '')}</div><button class="b" onclick="ss()">บันทึกการตั้งค่า</button></div>`;
+    return `<h2>ตั้งค่าระบบ</h2><p class="mu">แก้ไขกฎการคำนวณค่าบริการ</p><div class="cd" style="margin-top:14px"><h3>กฎการเรียกเก็บเงิน</h3><small class="mu">แก้ไขแล้วกดบันทึก ระบบจะใช้กับใบแจ้งหนี้รอบถัดไป</small><div class="g4 sg" style="grid-template-columns:repeat(3,1fr)">${f('rent', 'ค่าเช่าห้องพัก', 'บาท/เดือน')}${f('rate', 'ค่าไฟฟ้า', 'บาท/หน่วย')}${f('dep', 'เงินแรกเข้า', 'บาท')}${f('due', 'วันครบกำหนดชำระ', 'ของเดือน')}${f('max', 'ค่าปรับสูงสุด', 'บาท')}${f('pp', 'PromptPay (เบอร์/เลข ปชช.)', 'บัญชี SCB')}${f('tax', 'เลขประจำตัวผู้เสียภาษี', '')}${f('name', 'ชื่อหอพัก (บนเอกสาร)', '')}${f('payee', 'ชื่อผู้รับเงิน', '')}${f('tel', 'เบอร์ติดต่อ', '')}${f('addr', 'ที่อยู่', '')}${f('url', 'ลิงก์เว็บระบบ', '')}</div><button class="b" onclick="ss()">บันทึกการตั้งค่า</button></div>`;
   },
 };
 function ss() {
   const s = D.set;
   ['rent', 'rate', 'dep', 'due', 'max'].forEach(k => (s[k] = +$('#s_' + k).value || 0));
-  ['pp', 'tax', 'name', 'payee', 'tel', 'addr', 'url', 'ejs', 'ejt', 'ejk'].forEach(
+  ['pp', 'tax', 'name', 'payee', 'tel', 'addr', 'url'].forEach(
     k => (s[k] = $('#s_' + k).value.trim())
   );
   lg('แก้ไขการตั้งค่า');

@@ -1,4 +1,4 @@
-/* 16_profile_documents_mail.js — โปรไฟล์/รูป, เอกสารใบแจ้งหนี้-ใบเสร็จ, อีเมล, สัญญา, ส่งออก CSV
+/* 16_profile_documents.js — โปรไฟล์/รูป, เอกสารใบแจ้งหนี้-ใบเสร็จ, สัญญา, ส่งออก CSV
    (แยกมาจาก script.js บรรทัด 1153-1210; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 pg.prof = () => {
   const ad = U.role != 'tenant';
@@ -176,71 +176,6 @@ const vi = id => {
       '<button class="b b2" onclick="cm()">ปิด</button></div>'
   );
 };
-async function mail(k, i, re) {
-  const u = tu(i);
-  if (!u) return;
-  D.mail = D.mail || [];
-  const S = D.set,
-    sj =
-      (k == 'inv' ? 'ใบแจ้งหนี้ ' : 'ใบเสร็จรับเงิน ') +
-      mon(i.per) +
-      ' ห้อง ' +
-      i.room +
-      ' - ' +
-      (S.name || 'T&T Mansion');
-  const m = re || { t: Date.now(), to: u.email, sj, k, inv: i.id, st: 'sending' };
-  if (!re) {
-    D.mail.unshift(m);
-    D.mail = D.mail.slice(0, 100);
-  }
-  m.to = u.email;
-  if (!(S.ejs && S.ejt && S.ejk)) {
-    m.st = 'wait';
-    m.er = 'ยังไม่ได้ตั้งค่า EmailJS ในหน้าตั้งค่า';
-    save();
-    if (P == 'rep') R();
-    return;
-  }
-  try {
-    const r = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        service_id: S.ejs,
-        template_id: S.ejt,
-        user_id: S.ejk,
-        template_params: {
-          to_email: u.email,
-          to_name: u.name,
-          subject: sj,
-          message_html: docHTML(i, k),
-        },
-      }),
-    });
-    if (!r.ok) throw new Error(await r.text());
-    m.st = 'ok';
-    m.er = '';
-    m.t = Date.now();
-  } catch (x) {
-    m.st = 'fail';
-    m.er = String(x.message || x).slice(0, 120);
-  }
-  save();
-  if (P == 'rep') R();
-}
-function pv(x) {
-  const m = D.mail[x],
-    i = gi(m.inv);
-  mo(
-    `<small class="mu">ถึง ${e(m.to)}<br>เรื่อง ${e(m.sj)}</small><br><br>${docHTML(i, m.k)}<br><button class="b b2" onclick="cm()">ปิด</button>`
-  );
-}
-function rs2(x) {
-  const m = D.mail[x];
-  m.st = 'sending';
-  R();
-  mail(m.k, gi(m.inv), m);
-}
 pg.con = () => {
   const ad = U.role == 'admin',
     t = D.users
