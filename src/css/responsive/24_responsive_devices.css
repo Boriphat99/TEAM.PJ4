@@ -257,15 +257,8 @@ button,
   scrollbar-width: thin;
 }
 
-/* ---------- หน้าแรก (Landing) บนมือถือ ---------- */
-.hh h1 em {
-  display: inline-block;
-  text-wrap: balance;
-} /* ตัดบรรทัดสมดุล ไม่ทิ้งคำว่า "หอพัก" ไว้บรรทัดเดียว */
+/* ---------- หน้าแรก (Landing) บนมือถือ ---------- */ /* ตัดบรรทัดสมดุล ไม่ทิ้งคำว่า "หอพัก" ไว้บรรทัดเดียว */
 @media (max-width: 480px) {
-  .hnr {
-    gap: 8px;
-  }
   .hr .seg span {
     padding: 5px 9px;
   }
@@ -278,10 +271,4 @@ button,
     font-size: 13px;
     min-height: 36px;
   }
-}
-@media (max-width: 420px) {
-  .hnr .logo {
-    font-size: 0;
-    gap: 0;
-  } /* จอแคบมาก: เหลือแต่ไอคอนโลโก้ เพื่อให้ปุ่มเข้าสู่ระบบไม่ถูกตัด */
 }

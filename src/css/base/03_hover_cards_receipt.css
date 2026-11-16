@@ -91,37 +91,6 @@ tr:hover td {
   border-radius: 9px;
 }
 
-.hero {
-  position: relative;
-}
-
-.hero:before,
-.hero:after {
-  content: '';
-  position: absolute;
-  border: 1px solid #14223a;
-  border-radius: 50%;
-  z-index: -1;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.hero:before {
-  width: 500px;
-  height: 500px;
-}
-
-.hero:after {
-  width: 680px;
-  height: 680px;
-}
-
-.ico {
-  box-shadow: 0 0 40px #54e8ff30;
-  color: var(--ac);
-}
-
 #mo {
   backdrop-filter: blur(4px);
 }

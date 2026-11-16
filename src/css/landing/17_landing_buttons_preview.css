@@ -16,11 +16,6 @@
   color: #dc2626;
 }
 
-.hc .hb {
-  padding: 15px 30px;
-  font-size: 16px;
-}
-
 html[data-theme='dark'] .hb {
   border-color: rgba(255, 255, 255, 0.22);
   background: rgba(255, 255, 255, 0.05);

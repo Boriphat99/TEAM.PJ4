@@ -112,17 +112,6 @@ body::before {
   -webkit-mask-image: linear-gradient(180deg, #000, transparent 48%);
   mask-image: linear-gradient(180deg, #000, transparent 48%);
 }
-.hp,
-html[data-theme='dark'] .hp {
-  background: transparent;
-}
-.hn,
-html[data-theme='dark'] .hn {
-  background: var(--bar);
-  -webkit-backdrop-filter: saturate(1.4) blur(14px);
-  backdrop-filter: saturate(1.4) blur(14px);
-  border-bottom: 1px solid var(--ln);
-}
 
 /* ---------- ปุ่ม: ขนาดและรูปแบบมาตรฐาน ---------- */
 .b {
@@ -683,11 +672,6 @@ input.is-valid {
   color: #e11d48;
   animation: ttm-fade 0.2s ease both;
 }
-.fld-hint {
-  font-size: 12px;
-  margin: 5px 2px 0;
-  color: var(--mu);
-}
 
 /* ---------- ตาราง / ป้ายสถานะ ---------- */
 th,
@@ -733,18 +717,6 @@ html[data-theme='dark'] .rm {
 .ib {
   display: inline-grid;
   place-items: center;
-}
-.fxc i svg,
-.hs3 i svg,
-.hdk i svg {
-  width: 22px;
-  height: 22px;
-}
-.hch span svg {
-  width: 15px;
-  height: 15px;
-  vertical-align: -3px;
-  margin-right: 4px;
 }
 .tsw svg {
   width: 15px;

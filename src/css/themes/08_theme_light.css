@@ -243,37 +243,6 @@ tr:hover td {
   box-shadow: 0 0 14px #dc2626;
 }
 
-.ico {
-  background: #fff;
-  color: #dc2626;
-  border-color: #fecaca;
-  box-shadow: 0 10px 30px #dc262625;
-}
-
-.bdg {
-  background: #fef2f2;
-  border-color: #fecaca;
-  color: #b91c1c;
-}
-
-.lp .tb {
-  background: #ffffffe6;
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--ln);
-}
-
-.ht h1 .gt {
-  background: none;
-  -webkit-text-fill-color: #dc2626;
-  color: #dc2626;
-  animation: none;
-  box-shadow: inset 0 -0.28em 0 #fecaca;
-}
-
-.b.big2:not(.b2):after {
-  background: linear-gradient(100deg, transparent, #fff7, transparent);
-}
-
 .tabs {
   display: flex;
   border-bottom: 2px solid var(--ln);
@@ -326,13 +295,6 @@ tr:hover td {
 .al .logo i {
   background: #fff;
   color: #dc2626;
-}
-
-.al .ico {
-  background: #ffffff26;
-  border-color: #ffffff40;
-  color: #fff;
-  box-shadow: none;
 }
 
 .al h1.gt {

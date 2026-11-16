@@ -5,7 +5,7 @@
 ```
 TEAM.PJ4/
 ├─ index.html  style.css  script.js   ← ไฟล์ขึ้นเว็บ (สร้างอัตโนมัติจาก src/ ด้วย build.js — ห้ามแก้ตรงนี้)
-├─ static/                            ← ไอคอนแอป 192/512/maskable, apple-touch-icon, manifest (มีที่นี่ที่เดียว)
+├─ static/                            ← รูปพื้นหลัง (bg-photo-d = คอม, bg-photo-d-m = มือถือ), ไอคอนแอป 192/512/maskable, apple-touch-icon, manifest
 ├─ src/                               ← โค้ดต้นฉบับ แก้ที่นี่เท่านั้น
 │  ├─ index.html                      ลิสต์ไฟล์ CSS/JS ตามลำดับโหลด (ลำดับมีผล!)
 │  ├─ css/

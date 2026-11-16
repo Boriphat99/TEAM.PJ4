@@ -124,13 +124,6 @@
   animation-direction: reverse !important;
 }
 
-.r3 {
-  width: 880px;
-  height: 880px;
-  margin: -440px 0 0 -440px;
-  animation-duration: 120s !important;
-}
-
 .rings b {
   position: absolute;
   top: -4px;
@@ -165,25 +158,6 @@
   }
 }
 
-.ht {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  align-items: flex-start;
-  position: relative;
-}
-
-.ht h1 {
-  font-size: clamp(34px, 5.4vw, 64px);
-  line-height: 1.15;
-}
-
-.ht p {
-  max-width: 480px;
-  font-size: 16px;
-  margin: 0;
-}
-
 .gt {
   background: linear-gradient(90deg, #9ff3ff, #54e8ff, #818cf8, #9ff3ff);
   background-size: 200% auto;
@@ -199,59 +173,10 @@
   }
 }
 
-.bdg {
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-  font-size: 12px;
-  padding: 6px 14px;
-  border-radius: 99px;
-  border: 1px solid #155e75;
-  background: #0c223099;
-  color: #9ff3ff;
-}
-
-.bdg u {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #4ade80;
-  box-shadow: 0 0 10px #4ade80;
-  animation: pl 1.6s infinite;
-}
-
 @keyframes pl {
   50% {
     opacity: 0.35;
   }
-}
-
-.cta {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.big2 {
-  padding: 14px 28px;
-  font-size: 15px;
-}
-
-.b.big2:not(.b2) {
-  position: relative;
-  overflow: hidden;
-}
-
-.b.big2:not(.b2):after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -60%;
-  width: 40%;
-  height: 100%;
-  background: linear-gradient(100deg, transparent, #fff8, transparent);
-  transform: skewX(-20deg);
-  animation: sw 3.5s infinite;
 }
 
 @keyframes sw {
@@ -266,14 +191,6 @@
   place-items: center;
 }
 
-.tilt {
-  position: relative;
-  width: min(340px, 100%);
-  transform-style: preserve-3d;
-  transform: rotateY(calc(var(--mx, 0) * 12deg)) rotateX(calc(var(--my, 0) * -9deg));
-  transition: transform 0.25s ease-out;
-}
-
 .flt {
   animation: fl 6s ease-in-out infinite alternate;
 }
@@ -284,161 +201,12 @@
   }
 }
 
-.mk {
-  background: linear-gradient(160deg, #0f1c33, #0a1222);
-  border: 1px solid #1e3a5f;
-  border-radius: 22px;
-  overflow: hidden;
-  box-shadow:
-    0 30px 70px #000a,
-    0 0 60px #54e8ff22;
-}
-
-.mkh {
-  background: linear-gradient(135deg, #1d4ed8, #2563eb);
-  padding: 18px;
-  text-align: center;
-}
-
-.mkh small {
-  display: block;
-  opacity: 0.8;
-}
-
-.mkh b {
-  font-size: 22px;
-}
-
-.mkb {
-  padding: 18px;
-}
-
-.mkt {
-  background: #0c2231;
-  border: 1px solid #155e75;
-  border-radius: 14px;
-  text-align: center;
-  padding: 12px;
-  margin: 12px 0;
-}
-
-.mkt .big {
-  font-size: 30px;
-}
-
-.mkq {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.qrm {
-  width: 64px;
-  height: 64px;
-  border-radius: 8px;
-  border: 6px solid #fff;
-  background: repeating-conic-gradient(#0f172a 0 25%, #fff 0 50%) 0 0/12px 12px;
-  flex: none;
-}
-
-.chip {
-  position: absolute;
-  padding: 8px 14px;
-  border-radius: 99px;
-  font-size: 12px;
-  font-weight: 600;
-  background: #0d2735ee;
-  border: 1px solid #155e75;
-  color: #e0f2fe;
-  transform: translateZ(70px);
-  box-shadow: 0 10px 30px #0008;
-  white-space: nowrap;
-}
-
-.c1 {
-  right: -18px;
-  top: 44px;
-  color: #4ade80;
-  border-color: #14532d;
-}
-
-.c2 {
-  left: -22px;
-  bottom: 70px;
-}
-
-.ft,
-.st4 {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-  padding: 10px 0 30px;
-}
-
-.st4 {
-  text-align: center;
-  padding-top: 0;
-}
-
-.fc {
-  background: linear-gradient(160deg, #0d1a30cc, #0a1222cc);
-  border: 1px solid var(--ln);
-  border-radius: 18px;
-  padding: 22px;
-  backdrop-filter: blur(8px);
-  transition: 0.25s;
-}
-
 .fc:hover {
   transform: translateY(-6px);
   border-color: #22778a;
   box-shadow:
     0 20px 40px #0008,
     0 0 30px #54e8ff18;
-}
-
-.fc i {
-  font-style: normal;
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: #0c2231;
-  color: var(--ac);
-  font-size: 20px;
-  margin-bottom: 12px;
-}
-
-.fc b {
-  display: block;
-  margin-bottom: 6px;
-}
-
-.fc small {
-  color: var(--mu);
-  line-height: 1.6;
-}
-
-.st4 div {
-  border: 1px solid var(--ln);
-  border-radius: 16px;
-  padding: 16px;
-  background: #0a1222aa;
-  backdrop-filter: blur(8px);
-}
-
-.st4 b {
-  font-size: 24px;
-  color: var(--ac);
-  display: block;
-}
-
-.lf {
-  text-align: center;
-  color: var(--mu);
-  font-size: 12px;
-  padding: 10px 0 30px;
 }
 
 .au .cd {

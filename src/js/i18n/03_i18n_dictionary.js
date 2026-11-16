@@ -5,7 +5,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 กฎการเรียกเก็บเงิน|Billing rules
 กดค้างที่รูป (มือถือ) หรือคลิกขวา (คอมพิวเตอร์) แล้วเลือกบันทึกรูปภาพ|Long-press the image (mobile) or right-click (desktop), then choose Save image
 กดแก้ไขเพื่อเพิ่ม)|press Edit to add)
-กรอกข้อมูลให้ครบ (ชื่อ เพศ เบอร์โทร อีเมล และรหัสผ่านอย่างน้อย|Please fill in everything (name, gender, phone, email, password of at least
 กรอกข้อมูลให้ครบ|Please fill in all fields
 กรอกชื่อและอีเมล|Enter name and email
 กรอกหมวดหมู่ หัวข้อ และรายละเอียดให้ครบ|Fill in category, subject and details
@@ -32,9 +31,7 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ข่าวสาร|News
 ข้อมูลการชำระเงิน|Payment information
 ข้อมูลจากใบเรียกเก็บเงินและห้องพักทั้งหมด|Data from all invoices and rooms
-ข้อมูลฉบับนี้บันทึกไว้ในเครื่องนี้|This data is saved on this device
 ข้อมูลส่วนตัว|Personal information
-ข้อมูลไม่ครบหรืออีเมลซ้ำ|Incomplete data or duplicate email
 ครบกำหนดวันที่|Due on day
 ครบกำหนด|Due
 ครบทุกขั้นตอนการเก็บค่าหอพัก|Every step of dorm fee collection
@@ -44,7 +41,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ครั้ง|times
 คลิกห้องเพื่อแก้ไขข้อมูล|Click a room to edit
 คำขอของฉัน|My requests
-คำขอทั้งหมด|All requests
 คุณ|you
 ค่าน้ำฟรี|Free water
 ค่าปรับ (นับถึงวันที่แจ้งชำระ)|Late fee (up to the notice date)
@@ -76,11 +72,9 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 จัดห้อง|Assign room
 จำนวนบิล|Number of invoices
 จำนวนรอบบิล|Billing cycles
-จำนวนเงิน (บาท)|Amount (THB)
 จำนวนเงิน|Amount
 จำรหัสผ่านได้แล้ว|Remembered your password
 จ่ายตรงเวลา|Paid on time
-ฉันมีบัญชีอยู่แล้ว|I already have an account
 ชั้น|Floor
 ชาย|Male
 ชำระเงินง่ายใน|Pay easily in
@@ -176,7 +170,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ผู้เช่าปัจจุบัน|Current tenant
 ผู้เช่า|Tenants
 กรุณายืนยันอีเมลก่อนเข้าสู่ระบบ (ตรวจสอบกล่องจดหมายของคุณ)|Please confirm your email before signing in (check your inbox)
-ลงทะเบียนสำเร็จ กรุณายืนยันอีเมลผ่านลิงก์ที่ส่งไป แล้วเข้าสู่ระบบ|Registered. Please confirm your email via the link we sent, then sign in
 ส่งลิงก์ตั้งรหัสผ่านใหม่ไปที่อีเมลแล้ว กรุณาตรวจสอบกล่องจดหมาย|A password reset link was sent to your email. Please check your inbox
 ตั้งรหัสผ่านใหม่สำเร็จ กรุณาเข้าสู่ระบบ|Password updated. Please sign in
 ส่งลิงก์ตั้งรหัสผ่านใหม่|Send reset link
@@ -195,8 +188,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ไม่พบข้อมูลบัญชีในระบบ|Account data not found
 กรอกอีเมลและรหัสผ่าน|Enter email and password
 กรอกอีเมล|Enter email
-กรอกชื่อ อีเมล และรหัสผ่านอย่างน้อย 6 ตัว|Enter name, email and a password of at least 6 characters
-สร้างบัญชีแล้วแต่ยังไม่พบข้อมูล กรุณารีเฟรชหน้า|Account created but not found yet. Please refresh
 กรอกชื่อ|Enter name
 เบอร์โทรติดต่อ|Contact numbers
 ยังไม่ได้ตั้งค่าเบอร์โทร|Phone number not set
@@ -227,7 +218,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 มีผลบังคับใช้|Active
 มีผู้เช่าอยู่แล้ว|Already has a tenant
 มีผู้เช่า|Occupied
-มีบัญชีแล้ว|Already have an account
 ยกเลิก|Cancel
 ยอดขึ้นอัตโนมัติ|amount filled automatically
 ยอดชำระทั้งสิ้น|Total paid
@@ -279,7 +269,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 รหัสผ่านใหม่ (เว้นว่างถ้าไม่เปลี่ยน)|New password (leave blank to keep)
 รหัสผ่านใหม่ (อย่างน้อย|New password (at least
 รหัสผ่านใหม่ต้องมีอย่างน้อย|New password must be at least
-รหัสผ่าน (อย่างน้อย|Password (at least
 รหัสผ่าน|Password
 รองรับผู้ใช้งาน|Supports
 รองรับเฉพาะไฟล์|Only files of type
@@ -317,10 +306,7 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 รีเฟรช|Refresh
 รูปแบบอีเมลไม่ถูกต้อง|Invalid email format
 รูป|image
-ลงทะเบียนสำเร็จ รอผู้ดูแลจัดห้องพักให้|Registered successfully. Please wait for the admin to assign your room
 ลงทะเบียนสำเร็จแล้ว รอผู้ดูแลจัดห้องพักให้ จึงจะมีใบแจ้งหนี้|Registered. Invoices will appear once the admin assigns your room
-ลงทะเบียนแล้วผู้ดูแลจะเป็นผู้จัดห้องพักให้ภายหลัง|After registering, the admin will assign your room
-ลงทะเบียนใหม่|Register
 ออกบิลย้อนหลังได้ไม่เกินวันที่ 10 ของเดือนถัดไป|back-dated invoices allowed until the 10th of the next month
 🟢 รอบ|🟢 Cycle
 🔒 รอบ|🔒 Cycle
@@ -372,9 +358,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ส่งสลิปใหม่|Resend slip
 แก้ไขสลิป · ส่งสลิปใหม่|Edit slip · resend
 ใบเสร็จรับเงินของผู้เช่า|Tenant receipts
-ใบเสร็จที่ออกให้ผู้เช่าเมื่อผู้ดูแลยืนยันการชำระ|Receipts issued to tenants once the admin confirms payment
-ยังไม่มีใบเสร็จ|No receipts yet
-เริ่มใช้งาน →|Get started →
 เริ่มใช้งาน|Get started
 ยังไม่มีบัญชี? ติดต่อผู้ดูแลหอพักเพื่อขอสร้างบัญชี|No account yet? Contact the dormitory admin to create one
 เข้าสู่ระบบ →|Sign in →
@@ -407,11 +390,9 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 สถานะห้อง|Room status
 สถานะ: ทั้งหมด|Status: All
 สถานะ|Status
-สมัครสมาชิก|Sign up
 สรุปรายรับที่ชำระแล้วในช่วงเวลาที่เลือก พิมพ์เป็น|Summary of paid revenue for the selected period. Print as
 สรุปรายเดือน|Monthly summary
 สรุปรายได้และสถานะการชำระเงิน|Summary of income and payment status
-สร้างบัญชีและเข้าสู่ระบบ|Create account and sign in
 สร้างรูปไม่สำเร็จ|Could not create the image
 สร้าง|Create
 สลิป|Slip
@@ -503,7 +484,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 เบอร์ติดต่อ|Contact number
 เบอร์โทรที่ลงทะเบียน|Registered phone number
 เบอร์โทรไม่ตรงกับที่ลงทะเบียนไว้|Phone number does not match the registered one
-เบอร์โทรไม่ถูกต้อง (เช่น|Invalid phone number (e.g.
 เบอร์โทรไม่ถูกต้อง|Invalid phone number
 เบอร์โทร|Phone
 เปลี่ยนรหัสผ่านสำเร็จ|Password changed successfully
@@ -521,8 +501,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 เพื่อย้ายผู้เช่าออกพร้อมเปลี่ยนสถานะห้อง|to move the tenant out and change the room status
 เพื่อเพิ่มเพื่อน|to add friend
 เราจะตอบกลับโดยเร็วที่สุด|we will reply as soon as possible
-เริ่มต้นบัญชีผู้เช่า|Start a tenant account
-เริ่มต้นใช้งาน|Get started
 เริ่มสัญญา|Start
 เรียกเก็บ|Billing
 เรื่อง|Subject
@@ -538,14 +516,12 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 เลือกรูป|Choose image
 เลือกหมวดหมู่|Select category
 เลือกห้องว่าง|Select a vacant room
-เลือกเพศ|Select gender
 เลือก|Select
 เวลา|Time
 เสร็จสิ้น|Completed
 แก้ไขกฎการคำนวณค่าบริการ|Edit fee calculation rules
 แก้ไขการตั้งค่า|Edit settings
 แก้ไขข้อมูลผู้เช่า|Edit tenant information
-แก้ไขค่าอื่น|Edit other charges
 แก้ไขช่องทาง|Edit channels
 แก้ไขผู้เช่า|Edit tenant
 แก้ไขวันที่|Edit dates
@@ -617,17 +593,14 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ไม่เกิน|Not over
 มืด|Dark
 ภาษา|Language
-โหมดสี|Color mode
 โหมดกลางวัน|Daytime mode
 โหมดกลางคืน|Night mode
-ตั้งค่าส่วนตัว|Personal settings
 ตัว|chars
 บัญชี|Account
 ทุกอย่างของหอพัก|Everything for your dorm
 ในหน้าจอเดียว|on one screen
 ดูฟีเจอร์ ›|See features ›
-เก็บค่าเช่า ค่าไฟ และออกใบเสร็จ ครบในที่เดียว|Rent, electricity and receipts, all in one place
-แดชบอร์ดสรุปห้องพัก รายได้ และสถานะการชำระเงินแบบเรียลไทม์|A real-time dashboard of rooms, revenue and payment status`
+เก็บค่าเช่า ค่าไฟ และออกใบเสร็จ ครบในที่เดียว|Rent, electricity and receipts, all in one place`
     .split('\n')
     .map(l => l.split('|'))
     .filter(x => x.length == 2 && x[0])

@@ -406,23 +406,6 @@ function ebs(id) {
   R();
   tt('✓ แก้ไขบิลแล้ว');
 }
-function ex(id) {
-  const i = gi(id);
-  if (plock(i.per)) return alert(LKM(i.per));
-  mo(
-    `<h3>ค่าใช้จ่ายเพิ่มเติม ${id}</h3><label>จำนวนเงิน (บาท)</label><input id="xa" type="number" value="${i.x || ''}"><label>หมายเหตุ</label><input id="xb" value="${e(i.xn || '')}"><button class="b" onclick="sx('${id}')">บันทึก</button> <button class="b b2" onclick="cm()">ยกเลิก</button>`
-  );
-}
-function sx(id) {
-  const i = gi(id);
-  if (plock(i.per)) return alert(LKM(i.per));
-  i.x = +$('#xa').value || 0;
-  i.xn = $('#xb').value.trim();
-  lg('แก้ไขค่าอื่น ' + id);
-  save();
-  cm();
-  R();
-}
 function mv(id) {
   const u = D.users.find(x => x.id == id),
     k = D.inv.filter(i => (i.uid ? i.uid == id : i.room == u.room) && i.s != 'paid').length;

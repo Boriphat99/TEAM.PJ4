@@ -607,90 +607,11 @@ html[data-theme='dark'] .amt {
 }
 
 /* ===================== 13) หน้าต้อนรับ ===================== */
-.hn,
-html[data-theme='dark'] .hn {
-  background: var(--bar) !important;
-  border-bottom: 1px solid var(--ln) !important;
-  -webkit-backdrop-filter: saturate(1.5) blur(16px);
-  backdrop-filter: saturate(1.5) blur(16px);
-}
-.hnr .logo div {
-  font-family: var(--font-d);
-  font-weight: 600;
-  letter-spacing: 0.04em;
-}
-.hnr .logo small,
-.hnr .logo .ac {
-  font-family: var(--font);
-  font-size: 10.5px;
-  letter-spacing: 0.22em;
-  font-weight: 600;
-}
-.hl a {
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  white-space: nowrap;
-}
-.hh h1 {
-  font-family: var(--font-d);
-  font-weight: 600;
-  line-height: 1.35;
-  letter-spacing: -0.01em;
-}
-.hh h1 em {
-  font-style: normal;
-  color: var(--ac);
-  background: linear-gradient(180deg, var(--ac3), var(--ac2));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-decoration: none;
-  box-shadow: none;
-}
-.hh h1 em::after,
-.hh h1 em::before {
-  opacity: 0.35;
-}
-.hh p {
-  color: var(--mu);
-  font-size: 17px;
-  line-height: 1.75;
-}
-.hck span,
-.hch span {
-  letter-spacing: 0.01em;
-}
-.hch span,
 .hb {
   border-color: var(--ln2) !important;
   box-shadow: var(--sh1);
 }
 /* แถบสีเข้มกลางหน้า: ไล่เฉดดำนิล-แดงเลือดหมู */
-.hdk,
-html[data-theme='dark'] .hdk {
-  background:
-    radial-gradient(900px 380px at 50% -20%, rgba(198, 44, 68, 0.35), transparent 65%),
-    linear-gradient(180deg, #2a0b13, #14070b) !important;
-  color: #f7eef0;
-}
-.hs3 b {
-  font-family: var(--font-d);
-  font-weight: 600;
-  color: #ffd3da !important;
-  letter-spacing: -0.01em;
-}
-.hs3 i {
-  background: rgba(255, 255, 255, 0.06) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #ff9aaa !important;
-}
-.hs3 small {
-  color: rgba(247, 238, 240, 0.72) !important;
-}
-.hx h2 {
-  font-family: var(--font-d);
-  font-weight: 600;
-}
 .pvw,
 .ph {
   box-shadow: 0 40px 90px -40px rgba(27, 20, 22, 0.45) !important;
@@ -784,10 +705,6 @@ html[data-theme='dark'] .al {
 }
 
 /* ===================== 17) สีหัวข้อ/ตัวเลขใหญ่ ให้ใช้โทเค็นเดียวกัน ===================== */
-.hh h1,
-.hx h2 {
-  color: var(--tx);
-}
 .big,
 .ac {
   color: var(--ac);
@@ -798,10 +715,6 @@ html[data-theme='dark'] .ac {
 }
 .cd .big {
   font-size: clamp(30px, 3vw, 40px);
-}
-.hh h1 em::after,
-.hh h1 em::before {
-  display: none !important;
 }
 
 /* ===================== 18) จอขนาดกลาง (แท็บเล็ต/หน้าต่างแคบ): ไม่ให้โลโก้และปุ่มตกบรรทัด ===================== */
@@ -819,31 +732,13 @@ html[data-theme='dark'] .ac {
     letter-spacing: 0.12em;
     font-size: 9.5px;
   }
-  .hl {
-    gap: 18px;
-  }
 }
 
 /* ===================== 19) แก้จุดทับกัน/ล้นจอ (ตรวจด้วยสคริปต์ทุกหน้า 360–1440px) ===================== */
 /* เส้นแดงหนาใต้ข้อความหัวเรื่อง (มาจากกฎธีมมืดเดิม box-shadow inset) */
-.hh h1 em,
-html[data-theme='dark'] .hh h1 em {
-  box-shadow: none !important;
-  text-decoration: none !important;
-}
 
 /* หัวเว็บหน้าแรกบนมือถือ: โลโก้ทับปุ่ม TH/EN — ซ่อนตัวหนังสือโลโก้ เหลือรูปโลโก้ และไม่ให้ปุ่มล้นจอ */
-.hnr {
-  min-width: 0;
-}
-.hnr .logo {
-  min-width: 0;
-  flex: 0 1 auto;
-}
 @media (max-width: 600px) {
-  .hnr .logo div {
-    display: none !important;
-  }
   .hr {
     gap: 8px !important;
     flex-wrap: nowrap;
@@ -1356,361 +1251,28 @@ html[data-theme='dark'] .ts {
 
 /* ===================== 26) หน้าต้อนรับ — "Silk & Glass" (วอลเปเปอร์ผ้าไหม + กระจก Liquid Glass แบบ iOS) =====================
    ใช้เฉพาะหน้าต้อนรับ (.hp) · รูปพื้นหลังกำหนดใน index.html (--hp-bg-*) เพราะ path ของรูปต้องอ้างจากหน้าเว็บ */
-.hp {
-  --g-bg: rgba(255, 255, 255, 0.56);
-  --g-bg-hi: rgba(255, 255, 255, 0.74);
-  --g-rim: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.98),
-    rgba(255, 255, 255, 0.28) 32%,
-    rgba(255, 255, 255, 0.06) 58%,
-    rgba(255, 255, 255, 0.6)
-  );
-  --g-in: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 0 24px rgba(255, 255, 255, 0.28);
-  --g-sh: 0 1px 1px rgba(40, 12, 20, 0.04), 0 24px 56px -28px rgba(70, 10, 28, 0.34);
-  --g-blur: blur(30px) saturate(150%);
-  --ink-panel: rgba(18, 11, 14, 0.82);
-  --hp-tx: #1b1416;
-  --hp-mu: #6f6466;
-  position: relative;
-  isolation: isolate;
-  background: transparent !important;
-  color: var(--hp-tx);
-}
-html[data-theme='dark'] .hp {
-  --g-bg: rgba(26, 18, 22, 0.46);
-  --g-bg-hi: rgba(34, 24, 29, 0.62);
-  --g-rim: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.34),
-    rgba(255, 255, 255, 0.06) 35%,
-    rgba(255, 255, 255, 0.02) 60%,
-    rgba(255, 255, 255, 0.18)
-  );
-  --g-in: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 0 22px rgba(255, 255, 255, 0.03);
-  --g-sh: 0 28px 64px -30px rgba(0, 0, 0, 0.85);
-  --ink-panel: rgba(12, 8, 10, 0.62);
-  --hp-tx: #f6f1f1;
-  --hp-mu: #ab9fa2;
-}
 /* ---- วอลเปเปอร์ติดจอ (เลเยอร์ position:fixed แยก ไม่ใช้ background-attachment:fixed ที่ทำให้มือถือหน่วง) ---- */
-.hp::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background: var(--hp-bg-l, #fbf8f4) center / cover no-repeat;
-  transform: translateZ(0);
-}
-html[data-theme='dark'] .hp::before {
-  background-image: var(--hp-bg-d, none);
-  background-color: #0d0a0b;
-}
-@media (max-aspect-ratio: 1/1) {
-  .hp::before {
-    background-image: var(--hp-bg-lm, var(--hp-bg-l));
-    background-position: center bottom;
-  }
-  html[data-theme='dark'] .hp::before {
-    background-image: var(--hp-bg-dm, var(--hp-bg-d));
-  }
-}
-html:has(.hp) body,
-html[data-theme='dark']:has(.hp) body {
-  background: transparent !important;
-}
-html:has(.hp) {
-  background: #fbf8f4;
-}
-html[data-theme='dark']:has(.hp) {
-  background: #0d0a0b;
-}
-.hp .hh,
-.hp .hcr,
-.hp .lf,
-.hp .hx {
-  background: transparent !important;
-}
 
 /* ---- สูตรกระจก: พื้นโปร่ง + เบลอ + ขอบสะท้อนแสงไล่เฉด (ขอบทำด้วย ::after + mask) ---- */
-.hp .hn,
-.hp .fxc,
-.hp .sp > div,
-.hp .pv,
-.hp .hdk,
-.hp .hch span,
-.hp .hr .seg,
-.hp .hr .thm,
-.hp .hr .hb {
-  -webkit-backdrop-filter: var(--g-blur) !important;
-  backdrop-filter: var(--g-blur) !important;
-  background: var(--g-bg) !important;
-  border: 0 !important;
-  box-shadow: var(--g-in), var(--g-sh) !important;
-  position: relative;
-}
-.hp .hn::after,
-.hp .fxc::after,
-.hp .sp > div::after,
-.hp .pv::after,
-.hp .hdk::after,
-.hp .hch span::after,
-.hp .hr .hb::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  pointer-events: none;
-  background: var(--g-rim);
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#000 0 0) content-box exclude,
-    linear-gradient(#000 0 0);
-}
 
 /* ---- แถบเมนูบน: เกาะลอยบางๆ ---- */
-html .hp .hn,
-html[data-theme='dark'] .hp .hn {
-  border-radius: 0 0 20px 20px;
-}
-@media (min-width: 801px) {
-  html .hp .hn {
-    top: 14px !important;
-    margin: 14px auto 0;
-    width: min(1120px, calc(100% - 40px));
-    border-radius: 20px;
-  }
-  .hp .hnr {
-    min-height: 60px;
-  }
-}
-.hp .hn .logo div {
-  color: var(--hp-tx);
-}
-.hp .hl a {
-  color: var(--hp-mu) !important;
-  font-weight: 500;
-  font-size: 14px;
-  letter-spacing: 0.01em;
-  position: relative;
-}
 .hp .hl a:hover {
   color: var(--hp-tx) !important;
 }
-.hp .hl a.on {
-  color: var(--hp-tx) !important;
-}
-.hp .hl a.on::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: -8px;
-  width: 4px;
-  height: 4px;
-  margin-left: -2px;
-  border-radius: 50%;
-  background: var(--ac);
-}
-.hp .hr .seg,
-.hp .hr .thm,
-.hp .hr .hb {
-  box-shadow:
-    var(--g-in),
-    0 6px 18px -12px rgba(70, 10, 28, 0.4) !important;
-}
-.hp .hr .hb {
-  color: var(--hp-tx) !important;
-  font-weight: 600;
-}
-.hp .hr .seg .on {
-  background: linear-gradient(180deg, #2a1a1f, #120b0e) !important;
-  color: #fff !important;
-  box-shadow: 0 4px 10px -4px rgba(0, 0, 0, 0.45) !important;
-}
-html[data-theme='dark'] .hp .hr .seg .on {
-  background: linear-gradient(180deg, #fff, #ece4e6) !important;
-  color: #1b1416 !important;
-}
 
 /* ---- Hero: หัวข้อบางสง่า ---- */
-.hp .hh {
-  padding-top: clamp(56px, 9vh, 110px) !important;
-}
-.hp .hh h1 {
-  font-family: var(--font-d);
-  font-weight: 500 !important;
-  font-size: clamp(34px, 4.6vw, 66px) !important;
-  line-height: 1.24 !important;
-  letter-spacing: -0.012em;
-  color: var(--hp-tx) !important;
-  text-shadow: none !important;
-  margin-bottom: 26px;
-}
-.hp .hh h1 em {
-  font-style: normal;
-  font-weight: 500;
-  background: linear-gradient(180deg, #a3122e 10%, #6a0a1d 90%) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent;
-  text-shadow: none !important;
-  padding: 0 0.04em;
-}
-html[data-theme='dark'] .hp .hh h1 em {
-  background: linear-gradient(180deg, #ffb0bc 0%, #ff5a71 85%) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-}
-.hp .hh h1 em::before,
-.hp .hh h1 em::after {
-  display: none !important;
-}
 /* ปุ่มหลัก: ทับทิมเงาแก้ว */
-.hp .hh .hc .b,
-.hp .hx .hc .b {
-  padding: 15px 30px !important;
-  font-size: 15px !important;
-  letter-spacing: 0.02em;
-  border-radius: 999px !important;
-  background: linear-gradient(180deg, #c21d3a 0%, #8f0f27 55%, #6c0a1d 100%) !important;
-  border: 0 !important;
-  color: #fff !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.5),
-    inset 0 -3px 8px rgba(40, 0, 10, 0.35),
-    0 18px 40px -16px rgba(130, 14, 36, 0.75),
-    0 0 0 1px rgba(120, 10, 30, 0.4) !important;
-}
 .hp .hh .hc .b:hover,
 .hp .hx .hc .b:hover {
   transform: translateY(-2px);
   filter: brightness(1.06);
 }
-.hp .hck {
-  gap: 8px 22px !important;
-  margin-top: 26px !important;
-}
-.hp .hck span {
-  color: var(--hp-mu) !important;
-  font-size: 13.5px;
-  font-weight: 500;
-}
-.hp .hh > small.mu {
-  color: var(--hp-mu) !important;
-  font-size: 13px !important;
-  letter-spacing: 0.02em;
-  font-weight: 500;
-}
-.hp .hch {
-  gap: 10px !important;
-}
-.hp .hch span {
-  color: var(--hp-tx) !important;
-  font-weight: 500 !important;
-  border-radius: 999px !important;
-  padding: 10px 18px !important;
-}
-.hp .hch span svg {
-  color: var(--ac);
-}
 
 /* ---- ภาพตัวอย่างหน้าจอ: กรอบกระจกหนา เอียงเล็กน้อยแบบเวทีโชว์สินค้า ---- */
-.hp .pvw {
-  perspective: 2400px;
-}
-.hp .pv {
-  padding: 10px !important;
-  border-radius: 26px !important;
-  background: var(--g-bg-hi) !important;
-  transform: rotateX(7deg) translateZ(0);
-  transform-origin: 50% 0;
-  box-shadow:
-    var(--g-in),
-    0 60px 120px -50px rgba(70, 10, 28, 0.55),
-    0 30px 60px -40px rgba(0, 0, 0, 0.25) !important;
-}
-.hp .pv > * {
-  border-radius: 16px;
-  overflow: hidden;
-}
-.hp .ph {
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.5),
-    0 50px 90px -30px rgba(40, 6, 16, 0.6) !important;
-}
-@media (max-width: 800px) {
-  .hp .pv {
-    transform: none;
-  }
-}
 
 /* ---- แถบสถิติ: แผงกระจกสีนิล ตัวเลขตัวใหญ่แบบมีเชิง ---- */
-html .hp .hdk,
-html[data-theme='dark'] .hp .hdk {
-  background:
-    radial-gradient(700px 260px at 50% 0%, rgba(194, 29, 58, 0.28), transparent 70%),
-    var(--ink-panel) !important;
-  margin: 0 auto;
-  width: min(1120px, calc(100% - 40px));
-  border-radius: 30px;
-  color: #f4eeee;
-  --g-rim: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.4),
-    rgba(255, 255, 255, 0.05) 40%,
-    rgba(255, 140, 160, 0.25)
-  );
-}
-@media (max-width: 800px) {
-  html .hp .hdk {
-    width: calc(100% - 24px);
-    border-radius: 26px;
-  }
-}
-.hp .hs3 b {
-  font-family: var(--font-d);
-  font-weight: 500 !important;
-  font-size: clamp(40px, 4.4vw, 60px) !important;
-  color: #fff !important;
-  letter-spacing: -0.02em;
-}
-.hp .hs3 small {
-  color: rgba(244, 238, 238, 0.66) !important;
-  letter-spacing: 0.02em;
-}
-.hp .hs3 i {
-  background: rgba(255, 255, 255, 0.07) !important;
-  border: 1px solid rgba(255, 255, 255, 0.16) !important;
-  color: #ff9aab !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
-}
-.hp .hs3 > div + div {
-  border-color: rgba(255, 255, 255, 0.1) !important;
-}
-.hp .hdn {
-  color: rgba(244, 238, 238, 0.45) !important;
-}
 
 /* ---- การ์ดฟีเจอร์: กระจกขาว ไอคอนทรงกลมทับทิม ---- */
-.hp .hx h2 {
-  font-family: var(--font-d);
-  font-weight: 500 !important;
-  font-size: clamp(28px, 3vw, 42px) !important;
-  letter-spacing: -0.01em;
-  color: var(--hp-tx) !important;
-}
-.hp .fxc {
-  border-radius: 26px !important;
-  padding: 26px 24px !important;
-  transition:
-    transform 0.3s var(--ease),
-    box-shadow 0.3s var(--ease);
-}
 @media (hover: hover) {
   .hp .fxc:hover {
     transform: translateY(-4px);
@@ -1719,75 +1281,10 @@ html[data-theme='dark'] .hp .hdk {
       0 34px 70px -30px rgba(90, 12, 32, 0.5) !important;
   }
 }
-.hp .fxc i {
-  width: 46px !important;
-  height: 46px !important;
-  border-radius: 50% !important;
-  display: grid !important;
-  place-items: center;
-  background: linear-gradient(160deg, #c8203e, #7a0c22) !important;
-  color: #fff !important;
-  border: 0 !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    0 10px 22px -10px rgba(130, 14, 36, 0.7) !important;
-}
-.hp .fxc i svg {
-  color: #fff !important;
-  stroke: currentColor;
-}
-.hp .fxc b {
-  font-size: 17px !important;
-  font-weight: 600 !important;
-  color: var(--hp-tx) !important;
-  margin-top: 14px;
-}
-.hp .fxc small {
-  color: var(--hp-mu) !important;
-  font-size: 14px !important;
-  line-height: 1.6;
-}
 
 /* ---- ขั้นตอนชำระเงิน: เลขทรงกลมทับทิม ---- */
-.hp .sp > div {
-  border-radius: 24px !important;
-  padding: 22px 16px !important;
-}
-.hp .sp > div b {
-  background: linear-gradient(160deg, #c8203e, #7a0c22) !important;
-  color: #fff !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    0 0 0 6px rgba(200, 32, 62, 0.1),
-    0 10px 22px -10px rgba(130, 14, 36, 0.7) !important;
-  font-family: var(--font-d);
-  font-weight: 600;
-}
-.hp .sp > div span {
-  color: var(--hp-tx) !important;
-  font-weight: 500;
-}
-.hp .lf {
-  color: var(--hp-mu) !important;
-  font-size: 12.5px;
-  letter-spacing: 0.02em;
-}
 
 /* ---- มือถือ: เบลอน้อยลงเพื่อความลื่น (ทับกฎเดิมที่ปิดเบลอแถบบน) ---- */
-@media (max-width: 800px) {
-  .hp {
-    --g-blur: blur(18px) saturate(145%);
-  }
-  html .hp .hn,
-  html[data-theme='dark'] .hp .hn {
-    -webkit-backdrop-filter: var(--g-blur) !important;
-    backdrop-filter: var(--g-blur) !important;
-    background: var(--g-bg) !important;
-  }
-  .hp .hck span {
-    font-size: 12.5px;
-  }
-}
 @media (prefers-reduced-transparency: reduce) {
   .hp {
     --g-bg: rgba(255, 255, 255, 0.94);
@@ -1799,11 +1296,6 @@ html[data-theme='dark'] .hp .hdk {
   }
 }
 /* แผงสถิติในธีมสว่าง: สีนิลเข้มใส ไม่ขุ่น */
-html:not([data-theme='dark']) .hp .hdk {
-  background:
-    radial-gradient(700px 260px at 50% 0%, rgba(194, 29, 58, 0.32), transparent 70%),
-    linear-gradient(180deg, rgba(30, 14, 19, 0.93), rgba(18, 9, 12, 0.95)) !important;
-}
 
 /* ===================== 27) หน้าในระบบ + หน้าเข้าสู่ระบบ: Silk & Glass =====================
    ใช้วอลเปเปอร์ชุดเดียวกับหน้าต้อนรับ แต่ซ้อนชั้นสีจางทับ เพื่อให้ตัวเลข/ตารางอ่านชัด
@@ -2130,37 +1622,6 @@ html[data-theme='dark'] {
   --s-veil: linear-gradient(180deg, rgba(11, 8, 9, 0.7), rgba(11, 8, 9, 0.82));
 }
 
-.hp::before,
-html[data-theme='dark'] .hp::before {
-  background-image: var(--ph-veil-x), var(--hp-bg-l);
-  background-size: cover;
-  background-position:
-    center,
-    center,
-    72% center;
-  background-repeat: no-repeat;
-  image-rendering: auto;
-}
-html[data-theme='dark'] .hp::before {
-  background-image: var(--ph-veil-x), var(--hp-bg-d);
-  background-position:
-    center,
-    center,
-    80% center;
-}
-@media (max-aspect-ratio: 1/1) {
-  .hp::before,
-  html[data-theme='dark'] .hp::before {
-    background-image: var(--ph-veil-y), var(--hp-bg-lm, var(--hp-bg-l));
-    background-position:
-      center,
-      center bottom;
-  }
-  html[data-theme='dark'] .hp::before {
-    background-image: var(--ph-veil-y), var(--hp-bg-dm, var(--hp-bg-d));
-  }
-}
-
 /* หน้าในระบบ + เข้าสู่ระบบ: ภาพเดียวกัน แต่ชั้นสีทึบกว่า เพราะมีตัวเลข/ตารางเยอะ */
 .app::before,
 .au::before {
@@ -2199,9 +1660,6 @@ html[data-theme='dark'] .app .top .me {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 /* ข้อความรองบนหน้าต้อนรับธีมมืด: สว่างขึ้นให้อ่านง่ายบนภาพถ่าย */
-html[data-theme='dark'] .hp {
-  --hp-mu: #c9bdc0;
-}
 
 /* ===================== 29) หน้าต้อนรับแบบเว็บไซต์ Apple (.apl) =====================
    แถบเมนูบางโปร่ง · ภาพหอพักเต็มจอ · หัวข้อตัวใหญ่ · ส่วนเนื้อหาพื้นเรียบสลับสี · การ์ดมุมมน */
@@ -2456,13 +1914,6 @@ html[data-theme='dark'] .ap-btn {
   font-size: clamp(32px, 4.8vw, 56px);
   line-height: 1.18;
   color: var(--ap-tx);
-}
-.ap-lead {
-  margin: 18px auto 0;
-  max-width: 640px;
-  font-size: clamp(17px, 1.8vw, 21px);
-  line-height: 1.5;
-  color: var(--ap-mu);
 }
 .ap-who {
   margin-top: 30px;
@@ -2932,7 +2383,6 @@ html[data-theme='dark'] .apl :is(.ap-tile, .ap-ol li, .ap-st > div)::before {
       rgba(255, 255, 255, 0.32) 50%,
       rgba(248, 243, 235, 0.55)
     ),
-    var(--hp-bg-blur, none) center / cover no-repeat,
     #fbf4ef !important;
 }
 html[data-theme='dark'] .apl .ap-dev .pvx {
@@ -2954,29 +2404,10 @@ html[data-theme='dark'] .apl .ap-dev .pvx {
   }
 }
 
-/* ---------- หน้าในระบบ + เข้าสู่ระบบ ธีมสว่าง: วอลเปเปอร์เบลอฟุ้ง + ฟิล์มขาวนวล ---------- */
+/* ---------- หน้าในระบบ + เข้าสู่ระบบ ธีมสว่าง: การ์ดขาวนวล ---------- */
 html:not([data-theme='dark']) {
-  --s-veil-blur: linear-gradient(
-    180deg,
-    rgba(255, 251, 244, 0.5),
-    rgba(255, 255, 255, 0.32) 50%,
-    rgba(248, 243, 235, 0.55)
-  );
   --s-card: rgba(255, 255, 255, 0.82);
   --s-card-m: rgba(255, 255, 255, 0.9);
-}
-html:not([data-theme='dark']) .app::before,
-html:not([data-theme='dark']) .au::before {
-  background-image: var(--s-veil-blur), var(--hp-bg-blur, var(--hp-bg-l));
-  background-position: center, center;
-  background-size: cover, cover;
-}
-@media (max-width: 800px) {
-  html:not([data-theme='dark']) .app::before,
-  html:not([data-theme='dark']) .au::before {
-    background-image: var(--s-veil-blur), var(--hp-bg-blur-m, var(--hp-bg-blur));
-    background-position: center, center;
-  }
 }
 /* ธีมมืด: ฟิล์มดำแบบเดียวกับหน้าต้อนรับ */
 html[data-theme='dark'] {
@@ -4448,15 +3879,6 @@ html[data-theme='dark'] body .app::before {
     var(--hp-bg-d) 50% 58% / cover no-repeat,
     var(--bg) !important;
 }
-@media (max-width: 800px) {
-  html:not([data-theme='dark']) body .app::before,
-  html[data-theme='dark'] body .app::before {
-    background:
-      var(--gh-film-m),
-      var(--hp-bg-soft-m, var(--hp-bg-dm)) center 42% / cover no-repeat,
-      var(--bg) !important;
-  }
-}
 /* หน้าเข้าสู่ระบบ: เห็นอาคารชัดกว่าหน้าในระบบ (เป็นหน้าแรกที่ผู้ใช้เห็น) */
 html:not([data-theme='dark']) body .au::before {
   background:
@@ -4685,15 +4107,6 @@ html[data-theme='dark'] .ts {
     rgba(40, 22, 34, 0.44) 50%,
     rgba(40, 22, 34, 0.56)
   );
-  /* ฟิล์มส่วนบนสุด (บนภาพคมชัด) เข้มตรงกลางบริเวณหัวข้อ */
-  --ap-hero-film:
-    radial-gradient(
-      ellipse 58% 46% at 50% 22%,
-      rgba(36, 18, 30, 0.72),
-      rgba(36, 18, 30, 0.22) 70%,
-      rgba(36, 18, 30, 0) 100%
-    ),
-    linear-gradient(180deg, rgba(36, 18, 30, 0.4), rgba(36, 18, 30, 0.12) 50%, rgba(36, 18, 30, 0));
   --ap-glass: rgba(255, 252, 248, 0.74);
   --ap-glass-solid: rgba(255, 252, 248, 0.93);
   --ap-glass-ln: rgba(255, 255, 255, 0.7);
@@ -4710,19 +4123,6 @@ html[data-theme='dark'] .apl {
     rgba(14, 11, 28, 0.64) 50%,
     rgba(10, 8, 22, 0.8)
   );
-  --ap-hero-film:
-    radial-gradient(
-      ellipse 58% 46% at 50% 22%,
-      rgba(10, 8, 24, 0.82),
-      rgba(10, 8, 24, 0.4) 70%,
-      rgba(10, 8, 24, 0.2) 100%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(12, 10, 26, 0.66),
-      rgba(14, 11, 28, 0.48) 50%,
-      rgba(14, 11, 28, 0.3)
-    );
   --ap-glass: rgba(24, 21, 38, 0.56);
   --ap-glass-solid: rgba(24, 21, 38, 0.9);
   --ap-glass-ln: rgba(226, 216, 255, 0.12);
@@ -4737,51 +4137,9 @@ html[data-theme='dark']:has(.apl) {
 html[data-theme='dark']:has(.apl) {
   background: #0c0a17 !important;
 }
-/* ฉากหลังติดจอ: ภาพเดียวกันแบบนุ่ม */
-.apl::before,
-html[data-theme='dark'] .apl::before {
-  background:
-    var(--ap-film),
-    var(--hp-bg-soft, var(--hp-bg-d)) 50% 58% / cover no-repeat,
-    #1b1018 !important;
-}
-@media (max-aspect-ratio: 1/1) {
-  .apl::before,
-  html[data-theme='dark'] .apl::before {
-    background:
-      var(--ap-film),
-      var(--hp-bg-soft-m, var(--hp-bg-dm)) center 42% / cover no-repeat,
-      #1b1018 !important;
-  }
-}
-/* ส่วนบนสุด: อาคารคมชัด แล้วค่อย ๆ จางเข้าหาภาพนุ่มด้านล่าง */
 .apl .ap-hero {
   position: relative;
   isolation: isolate;
-}
-.apl .ap-hero::before {
-  content: '';
-  position: absolute;
-  z-index: -1;
-  left: 0;
-  right: 0;
-  top: -80px;
-  bottom: 0;
-  pointer-events: none;
-  background:
-    var(--ap-hero-film),
-    var(--hp-bg-d) 0% 50% / cover no-repeat;
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 58%, transparent 96%);
-  mask-image: linear-gradient(180deg, #000 0%, #000 58%, transparent 96%);
-}
-@media (max-aspect-ratio: 1/1) {
-  .apl .ap-hero::before {
-    background:
-      var(--ap-hero-film),
-      var(--hp-bg-hero-m, var(--hp-bg-d)) 50% 50% / cover no-repeat;
-    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 50%, transparent 92%);
-    mask-image: linear-gradient(180deg, #000 0%, #000 50%, transparent 92%);
-  }
 }
 /* หัวข้อบรรทัดที่สอง: ไล่สีแสงพระอาทิตย์ตก (ทอง → พีช) */
 .apl .ap-hero h1 em,
@@ -5258,11 +4616,8 @@ html[data-theme='dark'] .ln2 {
 }
 
 /* ===================== 44) ภาพพื้นหลังแบบเดิม ทั้งคอมและมือถือ =====================
-   ใช้รูปอาคาร T&T คมชัดรูปเดียว ติดจอทั้งหน้า (เอาภาพส่วนบนที่แยกไว้และภาพแบบนุ่มออก)
+   ใช้รูปอาคาร T&T คมชัดรูปเดียว ติดจอทั้งหน้า
    ตำแหน่งรูปเท่าเดิม: คอม 50% 60% · มือถือ center 40% · คงสีฟิล์มของธีม Golden Hour / Twilight */
-.apl .ap-hero::before {
-  display: none !important;
-}
 @media (min-aspect-ratio: 1/1) {
   .apl {
     --ap-film:

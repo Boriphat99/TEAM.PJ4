@@ -4,16 +4,6 @@
   position: relative;
 }
 
-.lp .tb {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  padding: 18px 28px;
-  margin: 0;
-  z-index: 3;
-}
-
 .lp .wrap {
   padding: 0 20px;
 }
@@ -24,9 +14,6 @@
 }
 
 @media (max-width: 700px) {
-  .lp .tb {
-    padding: 14px 16px;
-  }
   .lp .hs {
     padding-top: 110px;
   }

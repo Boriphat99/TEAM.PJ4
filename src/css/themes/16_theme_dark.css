@@ -127,7 +127,6 @@ html[data-theme='dark'] .nv.on {
 }
 
 html[data-theme='dark'] .logo i,
-html[data-theme='dark'] .sp b,
 html[data-theme='dark'] .st b {
   background: #e11d48;
 }
@@ -298,10 +297,6 @@ html[data-theme='dark'] .tg {
   color: #b3a9ae;
 }
 
-html[data-theme='dark'] .hch span {
-  color: #e6dde1;
-}
-
 html[data-theme='dark'] .mu {
   color: var(--mu);
 }
@@ -386,18 +381,6 @@ html[data-theme='dark'] svg stop[stop-color='#dc2626'] {
   stop-color: #e11d48;
 }
 
-html[data-theme='dark'] .hp {
-  background: linear-gradient(180deg, #1d0b12 0, #0b0a0c 720px);
-}
-
-html[data-theme='dark'] .hn {
-  background: rgba(11, 10, 12, 0.88);
-}
-
-html[data-theme='dark'] .hl a {
-  color: #cfc5ca;
-}
-
 html[data-theme='dark'] .hl a.on,
 html[data-theme='dark'] .hl a:hover {
   color: #ff5c7a;
@@ -407,74 +390,21 @@ html[data-theme='dark'] .hb {
   color: #f2eef0;
 }
 
-html[data-theme='dark'] .hh h1 {
-  color: #f6f2f4;
-}
-
-html[data-theme='dark'] .hh h1 em {
-  color: #ff5c7a;
-  box-shadow: inset 0 -0.16em 0 rgba(225, 29, 72, 0.38);
-}
-
 html[data-theme='dark'] .pvb {
   background: #130f12;
-}
-
-html[data-theme='dark'] .pvsb {
-  background: #0f0c0e;
 }
 
 html[data-theme='dark'] .pvx {
   background: #0c0a0c;
 }
 
-html[data-theme='dark'] .pvs {
-  color: #b3a9ae;
-}
-
-html[data-theme='dark'] .pvs .on,
-html[data-theme='dark'] .pvr .o {
-  background: rgba(225, 29, 72, 0.14);
-  color: #ff8da1;
-  border-color: rgba(225, 29, 72, 0.38);
-}
-
-html[data-theme='dark'] .pvr span {
-  background: #191418;
-}
-
-html[data-theme='dark'] .pvr b {
-  color: #f2eef0;
-}
-
 html[data-theme='dark'] .pv {
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
-}
-
-html[data-theme='dark'] .fxc i {
-  background: rgba(225, 29, 72, 0.15);
 }
 
 html[data-theme='dark'] .fxc:hover,
 html[data-theme='dark'] .rc2:hover {
   border-color: #e11d48;
-}
-
-html[data-theme='dark'] .hcr {
-  background: #0f0c0e;
-}
-
-html[data-theme='dark'] .hdk {
-  background: linear-gradient(180deg, #2a0a14, #14060b);
-}
-
-html[data-theme='dark'] .hs3 i {
-  background: #4a0f22;
-  color: #ff8da1;
-}
-
-html[data-theme='dark'] .hs3 b {
-  color: #ff8da1;
 }
 
 html[data-theme='dark'] .ph {
@@ -485,19 +415,6 @@ html[data-theme='dark'] .ph {
 html[data-theme='dark'] .pnb {
   background: #141114;
   border-color: var(--ln);
-}
-
-html[data-theme='dark'] .phb2 {
-  background: #0f0c0e;
-}
-
-html[data-theme='dark'] .phh,
-html[data-theme='dark'] .phh2 {
-  background: linear-gradient(160deg, #7a0f2b, #e11d48);
-}
-
-html[data-theme='dark'] .phb span {
-  background: #e11d48;
 }
 
 html[data-theme='dark'] .pnb .on {

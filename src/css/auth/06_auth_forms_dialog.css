@@ -30,10 +30,6 @@
   line-height: 1.2;
 }
 
-.al .ico {
-  margin-top: 30px;
-}
-
 .gc {
   position: relative;
   border-radius: 20px;
@@ -160,9 +156,6 @@
   }
   .al {
     text-align: center;
-  }
-  .al .ico {
-    display: none;
   }
   .al h1 {
     font-size: 28px;
