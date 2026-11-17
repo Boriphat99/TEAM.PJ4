@@ -90,7 +90,7 @@ const ch = g => {
 };
 const nrc = () => {
   if (SBON) return '(กำลังออกเลขที่)';
-  const d = new Date();
+  const d = bk();
   return (
     'RC' +
     d.getFullYear() +

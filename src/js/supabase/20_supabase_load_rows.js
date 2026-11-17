@@ -130,7 +130,8 @@ async function sbLoad() {
         .sort((a, b) => String(b.submitted_at).localeCompare(String(a.submitted_at)))[0];
     const i = {
       id: v.code,
-      room: rn(c0.room_id),
+      // บิลของห้องเก่า (ผู้เช่าไม่เห็นข้อมูลห้องนั้นแล้ว) ใช้เลขห้องจากรหัสบิล INVyyyymm-ห้อง
+      room: rn(c0.room_id) ?? (+String(v.code).split('-')[1] || null),
       uid: tn0.app_id == null ? undefined : +tn0.app_id,
       per: v.billing_month,
       pv: +m.previous_reading || 0,

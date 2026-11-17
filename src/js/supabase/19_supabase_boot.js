@@ -118,7 +118,7 @@ async function sbEnter(fresh) {
 }
 function sbReset() {
   const d = seed();
-  Object.assign(D, d, { users: [], log: [], inv: [], mail: [], tk: [], news: [], contacts: [] });
+  Object.assign(D, d, { users: [], log: [], inv: [], tk: [], news: [], contacts: [] });
   SBX.snap = {};
   SBX.uid = null;
   if (SBX.ch && SBX.cl) {

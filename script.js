@@ -2058,7 +2058,7 @@ function lv(n) {
 function iss() {
   if (plock(PER)) return alert(LKM(PER));
   const [y, m] = PER.split('-').map(Number);
-  if (new Date() < new Date(y, m - 1, 27))
+  if (bk() < new Date(y, m - 1, 27))
     return cf('ยังไม่ถึงวันจดมิเตอร์ (27) ต้องการออกบิลต่อหรือไม่?', iss2);
   iss2();
 }
@@ -2191,7 +2191,7 @@ const ch = g => {
 };
 const nrc = () => {
   if (SBON) return '(กำลังออกเลขที่)';
-  const d = new Date();
+  const d = bk();
   return (
     'RC' +
     d.getFullYear() +
@@ -3343,7 +3343,7 @@ async function sbEnter(fresh) {
 }
 function sbReset() {
   const d = seed();
-  Object.assign(D, d, { users: [], log: [], inv: [], mail: [], tk: [], news: [], contacts: [] });
+  Object.assign(D, d, { users: [], log: [], inv: [], tk: [], news: [], contacts: [] });
   SBX.snap = {};
   SBX.uid = null;
   if (SBX.ch && SBX.cl) {
@@ -3484,7 +3484,8 @@ async function sbLoad() {
         .sort((a, b) => String(b.submitted_at).localeCompare(String(a.submitted_at)))[0];
     const i = {
       id: v.code,
-      room: rn(c0.room_id),
+      // บิลของห้องเก่า (ผู้เช่าไม่เห็นข้อมูลห้องนั้นแล้ว) ใช้เลขห้องจากรหัสบิล INVyyyymm-ห้อง
+      room: rn(c0.room_id) ?? (+String(v.code).split('-')[1] || null),
       uid: tn0.app_id == null ? undefined : +tn0.app_id,
       per: v.billing_month,
       pv: +m.previous_reading || 0,
@@ -4707,7 +4708,7 @@ new MutationObserver(() => {
    at0() = ปุ่ม "+ เพิ่มผู้เช่า" ในหน้าผู้เช่า */
 
 const todayISO = () => {
-  const d = new Date();
+  const d = bk(); // วันที่ตามเวลาไทย
   return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
 };
 const atfRooms = () => D.rooms.filter(r => vac(r));

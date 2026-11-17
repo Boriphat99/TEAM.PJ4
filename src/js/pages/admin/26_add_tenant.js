@@ -5,7 +5,7 @@
    at0() = ปุ่ม "+ เพิ่มผู้เช่า" ในหน้าผู้เช่า */
 
 const todayISO = () => {
-  const d = new Date();
+  const d = bk(); // วันที่ตามเวลาไทย
   return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
 };
 const atfRooms = () => D.rooms.filter(r => vac(r));

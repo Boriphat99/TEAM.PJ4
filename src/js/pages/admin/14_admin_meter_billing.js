@@ -82,7 +82,7 @@ function lv(n) {
 function iss() {
   if (plock(PER)) return alert(LKM(PER));
   const [y, m] = PER.split('-').map(Number);
-  if (new Date() < new Date(y, m - 1, 27))
+  if (bk() < new Date(y, m - 1, 27))
     return cf('ยังไม่ถึงวันจดมิเตอร์ (27) ต้องการออกบิลต่อหรือไม่?', iss2);
   iss2();
 }
