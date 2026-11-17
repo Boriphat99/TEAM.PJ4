@@ -10133,3 +10133,15 @@ html[data-theme='dark'] body .app::before {
   }
 }
 
+/* ===== 47. มือถือ: แถบเมนูล่างไม่เลื่อนเองเมื่อกดเมนู =====
+   ปิดการดีดเข้าตำแหน่งปุ่ม (scroll-snap) เพราะตอนวาดแถบใหม่หลังเปลี่ยนหน้า
+   เบราว์เซอร์จะดีดให้ปุ่มใดปุ่มหนึ่งอยู่กลางจอ ทำให้แถบเลื่อนไปจากที่ผู้ใช้วางไว้ */
+@media (max-width: 800px) {
+  .sb {
+    scroll-snap-type: none !important;
+  }
+  .sb .nv {
+    scroll-snap-align: none !important;
+  }
+}
+

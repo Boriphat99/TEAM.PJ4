@@ -1,6 +1,6 @@
 /* 27_ux_polish.js — ปรับความลื่นและใช้งานง่าย (ไม่เปลี่ยนการทำงานของระบบ)
    1) เปลี่ยนหน้าแล้วเลื่อนขึ้นบนสุด + เฟดเข้าหน้าใหม่ (เฉพาะตอนเปลี่ยนหน้า ไม่ใช่ตอนข้อมูลอัปเดต)
-   2) เมนูล่างบนมือถือ: เลื่อนให้เมนูที่เลือกอยู่กลางจอเสมอ
+   2) (เลิกใช้) เมนูล่างบนมือถือไม่เลื่อนเองเมื่อกด — อยู่ตำแหน่งเดิม
    3) กด Esc เพื่อปิดหน้าต่างป๊อปอัป
    4) กันการกดปุ่มซ้ำเร็วๆ (ดับเบิลแทป) เช่น อนุมัติ/ออกบิล/ส่งสลิป ซ้ำสองครั้ง
    5) ใส่ป้ายชื่อ (aria-label) ให้ปุ่มที่มีแต่ไอคอน เพื่อโปรแกรมอ่านหน้าจอ
@@ -12,7 +12,7 @@
   let lastP = typeof P != 'undefined' ? P : null,
     lastU = null;
 
-  // ---------- 1) + 2) หลังวาดหน้าใหม่ ----------
+  // ---------- 1) หลังวาดหน้าใหม่ ----------
   function afterRender() {
     const curU = U && U.id;
     const pageChanged = P !== lastP || curU !== lastU;
@@ -29,24 +29,14 @@
         mn.classList.add('pg-in');
       }
     }
-    centerNav(pageChanged);
     labelIcons();
     numericInputs();
-  }
-  function centerNav(smooth) {
-    if (innerWidth > 800) return;
-    const sb = app.querySelector('.sb'),
-      on = sb && sb.querySelector('.nv.on');
-    if (!sb || !on || sb.scrollWidth <= sb.clientWidth) return;
-    const target = on.offsetLeft - (sb.clientWidth - on.offsetWidth) / 2;
-    sb.scrollTo({ left: Math.max(0, target), behavior: smooth ? 'smooth' : 'instant' });
   }
   let raf = 0;
   new MutationObserver(() => {
     cancelAnimationFrame(raf);
     raf = requestAnimationFrame(afterRender);
   }).observe(app, { childList: true });
-  addEventListener('resize', () => centerNav(false), { passive: true });
 
   // ---------- 3) Esc ปิดหน้าต่าง ----------
   document.addEventListener('keydown', ev => {

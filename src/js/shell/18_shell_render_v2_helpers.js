@@ -23,13 +23,18 @@ function R() {
     });
   const n = document.querySelector('.sb');
   if (n) {
-    n.scrollLeft = l;
+    // แถบเมนูวาดใหม่ทุกครั้ง: กลับไปตำแหน่งเดิมทันที (instant) ไม่ให้เห็นแถบไหล
+    n.scrollTo({ left: l, behavior: 'instant' });
     const t = n.querySelector('.nv.on');
+    // เมนูที่กดอยู่ตำแหน่งเดิม ไม่เลื่อนแถบ; เลื่อนให้เห็นเฉพาะเมื่อเมนูที่เลือกอยู่นอกจอทั้งชิ้น
+    // (เช่น เปิดหน้าจากลิงก์ในแดชบอร์ด)
     if (t) {
       const A = n.getBoundingClientRect(),
         B = t.getBoundingClientRect();
-      if (B.left < A.left + 8) n.scrollLeft -= A.left + 8 - B.left;
-      else if (B.right > A.right - 8) n.scrollLeft += B.right - (A.right - 8);
+      if (B.right <= A.left)
+        n.scrollTo({ left: n.scrollLeft - (A.left + 8 - B.left), behavior: 'instant' });
+      else if (B.left >= A.right)
+        n.scrollTo({ left: n.scrollLeft + B.right - (A.right - 8), behavior: 'instant' });
     }
   }
 }
