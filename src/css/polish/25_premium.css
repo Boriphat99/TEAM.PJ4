@@ -4703,3 +4703,18 @@ html[data-theme='dark'] body .app::before {
     font-size: 14px;
   }
 }
+
+/* ===== 46. มือถือ/แท็บเล็ต: ภาพพื้นหลังไม่ซูมตอนเลื่อนหน้า =====
+   แถบที่อยู่ของเบราว์เซอร์ซ่อน/แสดงตอนเลื่อน ทำให้ความสูงจอเปลี่ยน
+   ชั้นภาพที่ยึดบน-ล่าง (inset: 0) จึงยืดตามและภาพ cover ถูกย่อ/ขยาย
+   ให้ชั้นภาพสูงคงที่เท่าจอตอนแถบซ่อน (100lvh) ภาพจึงนิ่ง */
+@media (hover: none), (max-width: 800px) {
+  .apl::before,
+  .au::before,
+  .app::before {
+    top: 0 !important;
+    bottom: auto !important;
+    height: 100vh !important;
+    height: 100lvh !important;
+  }
+}
