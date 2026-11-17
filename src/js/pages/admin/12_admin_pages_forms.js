@@ -180,7 +180,7 @@ const pg = {
   },
   met() {
     const ps = pall();
-    if (!ps.includes(PER)) PER = ps.includes(dper()) ? dper() : ps[0];
+    if (!ps.includes(PER)) PER = ps[0];
     MK = ps.map(p => p + (plock(p) ? 'L' : 'O')).join();
     const L = plock(PER),
       oc = D.rooms.filter(r => tn(r.n)),

@@ -49,7 +49,8 @@ const dper = () => {
     d = n.getDate() >= 27 ? n : new Date(n.getFullYear(), n.getMonth() - 1, 1);
   return d.getFullYear() + '-' + pad(d.getMonth() + 1);
 };
-let PER = dper();
+// หน้ามิเตอร์ & ออกบิล เปิดที่เดือนล่าสุด (เดือนปัจจุบัน) เสมอ
+let PER = pcur();
 try {
   const s = +localStorage.getItem('ttm_s');
   U = D.users.find(u => u.id == s && !u.out) || null;
@@ -80,6 +81,7 @@ function dg(m, cb) {
 window.alert = m => dg(String(m));
 const cf = (m, cb) => dg(m, cb);
 const go = p => {
+    if (p == 'met' && P != 'met') PER = pcur(); // กดเข้าเมนู → เดือนล่าสุด
     P = p;
     R();
   },
