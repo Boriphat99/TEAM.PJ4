@@ -65,10 +65,52 @@ setInterval(mtick, 30000);
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) mtick();
 });
+// เลขก่อนหน้า (ล็อก ไม่ให้พิมพ์แก้)
+// - บิลแรกของสัญญา: เลขมิเตอร์ตอนย้ายเข้า (ไม่รวมไฟของผู้เช่าคนก่อน/ช่วงห้องว่าง)
+// - ต่อจากนั้น: เลขล่าสุดของบิลล่าสุดของห้อง (รวมบิลย้ายออก)
+const cBills = (t, n) =>
+  D.inv.filter(i => i.uid == t.id && i.room == n && !i.fin && (i.iss || 0) >= (t.cs || 0) - 864e5);
 function pvOf(r) {
-  const l = D.inv.filter(i => i.room == r.n).sort((a, b) => (a.per < b.per ? 1 : -1))[0];
+  const t = act(r.n);
+  if (t && t.sm != null && !cBills(t, r.n).length) return t.sm;
+  const l = D.inv
+    .filter(i => i.room == r.n)
+    .sort((a, b) => (a.per < b.per ? 1 : a.per > b.per ? -1 : (b.iss || 0) - (a.iss || 0)))[0];
   return l ? l.pv + l.u : r.m;
-} // เลขก่อนหน้า = เลขล่าสุดของบิลล่าสุด (ล็อก ไม่ให้พิมพ์แก้)
+}
+// บิลสุดท้ายตอนย้ายออก: ค่าไฟจากเลขก่อนหน้าถึงเลขตอนย้ายออก (ไม่มีค่าเช่า)
+// เรียกก่อนตั้งสถานะย้ายออก (ผู้เช่ายังเป็นผู้เช่าปัจจุบันของห้อง)
+function finBill(u, end) {
+  const r = D.rooms.find(x => x.n == u.room);
+  if (!r || end == null) return null;
+  const p0 = pvOf(r),
+    units = end - p0;
+  r.m = end;
+  if (units <= 0) return null;
+  const d = bk(),
+    per = d.getFullYear() + '-' + pad(d.getMonth() + 1);
+  let id = 'INV' + per.replace('-', '') + '-' + r.n + '-F' + pad(d.getDate());
+  if (D.inv.some(i => i.id == id)) id += '-' + Date.now().toString(36).slice(-3);
+  const inv = {
+    id,
+    room: r.n,
+    uid: u.id,
+    per,
+    pv: p0,
+    u: units,
+    el: units * D.set.rate,
+    x: 0,
+    xn: '',
+    rent: 0,
+    fine: 0,
+    s: 'unpaid',
+    iss: Date.now(),
+    fin: 1,
+  };
+  if (u._cid) inv._cid = u._cid;
+  D.inv.push(inv);
+  return inv;
+}
 function lv(n) {
   const r = D.rooms.find(x => x.n == n),
     v = $('#m' + n).value,
@@ -94,7 +136,7 @@ function iss2() {
     if (!el || el.value === '') continue;
     const v = +el.value,
       p0 = pvOf(r);
-    if (D.inv.some(i => i.room == r.n && i.per > PER))
+    if (D.inv.some(i => i.room == r.n && i.per > PER && !i.fin))
       return alert('ห้อง ' + r.n + ': มีบิลของเดือนถัดไปออกแล้ว ไม่สามารถออกบิลย้อนหลังได้');
     if (v < p0) return alert('ห้อง ' + r.n + ': เลขมิเตอร์ต้องไม่น้อยกว่าเดิม (' + p0 + ')');
     D.inv.push({

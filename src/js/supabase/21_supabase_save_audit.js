@@ -44,10 +44,15 @@ async function sbPush() {
       if (u._oldc) {
         const r = await c
           .from('contracts')
-          .update({ status: 'ended', moved_out_at: new Date().toISOString() })
+          .update({
+            status: 'ended',
+            moved_out_at: new Date().toISOString(),
+            end_meter: u._oldem ?? null,
+          })
           .eq('id', u._oldc);
         if (r.error) throw r.error;
         u._oldc = null;
+        delete u._oldem;
       }
   for (const t of SB_ORD) {
     const nr = now[t] || {},

@@ -59,9 +59,6 @@ async function sbLoad() {
     n: +r.room_no,
     m: +r.current_meter,
     st: r.occupancy_status == 'free' ? undefined : r.occupancy_status,
-    pdf: r.contract_pdf_path
-      ? { name: r.contract_pdf_name, size: r.contract_pdf_size || 0, path: r.contract_pdf_path }
-      : undefined,
     _id: r.id,
   }));
   const avU = u => (u.avatar_path ? pubUrl('avatars', u.avatar_path) : undefined),
@@ -109,6 +106,14 @@ async function sbLoad() {
       o.cs = D2T(c0.start_date);
       if (c0.end_date) o.ce = D2T(c0.end_date);
       if (c0.status == 'ended') o.out = tsv(c0.moved_out_at) || Date.now();
+      if (c0.start_meter != null) o.sm = +c0.start_meter; // เลขมิเตอร์ตอนย้ายเข้า
+      if (c0.end_meter != null) o.em = +c0.end_meter; // เลขมิเตอร์ตอนย้ายออก
+      if (c0.pdf_path)
+        o.cpdf = {
+          name: c0.pdf_name || 'สัญญาเช่า.pdf',
+          size: c0.pdf_size || 0,
+          path: c0.pdf_path,
+        };
       o._cid = c0.id;
       o._crm = o.room;
     }
@@ -134,8 +139,8 @@ async function sbLoad() {
       room: rn(c0.room_id) ?? (+String(v.code).split('-')[1] || null),
       uid: tn0.app_id == null ? undefined : +tn0.app_id,
       per: v.billing_month,
-      pv: +m.previous_reading || 0,
-      u: +m.units_used || 0,
+      pv: v.kind == 'final' ? +v.meter_from || 0 : +m.previous_reading || 0,
+      u: v.kind == 'final' ? +v.meter_to - +v.meter_from || 0 : +m.units_used || 0,
       el: +(g('electricity') || {}).amount || 0,
       x: +(g('other') || {}).amount || 0,
       xn: (g('other') || {}).description || '',
@@ -147,6 +152,7 @@ async function sbLoad() {
       _cid: v.contract_id,
       _mid: m.id,
     };
+    if (v.kind == 'final') i.fin = 1; // บิลสุดท้ายตอนย้ายออก (ค่าไฟอย่างเดียว)
     if (p) {
       i.mt = p.payment_method;
       i.sub = tsv(p.submitted_at);
@@ -225,7 +231,7 @@ function sbPrep() {
   });
   D.inv.forEach(i => {
     i._id = i._id || NEWID();
-    i._mid = i._mid || NEWID();
+    if (!i.fin) i._mid = i._mid || NEWID();
     if (!i._cid) {
       const u = D.users.find(x => x.id == i.uid);
       i._cid = u && u._cid;
@@ -296,6 +302,11 @@ function sbRows() {
           deposit_amount: D.set.dep,
           status: u.out ? 'ended' : 'active',
           moved_out_at: u.out ? ISO(u.out) : null,
+          start_meter: u.sm ?? null,
+          end_meter: u.out ? (u.em ?? null) : null,
+          pdf_path: (u.cpdf && u.cpdf.path) || null,
+          pdf_name: (u.cpdf && u.cpdf.name) || null,
+          pdf_size: (u.cpdf && u.cpdf.size) || null,
         });
     }
   });
@@ -312,8 +323,11 @@ function sbRows() {
       due_date: DD(due(i).getTime()),
       status: i.s,
       total_amount: base(i) + (i.fine || 0),
+      kind: i.fin ? 'final' : 'monthly',
+      meter_from: i.fin ? i.pv : null,
+      meter_to: i.fin ? i.pv + i.u : null,
     });
-    if (i._mid)
+    if (i._mid && !i.fin)
       A('meter_readings', i._mid, {
         id: i._mid,
         room_id: rm0._id,
@@ -321,11 +335,12 @@ function sbRows() {
         previous_reading: i.pv,
         current_reading: i.pv + i.u,
       });
-    g('rent', { invoice_id: i._id, item_type: 'rent', description: null, amount: i.rent });
+    if (!i.fin)
+      g('rent', { invoice_id: i._id, item_type: 'rent', description: null, amount: i.rent });
     g('electricity', {
       invoice_id: i._id,
       item_type: 'electricity',
-      meter_reading_id: i._mid || null,
+      meter_reading_id: (!i.fin && i._mid) || null,
       description: null,
       amount: i.el,
     });

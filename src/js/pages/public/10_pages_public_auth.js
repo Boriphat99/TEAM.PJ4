@@ -176,7 +176,8 @@ function dl() {
     u => u.email == $('#em').value.trim().toLowerCase() && u.pw == $('#pw').value
   );
   if (!u) return alert('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
-  if (u.out) return alert('บัญชีนี้ย้ายออกแล้ว กรุณาติดต่อผู้ดูแล');
+  if (u.out && !D.inv.some(i => i.uid == u.id && i.s != 'paid'))
+    return alert('บัญชีนี้ย้ายออกแล้ว กรุณาติดต่อผู้ดูแล');
   enter(u, 0, 1);
 }
 function enter(u, pg2, how) {

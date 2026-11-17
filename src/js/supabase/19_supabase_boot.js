@@ -107,7 +107,8 @@ async function sbEnter(fresh) {
     await SBX.cl.auth.signOut();
     return alert('ไม่พบข้อมูลบัญชีในระบบ');
   }
-  if (U.out) {
+  // ผู้เช่าที่ย้ายออกแล้วเข้าได้เฉพาะเมื่อยังมีบิลค้าง (เช่น บิลย้ายออก) เพื่อชำระให้เสร็จ
+  if (U.out && !D.inv.some(i => i.uid == U.id && i.s != 'paid')) {
     await SBX.cl.auth.signOut();
     U = null;
     sbReset();

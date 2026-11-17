@@ -98,7 +98,7 @@ const pg = {
       1,
       'ค่าไฟ'
     )}</div></div>
-<div class="ch" style="margin:22px 0 4px"><h3>ใบเรียกเก็บเงินล่าสุด</h3><b class="ac" style="cursor:pointer" onclick="go('${U && U.role == 'owner' ? 'rep' : 'pay'}')">ดูทั้งหมด ›</b></div><div class="ri">${rc2.map(i => `<div class="cd" onclick="${U && U.role != 'tenant' && i.slip ? 'vsl' : 'vi'}('${i.id}')" style="cursor:pointer;display:flex;gap:12px;align-items:center;padding:16px"><span class="dy">${due(i).getDate()}</span><div style="flex:1;line-height:1.7"><b>${mon(i.per)}</b> <span class="rch">ห้อง ${i.room}</span><br><small class="mu">${e((tu(i) || {}).name)}</small><br>${pill(i)}</div><b>฿${fm(tot(i))}</b></div>`).join('') || '<div class="cd mu">ยังไม่มีใบเรียกเก็บเงิน</div>'}</div>
+<div class="ch" style="margin:22px 0 4px"><h3>ใบเรียกเก็บเงินล่าสุด</h3><b class="ac" style="cursor:pointer" onclick="go('${U && U.role == 'owner' ? 'rep' : 'pay'}')">ดูทั้งหมด ›</b></div><div class="ri">${rc2.map(i => `<div class="cd" onclick="${U && U.role != 'tenant' && i.slip ? 'vsl' : 'vi'}('${i.id}')" style="cursor:pointer;display:flex;gap:12px;align-items:center;padding:16px"><span class="dy">${due(i).getDate()}</span><div style="flex:1;line-height:1.7"><b>${mlab(i)}</b> <span class="rch">ห้อง ${i.room}</span><br><small class="mu">${e((tu(i) || {}).name)}</small><br>${pill(i)}</div><b>฿${fm(tot(i))}</b></div>`).join('') || '<div class="cd mu">ยังไม่มีใบเรียกเก็บเงิน</div>'}</div>
 <div class="row" style="flex-wrap:wrap;margin-top:14px"><div class="cd" style="flex:2;min-width:300px"><div style="display:flex;justify-content:space-between"><div><h3>สถานะห้องพัก</h3><small class="mu">คลิกห้องเพื่อแก้ไขข้อมูล</small></div><b class="ac" style="cursor:pointer" onclick="go('rooms')">ดูทั้งหมด ›</b></div><br>${rg()}</div>
 <div class="cd" style="flex:1;min-width:240px"><h3>การดำเนินการด่วน</h3><br>${U && U.role == 'owner' ? `<div class="cd nv rok" style="margin-bottom:10px" onclick="goSlips('all')">สลิปโอนเงินของผู้เช่า</div><div class="cd nv rok" style="margin-bottom:10px" onclick="goSlips('paid')">ใบเสร็จรับเงินของผู้เช่า</div><div class="cd nv rok" onclick="go('rep')">รายงานสรุปรายได้</div>` : `<div class="cd nv" style="margin-bottom:10px" onclick="go('met')">บันทึกเลขมิเตอร์</div><div class="cd nv" style="margin-bottom:10px" onclick="go('met')">ออกใบแจ้งหนี้</div><div class="cd nv" onclick="F='pending';go('pay')">ตรวจสอบสลิป</div>`}</div></div>
 <div class="cd" style="margin-top:14px"><h3>ใบแจ้งหนี้ประจำเดือน</h3><small class="mu">ค่าเช่า ฿${fm(D.set.rent)} + ค่าไฟ ฿${D.set.rate}/หน่วย</small>${flt()}${tbl()}</div>`;
@@ -265,7 +265,7 @@ function rm(n) {
                         )
                         .join(
                           ''
-                        )}</select><button class="b" onclick="asg(+$('#as_u').value,${n})">จัดเข้าห้อง ${n}</button>`
+                        )}</select>${smIn('as_m', n)}<div style="margin-top:10px"><button class="b" onclick="asg(+$('#as_u').value,${n})">จัดเข้าห้อง ${n}</button></div>`
                     : ''
                 }<hr style="border-color:var(--ln);margin:18px 0"><h3>เพิ่มผู้เช่าเข้าห้องนี้</h3><small class="mu">สร้างบัญชี (อีเมล + รหัสผ่าน) และเปิดสัญญาเช่าในขั้นตอนเดียว</small><div style="margin-top:10px"><button class="b" onclick="atf(${n})">+ เพิ่มผู้เช่าห้อง ${n}</button></div>`
               : ''
@@ -285,8 +285,8 @@ function rsv(n) {
         mon(li.per) +
         ') แก้ได้ที่เมนู มิเตอร์ & ออกบิล > แก้ไขบิล (ก่อนปิดรอบ)'
     );
-  const fin = () => {
-    if (v !== '' && +v >= 0) r.m = +v;
+  const fin = keepM => {
+    if (!keepM && v !== '' && +v >= 0) r.m = +v;
     if (!t || sv != 'busy') r.st = sv == 'free' ? '' : sv;
     lg('แก้ไขสถานะห้อง ' + n);
     save();
@@ -294,23 +294,12 @@ function rsv(n) {
     R();
     tt('✓ บันทึกสถานะห้อง ' + n + ' แล้ว');
   };
-  if (t && sv != 'busy') {
-    const k = D.inv.filter(i => (i.uid ? i.uid == t.id : i.room == n) && i.s != 'paid').length;
-    return cf(
-      'เปลี่ยนเป็น' +
-        (sv == 'maint' ? 'ปิดปรับปรุง' : 'ว่าง') +
-        ' จะย้ายผู้เช่า ' +
-        t.name +
-        ' ออกจากห้อง' +
-        (k ? '\nมีบิลค้าง ' + k + ' รายการ จะยังอยู่ในประวัติผู้เช่าเดิม' : '') +
-        '\nยืนยัน?',
-      () => {
-        t.out = Date.now();
-        lg('ย้ายออก ห้อง ' + n);
-        fin();
-      }
+  if (t && sv != 'busy')
+    return mvo(
+      t.id,
+      () => fin(1),
+      sv == 'maint' ? 'ปิดปรับปรุง · ย้ายผู้เช่าออก' : 'ย้ายผู้เช่าออก'
     );
-  }
   fin();
 }
 function et(id) {
@@ -336,29 +325,35 @@ function eu(id) {
     if (o && o.id != id) return alert('ห้อง ' + r + ' มีผู้เช่าอยู่แล้ว');
     if (rr.st) return alert('ห้อง ' + r + ' ไม่ว่าง/ปิดปรับปรุง กรุณาเปลี่ยนสถานะห้องเป็นว่างก่อน');
   }
-  if (!u.room && r) u.cs = Date.now();
-  Object.assign(u, { name: n, email: m, tel: $('#f_t').value.trim(), room: r || null });
+  // ข้อมูลทั่วไปบันทึกทันที · การย้ายออก/ย้ายห้อง/จัดห้อง ไปต่อที่หน้าต่างจดเลขมิเตอร์
+  Object.assign(u, { name: n, email: m, tel: $('#f_t').value.trim() });
   if (w) u.pw = w;
-  if (go2) {
-    if (!u.out) u.out = Date.now();
-  } else delete u.out;
-  lg('แก้ไขผู้เช่า ' + n);
-  save();
-  cm();
-  R();
-  tt('✓ บันทึกข้อมูลผู้เช่าแล้ว');
-}
-function rv(id) {
-  const u = D.users.find(x => x.id == id),
-    rr = D.rooms.find(x => x.n == u.room);
-  if (act(u.room)) return alert('ห้อง ' + u.room + ' มีผู้เช่าอยู่แล้ว');
-  if (rr.st)
-    return alert('ห้อง ' + u.room + ' ไม่ว่าง/ปิดปรับปรุง กรุณาเปลี่ยนสถานะห้องเป็นว่างก่อน');
-  delete u.out;
-  lg('ย้ายกลับเข้าพัก ห้อง ' + u.room);
-  save();
-  R();
-  tt('✓ ย้ายกลับเข้าพักแล้ว');
+  const done = () => {
+    lg('แก้ไขผู้เช่า ' + n);
+    save();
+    cm();
+    R();
+    tt('✓ บันทึกข้อมูลผู้เช่าแล้ว');
+  };
+  if (go2 && !u.out && u.room)
+    return mvo(u.id, (f, room) => {
+      lg('แก้ไขผู้เช่า ' + n);
+      save();
+      cm();
+      R();
+      tt(mvoMsg(room, f));
+    });
+  if (go2 && !u.room) u.out = u.out || Date.now();
+  if (!go2 && u.out) undoOut(u);
+  if (!go2 && u.room && r && r != u.room) {
+    save();
+    return mvr(u.id, r);
+  }
+  if (!go2 && !u.room && r) {
+    save();
+    return asr(u.id, r);
+  }
+  done();
 }
 function eb(id) {
   const i = gi(id);
@@ -397,26 +392,6 @@ function ebs(id) {
   cm();
   R();
   tt('✓ แก้ไขบิลแล้ว');
-}
-function mv(id) {
-  const u = D.users.find(x => x.id == id),
-    k = D.inv.filter(i => (i.uid ? i.uid == id : i.room == u.room) && i.s != 'paid').length;
-  cf(
-    'ยืนยันย้ายออก ' +
-      u.name +
-      ' (ห้อง ' +
-      u.room +
-      ')?\nสถานะห้องจะเปลี่ยนเป็น "ว่าง"' +
-      (k ? '\nมีบิลค้างชำระ ' + k + ' รายการ จะยังอยู่ในประวัติของผู้เช่าคนนี้' : ''),
-    () => {
-      u.out = Date.now();
-      lg('ย้ายออก ห้อง ' + u.room);
-      save();
-      cm();
-      R();
-      tt('✓ ย้ายออกแล้ว ห้อง ' + u.room + ' ว่าง');
-    }
-  );
 }
 function BLD(z) {
   return `<i class="ci" style="width:${z}px;height:${z}px;flex:0 0 auto"><svg viewBox="0 0 24 24" width="${Math.round(z * 0.56)}" height="${Math.round(z * 0.56)}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16"/><path d="M14 10h5a1 1 0 0 1 1 1v10"/><path d="M3 21h18"/><path d="M8 8h2M8 12h2M8 16h2M17 14h.01M17 17h.01"/></svg></i>`;

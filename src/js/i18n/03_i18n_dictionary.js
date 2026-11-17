@@ -1,7 +1,33 @@
 /* 03_i18n_dictionary.js — พจนานุกรมแปลภาษา ไทย/อังกฤษ (ขนาดใหญ่)
    (แยกมาจาก script.js บรรทัด 12-656; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
-  ENm = `กฎการเรียกเก็บค่าบริการของหอพัก|Dorm billing rules
+  ENm = `เลขมิเตอร์ตอนย้ายเข้า|Move-in meter reading
+จดจากมิเตอร์จริงในวันที่เข้าพัก · บิลแรกจะคิดค่าไฟจากเลขนี้|Read the actual meter on move-in day · the first bill charges electricity from this number
+กรุณากรอกเลขมิเตอร์ตอนย้ายเข้า|Please enter the move-in meter reading
+เลขมิเตอร์ต้องเป็นจำนวนเต็มไม่ติดลบ|Meter reading must be a non-negative whole number
+เลขมิเตอร์ตอนย้ายเข้าต้องไม่น้อยกว่าเลขล่าสุดของห้อง|Move-in reading must not be lower than the latest reading of room
+เลขมิเตอร์ตอนย้ายออกต้องเป็นจำนวนเต็มและไม่น้อยกว่าเลขก่อนหน้า|Move-out reading must be a whole number and not lower than the previous reading
+เลขมิเตอร์ตอนย้ายออก|Move-out meter reading
+ไม่น้อยกว่า|at least
+ต้องไม่น้อยกว่า|must be at least
+หน่วยที่ใช้|Units used
+ค่าไฟช่วงสุดท้าย|Final electricity charge
+ระบบจะออกบิลสุดท้าย (ค่าไฟอย่างเดียว) ให้ผู้เช่าชำระเงินสดหรือผ่าน QR · เว้นว่าง = ไม่ออกบิลสุดท้าย|A final bill (electricity only) will be issued; the tenant can pay by cash or QR · leave blank = no final bill
+ระบบออกบิลสุดท้าย (ค่าไฟอย่างเดียว) ของห้องเดิม · เว้นว่าง = ไม่ออกบิล|A final bill (electricity only) is issued for the old room · leave blank = no bill
+ยืนยันย้ายห้อง|Confirm room change
+ปิดปรับปรุง · ย้ายผู้เช่าออก|Maintenance · move tenant out
+ย้ายผู้เช่าออก|Move tenant out
+ออกบิลสุดท้าย|final bill issued
+บิลย้ายออกที่ยังไม่ชำระจะถูกยกเลิก|Unpaid move-out bills will be cancelled
+ย้ายกลับเข้าพัก ห้อง|Move back in, room
+บิลย้ายออก|Move-out bill
+ห้องเดิม|Old room
+ห้องใหม่|New room
+ย้ายห้อง|Change room
+คุณย้ายออกแล้ว · ชำระบิลที่ค้างอยู่ได้ที่หน้านี้ หลังชำระครบบัญชีจะเข้าใช้งานไม่ได้อีก|You have moved out · pay your remaining bills here. After everything is paid this account can no longer sign in
+ไม่พบสัญญาของผู้เช่าคนนี้|Contract for this tenant not found
+ลบไฟล์สัญญาของ|Delete contract file of
+กฎการเรียกเก็บค่าบริการของหอพัก|Dorm billing rules
 กฎการเรียกเก็บเงิน|Billing rules
 กดค้างที่รูป (มือถือ) หรือคลิกขวา (คอมพิวเตอร์) แล้วเลือกบันทึกรูปภาพ|Long-press the image (mobile) or right-click (desktop), then choose Save image
 กดแก้ไขเพื่อเพิ่ม)|press Edit to add)
@@ -61,7 +87,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ค้างชำระ|Overdue
 จดมิเตอร์วันที่|Meter reading on day
 จดเลขมิเตอร์ คำนวณหน่วยไฟอัตโนมัติ|Record meter readings; electricity units calculated automatically
-จะย้ายผู้เช่า|will move the tenant
 จัดผู้เช่าที่ลงทะเบียนแล้วเข้าห้องนี้|Assign a registered tenant to this room
 จัดการห้อง สถานะ และผู้เช่า|Manage rooms, status and tenants
 จัดการห้อง|Manage room
@@ -283,7 +308,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 รับเงินสด (เคาน์เตอร์)|Receive cash (counter)
 รับเงินสด|Receive cash
 รายการ จะยังอยู่ในประวัติของผู้เช่าคนนี้|items will remain in this tenant's history
-รายการ จะยังอยู่ในประวัติผู้เช่าเดิม|items will remain in the previous tenant's history
 รายการ|items
 รายงานรายรับ|Revenue report
 รายงาน|Reports
@@ -361,7 +385,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ลบรูปโปรไฟล์|Remove profile photo
 ลบรูป|Remove image
 ลบไฟล์สัญญา ห้อง|Deleted contract file, room
-ลบไฟล์สัญญาห้อง|Delete contract file for room
 ลบ|Delete
 ลากเพื่อจัดตำแหน่ง · เลื่อนแถบเพื่อซูม|Drag to position · slide to zoom
 ลำดับ|No.
@@ -379,7 +402,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 ว่าง|Vacant
 ศูนย์ช่วยเหลือ|Help center
 สถานะผู้เช่า|Tenant status
-สถานะห้องจะเปลี่ยนเป็น|Room status will change to
 สถานะห้องพัก|Room status
 สถานะห้อง|Room status
 สถานะ: ทั้งหมด|Status: All
@@ -434,7 +456,6 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 อนุมัติ|Approve
 ออกจากระบบ|Sign out
 ต้องการออกจากระบบใช่หรือไม่?|Do you want to sign out?
-ออกจากห้อง|from the room
 ออกบิลทุกห้อง พร้อมค่าปรับอัตโนมัติ|Issue invoices for every room with automatic late fees
 ออกบิลวันที่|Issue invoices on day
 ออกบิล|Issue invoices

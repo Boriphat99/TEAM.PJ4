@@ -3,18 +3,18 @@
 // ---- tenant pages ----
 pg.my = () => {
   const l = D.inv.filter(i => mine(i) && i.s != 'paid');
-  return `<h2>ใบแจ้งหนี้ของฉัน</h2><p class="mu">${U.room ? 'ห้อง ' + U.room : 'ยังไม่ได้จัดห้อง'} · ${e(U.name)}</p>${U.room ? '' : '<div class="note">⏳ ลงทะเบียนสำเร็จแล้ว รอผู้ดูแลจัดห้องพักให้ จึงจะมีใบแจ้งหนี้</div>'}<div class="note">💵 ชำระผ่าน PromptPay QR · หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div><div style="margin-top:14px;display:grid;gap:14px">${
+  return `<h2>ใบแจ้งหนี้ของฉัน</h2><p class="mu">${U.room ? 'ห้อง ' + U.room : U.out ? 'ย้ายออกแล้ว' : 'ยังไม่ได้จัดห้อง'} · ${e(U.name)}</p>${U.room || U.out ? '' : '<div class="note">⏳ ลงทะเบียนสำเร็จแล้ว รอผู้ดูแลจัดห้องพักให้ จึงจะมีใบแจ้งหนี้</div>'}${U.out ? '<div class="note">คุณย้ายออกแล้ว · ชำระบิลที่ค้างอยู่ได้ที่หน้านี้ หลังชำระครบบัญชีจะเข้าใช้งานไม่ได้อีก</div>' : ''}<div class="note">💵 ชำระผ่าน PromptPay QR · หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div><div style="margin-top:14px;display:grid;gap:14px">${
     l
       .map(i => {
         const s = st(i);
-        return `<div class="cd"><div style="display:flex;justify-content:space-between"><b>${mon(i.per)}</b>${pill(i)}</div><div class="big">฿${fm(tot(i))}</div><div class="bd mu"><span>ค่าเช่า</span><span>฿${fm(i.rent)}</span></div><div class="bd mu"><span>ค่าไฟ ${i.u} หน่วย × ${D.set.rate}</span><span>฿${fm(i.el)}</span></div>${i.x ? `<div class="bd mu"><span>${e(i.xn || 'ค่าใช้จ่ายเพิ่มเติม')}</span><span>฿${fm(i.x)}</span></div>` : ''}${tot(i) > base(i) ? `<div class="bd" style="color:#fb7185"><span>ค่าปรับ</span><span>฿${fm(tot(i) - base(i))}</span></div>` : ''}<p class="mu">ครบกำหนด ${dt(due(i))}</p>${i.s == 'unpaid' && i.rj ? `<div class="note" style="background:#fee2e2;color:#b91c1c;border-color:#fecaca">⚠ สลิปถูกปฏิเสธ: ${e(i.rj)}<br>กรุณาตรวจสอบแล้วส่งสลิปใหม่</div>` : ''}${i.s == 'pending' ? '<span class="mu">รอผู้ดูแลตรวจสอบ · ส่งสลิปผิดแก้ไขได้ก่อนผู้ดูแลยืนยัน</span> ' : ''}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="b" onclick="vi('${i.id}')">ดูใบแจ้งหนี้</button>${i.s == 'pending' && i.mt != 'cash' ? `<button class="b b2" onclick="pm('${i.id}')">แก้ไข/ส่งสลิปใหม่</button>` : ''}</div></div>`;
+        return `<div class="cd"><div style="display:flex;justify-content:space-between"><b>${mlab(i)}</b>${pill(i)}</div><div class="big">฿${fm(tot(i))}</div>${i.fin ? '' : `<div class="bd mu"><span>ค่าเช่า</span><span>฿${fm(i.rent)}</span></div>`}<div class="bd mu"><span>ค่าไฟ ${i.u} หน่วย × ${D.set.rate}</span><span>฿${fm(i.el)}</span></div>${i.x ? `<div class="bd mu"><span>${e(i.xn || 'ค่าใช้จ่ายเพิ่มเติม')}</span><span>฿${fm(i.x)}</span></div>` : ''}${tot(i) > base(i) ? `<div class="bd" style="color:#fb7185"><span>ค่าปรับ</span><span>฿${fm(tot(i) - base(i))}</span></div>` : ''}<p class="mu">ครบกำหนด ${dt(due(i))}</p>${i.s == 'unpaid' && i.rj ? `<div class="note" style="background:#fee2e2;color:#b91c1c;border-color:#fecaca">⚠ สลิปถูกปฏิเสธ: ${e(i.rj)}<br>กรุณาตรวจสอบแล้วส่งสลิปใหม่</div>` : ''}${i.s == 'pending' ? '<span class="mu">รอผู้ดูแลตรวจสอบ · ส่งสลิปผิดแก้ไขได้ก่อนผู้ดูแลยืนยัน</span> ' : ''}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="b" onclick="vi('${i.id}')">ดูใบแจ้งหนี้</button>${i.s == 'pending' && i.mt != 'cash' ? `<button class="b b2" onclick="pm('${i.id}')">แก้ไข/ส่งสลิปใหม่</button>` : ''}</div></div>`;
       })
       .join('') || '<div class="cd mu">ไม่มีบิลค้างชำระ 🎉</div>'
   }</div>`;
 };
 pg.hist = () => {
   const l = D.inv.filter(i => mine(i) && i.s == 'paid');
-  return `<h2>ประวัติ & ใบเสร็จ</h2><div class="cd sc" style="margin-top:14px"><table><tr><th>รอบบิล</th><th>ยอด</th><th>วันที่ชำระ</th><th></th></tr>${l.map(i => `<tr><td>${mon(i.per)}</td><td>฿${fm(tot(i))}</td><td>${dt(i.paid)}</td><td><button class="b b2 sm rok" onclick="rc('${i.id}')">ใบเสร็จ</button></td></tr>`).join('') || '<tr><td colspan=4 class=mu>ยังไม่มีประวัติ</td></tr>'}</table></div>`;
+  return `<h2>ประวัติ & ใบเสร็จ</h2><div class="cd sc" style="margin-top:14px"><table><tr><th>รอบบิล</th><th>ยอด</th><th>วันที่ชำระ</th><th></th></tr>${l.map(i => `<tr><td>${mlab(i)}</td><td>฿${fm(tot(i))}</td><td>${dt(i.paid)}</td><td><button class="b b2 sm rok" onclick="rc('${i.id}')">ใบเสร็จ</button></td></tr>`).join('') || '<tr><td colspan=4 class=mu>ยังไม่มีประวัติ</td></tr>'}</table></div>`;
 };
 const fz = i => (i.s == 'pending' ? i.fine || 0 : fine(i)); // ส่งสลิปใหม่: ค่าปรับคงตามวันที่แจ้งชำระครั้งแรก
 function pm(id) {
@@ -25,7 +25,7 @@ function pm(id) {
   SLIP = null;
   mo(`<div class="mh"><h3>${pd ? 'แก้ไขสลิป · ส่งสลิปใหม่' : 'ชำระเงินผ่าน PromptPay'}</h3><span class="mu">${i.id}</span></div>
  <div class="amt"><small>ยอดที่ต้องชำระ</small><div class="big">฿${fm(t)}</div><small>ครบกำหนด ${dt(due(i))}${late(i) > 0 ? ` · <b style="color:#fb7185">เลยกำหนด ${late(i)} วัน</b>` : ''}</small></div>
- <div class="bk"><div class="bd"><span>ค่าเช่า</span><span>฿${fm(i.rent)}</span></div><div class="bd"><span>ค่าไฟ ${i.u} หน่วย</span><span>฿${fm(i.el)}</span></div>${i.x ? `<div class="bd"><span>${e(i.xn || 'ค่าใช้จ่ายเพิ่มเติม')}</span><span>฿${fm(i.x)}</span></div>` : ''}${f ? `<div class="bd" style="color:#fb7185"><span>ค่าปรับ (นับถึงวันที่แจ้งชำระ)</span><span>฿${f}</span></div>` : ''}</div>
+ <div class="bk">${i.fin ? '' : `<div class="bd"><span>ค่าเช่า</span><span>฿${fm(i.rent)}</span></div>`}<div class="bd"><span>ค่าไฟ ${i.u} หน่วย</span><span>฿${fm(i.el)}</span></div>${i.x ? `<div class="bd"><span>${e(i.xn || 'ค่าใช้จ่ายเพิ่มเติม')}</span><span>฿${fm(i.x)}</span></div>` : ''}${f ? `<div class="bd" style="color:#fb7185"><span>ค่าปรับ (นับถึงวันที่แจ้งชำระ)</span><span>฿${f}</span></div>` : ''}</div>
  ${pd ? '<div class="note">ผู้ดูแลยังไม่ได้ยืนยัน จึงส่งสลิปใหม่ได้ · เมื่อผู้ดูแลยืนยันแล้วจะแก้ไขไม่ได้</div>' : ''}${!pd && i.rj ? `<div class="note" style="background:#fee2e2;color:#b91c1c;border-color:#fecaca">⚠ สลิปครั้งก่อนถูกปฏิเสธ: ${e(i.rj)}</div>` : ''}<div class="st"><b>1</b> สแกน QR ด้วยแอปธนาคาร</div><div class="qrc"><div class="qr" id="qr"></div><small class="mu">ยอดเงินจะขึ้นอัตโนมัติ ไม่ต้องกรอกเอง</small></div>
  <div class="st"><b>2</b> อัปโหลดสลิปโอนเงิน (JPG/PNG)</div><input type="file" id="sf" accept="image/jpeg,image/png" onchange="sl(this)">
  <button class="b" style="width:100%" onclick="sub('${id}')">${pd ? 'ส่งสลิปใหม่' : 'แจ้งชำระเงิน'}</button>
@@ -170,7 +170,7 @@ function rcpHTML(i) {
     T = tot(i),
     g = '#15803d',
     rows = [
-      ['ค่าเช่าห้อง (' + mon(i.per) + ')', i.rent, ''],
+      ...(i.fin ? [] : [['ค่าเช่าห้อง (' + mon(i.per) + ')', i.rent, '']]),
       [
         'ค่าไฟฟ้า',
         i.el,
@@ -215,7 +215,7 @@ function rcTable() {
   return `<div id="slips" class="cd sc" style="margin-top:14px"><h3 style="margin-bottom:6px">สลิปโอนเงินและใบเสร็จของผู้เช่า</h3><small class="mu">สลิปที่ผู้เช่าส่งมาทุกห้อง และใบเสร็จเมื่อผู้ดูแลยืนยันการชำระแล้ว</small><div class="fl" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">${fb('all', 'ทั้งหมด')}${fb('pending', 'รอตรวจสอบ')}${fb('paid', 'ชำระแล้ว')}</div><table><tr><th>ห้อง</th><th>ผู้เช่า</th><th>รอบบิล</th><th>ยอด</th><th>ช่องทาง</th><th>วันที่แจ้งชำระ</th><th>สถานะ</th><th>สลิปที่ผู้เช่าส่ง</th><th></th></tr>${
     V.map(i => {
       const u = tu(i) || {};
-      return `<tr><td>${e(i.room)}</td><td>${e(u.name || '-')}</td><td>${mon(i.per)}</td><td>฿${fm(tot(i))}</td><td>${i.mt == 'qr' ? 'QR' : i.mt == 'cash' ? 'เงินสด' : '-'}</td><td>${i.sub ? dt(i.sub) : '-'}</td><td>${pill(i)}</td><td>${i.slip ? `<img class="slt" loading="lazy" decoding="async" width="48" height="64" data-sid="${i.id}" alt="สลิปห้อง ${e(i.room)}" onclick="vsl('${i.id}')">` : `<small class="mu">${i.mt == 'cash' ? 'เงินสด' : '-'}</small>`}</td><td style="white-space:nowrap">${i.slip ? `<button class="b b2 sm rok" onclick="vsl('${i.id}')">ดูสลิป</button> ` : ''}${i.s == 'paid' ? `<button class="b b2 sm rok" onclick="rc('${i.id}')">ใบเสร็จ</button>` : ''}</td></tr>`;
+      return `<tr><td>${e(i.room)}</td><td>${e(u.name || '-')}</td><td>${mlab(i)}</td><td>฿${fm(tot(i))}</td><td>${i.mt == 'qr' ? 'QR' : i.mt == 'cash' ? 'เงินสด' : '-'}</td><td>${i.sub ? dt(i.sub) : '-'}</td><td>${pill(i)}</td><td>${i.slip ? `<img class="slt" loading="lazy" decoding="async" width="48" height="64" data-sid="${i.id}" alt="สลิปห้อง ${e(i.room)}" onclick="vsl('${i.id}')">` : `<small class="mu">${i.mt == 'cash' ? 'เงินสด' : '-'}</small>`}</td><td style="white-space:nowrap">${i.slip ? `<button class="b b2 sm rok" onclick="vsl('${i.id}')">ดูสลิป</button> ` : ''}${i.s == 'paid' ? `<button class="b b2 sm rok" onclick="rc('${i.id}')">ใบเสร็จ</button>` : ''}</td></tr>`;
     }).join('') || '<tr><td colspan=9 class=mu>ยังไม่มีรายการ</td></tr>'
   }</table>${!RCA && L.length > 20 ? `<div style="margin-top:10px"><button class="b b2 sm" onclick="RCA=1;R()">ดูทั้งหมด (${L.length} รายการ)</button></div>` : ''}</div>`;
 }

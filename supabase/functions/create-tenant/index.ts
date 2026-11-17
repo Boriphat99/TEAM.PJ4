@@ -7,7 +7,8 @@
 //  - ถ้าเปิดสัญญาไม่สำเร็จ จะลบบัญชีที่เพิ่งสร้างทิ้ง (ไม่ให้เหลือข้อมูลครึ่งๆ กลางๆ)
 //  - ติดธง user_metadata.must_change_pw = true เพื่อให้หน้าเว็บแจ้งเตือนผู้เช่าให้เปลี่ยนรหัสผ่าน
 //
-// body: { email, password, full_name, phone?, room_no, start_date (YYYY-MM-DD), end_date? }
+// body: { email, password, full_name, phone?, room_no, start_date (YYYY-MM-DD), end_date?, start_meter? }
+//   start_meter = เลขมิเตอร์ตอนย้ายเข้า (บิลแรกของสัญญาคิดค่าไฟจากเลขนี้)
 // ตอบกลับ: { user_id, tenant_id, contract_id }
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.4';
 
@@ -62,6 +63,8 @@ Deno.serve(async req => {
   const room_no = String(b.room_no || '').trim();
   const start_date = b.start_date;
   const end_date = b.end_date || null;
+  const sm0 = b.start_meter;
+  const start_meter = sm0 === undefined || sm0 === null || sm0 === '' ? null : Number(sm0);
   if (!full_name) return bad('กรุณากรอกชื่อ - นามสกุล');
   if (!/^\S+@\S+\.\S+$/.test(email)) return bad('รูปแบบอีเมลไม่ถูกต้อง');
   if (password.length < 6) return bad('รหัสผ่านต้องมีอย่างน้อย 6 ตัว');
@@ -70,6 +73,8 @@ Deno.serve(async req => {
   if (!isDate(start_date)) return bad('กรุณาระบุวันเริ่มสัญญา');
   if (end_date && (!isDate(end_date) || String(end_date) < String(start_date)))
     return bad('วันสิ้นสุดสัญญาต้องไม่ก่อนวันเริ่มสัญญา');
+  if (start_meter !== null && (!Number.isInteger(start_meter) || start_meter < 0))
+    return bad('เลขมิเตอร์ตอนย้ายเข้าต้องเป็นจำนวนเต็มไม่ติดลบ');
 
   const { data: staff } = await admin
     .from('staff_emails')
@@ -129,6 +134,7 @@ Deno.serve(async req => {
       end_date,
       deposit_amount: S?.default_deposit ?? 7600,
       status: 'active',
+      start_meter,
     })
     .select('id')
     .single();
@@ -137,7 +143,7 @@ Deno.serve(async req => {
   await admin.from('audit_logs').insert({
     actor_id: caller.user.id,
     actor_name: me?.full_name ?? null,
-    action: `เพิ่มผู้เช่า ${full_name} ห้อง ${room_no} (สัญญาเริ่ม ${start_date})`,
+    action: `เพิ่มผู้เช่า ${full_name} ห้อง ${room_no} (สัญญาเริ่ม ${start_date}${start_meter !== null ? ', มิเตอร์ย้ายเข้า ' + start_meter : ''})`,
   });
   return json({ user_id: uid, tenant_id: ten.id, contract_id: con.id });
 });

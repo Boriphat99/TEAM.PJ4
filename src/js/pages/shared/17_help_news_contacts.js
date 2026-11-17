@@ -173,14 +173,15 @@ const NVA = [
   ['news', 'ข่าวสาร', '▣'],
   ['prof', 'โปรไฟล์', '◉'],
 ];
-let CPR = 0;
-const pdfc = (n, ad) => {
-  const r = D.rooms.find(x => x.n == n),
-    f = r && r.pdf;
+// ไฟล์สัญญาเช่า PDF: เก็บแยกต่อสัญญา (ผู้เช่าแต่ละคน) ไม่เขียนทับสัญญาของผู้เช่าคนก่อน
+let CPU = 0;
+const pdfc = (u, ad) => {
+  const f = u && u.cpdf,
+    id = u && u.id;
   return f
-    ? `<button class="b b2 sm" style="border:1px solid var(--ac);color:var(--ac);max-width:100%;text-align:left" title="${e(f.name)}" onclick="cpv(${n})">📄 ${e(f.name.length > 24 ? f.name.slice(0, 22) + '…' : f.name)}</button><br><small class="mu">${Math.round(f.size / 1024)} KB</small>${ad ? ` <button class="b b2 sm" onclick="CPR=${n};$('#cpi').click()">เปลี่ยน</button> <button class="b b2 sm" onclick="cpd(${n})">ลบ</button>` : ''}`
+    ? `<button class="b b2 sm" style="border:1px solid var(--ac);color:var(--ac);max-width:100%;text-align:left" title="${e(f.name)}" onclick="cpv(${id})">📄 ${e(f.name.length > 24 ? f.name.slice(0, 22) + '…' : f.name)}</button><br><small class="mu">${Math.round(f.size / 1024)} KB</small>${ad ? ` <button class="b b2 sm" onclick="CPU=${id};$('#cpi').click()">เปลี่ยน</button> <button class="b b2 sm" onclick="cpd(${id})">ลบ</button>` : ''}`
     : ad
-      ? `<button class="b b2 sm" onclick="CPR=${n};$('#cpi').click()">อัปโหลด PDF</button>`
+      ? `<button class="b b2 sm" onclick="CPU=${id};$('#cpi').click()">อัปโหลด PDF</button>`
       : '<small class="mu">ยังไม่มีไฟล์</small>';
 };
 function cpf(el) {
@@ -192,65 +193,46 @@ function cpf(el) {
     return alert('ไฟล์ใหญ่เกิน 2MB (พื้นที่จัดเก็บของเบราว์เซอร์จำกัด)');
   const rd = new FileReader();
   rd.onload = () => {
-    const r = D.rooms.find(x => x.n == CPR);
-    if (!r) return;
-    const old = r.pdf;
-    r.pdf = { name: f.name, size: f.size, data: rd.result, t: Date.now() };
+    const u = D.users.find(x => x.id == CPU);
+    if (!u) return;
+    const old = u.cpdf;
+    u.cpdf = { name: f.name, size: f.size, data: rd.result, t: Date.now() };
     try {
       localStorage.setItem(K, JSON.stringify(D));
     } catch (x) {
-      if (old) r.pdf = old;
-      else delete r.pdf;
+      if (old) u.cpdf = old;
+      else delete u.cpdf;
       return alert('พื้นที่จัดเก็บเต็ม ไม่สามารถเก็บไฟล์นี้ได้');
     }
-    lg('อัปโหลดไฟล์สัญญา ห้อง ' + CPR);
+    lg('อัปโหลดไฟล์สัญญา ห้อง ' + u.room + ' (' + u.name + ')');
     R();
-    tt('✓ อัปโหลดไฟล์สัญญา ห้อง ' + CPR + ' แล้ว');
+    tt('✓ อัปโหลดไฟล์สัญญา ห้อง ' + u.room + ' แล้ว');
   };
   rd.readAsDataURL(f);
 }
-function cpd(n) {
-  cf('ลบไฟล์สัญญาห้อง ' + n + '?', () => {
-    delete D.rooms.find(x => x.n == n).pdf;
-    lg('ลบไฟล์สัญญา ห้อง ' + n);
+function cpd(id) {
+  const u = D.users.find(x => x.id == id);
+  if (!u) return;
+  cf('ลบไฟล์สัญญาของ ' + u.name + ' (ห้อง ' + u.room + ')?', () => {
+    delete u.cpdf;
+    lg('ลบไฟล์สัญญา ห้อง ' + u.room + ' (' + u.name + ')');
     save();
     R();
   });
 }
-function cpv(n) {
-  const r = D.rooms.find(x => x.n == n);
-  if (!r || !r.pdf) return;
-  const b = atob(r.pdf.data.split(',')[1]),
+function cpv(id) {
+  const u = D.users.find(x => x.id == id);
+  if (!u || !u.cpdf) return;
+  const b = atob(u.cpdf.data.split(',')[1]),
     a = new Uint8Array(b.length);
   for (let i = 0; i < b.length; i++) a[i] = b.charCodeAt(i);
-  const u = URL.createObjectURL(new Blob([a], { type: 'application/pdf' }));
+  const url = URL.createObjectURL(new Blob([a], { type: 'application/pdf' }));
   mo(
-    `<h3>สัญญาเช่า ห้อง ${n}</h3><small class="mu">${e(r.pdf.name)}</small><iframe src="${u}" style="width:100%;height:62vh;border:1px solid var(--ln);border-radius:12px;margin:10px 0"></iframe><a class="b b2" target="_blank" rel="noopener" href="${u}">เปิดในแท็บใหม่</a> <button class="b b2" onclick="cm()">ปิด</button>`
+    `<h3>สัญญาเช่า ห้อง ${u.room}</h3><small class="mu">${e(u.name)} · ${e(u.cpdf.name)}</small><iframe src="${url}" style="width:100%;height:62vh;border:1px solid var(--ln);border-radius:12px;margin:10px 0"></iframe><a class="b b2" target="_blank" rel="noopener" href="${url}">เปิดในแท็บใหม่</a> <button class="b b2" onclick="cm()">ปิด</button>`
   );
   $('#mc').style.maxWidth = '860px';
 }
 const UN = () => D.users.filter(u => u.role == 'tenant' && !u.room && !u.out);
-function asg(uid, n) {
-  const u = D.users.find(x => x.id == uid),
-    r = D.rooms.find(x => x.n == n);
-  if (!u || !r) return;
-  if (!vac(r)) return alert('ห้องนี้ไม่ว่างแล้ว');
-  u.room = n;
-  u.cs = Date.now();
-  lg('จัดห้อง ' + n + ' ให้ ' + u.name);
-  save();
-  cm();
-  R();
-  tt('✓ จัดห้อง ' + n + ' ให้ ' + u.name + ' แล้ว');
-}
-function asr(uid) {
-  const u = D.users.find(x => x.id == uid),
-    f = D.rooms.filter(vac);
-  if (!f.length) return alert('ไม่มีห้องว่างสำหรับเพิ่มผู้เช่า');
-  mo(
-    `<h3>จัดห้องให้ ${e(u.name)}</h3><small class="mu">${e(u.tel || u.email)}</small><label>เลือกห้องว่าง</label><select id="as_r">${f.map(r => `<option>${r.n}</option>`).join('')}</select><button class="b" onclick="asg(${uid},+$('#as_r').value)">จัดห้อง</button> <button class="b b2" onclick="cm()">ยกเลิก</button>`
-  );
-}
 const contactsOf = () => {
   const L =
     D.contacts && D.contacts.length

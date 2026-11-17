@@ -62,7 +62,7 @@ async function vsl(id) {
   const info = `<div class="slv-info">
         <div><small class="mu">ห้อง</small><b>${e(i.room)}</b></div>
         <div><small class="mu">ผู้เช่า</small><b>${e(u.name || '-')}</b></div>
-        <div><small class="mu">รอบบิล</small><b>${mon(i.per)}</b></div>
+        <div><small class="mu">รอบบิล</small><b>${mlab(i)}</b></div>
         <div><small class="mu">ยอดที่แจ้งชำระ</small><b class="ac">฿${fm(tot(i))}</b></div>
         <div><small class="mu">ช่องทาง</small><b>${mt}</b></div>
         <div><small class="mu">วันที่แจ้งชำระ</small><b>${i.sub ? dt(i.sub) : '-'}</b></div>

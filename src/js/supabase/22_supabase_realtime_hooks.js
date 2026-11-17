@@ -191,52 +191,45 @@ if (SBON) {
     R();
     tt(pd ? '✓ ส่งสลิปใหม่แล้ว รอผู้ดูแลตรวจสอบ' : '✓ แจ้งชำระเงินแล้ว รอผู้ดูแลตรวจสอบ');
   };
+  // ไฟล์สัญญา: Storage contracts/<contract_id>.pdf + บันทึกชื่อไฟล์ในแถวสัญญา
   cpf = async function (el) {
     const f = el.files[0];
     el.value = '';
     if (!f) return;
     if (f.type != 'application/pdf' && !/\.pdf$/i.test(f.name)) return alert('รองรับเฉพาะไฟล์ PDF');
     if (f.size > 5 * 1024 * 1024) return alert('ไฟล์ใหญ่เกิน 5MB');
-    const r = D.rooms.find(x => x.n == CPR);
-    if (!r) return;
-    const path = r.n + '.pdf';
+    const u = D.users.find(x => x.id == CPU);
+    if (!u || !u._cid) return alert('ไม่พบสัญญาของผู้เช่าคนนี้');
+    const path = u._cid + '.pdf';
     const up = await SBX.cl.storage
       .from('contracts')
       .upload(path, f, { upsert: true, contentType: 'application/pdf' });
     if (up.error) return alert('อัปโหลดไม่สำเร็จ: ' + up.error.message);
-    const u = await SBX.cl
-      .from('rooms')
-      .update({ contract_pdf_path: path, contract_pdf_name: f.name, contract_pdf_size: f.size })
-      .eq('id', r._id);
-    if (u.error) return alert(u.error.message);
-    r.pdf = { name: f.name, size: f.size, path };
-    lg('อัปโหลดไฟล์สัญญา ห้อง ' + r.n);
+    u.cpdf = { name: f.name, size: f.size, path };
+    lg('อัปโหลดไฟล์สัญญา ห้อง ' + u.room + ' (' + u.name + ')');
+    save();
     R();
-    tt('✓ อัปโหลดไฟล์สัญญา ห้อง ' + r.n + ' แล้ว');
+    tt('✓ อัปโหลดไฟล์สัญญา ห้อง ' + u.room + ' แล้ว');
   };
-  cpd = function (n) {
-    cf('ลบไฟล์สัญญาห้อง ' + n + '?', async () => {
-      const r = D.rooms.find(x => x.n == n);
-      if (!r || !r.pdf) return;
-      await SBX.cl.storage.from('contracts').remove([r.pdf.path]);
-      const u = await SBX.cl
-        .from('rooms')
-        .update({ contract_pdf_path: null, contract_pdf_name: null, contract_pdf_size: null })
-        .eq('id', r._id);
-      if (u.error) return alert(u.error.message);
-      delete r.pdf;
-      lg('ลบไฟล์สัญญา ห้อง ' + n);
+  cpd = function (id) {
+    const u = D.users.find(x => x.id == id);
+    if (!u || !u.cpdf) return;
+    cf('ลบไฟล์สัญญาของ ' + u.name + ' (ห้อง ' + u.room + ')?', async () => {
+      await SBX.cl.storage.from('contracts').remove([u.cpdf.path]);
+      delete u.cpdf;
+      lg('ลบไฟล์สัญญา ห้อง ' + u.room + ' (' + u.name + ')');
+      save();
       R();
     });
   };
-  cpv = async function (n) {
-    const r = D.rooms.find(x => x.n == n);
-    if (!r || !r.pdf) return;
-    const s = await SBX.cl.storage.from('contracts').createSignedUrl(r.pdf.path, 600);
+  cpv = async function (id) {
+    const u = D.users.find(x => x.id == id);
+    if (!u || !u.cpdf) return;
+    const s = await SBX.cl.storage.from('contracts').createSignedUrl(u.cpdf.path, 600);
     if (!s.data) return alert('เปิดไฟล์ไม่สำเร็จ');
-    const u = s.data.signedUrl;
+    const url = s.data.signedUrl;
     mo(
-      `<h3>สัญญาเช่า ห้อง ${n}</h3><small class="mu">${e(r.pdf.name)}</small>${innerWidth > 800 ? `<iframe src="${u}" style="width:100%;height:62vh;border:1px solid var(--ln);border-radius:12px;margin:10px 0"></iframe>` : '<br><br>'}<a class="b" style="display:inline-block;text-decoration:none" target="_blank" rel="noopener" href="${u}">เปิดไฟล์สัญญา</a> <button class="b b2" onclick="cm()">ปิด</button>`
+      `<h3>สัญญาเช่า ห้อง ${u.room}</h3><small class="mu">${e(u.name)} · ${e(u.cpdf.name)}</small>${innerWidth > 800 ? `<iframe src="${url}" style="width:100%;height:62vh;border:1px solid var(--ln);border-radius:12px;margin:10px 0"></iframe>` : '<br><br>'}<a class="b" style="display:inline-block;text-decoration:none" target="_blank" rel="noopener" href="${url}">เปิดไฟล์สัญญา</a> <button class="b b2" onclick="cm()">ปิด</button>`
     );
     $('#mc').style.maxWidth = '860px';
   };

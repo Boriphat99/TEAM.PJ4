@@ -20,7 +20,8 @@ function atf(n) {
   mo(`<h3>เพิ่มผู้เช่า</h3><small class="mu">สร้างบัญชีเข้าสู่ระบบให้ผู้เช่า พร้อมเปิดสัญญาเช่า</small>
     <div class="atf">
       <div class="atf-sec"><b>1 · ห้องพัก</b>
-        <label>เลือกห้องว่าง</label><select id="af_r">${f.map(r => `<option value="${r.n}" ${r.n == n ? 'selected' : ''}>ห้อง ${r.n}</option>`).join('')}</select>
+        <label>เลือกห้องว่าง</label><select id="af_r" onchange="$('#af_m').value=smDef(+this.value)">${f.map(r => `<option value="${r.n}" ${r.n == n ? 'selected' : ''}>ห้อง ${r.n}</option>`).join('')}</select>
+        ${smIn('af_m', n)}
       </div>
       <div class="atf-sec"><b>2 · ข้อมูลผู้เช่า</b>
         <label>ชื่อ - นามสกุล *</label><input id="af_n" autocomplete="off">
@@ -61,6 +62,8 @@ async function atfGo() {
   if (pw.length < 6) return alert('รหัสผ่านต้องมีอย่างน้อย 6 ตัว');
   if (tel && !/^[0-9\-+ ]{9,15}$/.test(tel)) return alert('เบอร์โทรไม่ถูกต้อง');
   if (!s) return alert('กรุณาระบุวันเริ่มสัญญา');
+  const sm = smRead('af_m', n);
+  if (sm == null) return;
   if (x && x < s) return alert('วันสิ้นสุดสัญญาต้องไม่ก่อนวันเริ่มสัญญา');
   if (file && file.type != 'application/pdf' && !/\.pdf$/i.test(file.name))
     return alert('ไฟล์สัญญารองรับเฉพาะ PDF');
@@ -88,6 +91,7 @@ async function atfGo() {
         room_no: String(n),
         start_date: s,
         end_date: x || null,
+        start_meter: sm,
       },
     });
     if (r.error) {
@@ -101,7 +105,7 @@ async function atfGo() {
     }
     await sbLoad();
     if (file) {
-      CPR = n;
+      CPU = (D.users.find(u => u.email == em) || {}).id;
       const dt = new DataTransfer();
       dt.items.add(file);
       const tmp = document.createElement('input');
@@ -127,12 +131,13 @@ async function atfGo() {
       tel,
       cs: D2T0(s),
       ce: x ? D2T0(x) : undefined,
+      sm,
       mcp: 1,
     });
     lg('เพิ่มผู้เช่า ห้อง ' + n);
     save();
     if (file) {
-      CPR = n;
+      CPU = (D.users.find(u => u.email == em) || {}).id;
       const dt = new DataTransfer();
       dt.items.add(file);
       const tmp = document.createElement('input');

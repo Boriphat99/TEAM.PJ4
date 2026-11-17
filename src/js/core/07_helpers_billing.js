@@ -32,6 +32,8 @@ const e = s => String(s || '').replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) +
   },
   pill = i => `<span class="pl ${SL[st(i)][1]}">${SL[st(i)][0]}</span>`,
   base = i => i.rent + i.el + (i.x || 0),
+  // รอบบิล + ป้าย "บิลย้ายออก" สำหรับบิลสุดท้ายตอนย้ายออก (ค่าไฟอย่างเดียว)
+  mlab = i => (typeof mon == 'function' ? mon(i.per) : i.per) + (i.fin ? ' · บิลย้ายออก' : ''),
   tot = i => base(i) + (i.s == 'unpaid' ? fine(i) : i.fine || 0),
   vac = r => !tn(r.n) && !r.st,
   act = r => D.users.find(u => u.room == r && u.role == 'tenant' && !u.out),

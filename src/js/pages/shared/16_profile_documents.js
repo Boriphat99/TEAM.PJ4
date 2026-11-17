@@ -144,7 +144,7 @@ function docHTML(i, k, nl) {
     f = inv ? 0 : i.fine || 0,
     T = inv ? base(i) : tot(i),
     rows = [
-      ['ค่าเช่าห้อง', i.rent],
+      ...(i.fin ? [] : [['ค่าเช่าห้อง', i.rent]]),
       ['ค่าไฟฟ้า (' + i.pv + ' - ' + (i.pv + i.u) + ') ใช้ ' + i.u + ' หน่วย × ' + S.rate, i.el],
     ];
   if (i.x) rows.push([i.xn || 'ค่าใช้จ่ายเพิ่มเติม', i.x]);
@@ -154,7 +154,7 @@ function docHTML(i, k, nl) {
     url = /^https?:\/\//.test(S.url || '') ? e(S.url) : '';
   return `<div class="doc" style="font-family:Tahoma,Arial,sans-serif;max-width:480px;margin:0 auto;background:#fff;color:#0f172a;border-radius:16px;overflow:hidden;border:1px solid #e2e8f0;text-align:left">
 <div style="background:${c};color:#fff;text-align:center;padding:24px 16px"><div style="font-size:26px;font-weight:700">${inv ? 'ใบแจ้งหนี้' : 'ใบเสร็จรับเงิน'}</div><div>${e(nm)}</div></div>
-<div style="padding:20px;font-size:14px"><table style="width:100%;border-collapse:collapse">${H('ผู้เช่า', 'คุณ ' + e(u.name || '-') + ' ห้อง ' + i.room, 1)}${H('เลขที่บิล', i.id, 1)}${H('รอบบิล', mon(i.per), 1)}${H(inv ? 'ครบกำหนด' : 'วันที่ชำระ', inv ? dt(due(i)) : dt(i.paid), 1)}</table>
+<div style="padding:20px;font-size:14px"><table style="width:100%;border-collapse:collapse">${H('ผู้เช่า', 'คุณ ' + e(u.name || '-') + ' ห้อง ' + i.room, 1)}${H('เลขที่บิล', i.id, 1)}${H('รอบบิล', mlab(i), 1)}${H(inv ? 'ครบกำหนด' : 'วันที่ชำระ', inv ? dt(due(i)) : dt(i.paid), 1)}</table>
 <div style="border-top:1px solid #e2e8f0;margin:12px 0"></div><div style="font-weight:700">รายละเอียด</div><table style="width:100%;border-collapse:collapse">${rows.map(r => H(r[0], B(r[1]))).join('')}</table>
 <div style="background:${inv ? '#f9eef0' : '#dcfce7'};border-radius:12px;text-align:center;padding:16px;margin:16px 0"><div style="color:#64748b">${inv ? 'ยอดชำระทั้งสิ้น' : 'ยอดที่ชำระ'}</div><div style="font-size:32px;font-weight:700;color:${c}">${B(T)}</div></div>
 ${
@@ -181,7 +181,7 @@ pg.con = () => {
     t = D.users
       .filter(u => u.role == 'tenant' && u.room && (U.role != 'tenant' || u.id == U.id))
       .sort((a, b) => !!a.out - !!b.out || a.room - b.room);
-  return `<h2>สัญญาเช่า</h2><input type="file" id="cpi" accept="application/pdf" hidden onchange="cpf(this)"><p class="mu">เงินแรกเข้า ฿${fm(D.set.dep)} (มัดจำ + ค่าเช่าล่วงหน้า) บันทึกครั้งเดียว ณ วันเริ่มสัญญา</p><div class="cd sc" style="margin-top:14px"><table><tr><th>ห้อง</th><th>ผู้เช่า</th><th>เริ่มสัญญา</th><th>สิ้นสุด</th><th>เงินแรกเข้า</th><th>สถานะ</th><th>ไฟล์สัญญา (PDF)</th>${ad ? '<th></th>' : ''}</tr>${t.map(u => `<tr><td>${u.room}</td><td>${e(u.name)}</td><td>${dt(u.cs || u.id)}</td><td>${u.ce ? dt(u.ce) : 'ไม่กำหนด'}</td><td>฿${fm(D.set.dep)}</td><td>${u.out ? '<span class="pl r">สิ้นสุดสัญญา</span>' : '<span class="pl g">มีผลบังคับใช้</span>'}</td><td>${pdfc(u.room, ad)}</td>${ad ? `<td><button class="b b2 sm" onclick="ec(${u.id})">แก้ไขวันที่</button></td>` : ''}</tr>`).join('') || '<tr><td colspan=8 class=mu>ไม่มีข้อมูล</td></tr>'}</table></div>`;
+  return `<h2>สัญญาเช่า</h2><input type="file" id="cpi" accept="application/pdf" hidden onchange="cpf(this)"><p class="mu">เงินแรกเข้า ฿${fm(D.set.dep)} (มัดจำ + ค่าเช่าล่วงหน้า) บันทึกครั้งเดียว ณ วันเริ่มสัญญา</p><div class="cd sc" style="margin-top:14px"><table><tr><th>ห้อง</th><th>ผู้เช่า</th><th>เริ่มสัญญา</th><th>สิ้นสุด</th><th>เงินแรกเข้า</th><th>สถานะ</th><th>ไฟล์สัญญา (PDF)</th>${ad ? '<th></th>' : ''}</tr>${t.map(u => `<tr><td>${u.room}</td><td>${e(u.name)}</td><td>${dt(u.cs || u.id)}</td><td>${u.ce ? dt(u.ce) : 'ไม่กำหนด'}</td><td>฿${fm(D.set.dep)}</td><td>${u.out ? '<span class="pl r">สิ้นสุดสัญญา</span>' : '<span class="pl g">มีผลบังคับใช้</span>'}</td><td>${pdfc(u, ad)}</td>${ad ? `<td><button class="b b2 sm" onclick="ec(${u.id})">แก้ไขวันที่</button></td>` : ''}</tr>`).join('') || '<tr><td colspan=8 class=mu>ไม่มีข้อมูล</td></tr>'}</table></div>`;
 };
 const iv = ts =>
   ts ? new Date(ts - new Date(ts).getTimezoneOffset() * 6e4).toISOString().slice(0, 10) : '';
@@ -212,7 +212,7 @@ function th(id) {
       .filter(i => (i.uid ? i.uid == id : i.room == u.room))
       .sort((a, b) => b.per.localeCompare(a.per));
   mo(
-    `<h3>ประวัติชำระ ${e(u.name)}</h3><small class="mu">ห้อง ${u.room}</small><div class="sc"><table><tr><th>รอบบิล</th><th>ยอด</th><th>สถานะ</th><th>วันที่ชำระ</th></tr>${l.map(i => `<tr><td>${mon(i.per)}</td><td>฿${fm(tot(i))}</td><td>${pill(i)}</td><td>${i.paid ? dt(i.paid) : '-'}</td></tr>`).join('') || '<tr><td colspan=4 class=mu>ยังไม่มีบิล</td></tr>'}</table></div><br><button class="b b2" onclick="cm()">ปิด</button>`
+    `<h3>ประวัติชำระ ${e(u.name)}</h3><small class="mu">ห้อง ${u.room}</small><div class="sc"><table><tr><th>รอบบิล</th><th>ยอด</th><th>สถานะ</th><th>วันที่ชำระ</th></tr>${l.map(i => `<tr><td>${mlab(i)}</td><td>฿${fm(tot(i))}</td><td>${pill(i)}</td><td>${i.paid ? dt(i.paid) : '-'}</td></tr>`).join('') || '<tr><td colspan=4 class=mu>ยังไม่มีบิล</td></tr>'}</table></div><br><button class="b b2" onclick="cm()">ปิด</button>`
   );
 }
 async function xc() {
