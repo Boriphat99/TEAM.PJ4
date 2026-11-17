@@ -4682,3 +4682,24 @@ html[data-theme='dark'] body .app::before {
       var(--bg) !important;
   }
 }
+
+/* ===== 45. หน้าเข้าสู่ระบบ: ตัวอักษรชุดเดียวกับหน้าต้อนรับ =====
+   โลโก้ใช้ Noto Serif Thai แบบเดียวกับแถบบนหน้าต้อนรับ
+   ข้อความใต้หัวข้อขนาดเท่าคำโปรยของหน้าต้อนรับ */
+.wrap.au .al .logo {
+  font-family: 'Noto Serif Thai', serif;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.wrap.au .al h1.gt {
+  line-height: 1.3;
+}
+.wrap.au .al p.mu {
+  font-size: 16px;
+  line-height: 1.45;
+}
+@media (max-width: 800px) {
+  .wrap.au .al p.mu {
+    font-size: 14px;
+  }
+}
