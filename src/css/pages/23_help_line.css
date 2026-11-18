@@ -152,3 +152,18 @@ html[data-theme='dark'] .b.lgb {
     flex: 1 1 100%;
   }
 }
+/* แถวบอทแจ้งเตือนใต้การ์ด LINE ติดต่อสอบถาม */
+.lnbt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 14px 22px;
+  border-top: 1px solid var(--ln);
+  line-height: 1.6;
+}
+.lnbt > div {
+  flex: 1 1 260px;
+  min-width: 0;
+}

@@ -50,6 +50,7 @@ async function sbLoad() {
     payee: S.payee_name || '',
     url: S.system_url || '',
     line: S.line_id || '',
+    lineBot: S.line_bot_id || '',
     _id: S.id,
   };
   D.set._lqp = S.line_qr_path || undefined;
@@ -264,6 +265,7 @@ function sbRows() {
       payee_name: S.payee || null,
       system_url: S.url || null,
       line_id: S.line || null,
+      line_bot_id: S.lineBot || null,
     });
   D.rooms.forEach(
     r =>

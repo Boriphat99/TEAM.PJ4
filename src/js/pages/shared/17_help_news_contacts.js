@@ -20,6 +20,24 @@ const okImg = f => /^image\/(jpeg|png|webp)$/.test(f.type) && f.size <= 5 * 1024
     rd.readAsDataURL(f);
   },
   TKS = { open: ['รอดำเนินการ', 'y'], prog: ['กำลังดำเนินการ', 'p'], done: ['เสร็จสิ้น', 'g'] };
+// ลิงก์เพิ่มเพื่อน: บัญชี OA (@xxxx) ใช้ /R/ti/p/%40xxxx · LINE ส่วนตัวใช้ /ti/p/~id
+const lnUrl = id => {
+    id = String(id || '').trim();
+    return id.startsWith('@')
+      ? 'https://line.me/R/ti/p/' + encodeURIComponent(id)
+      : 'https://line.me/ti/p/~' + encodeURIComponent(id);
+  },
+  lnBotId = v => {
+    v = String(v || '')
+      .trim()
+      .replace(/\s+/g, '');
+    return v && !v.startsWith('@') ? '@' + v : v;
+  },
+  lnBotRow = ad => {
+    const b = (D.set.lineBot || '').trim();
+    if (!b && !ad) return '';
+    return `<div class="lnbt"><div><b>LINE แจ้งเตือน (บอท)</b> ${b ? `<span class="rch">${e(b)}</span>` : '<small class="mu">ยังไม่ได้ตั้งค่า</small>'}<br><small class="mu">ส่งแจ้งเตือนบิล วันครบกำหนด และใบเสร็จให้อัตโนมัติ · ตอบคำถามไม่ได้ · เพิ่มเพื่อนแล้วเชื่อมบัญชีได้ที่หน้าโปรไฟล์</small></div>${b ? `<a class="b b2 sm" target="_blank" rel="noopener" href="${lnUrl(b)}">เพิ่มเพื่อนบอท</a>` : ''}</div>`;
+  };
 pg.help = () => {
   TKI = [];
   const S = D.set,
@@ -28,7 +46,7 @@ pg.help = () => {
     id = (S.line || '').trim();
   return `<div class="hd2"><div><h2>ศูนย์ช่วยเหลือ</h2><p class="mu" style="margin:2px 0">ส่งคำขอ — เราจะตอบกลับโดยเร็วที่สุด</p></div></div>
 <div class="hlp" style="max-width:780px"><h3 style="margin:18px 0 4px">ช่องทางการติดต่อ</h3><p class="mu" style="margin:0 0 12px">ติดต่อเราผ่านช่องทางที่คุณสะดวก</p>
-<div class="ln2"><div class="lnh"><i class="lni"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.5 1.4 4.7 3.7 6.2-.2.8-.7 2.7-.8 3.1 0 0-.1.3.2.4.2.1.4 0 .4 0 .5-.1 3-2 4.1-2.8.8.1 1.6.2 2.4.2 5.5 0 10-3.6 10-8S17.5 3 12 3z"/></svg></i><b>LINE Official Account</b></div><div class="lnb"><div class="lq">${S.lineqr ? `<img src="${S.lineqr}" alt="QR LINE">` : 'พื้นที่ใส่ QR LINE<br>' + (ad ? '(กดแก้ไขเพื่อเพิ่ม)' : '(ผู้ดูแลยังไม่ได้เพิ่ม)')}</div><div class="lnx"><h3 class="lid">${id ? e(id) : 'ยังไม่ได้ตั้งค่า LINE ID'}</h3><small class="mu lns">LINE Official Account · ${PN()}</small><p class="mu lnt">สแกน QR หรือค้นหา LINE ID เพื่อเพิ่มเพื่อน</p><div class="lna">${id ? `<a class="b lgb" target="_blank" rel="noopener" href="https://line.me/R/ti/p/${encodeURIComponent(id)}">เพิ่มเพื่อนใน LINE</a>` : ''}${ad ? '<button class="b b2 sm" onclick="le()">แก้ไข QR / LINE ID</button>' : ''}</div></div></div></div>
+<div class="ln2"><div class="lnh"><i class="lni"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.5 1.4 4.7 3.7 6.2-.2.8-.7 2.7-.8 3.1 0 0-.1.3.2.4.2.1.4 0 .4 0 .5-.1 3-2 4.1-2.8.8.1 1.6.2 2.4.2 5.5 0 10-3.6 10-8S17.5 3 12 3z"/></svg></i><b>LINE ติดต่อสอบถาม</b></div><div class="lnb"><div class="lq">${S.lineqr ? `<img src="${S.lineqr}" alt="QR LINE">` : 'พื้นที่ใส่ QR LINE<br>' + (ad ? '(กดแก้ไขเพื่อเพิ่ม)' : '(ผู้ดูแลยังไม่ได้เพิ่ม)')}</div><div class="lnx"><h3 class="lid">${id ? e(id) : 'ยังไม่ได้ตั้งค่า LINE ID'}</h3><small class="mu lns">ติดต่อสอบถาม · ${PN()}</small><p class="mu lnt">สแกน QR หรือค้นหา LINE ID เพื่อพูดคุยกับผู้ดูแลหอพัก</p><div class="lna">${id ? `<a class="b lgb" target="_blank" rel="noopener" href="${lnUrl(id)}">เพิ่มเพื่อนใน LINE</a>` : ''}${ad ? '<button class="b b2 sm" onclick="le()">แก้ไข LINE</button>' : ''}</div></div></div>${lnBotRow(ad)}</div>
 ${ad ? '' : contactCard()}${ad ? '' : `<h3 style="margin:28px 0 12px">ส่งคำขอใหม่</h3><div class="cd"><label>หมวดหมู่</label><select id="tkc"><option value="">เลือกหมวดหมู่</option>${['ปัญหาการชำระเงิน', 'ใบแจ้งหนี้ / ค่าไฟ', 'ซ่อมบำรุง', 'บัญชีผู้ใช้', 'อื่นๆ'].map(x => `<option>${x}</option>`).join('')}</select><label>หัวข้อ</label><input id="tkt" placeholder="อธิบายปัญหาโดยย่อ" maxlength="100"><label>รายละเอียด</label><textarea id="tkb" rows="4" placeholder="กรุณาอธิบายปัญหาอย่างละเอียด..."></textarea><label>แนบรูปภาพ (ไม่บังคับ)</label><div style="margin:6px 0"><input type="file" id="tkf" accept="image/jpeg,image/png,image/webp" multiple hidden onchange="tki(this)"><button class="b b2 sm" onclick="$('#tkf').click()">แนบรูปภาพ</button> <small class="mu">สูงสุด 5 รูป (JPEG, PNG, WebP) · ไม่เกิน 5MB ต่อรูป</small></div><div id="tkp" class="fl"></div><div style="text-align:right"><button class="b" onclick="tks()">ส่งคำขอ</button></div></div>`}
 <h3 style="margin:28px 0 12px">${ad ? 'คำขอจากผู้ใช้ (ช่วยเหลือผู้ส่งคำขอ)' : 'คำขอของฉัน'}</h3>${
     tk
@@ -108,7 +126,7 @@ function le() {
   const S = D.set;
   LQ = S.lineqr || '';
   mo(
-    `<h3>LINE Official Account</h3><label>LINE ID (เช่น @ttmansion)</label><input id="l_id" value="${e(S.line || '')}" placeholder="@yourid"><label>รูป QR Code LINE</label><div class="lq" style="margin:6px 0 10px" id="l_pv">${S.lineqr ? `<img src="${S.lineqr}">` : 'ยังไม่มีรูป'}</div><input type="file" id="l_f" accept="image/jpeg,image/png,image/webp" hidden onchange="lqf(this)"><button class="b b2 sm" onclick="$('#l_f').click()">เลือกรูป QR</button> <button class="b b2 sm" onclick="LQ='';$('#l_pv').textContent='ลบรูปแล้ว'">ลบรูป</button><br><br><button class="b" onclick="ls()">บันทึก</button> <button class="b b2" onclick="cm()">ยกเลิก</button>`
+    `<h3>LINE ติดต่อสอบถาม</h3><label>LINE ID สำหรับพูดคุย (LINE ส่วนตัว หรือ OA ที่มีคนตอบ)</label><input id="l_id" value="${e(S.line || '')}" placeholder="เช่น myline หรือ @ttmansion"><label>รูป QR Code LINE</label><div class="lq" style="margin:6px 0 10px" id="l_pv">${S.lineqr ? `<img src="${S.lineqr}">` : 'ยังไม่มีรูป'}</div><input type="file" id="l_f" accept="image/jpeg,image/png,image/webp" hidden onchange="lqf(this)"><button class="b b2 sm" onclick="$('#l_f').click()">เลือกรูป QR</button> <button class="b b2 sm" onclick="LQ='';$('#l_pv').textContent='ลบรูปแล้ว'">ลบรูป</button><h3 style="margin-top:22px">LINE แจ้งเตือน (บอท)</h3><label>Bot basic ID ของบอทแจ้งเตือน (ดูได้ใน LINE Developers แท็บ Messaging API)</label><input id="l_bot" value="${e(S.lineBot || '')}" placeholder="เช่น @130kmbel"><br><br><button class="b" onclick="ls()">บันทึก</button> <button class="b b2" onclick="cm()">ยกเลิก</button>`
   );
 }
 function lqf(el) {
@@ -123,6 +141,7 @@ function lqf(el) {
 }
 function ls() {
   D.set.line = $('#l_id').value.trim();
+  D.set.lineBot = lnBotId($('#l_bot').value);
   if (LQ) D.set.lineqr = LQ;
   else delete D.set.lineqr;
   lg('แก้ไขช่องทาง LINE');

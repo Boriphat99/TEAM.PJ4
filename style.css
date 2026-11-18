@@ -5136,6 +5136,21 @@ html[data-theme='dark'] .b.lgb {
     flex: 1 1 100%;
   }
 }
+/* แถวบอทแจ้งเตือนใต้การ์ด LINE ติดต่อสอบถาม */
+.lnbt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 14px 22px;
+  border-top: 1px solid var(--ln);
+  line-height: 1.6;
+}
+.lnbt > div {
+  flex: 1 1 260px;
+  min-width: 0;
+}
 
 /* 24_responsive_devices.css — ปรับให้สวยและใช้งานง่ายทั้ง 3 อุปกรณ์
    มือถือ ≤ 800px · แท็บเล็ต 801–1099px · คอมพิวเตอร์ ≥ 1100px  (ไฟล์ใหม่ โหลดท้ายสุด จึงทับกฎเดิมได้โดยไม่ต้องแก้ไฟล์เดิม) */

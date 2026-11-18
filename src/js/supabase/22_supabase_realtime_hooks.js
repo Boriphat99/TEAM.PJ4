@@ -280,7 +280,8 @@ if (SBON) {
   };
   ls = async function () {
     const id = $('#l_id').value.trim(),
-      upd = { line_id: id || null, updated_at: new Date().toISOString() };
+      bot = lnBotId($('#l_bot').value),
+      upd = { line_id: id || null, line_bot_id: bot || null, updated_at: new Date().toISOString() };
     if (/^data:/.test(LQ)) {
       const np = 'line_qr_' + Date.now() + '.png',
         up = await SBX.cl.storage
@@ -301,6 +302,7 @@ if (SBON) {
         .catch(() => {});
     if (upd.line_qr_path !== undefined) D.set._lqp = upd.line_qr_path || undefined;
     D.set.line = id;
+    D.set.lineBot = bot;
     if (upd.line_qr_path) D.set.lineqr = pubUrl('branding', upd.line_qr_path) + '?v=' + Date.now();
     else if (upd.line_qr_path === null) delete D.set.lineqr;
     lg('แก้ไขช่องทาง LINE');

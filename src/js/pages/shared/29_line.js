@@ -38,10 +38,8 @@ async function lnLoad() {
 }
 const lnOn = uid => !!(uid && LN.lk[uid]);
 const lnAdd = () => {
-  const id = (D.set.line || '').trim();
-  return id
-    ? 'https://line.me/R/ti/p/' + encodeURIComponent(id.startsWith('@') ? id : '@' + id)
-    : '';
+  const id = lnBotId(D.set.lineBot);
+  return id ? lnUrl(id) : '';
 };
 
 // ---------- การ์ดในหน้าโปรไฟล์ (ผู้เช่า + ผู้ดูแลระบบ) ----------
@@ -59,7 +57,7 @@ function lnCard() {
     return `<div class="cd" id="lnc">${h}<p class="mu" style="margin:6px 0 12px">${what}</p><div class="bd"><span><span class="pl g">เชื่อมแล้ว</span> <small class="mu">ตั้งแต่ ${dt(at)}</small></span><button class="b b2 sm" onclick="lnUnlink()">ยกเลิกการเชื่อม</button></div></div>`;
   const add = lnAdd(),
     live = LN.code && LN.exp > Date.now();
-  return `<div class="cd" id="lnc">${h}<p class="mu" style="margin:6px 0 12px">${what}</p><ol style="margin:0 0 14px;padding-left:20px;line-height:1.9"><li>เพิ่มเพื่อน LINE ของหอพัก ${add ? `<a class="b b2 sm" href="${add}" target="_blank" rel="noopener">เพิ่มเพื่อน ${e(D.set.line)}</a>` : '<small class="mu">(ผู้ดูแลยังไม่ได้ตั้ง LINE ID ในหน้าตั้งค่า)</small>'}</li><li>กดขอรหัส แล้วพิมพ์รหัส 6 หลักส่งในแชท LINE ของหอพัก</li></ol>${
+  return `<div class="cd" id="lnc">${h}<p class="mu" style="margin:6px 0 12px">${what}</p><ol style="margin:0 0 14px;padding-left:20px;line-height:1.9"><li>เพิ่มเพื่อนบอทแจ้งเตือนของหอพัก ${add ? `<a class="b b2 sm" href="${add}" target="_blank" rel="noopener">เพิ่มเพื่อน ${e(lnBotId(D.set.lineBot))}</a>` : '<small class="mu">(ผู้ดูแลยังไม่ได้ตั้งค่าบอทในหน้าช่วยเหลือ)</small>'}</li><li>กดขอรหัส แล้วพิมพ์รหัส 6 หลักส่งในแชทของบอท</li></ol>${
     live
       ? `<div style="text-align:center;padding:12px;border:1px dashed var(--ac);border-radius:12px"><small class="mu">รหัสเชื่อมบัญชี</small><div style="font-size:32px;font-weight:700;letter-spacing:8px;color:var(--ac)">${LN.code}</div><small class="mu">หมดอายุใน <b id="lnt">${lnLeft()}</b> · ระบบจะเปลี่ยนสถานะให้เองเมื่อเชื่อมสำเร็จ</small></div><br><button class="b b2 sm" onclick="lnCode()">ขอรหัสใหม่</button> <button class="b b2 sm" onclick="lnCheck(1)">ตรวจสถานะ</button>`
       : `<button class="b" onclick="lnCode()">ขอรหัส</button>`

@@ -26,17 +26,28 @@ try {
 /* 03_i18n_dictionary.js — พจนานุกรมแปลภาษา ไทย/อังกฤษ (ขนาดใหญ่)
    (แยกมาจาก script.js บรรทัด 12-656; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
-  ENm = `แจ้งเตือนทาง LINE|LINE notifications
+  ENm = `LINE ติดต่อสอบถาม|LINE for questions
+ติดต่อสอบถาม|Contact us
+สแกน QR หรือค้นหา LINE ID เพื่อพูดคุยกับผู้ดูแลหอพัก|Scan the QR or search the LINE ID to chat with the dorm staff
+LINE ID สำหรับพูดคุย (LINE ส่วนตัว หรือ OA ที่มีคนตอบ)|LINE ID for chatting (a personal LINE or a staffed OA)
+LINE แจ้งเตือน (บอท)|LINE notifications (bot)
+Bot basic ID ของบอทแจ้งเตือน (ดูได้ใน LINE Developers แท็บ Messaging API)|Bot basic ID of the notification bot (see LINE Developers, Messaging API tab)
+ส่งแจ้งเตือนบิล วันครบกำหนด และใบเสร็จให้อัตโนมัติ|Sends bill, due date and receipt alerts automatically
+ตอบคำถามไม่ได้|cannot answer questions
+เพิ่มเพื่อนแล้วเชื่อมบัญชีได้ที่หน้าโปรไฟล์|add it as a friend, then link your account on the Profile page
+เพิ่มเพื่อนบอทแจ้งเตือนของหอพัก|Add the dorm's notification bot as a friend
+เพิ่มเพื่อนบอท|Add bot
+(ผู้ดูแลยังไม่ได้ตั้งค่าบอทในหน้าช่วยเหลือ)|(the admin has not set up the bot on the Help page yet)
+กดขอรหัส แล้วพิมพ์รหัส 6 หลักส่งในแชทของบอท|Tap Get code, then send the 6-digit code in the bot's chat
+แก้ไข LINE|Edit LINE
+แจ้งเตือนทาง LINE|LINE notifications
 ใช้ได้เมื่อเชื่อมฐานข้อมูลจริง|Available once connected to the live database
 รับแจ้งเตือนเมื่อบิลออก ใกล้ครบกำหนด เลยกำหนด และเมื่อใบเสร็จออกแล้ว|Get notified when a bill is issued, when it is almost due, when it is overdue and when your receipt is ready
 รับแจ้งเตือนทันทีเมื่อมีผู้เช่าส่งสลิปชำระเงิน|Get notified as soon as a tenant sends a payment slip
 เชื่อมแล้ว|Linked
 ยังไม่เชื่อม|Not linked
 ยกเลิกการเชื่อม|Unlink
-เพิ่มเพื่อน LINE ของหอพัก|Add the dorm's LINE account as a friend
 เพิ่มเพื่อน|Add friend
-(ผู้ดูแลยังไม่ได้ตั้ง LINE ID ในหน้าตั้งค่า)|(the admin has not set a LINE ID in Settings yet)
-กดขอรหัส แล้วพิมพ์รหัส 6 หลักส่งในแชท LINE ของหอพัก|Tap Get code, then send the 6-digit code in the dorm's LINE chat
 รหัสเชื่อมบัญชี|Link code
 หมดอายุใน|Expires in
 ระบบจะเปลี่ยนสถานะให้เองเมื่อเชื่อมสำเร็จ|the status updates by itself once linked
@@ -2789,6 +2800,24 @@ const okImg = f => /^image\/(jpeg|png|webp)$/.test(f.type) && f.size <= 5 * 1024
     rd.readAsDataURL(f);
   },
   TKS = { open: ['รอดำเนินการ', 'y'], prog: ['กำลังดำเนินการ', 'p'], done: ['เสร็จสิ้น', 'g'] };
+// ลิงก์เพิ่มเพื่อน: บัญชี OA (@xxxx) ใช้ /R/ti/p/%40xxxx · LINE ส่วนตัวใช้ /ti/p/~id
+const lnUrl = id => {
+    id = String(id || '').trim();
+    return id.startsWith('@')
+      ? 'https://line.me/R/ti/p/' + encodeURIComponent(id)
+      : 'https://line.me/ti/p/~' + encodeURIComponent(id);
+  },
+  lnBotId = v => {
+    v = String(v || '')
+      .trim()
+      .replace(/\s+/g, '');
+    return v && !v.startsWith('@') ? '@' + v : v;
+  },
+  lnBotRow = ad => {
+    const b = (D.set.lineBot || '').trim();
+    if (!b && !ad) return '';
+    return `<div class="lnbt"><div><b>LINE แจ้งเตือน (บอท)</b> ${b ? `<span class="rch">${e(b)}</span>` : '<small class="mu">ยังไม่ได้ตั้งค่า</small>'}<br><small class="mu">ส่งแจ้งเตือนบิล วันครบกำหนด และใบเสร็จให้อัตโนมัติ · ตอบคำถามไม่ได้ · เพิ่มเพื่อนแล้วเชื่อมบัญชีได้ที่หน้าโปรไฟล์</small></div>${b ? `<a class="b b2 sm" target="_blank" rel="noopener" href="${lnUrl(b)}">เพิ่มเพื่อนบอท</a>` : ''}</div>`;
+  };
 pg.help = () => {
   TKI = [];
   const S = D.set,
@@ -2797,7 +2826,7 @@ pg.help = () => {
     id = (S.line || '').trim();
   return `<div class="hd2"><div><h2>ศูนย์ช่วยเหลือ</h2><p class="mu" style="margin:2px 0">ส่งคำขอ — เราจะตอบกลับโดยเร็วที่สุด</p></div></div>
 <div class="hlp" style="max-width:780px"><h3 style="margin:18px 0 4px">ช่องทางการติดต่อ</h3><p class="mu" style="margin:0 0 12px">ติดต่อเราผ่านช่องทางที่คุณสะดวก</p>
-<div class="ln2"><div class="lnh"><i class="lni"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.5 1.4 4.7 3.7 6.2-.2.8-.7 2.7-.8 3.1 0 0-.1.3.2.4.2.1.4 0 .4 0 .5-.1 3-2 4.1-2.8.8.1 1.6.2 2.4.2 5.5 0 10-3.6 10-8S17.5 3 12 3z"/></svg></i><b>LINE Official Account</b></div><div class="lnb"><div class="lq">${S.lineqr ? `<img src="${S.lineqr}" alt="QR LINE">` : 'พื้นที่ใส่ QR LINE<br>' + (ad ? '(กดแก้ไขเพื่อเพิ่ม)' : '(ผู้ดูแลยังไม่ได้เพิ่ม)')}</div><div class="lnx"><h3 class="lid">${id ? e(id) : 'ยังไม่ได้ตั้งค่า LINE ID'}</h3><small class="mu lns">LINE Official Account · ${PN()}</small><p class="mu lnt">สแกน QR หรือค้นหา LINE ID เพื่อเพิ่มเพื่อน</p><div class="lna">${id ? `<a class="b lgb" target="_blank" rel="noopener" href="https://line.me/R/ti/p/${encodeURIComponent(id)}">เพิ่มเพื่อนใน LINE</a>` : ''}${ad ? '<button class="b b2 sm" onclick="le()">แก้ไข QR / LINE ID</button>' : ''}</div></div></div></div>
+<div class="ln2"><div class="lnh"><i class="lni"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.5 1.4 4.7 3.7 6.2-.2.8-.7 2.7-.8 3.1 0 0-.1.3.2.4.2.1.4 0 .4 0 .5-.1 3-2 4.1-2.8.8.1 1.6.2 2.4.2 5.5 0 10-3.6 10-8S17.5 3 12 3z"/></svg></i><b>LINE ติดต่อสอบถาม</b></div><div class="lnb"><div class="lq">${S.lineqr ? `<img src="${S.lineqr}" alt="QR LINE">` : 'พื้นที่ใส่ QR LINE<br>' + (ad ? '(กดแก้ไขเพื่อเพิ่ม)' : '(ผู้ดูแลยังไม่ได้เพิ่ม)')}</div><div class="lnx"><h3 class="lid">${id ? e(id) : 'ยังไม่ได้ตั้งค่า LINE ID'}</h3><small class="mu lns">ติดต่อสอบถาม · ${PN()}</small><p class="mu lnt">สแกน QR หรือค้นหา LINE ID เพื่อพูดคุยกับผู้ดูแลหอพัก</p><div class="lna">${id ? `<a class="b lgb" target="_blank" rel="noopener" href="${lnUrl(id)}">เพิ่มเพื่อนใน LINE</a>` : ''}${ad ? '<button class="b b2 sm" onclick="le()">แก้ไข LINE</button>' : ''}</div></div></div>${lnBotRow(ad)}</div>
 ${ad ? '' : contactCard()}${ad ? '' : `<h3 style="margin:28px 0 12px">ส่งคำขอใหม่</h3><div class="cd"><label>หมวดหมู่</label><select id="tkc"><option value="">เลือกหมวดหมู่</option>${['ปัญหาการชำระเงิน', 'ใบแจ้งหนี้ / ค่าไฟ', 'ซ่อมบำรุง', 'บัญชีผู้ใช้', 'อื่นๆ'].map(x => `<option>${x}</option>`).join('')}</select><label>หัวข้อ</label><input id="tkt" placeholder="อธิบายปัญหาโดยย่อ" maxlength="100"><label>รายละเอียด</label><textarea id="tkb" rows="4" placeholder="กรุณาอธิบายปัญหาอย่างละเอียด..."></textarea><label>แนบรูปภาพ (ไม่บังคับ)</label><div style="margin:6px 0"><input type="file" id="tkf" accept="image/jpeg,image/png,image/webp" multiple hidden onchange="tki(this)"><button class="b b2 sm" onclick="$('#tkf').click()">แนบรูปภาพ</button> <small class="mu">สูงสุด 5 รูป (JPEG, PNG, WebP) · ไม่เกิน 5MB ต่อรูป</small></div><div id="tkp" class="fl"></div><div style="text-align:right"><button class="b" onclick="tks()">ส่งคำขอ</button></div></div>`}
 <h3 style="margin:28px 0 12px">${ad ? 'คำขอจากผู้ใช้ (ช่วยเหลือผู้ส่งคำขอ)' : 'คำขอของฉัน'}</h3>${
     tk
@@ -2877,7 +2906,7 @@ function le() {
   const S = D.set;
   LQ = S.lineqr || '';
   mo(
-    `<h3>LINE Official Account</h3><label>LINE ID (เช่น @ttmansion)</label><input id="l_id" value="${e(S.line || '')}" placeholder="@yourid"><label>รูป QR Code LINE</label><div class="lq" style="margin:6px 0 10px" id="l_pv">${S.lineqr ? `<img src="${S.lineqr}">` : 'ยังไม่มีรูป'}</div><input type="file" id="l_f" accept="image/jpeg,image/png,image/webp" hidden onchange="lqf(this)"><button class="b b2 sm" onclick="$('#l_f').click()">เลือกรูป QR</button> <button class="b b2 sm" onclick="LQ='';$('#l_pv').textContent='ลบรูปแล้ว'">ลบรูป</button><br><br><button class="b" onclick="ls()">บันทึก</button> <button class="b b2" onclick="cm()">ยกเลิก</button>`
+    `<h3>LINE ติดต่อสอบถาม</h3><label>LINE ID สำหรับพูดคุย (LINE ส่วนตัว หรือ OA ที่มีคนตอบ)</label><input id="l_id" value="${e(S.line || '')}" placeholder="เช่น myline หรือ @ttmansion"><label>รูป QR Code LINE</label><div class="lq" style="margin:6px 0 10px" id="l_pv">${S.lineqr ? `<img src="${S.lineqr}">` : 'ยังไม่มีรูป'}</div><input type="file" id="l_f" accept="image/jpeg,image/png,image/webp" hidden onchange="lqf(this)"><button class="b b2 sm" onclick="$('#l_f').click()">เลือกรูป QR</button> <button class="b b2 sm" onclick="LQ='';$('#l_pv').textContent='ลบรูปแล้ว'">ลบรูป</button><h3 style="margin-top:22px">LINE แจ้งเตือน (บอท)</h3><label>Bot basic ID ของบอทแจ้งเตือน (ดูได้ใน LINE Developers แท็บ Messaging API)</label><input id="l_bot" value="${e(S.lineBot || '')}" placeholder="เช่น @130kmbel"><br><br><button class="b" onclick="ls()">บันทึก</button> <button class="b b2" onclick="cm()">ยกเลิก</button>`
   );
 }
 function lqf(el) {
@@ -2892,6 +2921,7 @@ function lqf(el) {
 }
 function ls() {
   D.set.line = $('#l_id').value.trim();
+  D.set.lineBot = lnBotId($('#l_bot').value);
   if (LQ) D.set.lineqr = LQ;
   else delete D.set.lineqr;
   lg('แก้ไขช่องทาง LINE');
@@ -3462,6 +3492,7 @@ async function sbLoad() {
     payee: S.payee_name || '',
     url: S.system_url || '',
     line: S.line_id || '',
+    lineBot: S.line_bot_id || '',
     _id: S.id,
   };
   D.set._lqp = S.line_qr_path || undefined;
@@ -3676,6 +3707,7 @@ function sbRows() {
       payee_name: S.payee || null,
       system_url: S.url || null,
       line_id: S.line || null,
+      line_bot_id: S.lineBot || null,
     });
   D.rooms.forEach(
     r =>
@@ -4201,7 +4233,8 @@ if (SBON) {
   };
   ls = async function () {
     const id = $('#l_id').value.trim(),
-      upd = { line_id: id || null, updated_at: new Date().toISOString() };
+      bot = lnBotId($('#l_bot').value),
+      upd = { line_id: id || null, line_bot_id: bot || null, updated_at: new Date().toISOString() };
     if (/^data:/.test(LQ)) {
       const np = 'line_qr_' + Date.now() + '.png',
         up = await SBX.cl.storage
@@ -4222,6 +4255,7 @@ if (SBON) {
         .catch(() => {});
     if (upd.line_qr_path !== undefined) D.set._lqp = upd.line_qr_path || undefined;
     D.set.line = id;
+    D.set.lineBot = bot;
     if (upd.line_qr_path) D.set.lineqr = pubUrl('branding', upd.line_qr_path) + '?v=' + Date.now();
     else if (upd.line_qr_path === null) delete D.set.lineqr;
     lg('แก้ไขช่องทาง LINE');
@@ -5307,10 +5341,8 @@ async function lnLoad() {
 }
 const lnOn = uid => !!(uid && LN.lk[uid]);
 const lnAdd = () => {
-  const id = (D.set.line || '').trim();
-  return id
-    ? 'https://line.me/R/ti/p/' + encodeURIComponent(id.startsWith('@') ? id : '@' + id)
-    : '';
+  const id = lnBotId(D.set.lineBot);
+  return id ? lnUrl(id) : '';
 };
 
 // ---------- การ์ดในหน้าโปรไฟล์ (ผู้เช่า + ผู้ดูแลระบบ) ----------
@@ -5328,7 +5360,7 @@ function lnCard() {
     return `<div class="cd" id="lnc">${h}<p class="mu" style="margin:6px 0 12px">${what}</p><div class="bd"><span><span class="pl g">เชื่อมแล้ว</span> <small class="mu">ตั้งแต่ ${dt(at)}</small></span><button class="b b2 sm" onclick="lnUnlink()">ยกเลิกการเชื่อม</button></div></div>`;
   const add = lnAdd(),
     live = LN.code && LN.exp > Date.now();
-  return `<div class="cd" id="lnc">${h}<p class="mu" style="margin:6px 0 12px">${what}</p><ol style="margin:0 0 14px;padding-left:20px;line-height:1.9"><li>เพิ่มเพื่อน LINE ของหอพัก ${add ? `<a class="b b2 sm" href="${add}" target="_blank" rel="noopener">เพิ่มเพื่อน ${e(D.set.line)}</a>` : '<small class="mu">(ผู้ดูแลยังไม่ได้ตั้ง LINE ID ในหน้าตั้งค่า)</small>'}</li><li>กดขอรหัส แล้วพิมพ์รหัส 6 หลักส่งในแชท LINE ของหอพัก</li></ol>${
+  return `<div class="cd" id="lnc">${h}<p class="mu" style="margin:6px 0 12px">${what}</p><ol style="margin:0 0 14px;padding-left:20px;line-height:1.9"><li>เพิ่มเพื่อนบอทแจ้งเตือนของหอพัก ${add ? `<a class="b b2 sm" href="${add}" target="_blank" rel="noopener">เพิ่มเพื่อน ${e(lnBotId(D.set.lineBot))}</a>` : '<small class="mu">(ผู้ดูแลยังไม่ได้ตั้งค่าบอทในหน้าช่วยเหลือ)</small>'}</li><li>กดขอรหัส แล้วพิมพ์รหัส 6 หลักส่งในแชทของบอท</li></ol>${
     live
       ? `<div style="text-align:center;padding:12px;border:1px dashed var(--ac);border-radius:12px"><small class="mu">รหัสเชื่อมบัญชี</small><div style="font-size:32px;font-weight:700;letter-spacing:8px;color:var(--ac)">${LN.code}</div><small class="mu">หมดอายุใน <b id="lnt">${lnLeft()}</b> · ระบบจะเปลี่ยนสถานะให้เองเมื่อเชื่อมสำเร็จ</small></div><br><button class="b b2 sm" onclick="lnCode()">ขอรหัสใหม่</button> <button class="b b2 sm" onclick="lnCheck(1)">ตรวจสถานะ</button>`
       : `<button class="b" onclick="lnCode()">ขอรหัส</button>`

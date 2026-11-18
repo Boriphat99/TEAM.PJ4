@@ -1,17 +1,28 @@
 /* 03_i18n_dictionary.js — พจนานุกรมแปลภาษา ไทย/อังกฤษ (ขนาดใหญ่)
    (แยกมาจาก script.js บรรทัด 12-656; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
-  ENm = `แจ้งเตือนทาง LINE|LINE notifications
+  ENm = `LINE ติดต่อสอบถาม|LINE for questions
+ติดต่อสอบถาม|Contact us
+สแกน QR หรือค้นหา LINE ID เพื่อพูดคุยกับผู้ดูแลหอพัก|Scan the QR or search the LINE ID to chat with the dorm staff
+LINE ID สำหรับพูดคุย (LINE ส่วนตัว หรือ OA ที่มีคนตอบ)|LINE ID for chatting (a personal LINE or a staffed OA)
+LINE แจ้งเตือน (บอท)|LINE notifications (bot)
+Bot basic ID ของบอทแจ้งเตือน (ดูได้ใน LINE Developers แท็บ Messaging API)|Bot basic ID of the notification bot (see LINE Developers, Messaging API tab)
+ส่งแจ้งเตือนบิล วันครบกำหนด และใบเสร็จให้อัตโนมัติ|Sends bill, due date and receipt alerts automatically
+ตอบคำถามไม่ได้|cannot answer questions
+เพิ่มเพื่อนแล้วเชื่อมบัญชีได้ที่หน้าโปรไฟล์|add it as a friend, then link your account on the Profile page
+เพิ่มเพื่อนบอทแจ้งเตือนของหอพัก|Add the dorm's notification bot as a friend
+เพิ่มเพื่อนบอท|Add bot
+(ผู้ดูแลยังไม่ได้ตั้งค่าบอทในหน้าช่วยเหลือ)|(the admin has not set up the bot on the Help page yet)
+กดขอรหัส แล้วพิมพ์รหัส 6 หลักส่งในแชทของบอท|Tap Get code, then send the 6-digit code in the bot's chat
+แก้ไข LINE|Edit LINE
+แจ้งเตือนทาง LINE|LINE notifications
 ใช้ได้เมื่อเชื่อมฐานข้อมูลจริง|Available once connected to the live database
 รับแจ้งเตือนเมื่อบิลออก ใกล้ครบกำหนด เลยกำหนด และเมื่อใบเสร็จออกแล้ว|Get notified when a bill is issued, when it is almost due, when it is overdue and when your receipt is ready
 รับแจ้งเตือนทันทีเมื่อมีผู้เช่าส่งสลิปชำระเงิน|Get notified as soon as a tenant sends a payment slip
 เชื่อมแล้ว|Linked
 ยังไม่เชื่อม|Not linked
 ยกเลิกการเชื่อม|Unlink
-เพิ่มเพื่อน LINE ของหอพัก|Add the dorm's LINE account as a friend
 เพิ่มเพื่อน|Add friend
-(ผู้ดูแลยังไม่ได้ตั้ง LINE ID ในหน้าตั้งค่า)|(the admin has not set a LINE ID in Settings yet)
-กดขอรหัส แล้วพิมพ์รหัส 6 หลักส่งในแชท LINE ของหอพัก|Tap Get code, then send the 6-digit code in the dorm's LINE chat
 รหัสเชื่อมบัญชี|Link code
 หมดอายุใน|Expires in
 ระบบจะเปลี่ยนสถานะให้เองเมื่อเชื่อมสำเร็จ|the status updates by itself once linked
