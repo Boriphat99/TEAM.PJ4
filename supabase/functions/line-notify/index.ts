@@ -74,8 +74,8 @@ Deno.serve(async req => {
   // deno-lint-ignore no-explicit-any
   let inv: any = b.invoice_id ? await loadInv() : null;
   if (!inv) return json({ error: 'invoice not found' }, 404);
-  // บิลใหม่: รายการในบิลถูกบันทึกตามหลังแถวบิลเล็กน้อย รอแล้วอ่านใหม่ 1 ครั้ง
-  if (kind === 'bill' && !(inv.invoice_items || []).length) {
+  // บิลใหม่: รายการในบิลถูกบันทึกตามหลังแถวบิล (เน็ตช้าอาจหลายวินาที) รออ่านใหม่สูงสุด 4 ครั้ง
+  for (let t = 0; kind === 'bill' && !(inv.invoice_items || []).length && t < 4; t++) {
     await new Promise(r => setTimeout(r, 2500));
     inv = (await loadInv()) || inv;
   }
@@ -98,6 +98,8 @@ Deno.serve(async req => {
   // เตือน/ส่งเองเฉพาะบิลที่ยังค้างจริง ณ ตอนส่ง
   if (['due_soon', 'overdue', 'last_day', 'manual'].includes(kind) && inv.status !== 'unpaid')
     return json({ skipped: 'not unpaid' });
+  // บิลที่ชำระแล้วตั้งแต่ตอนบันทึก (เช่น ลงข้อมูลย้อนหลัง) ไม่ต้องแจ้งว่าบิลออก
+  if (kind === 'bill' && inv.status === 'paid') return json({ skipped: 'already paid' });
 
   const room = inv.contracts?.rooms?.room_no ?? '-';
   const tenantName = inv.contracts?.tenants?.full_name ?? '';

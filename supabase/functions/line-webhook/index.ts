@@ -11,11 +11,21 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.4';
 const json = (b: unknown, s = 200) =>
   new Response(JSON.stringify(b), { status: s, headers: { 'Content-Type': 'application/json' } });
 
-const HELP =
-  'เชื่อมบัญชีกับระบบหอพักได้ดังนี้\n' +
-  '1. เข้าเว็บไซต์หอพัก แล้วเปิดหน้าโปรไฟล์\n' +
-  '2. กด "ขอรหัส" ในการ์ดเชื่อม LINE\n' +
-  '3. พิมพ์รหัส 6 หลักส่งมาในแชทนี้ (รหัสใช้ได้ 10 นาที)';
+// ข้อความวิธีเชื่อมบัญชี พร้อมลิงก์เว็บไซต์และ LINE สำหรับสอบถาม (อ่านจากหน้าตั้งค่าของระบบ)
+// deno-lint-ignore no-explicit-any
+const helpText = (S: any) => {
+  const url = S?.system_url || 'https://boriphat99.github.io/TEAM.PJ4/';
+  const ask = S?.line_id
+    ? `\n\nบอทนี้ใช้ส่งแจ้งเตือนอย่างเดียว ตอบคำถามไม่ได้\nสอบถามเพิ่มเติมทาง LINE: ${S.line_id}`
+    : '';
+  return (
+    'เชื่อมบัญชีกับระบบหอพักได้ดังนี้\n' +
+    `1. เข้าเว็บไซต์หอพัก ${url} แล้วเปิดหน้าโปรไฟล์\n` +
+    '2. กด "ขอรหัส" ในการ์ดแจ้งเตือนทาง LINE\n' +
+    '3. พิมพ์รหัส 6 หลักส่งมาในแชทนี้ (รหัสใช้ได้ 10 นาที)' +
+    ask
+  );
+};
 const MAX_FAILS = 5;
 
 async function validSignature(body: string, sig: string, secret: string) {
@@ -76,12 +86,22 @@ Deno.serve(async req => {
     { auth: { persistSession: false } }
   );
 
+  // deno-lint-ignore no-explicit-any
+  let S: any = null;
+  const help = async () => {
+    if (!S)
+      S =
+        (await sb.from('app_settings').select('system_url, line_id').limit(1).maybeSingle()).data ||
+        {};
+    return helpText(S);
+  };
+
   for (const ev of events) {
     const lineUser = ev.source?.userId;
     if (!lineUser || ev.source?.type !== 'user') continue;
 
     if (ev.type === 'follow') {
-      await reply(ev.replyToken, 'ขอบคุณที่เพิ่มเพื่อนครับ\n\n' + HELP);
+      await reply(ev.replyToken, 'ขอบคุณที่เพิ่มเพื่อนครับ\n\n' + (await help()));
       continue;
     }
     if (ev.type === 'unfollow') {
@@ -92,7 +112,7 @@ Deno.serve(async req => {
 
     const text = String(ev.message.text || '').replace(/\s+/g, '');
     if (!/^\d{6}$/.test(text)) {
-      await reply(ev.replyToken, HELP);
+      await reply(ev.replyToken, await help());
       continue;
     }
 
