@@ -1,7 +1,40 @@
 /* 03_i18n_dictionary.js — พจนานุกรมแปลภาษา ไทย/อังกฤษ (ขนาดใหญ่)
    (แยกมาจาก script.js บรรทัด 12-656; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
-  ENm = `เลขมิเตอร์ตอนย้ายเข้า|Move-in meter reading
+  ENm = `แจ้งเตือนทาง LINE|LINE notifications
+ใช้ได้เมื่อเชื่อมฐานข้อมูลจริง|Available once connected to the live database
+รับแจ้งเตือนเมื่อบิลออก ใกล้ครบกำหนด เลยกำหนด และเมื่อใบเสร็จออกแล้ว|Get notified when a bill is issued, when it is almost due, when it is overdue and when your receipt is ready
+รับแจ้งเตือนทันทีเมื่อมีผู้เช่าส่งสลิปชำระเงิน|Get notified as soon as a tenant sends a payment slip
+เชื่อมแล้ว|Linked
+ยังไม่เชื่อม|Not linked
+ยกเลิกการเชื่อม|Unlink
+เพิ่มเพื่อน LINE ของหอพัก|Add the dorm's LINE account as a friend
+เพิ่มเพื่อน|Add friend
+(ผู้ดูแลยังไม่ได้ตั้ง LINE ID ในหน้าตั้งค่า)|(the admin has not set a LINE ID in Settings yet)
+กดขอรหัส แล้วพิมพ์รหัส 6 หลักส่งในแชท LINE ของหอพัก|Tap Get code, then send the 6-digit code in the dorm's LINE chat
+รหัสเชื่อมบัญชี|Link code
+หมดอายุใน|Expires in
+ระบบจะเปลี่ยนสถานะให้เองเมื่อเชื่อมสำเร็จ|the status updates by itself once linked
+ขอรหัสใหม่|New code
+ขอรหัส|Get code
+ตรวจสถานะ|Check status
+เชื่อม LINE เรียบร้อยแล้ว|LINE linked
+ยังไม่ได้รับรหัสในแชท LINE|The code has not arrived in the LINE chat yet
+ยกเลิกการเชื่อม LINE แล้ว|LINE unlinked
+ติดตามหนี้ค้าง|Overdue tracking
+บิลที่เลยวันครบกำหนดแล้วยังไม่ชำระ|Bills past their due date that are still unpaid
+ระบบส่งเตือนทาง LINE อัตโนมัติก่อนครบกำหนด 2 วัน หลังเลยกำหนด 1 วัน และ 5 วัน|LINE reminders go out automatically 2 days before the due date, and 1 and 5 days after it
+การส่งเตือนทาง LINE ใช้ได้เมื่อเชื่อมฐานข้อมูลจริง|LINE reminders are available once connected to the live database
+ส่งเตือนทุกบิลที่เชื่อม LINE|Remind all LINE-linked bills
+ไม่มีบิลค้างชำระ|No overdue bills
+เตือนล่าสุด|Last reminder
+เลยกำหนด|Overdue
+ยอดค้าง|Amount due
+ส่งไม่สำเร็จ|failed
+ส่งเตือน|Remind
+เชื่อม LINE แล้ว|LINE linked
+ค้างชำระ|Unpaid
+เลขมิเตอร์ตอนย้ายเข้า|Move-in meter reading
 จดจากมิเตอร์จริงในวันที่เข้าพัก · บิลแรกจะคิดค่าไฟจากเลขนี้|Read the actual meter on move-in day · the first bill charges electricity from this number
 กรุณากรอกเลขมิเตอร์ตอนย้ายเข้า|Please enter the move-in meter reading
 เลขมิเตอร์ต้องเป็นจำนวนเต็มไม่ติดลบ|Meter reading must be a non-negative whole number
