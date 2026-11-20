@@ -19,16 +19,21 @@
             maximumFractionDigits: dec,
             useGrouping: m[2].includes(','),
           }),
-        t0 = performance.now(),
         d = 650;
+      let t0 = 0;
       const step = now => {
         if (!el.isConnected) return;
-        const k = Math.min(1, (now - t0) / d),
+        if (!t0) t0 = now; // เริ่มนับจากเฟรมแรกจริง (กันค่าเวลาก่อนเริ่มทำให้ตัวเลขติดลบ)
+        const k = Math.min(1, Math.max(0, (now - t0) / d)),
           z = 1 - Math.pow(1 - k, 3);
         el.textContent = k < 1 ? m[1] + f(v * z) + m[3] : t;
         if (k < 1) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);
+      // กันกรณีแท็บอยู่เบื้องหลังแล้วภาพเคลื่อนไหวหยุดกลางทาง: คืนค่าจริงเสมอ
+      setTimeout(() => {
+        if (el.isConnected) el.textContent = t;
+      }, d + 150);
     });
   };
   const R_ = R;
