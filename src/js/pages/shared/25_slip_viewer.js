@@ -67,7 +67,13 @@ async function vsl(id) {
         <div><small class="mu">ช่องทาง</small><b>${mt}</b></div>
         <div><small class="mu">วันที่แจ้งชำระ</small><b>${i.sub ? dt(i.sub) : '-'}</b></div>
         <div><small class="mu">สถานะ</small>${pill(i)}</div>
-    </div>`;
+    </div>${
+      i.slip && i.mt != 'cash'
+        ? i.sref
+          ? `<div class="sq sq-ok">${NI('ok')}<span>QR บนสลิปถูกต้อง · ${e(bankName(i.sbank))}<br><small>เลขอ้างอิง ${e(i.sref)} · ไม่ซ้ำกับสลิปอื่นในระบบ</small><br><small>ยอดเงินยังต้องตรวจกับรายการเงินเข้าบัญชี หรือสแกน QR ด้วยแอปธนาคาร</small></span></div>`
+          : `<div class="sq sq-wa">${NI('warn')}<span>ไม่พบ QR บนรูปสลิปนี้ · ควรตรวจกับรายการเงินเข้าบัญชีอย่างละเอียด</span></div>`
+        : ''
+    }`;
   const btns = `<div class="np acts" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
         <button class="b b2" onclick="vi('${id}')">ใบแจ้งหนี้</button>
         ${i.s == 'paid' ? `<button class="b b2" onclick="rc('${id}')">ใบเสร็จ</button>` : ''}
@@ -76,9 +82,7 @@ async function vsl(id) {
   const body = i.slip
     ? `<div class="slv-img"><div class="slv-ld">กำลังโหลดรูปสลิป…</div><img id="slvimg" decoding="async" alt="สลิปโอนเงินห้อง ${e(i.room)}" style="display:none"></div>`
     : `<div class="slv-none">${i.mt == 'cash' ? NI('cash') + 'ชำระเป็นเงินสดที่เคาน์เตอร์ — ไม่มีสลิปโอนเงิน' : 'ผู้เช่ายังไม่ได้ส่งสลิปโอนเงินสำหรับบิลนี้'}</div>`;
-  mo(
-    `<h3>สลิปโอนเงินที่ผู้เช่าส่งมา</h3><small class="mu">${e(i.id)}</small>${body}${info}${btns}`
-  );
+  mo(`<h3>สลิปโอนเงินที่ผู้เช่าส่งมา</h3><small class="mu">${e(i.id)}</small>${body}${info}${btns}`);
   if (innerWidth > 800) $('#mc').style.maxWidth = '520px';
   if (!i.slip) return;
   const src = await slipSrc(i),

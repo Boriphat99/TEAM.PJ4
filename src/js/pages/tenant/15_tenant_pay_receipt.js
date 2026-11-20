@@ -23,11 +23,12 @@ function pm(id) {
     f = fz(i),
     t = base(i) + f;
   SLIP = null;
+  SLIPQ = null;
   mo(`<div class="mh"><h3>${pd ? 'แก้ไขสลิป · ส่งสลิปใหม่' : 'ชำระเงินผ่าน PromptPay'}</h3><span class="mu">${i.id}</span></div>
  <div class="amt"><small>ยอดที่ต้องชำระ</small><div class="big">฿${fm(t)}</div><small>ครบกำหนด ${dt(due(i))}${late(i) > 0 ? ` · <b style="color:#fb7185">เลยกำหนด ${late(i)} วัน</b>` : ''}</small></div>
  <div class="bk">${i.fin ? '' : `<div class="bd"><span>ค่าเช่า</span><span>฿${fm(i.rent)}</span></div>`}<div class="bd"><span>ค่าไฟ ${i.u} หน่วย</span><span>฿${fm(i.el)}</span></div>${i.x ? `<div class="bd"><span>${e(i.xn || 'ค่าใช้จ่ายเพิ่มเติม')}</span><span>฿${fm(i.x)}</span></div>` : ''}${f ? `<div class="bd" style="color:#fb7185"><span>ค่าปรับ (นับถึงวันที่แจ้งชำระ)</span><span>฿${f}</span></div>` : ''}</div>
  ${pd ? '<div class="note">ผู้ดูแลยังไม่ได้ยืนยัน จึงส่งสลิปใหม่ได้ · เมื่อผู้ดูแลยืนยันแล้วจะแก้ไขไม่ได้</div>' : ''}${!pd && i.rj ? `<div class="note" style="background:#fee2e2;color:#b91c1c;border-color:#fecaca">${NI('warn')}สลิปครั้งก่อนถูกปฏิเสธ: ${e(i.rj)}</div>` : ''}<div class="st"><b>1</b> สแกน QR ด้วยแอปธนาคาร</div><div class="qrc"><div class="qr" id="qr"></div><small class="mu">ยอดเงินจะขึ้นอัตโนมัติ ไม่ต้องกรอกเอง</small></div>
- <div class="st"><b>2</b> อัปโหลดสลิปโอนเงิน (JPG/PNG)</div><label class="drop" id="sfz" ondragover="event.preventDefault();this.classList.add('on')" ondragleave="this.classList.remove('on')" ondrop="slDrop(event)"><input type="file" id="sf" accept="image/jpeg,image/png" onchange="sl(this)"><img class="dz-pv" id="sfp" alt="ตัวอย่างสลิป" hidden><span class="dz-ic">${IC.up}</span><span class="dz-t"><b id="sfn">เลือกรูปสลิป</b><span class="dz-or"> หรือลากไฟล์มาวางที่นี่</span></span><small class="mu" id="sfh">JPG หรือ PNG ไม่เกิน 8 MB</small></label>
+ <div class="st"><b>2</b> อัปโหลดสลิปโอนเงิน (JPG/PNG)</div><label class="drop" id="sfz" ondragover="event.preventDefault();this.classList.add('on')" ondragleave="this.classList.remove('on')" ondrop="slDrop(event)"><input type="file" id="sf" accept="image/jpeg,image/png" onchange="sl(this)"><img class="dz-pv" id="sfp" alt="ตัวอย่างสลิป" hidden><span class="dz-ic">${IC.up}</span><span class="dz-t"><b id="sfn">เลือกรูปสลิป</b><span class="dz-or"> หรือลากไฟล์มาวางที่นี่</span></span><small class="mu" id="sfh">JPG หรือ PNG ไม่เกิน 8 MB</small></label><div id="sfq" class="sq" hidden></div>
  <button class="b" style="width:100%" onclick="sub('${id}')">${pd ? 'ส่งสลิปใหม่' : 'แจ้งชำระเงิน'}</button>
  <div class="note">${NI('cash')}หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div>
  <button class="b b2 sm" style="margin-top:8px" onclick="vi('${id}')">‹ กลับไปดูใบแจ้งหนี้</button>`);
@@ -42,6 +43,128 @@ function tm(id) {
     $('#qr').innerHTML = k.createSvgTag(5, 2);
   } catch (x) {
     $('#qr').textContent = 'สร้าง QR ไม่สำเร็จ';
+  }
+}
+// ---------- ตรวจสลิปเบื้องต้นจาก QR มุมสลิป (mini QR ตามมาตรฐานธนาคารไทย) ----------
+// ในQR มีรหัสธนาคารที่โอน + เลขอ้างอิงรายการ (ไม่มียอดเงิน) ใช้กันสลิปซ้ำ และให้ผู้ดูแลเห็นเลขอ้างอิง
+// อ่านด้วย BarcodeDetector ของเบราว์เซอร์ถ้ามี ไม่มีจึงโหลด jsQR (ครั้งแรกที่ใช้)
+let SLIPQ = null; // { ref, bank } | { none: 1 } | null (ยังอ่านไม่เสร็จ)
+const BANKS = {
+  '002': 'กรุงเทพ',
+  '004': 'กสิกรไทย',
+  '006': 'กรุงไทย',
+  '011': 'ทหารไทยธนชาต',
+  '014': 'ไทยพาณิชย์',
+  '022': 'ซีไอเอ็มบี ไทย',
+  '024': 'ยูโอบี',
+  '025': 'กรุงศรีอยุธยา',
+  '030': 'ออมสิน',
+  '033': 'อาคารสงเคราะห์',
+  '034': 'ธ.ก.ส.',
+  '066': 'อิสลามแห่งประเทศไทย',
+  '067': 'ทิสโก้',
+  '069': 'เกียรตินาคินภัทร',
+  '073': 'แลนด์ แอนด์ เฮ้าส์',
+};
+const bankName = c => (c ? 'ธนาคาร' + (BANKS[c] || ' รหัส ' + c) : '');
+// อ่าน TLV (รหัส 2 หลัก + ความยาว 2 หลัก + ค่า)
+function tlvRead(s) {
+  const o = {};
+  let i = 0;
+  while (i + 4 <= s.length) {
+    const t = s.slice(i, i + 2),
+      n = +s.slice(i + 2, i + 4);
+    if (!/^\d{2}$/.test(t) || isNaN(n) || i + 4 + n > s.length) return null;
+    o[t] = s.slice(i + 4, i + 4 + n);
+    i += 4 + n;
+  }
+  return i == s.length ? o : null;
+}
+function crc16(s) {
+  let c = 0xffff;
+  for (let i = 0; i < s.length; i++) {
+    c ^= s.charCodeAt(i) << 8;
+    for (let k = 0; k < 8; k++) c = c & 0x8000 ? ((c << 1) ^ 0x1021) & 0xffff : (c << 1) & 0xffff;
+  }
+  return c.toString(16).toUpperCase().padStart(4, '0');
+}
+// คืน { ref, bank } ถ้าเป็น QR สลิปที่ถูกต้อง (มีเลขอ้างอิง + ค่าตรวจสอบ CRC ตรง) ไม่ใช่คืน null
+function miniQR(txt) {
+  const s = String(txt || '').trim(),
+    top = tlvRead(s);
+  if (!top || !top['00']) return null;
+  if (top['91'] && crc16(s.slice(0, -4)).toUpperCase() != top['91'].toUpperCase()) return null;
+  const sub = tlvRead(top['00']);
+  if (!sub || !sub['02'] || !/^\d{3}$/.test(sub['01'] || '')) return null;
+  return { ref: sub['02'].replace(/[^A-Za-z0-9]/g, ''), bank: sub['01'] };
+}
+let JSQR = null;
+const loadJsQR = () =>
+  JSQR ||
+  (JSQR = new Promise((ok, no) => {
+    if (window.jsQR) return ok(window.jsQR);
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js';
+    s.onload = () => (window.jsQR ? ok(window.jsQR) : no());
+    s.onerror = no;
+    document.head.appendChild(s);
+  }));
+// หา QR ทั้งภาพก่อน ไม่เจอจึงลองขยายครึ่งล่างของภาพ (QR สลิปส่วนใหญ่อยู่มุมล่าง)
+async function readSlipQR(img) {
+  const tries = [
+    [0, 0, 1, 1],
+    [0, 0.45, 1, 0.55],
+    [0.4, 0.5, 0.6, 0.5],
+  ];
+  if ('BarcodeDetector' in window) {
+    try {
+      const d = new BarcodeDetector({ formats: ['qr_code'] }),
+        r = await d.detect(img);
+      for (const x of r) {
+        const q = miniQR(x.rawValue);
+        if (q) return q;
+      }
+    } catch (x) {}
+  }
+  let J;
+  try {
+    J = await loadJsQR();
+  } catch (x) {
+    return null;
+  }
+  for (const [fx, fy, fw, fh] of tries) {
+    const sw = img.width * fw,
+      sh = img.height * fh,
+      k = Math.min(1, 1400 / Math.max(sw, sh)) * (fw < 1 ? 1.6 : 1),
+      c = document.createElement('canvas');
+    c.width = Math.round(sw * Math.min(k, 2));
+    c.height = Math.round(sh * Math.min(k, 2));
+    const g = c.getContext('2d', { willReadFrequently: true });
+    g.drawImage(img, img.width * fx, img.height * fy, sw, sh, 0, 0, c.width, c.height);
+    const r = J(g.getImageData(0, 0, c.width, c.height).data, c.width, c.height, {
+      inversionAttempts: 'attemptBoth',
+    });
+    const q = r && miniQR(r.data);
+    if (q) return q;
+  }
+  return null;
+}
+// แสดงผลการอ่าน QR ใต้กรอบสลิป
+function slQRShow() {
+  const z = document.getElementById('sfq');
+  if (!z) return;
+  z.hidden = false;
+  if (!SLIPQ) {
+    z.className = 'sq sq-ld';
+    z.innerHTML = NI('info') + '<span>กำลังตรวจ QR บนสลิป…</span>';
+  } else if (SLIPQ.ref) {
+    z.className = 'sq sq-ok';
+    z.innerHTML =
+      NI('ok') +
+      `<span>พบ QR ของสลิป · ${e(bankName(SLIPQ.bank))}<br><small>เลขอ้างอิง ${e(SLIPQ.ref)}</small></span>`;
+  } else {
+    z.className = 'sq sq-wa';
+    z.innerHTML = NI('warn') + '<span>ไม่พบ QR บนสลิป · ควรใช้รูปสลิปจากแอปธนาคารแบบเต็มใบ ไม่ตัดมุม</span>';
   }
 }
 // แสดงภาพตัวอย่างสลิปในกรอบ หลังย่อรูปเสร็จ
@@ -87,14 +210,39 @@ function sl(el) {
       c.getContext('2d').drawImage(m, 0, 0, c.width, c.height);
       SLIP = c.toDataURL('image/jpeg', 0.85);
       slShow(f.name);
+      SLIPQ = null;
+      slQRShow();
+      const tok = (sl.tok = (sl.tok || 0) + 1);
+      readSlipQR(m)
+        .then(
+          q => q,
+          () => null
+        )
+        .then(q => {
+          if (tok != sl.tok) return;
+          SLIPQ = q || { none: 1 };
+          slQRShow();
+        });
     };
     m.src = r.result;
   };
   r.readAsDataURL(f);
 }
-function sub(id) {
+// ก่อนส่ง: รอผลอ่าน QR · ไม่พบ QR ให้ยืนยันก่อน · คืน false ถ้าไม่ส่ง
+async function slipGate() {
+  for (let t = 0; !SLIPQ && t < 40; t++) await new Promise(r => setTimeout(r, 150));
+  if (SLIPQ && SLIPQ.ref) return true;
+  return confirm('ระบบไม่พบ QR บนรูปสลิปนี้\nผู้ดูแลอาจต้องใช้เวลาตรวจสอบนานขึ้น\n\nต้องการส่งสลิปนี้ต่อหรือไม่?');
+}
+async function sub(id) {
   const i = gi(id);
   if (!SLIP) return alert('กรุณาอัปโหลดสลิปโอนเงิน');
+  if (!(await slipGate())) return;
+  const ref = SLIPQ && SLIPQ.ref;
+  if (ref && D.inv.some(x => x.id != id && x.sref == ref && x.s != 'unpaid'))
+    return alert('สลิปนี้ถูกใช้ซ้ำ ใช้แจ้งชำระไม่ได้ กรุณาแนบสลิปของรายการโอนครั้งนี้');
+  i.sref = ref || undefined;
+  i.sbank = (SLIPQ && SLIPQ.bank) || undefined;
   if (i.s != 'pending') i.fine = fine(i);
   delete i.rj;
   i.mt = 'qr';

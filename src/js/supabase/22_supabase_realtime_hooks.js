@@ -150,8 +150,7 @@ if (SBON) {
       const o = act(r),
         rr = D.rooms.find(x => x.n == r);
       if (o && o.id != id) return alert('ห้อง ' + r + ' มีผู้เช่าอยู่แล้ว');
-      if (rr.st)
-        return alert('ห้อง ' + r + ' ไม่ว่าง/ปิดปรับปรุง กรุณาเปลี่ยนสถานะห้องเป็นว่างก่อน');
+      if (rr.st) return alert('ห้อง ' + r + ' ไม่ว่าง/ปิดปรับปรุง กรุณาเปลี่ยนสถานะห้องเป็นว่างก่อน');
     }
     if (!u.room && r) u.cs = Date.now();
     Object.assign(u, { name: n, tel: $('#f_t').value.trim(), room: r || null });
@@ -178,13 +177,22 @@ if (SBON) {
     const i = gi(id),
       pd = i.s == 'pending';
     if (!SLIP) return alert('กรุณาอัปโหลดสลิปโอนเงิน');
+    if (!(await slipGate())) return;
     const path = i._id + '/' + Date.now() + '.jpg',
       up = await SBX.cl.storage
         .from('slips')
         .upload(path, d2b(SLIP), { contentType: 'image/jpeg' });
     if (up.error) return alert('อัปโหลดสลิปไม่สำเร็จ: ' + up.error.message);
-    const { error } = await SBX.cl.rpc('submit_payment', { p_invoice: i._id, p_slip: path });
-    if (error) return alert(error.message);
+    const { error } = await SBX.cl.rpc('submit_payment', {
+      p_invoice: i._id,
+      p_slip: path,
+      p_ref: (SLIPQ && SLIPQ.ref) || null,
+      p_bank: (SLIPQ && SLIPQ.bank) || null,
+    });
+    if (error) {
+      SBX.cl.storage.from('slips').remove([path]);
+      return alert(error.message);
+    }
     lg((pd ? 'ส่งสลิปใหม่ ' : 'แจ้งชำระ ') + id);
     cm();
     await sbLoad();

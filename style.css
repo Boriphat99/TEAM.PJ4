@@ -10344,3 +10344,49 @@ html[data-theme='dark'] body .app::before {
   border-bottom: 2px solid #a8a29e !important;
 }
 
+/* ===== ผลตรวจ QR บนสลิป (ใต้กรอบแนบสลิป และในหน้าดูสลิปของผู้ดูแล) ===== */
+.sq {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 2px;
+  text-align: left;
+  border-radius: 10px;
+  padding: 9px 12px;
+  margin: -4px 0 12px;
+  font-size: 13px;
+  line-height: 1.55;
+  border: 1px solid transparent;
+}
+.sq[hidden] {
+  display: none !important;
+}
+.sq > span {
+  flex: 1;
+  min-width: 0;
+}
+.sq .ni {
+  margin-top: 2px;
+}
+.sq small {
+  font-size: 12px;
+  opacity: 0.9;
+  word-break: break-all;
+}
+.sq-ld {
+  background: color-mix(in srgb, var(--mu) 10%, transparent);
+  color: var(--mu);
+}
+.sq-ok {
+  background: var(--ok-bg, #e8f5ed);
+  border-color: var(--ok-ln, #cbe6d6);
+  color: var(--ok, #1d7a4c);
+}
+.sq-wa {
+  background: var(--wa-bg, #fcf3dc);
+  border-color: var(--wa-ln, #efdcaa);
+  color: var(--wa, #8a5900);
+}
+.slv-info + .sq {
+  margin: 12px 0 0;
+}
+

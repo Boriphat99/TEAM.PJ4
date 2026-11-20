@@ -162,6 +162,8 @@ async function sbLoad() {
       i.mt = p.payment_method;
       i.sub = tsv(p.submitted_at);
       if (p.slip_url) i.slip = p.slip_url;
+      if (p.slip_ref) i.sref = p.slip_ref;
+      if (p.slip_bank) i.sbank = p.slip_bank;
       if (p.receipt_no) i.rc = p.receipt_no;
       if (p.verify_status == 'approved') i.paid = tsv(p.paid_at || p.verified_at);
       i._pid = p.id;
