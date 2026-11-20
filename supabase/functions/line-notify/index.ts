@@ -15,9 +15,10 @@ const BY_PAYMENT = ['receipt', 'reject', 'slip'];
 const json = (b: unknown, s = 200) =>
   new Response(JSON.stringify(b), { status: s, headers: { 'Content-Type': 'application/json' } });
 
+// จำนวนเงินแบบเอกสาร เช่น 4,648.00 บาท
 const baht = (n: number) =>
-  '฿' +
-  Number(n || 0).toLocaleString('th-TH', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +
+  ' บาท';
 const monthTh = (ym: string) => {
   const [y, m] = ym.split('-').map(Number);
   return new Date(Date.UTC(y, m - 1, 15)).toLocaleDateString('th-TH', {
@@ -29,7 +30,7 @@ const monthTh = (ym: string) => {
 const dateTh = (d: string) =>
   new Date(d + 'T12:00:00+07:00').toLocaleDateString('th-TH', {
     day: 'numeric',
-    month: 'short',
+    month: 'long',
     year: 'numeric',
     timeZone: 'Asia/Bangkok',
   });
@@ -118,14 +119,27 @@ Deno.serve(async req => {
   const fineNow =
     late > 0 ? Math.min(Number(S?.max_fine ?? 250), late * Number(S?.fine_per_day ?? 50)) : 0;
   const url = S?.system_url || 'https://boriphat99.github.io/TEAM.PJ4/';
-  const head = `${S?.dorm_name || 'T&T Mansion'} · ห้อง ${room}`;
-  const per = (inv.kind === 'final' ? 'บิลย้ายออก ' : 'รอบบิล ') + monthTh(inv.billing_month);
-  const finePolicy = `ค่าปรับวันละ ${baht(Number(S?.fine_per_day ?? 50))} สูงสุด ${baht(Number(S?.max_fine ?? 250))}`;
+  const dorm = S?.dorm_name || 'T&T Mansion';
+  const fineDay = Number(S?.fine_per_day ?? 50);
+  const fineMax = Number(S?.max_fine ?? 250);
+  const n0 = (n: number) => n.toLocaleString('en-US') + ' บาท';
+  const finePolicy = `คิดค่าปรับวันละ ${n0(fineDay)} สูงสุดไม่เกิน ${n0(fineMax)}`;
+  const month =
+    inv.kind === 'final'
+      ? 'งวดสุดท้าย (ย้ายออก) เดือน' + monthTh(inv.billing_month)
+      : 'ประจำเดือน' + monthTh(inv.billing_month);
+  // ส่วนหัวของข้อความถึงผู้เช่า: หัวเรื่อง / หอพัก ห้อง / เรียน ชื่อผู้เช่า
+  const top = (title: string) => {
+    lines.push(title, `${dorm} ห้อง ${room}`);
+    if (tenantName) lines.push(`เรียน คุณ${tenantName}`);
+    lines.push('');
+  };
+  const ignore = 'หากท่านชำระเงินแล้ว โปรดละเว้นข้อความนี้';
 
   // หน่วยไฟ (บิลปกติจากเลขมิเตอร์ของบิล · บิลย้ายออกจาก meter_from/meter_to)
   let units = '';
   if (inv.kind === 'final')
-    units = `มิเตอร์ ${inv.meter_from} → ${inv.meter_to} (${Number(inv.meter_to) - Number(inv.meter_from)} หน่วย)`;
+    units = `${Number(inv.meter_to) - Number(inv.meter_from)} หน่วย เลขมิเตอร์ ${inv.meter_from} ถึง ${inv.meter_to}`;
   else {
     const mid = items.find(x => x.item_type === 'electricity')?.meter_reading_id;
     if (mid) {
@@ -134,93 +148,110 @@ Deno.serve(async req => {
         .select('previous_reading, current_reading, units_used')
         .eq('id', mid)
         .maybeSingle();
-      if (m) units = `${m.units_used} หน่วย (${m.previous_reading} → ${m.current_reading})`;
+      if (m) units = `${m.units_used} หน่วย เลขมิเตอร์ ${m.previous_reading} ถึง ${m.current_reading}`;
     }
   }
 
   const lines: string[] = [];
+  const paid = baht(Number(pay?.amount_paid ?? inv.total_amount));
   switch (kind) {
     case 'bill':
-      lines.push(
-        inv.kind === 'final' ? 'บิลย้ายออก (ค่าไฟช่วงสุดท้าย)' : 'ใบแจ้งหนี้ใหม่',
-        head,
-        per
-      );
-      if (amt('rent')) lines.push(`ค่าเช่า ${baht(amt('rent'))}`);
-      lines.push(`ค่าไฟ ${baht(amt('electricity'))}${units ? ' · ' + units : ''}`);
+      top(inv.kind === 'final' ? 'แจ้งใบแจ้งหนี้ค่าไฟฟ้างวดสุดท้าย (ย้ายออก)' : 'แจ้งใบแจ้งหนี้' + month);
+      if (amt('rent')) lines.push(`ค่าเช่าห้อง ${baht(amt('rent'))}`);
+      lines.push(`ค่าไฟฟ้า ${baht(amt('electricity'))}${units ? ` (${units})` : ''}`);
       for (const x of items.filter(x => x.item_type === 'other'))
         lines.push(`${x.description || 'ค่าใช้จ่ายเพิ่มเติม'} ${baht(Number(x.amount))}`);
       lines.push(
-        `ยอดรวม ${baht(base)}`,
-        `ครบกำหนดชำระ ${dateTh(inv.due_date)}`,
-        `ชำระผ่าน QR ได้ที่ ${url}`
+        `รวมเป็นเงินทั้งสิ้น ${baht(base)}`,
+        `กำหนดชำระภายในวันที่ ${dateTh(inv.due_date)}`,
+        '',
+        'ท่านสามารถดูใบแจ้งหนี้และชำระเงินผ่านพร้อมเพย์ได้ที่',
+        url
       );
       break;
     case 'due_soon':
+      top('แจ้งเตือนกำหนดชำระค่าบริการ');
       lines.push(
-        'ใกล้ครบกำหนดชำระ',
-        head,
-        `${per} ยอด ${baht(base)}`,
-        `ครบกำหนด ${dateTh(inv.due_date)}`,
-        `ชำระหลังวันครบกำหนดมี${finePolicy}`,
-        `ชำระได้ที่ ${url}`
+        `ใบแจ้งหนี้${month} จำนวน ${baht(base)}`,
+        `ครบกำหนดชำระในวันที่ ${dateTh(inv.due_date)}`,
+        `หากชำระหลังวันครบกำหนด ${finePolicy}`,
+        '',
+        'ท่านสามารถชำระเงินได้ที่',
+        url,
+        ignore
       );
       break;
     case 'overdue':
+      top('แจ้งเตือนค่าบริการเกินกำหนดชำระ');
       lines.push(
-        'เลยกำหนดชำระแล้ว',
-        head,
-        `${per} ยอด ${baht(base)}`,
-        `เริ่มมี${finePolicy}`,
-        `ยอดที่ต้องชำระวันนี้ ${baht(base + fineNow)}`,
-        `ชำระได้ที่ ${url}`
+        `ใบแจ้งหนี้${month} จำนวน ${baht(base)}`,
+        `ครบกำหนดชำระเมื่อวันที่ ${dateTh(inv.due_date)}`,
+        'ขณะนี้ยังไม่ได้รับการชำระ',
+        `ค่าปรับ ${baht(fineNow)} (คิดวันละ ${n0(fineDay)} สูงสุดไม่เกิน ${n0(fineMax)})`,
+        `ยอดที่ต้องชำระ ณ วันนี้ ${baht(base + fineNow)}`,
+        '',
+        'กรุณาชำระเงินโดยเร็วได้ที่',
+        url,
+        ignore
       );
       break;
     case 'last_day':
+      top('แจ้งเตือนวันสุดท้ายของการชำระค่าบริการ');
       lines.push(
-        'วันนี้เป็นวันสุดท้ายก่อนผิดนัดชำระ',
-        head,
-        `${per} ยอด ${baht(base)} + ค่าปรับ ${baht(fineNow)}`,
-        `ยอดที่ต้องชำระ ${baht(base + fineNow)}`,
-        'หากยังไม่ชำระภายในวันนี้ บิลจะเป็นสถานะผิดนัดชำระ',
-        `ชำระได้ที่ ${url}`
+        `ใบแจ้งหนี้${month} ยังไม่ได้รับการชำระ`,
+        `ค่าบริการ ${baht(base)} ค่าปรับ ${baht(fineNow)}`,
+        `รวมยอดที่ต้องชำระ ${baht(base + fineNow)}`,
+        'วันนี้เป็นวันสุดท้ายของการชำระเงิน หากพ้นวันนี้จะถือว่าผิดนัดชำระตามสัญญาเช่า',
+        '',
+        'กรุณาชำระเงินภายในวันนี้ได้ที่',
+        url,
+        ignore
       );
       break;
     case 'manual':
-      lines.push(
-        'แจ้งเตือนค้างชำระ',
-        head,
-        `${per} ยอด ${baht(base)}`,
-        late > 0
-          ? `ค้างชำระ ${late} วัน · ค่าปรับ ${baht(fineNow)} · รวม ${baht(base + fineNow)}`
-          : `ครบกำหนด ${dateTh(inv.due_date)}`,
-        `ชำระได้ที่ ${url} หรือติดต่อผู้ดูแลหอพัก`
-      );
+      top('แจ้งเตือนค่าบริการค้างชำระ');
+      lines.push(`ใบแจ้งหนี้${month} จำนวน ${baht(base)}`);
+      if (late > 0)
+        lines.push(
+          `ค้างชำระมาแล้ว ${late} วัน ค่าปรับ ${baht(fineNow)}`,
+          `รวมยอดที่ต้องชำระ ${baht(base + fineNow)}`
+        );
+      else lines.push(`ครบกำหนดชำระในวันที่ ${dateTh(inv.due_date)}`);
+      lines.push('', 'กรุณาชำระเงินได้ที่', url, 'หากมีข้อสงสัย กรุณาติดต่อผู้ดูแลหอพัก', ignore);
       break;
     case 'receipt':
+      top('ยืนยันการรับชำระเงิน');
       lines.push(
-        'ชำระเงินเรียบร้อยแล้ว',
-        head,
-        `${per} ยอด ${baht(Number(pay?.amount_paid ?? inv.total_amount))} (${pay?.payment_method === 'cash' ? 'เงินสด' : 'PromptPay QR'})`,
-        `ใบเสร็จเลขที่ ${pay?.receipt_no || '-'} ออกแล้ว`,
-        `ดูและดาวน์โหลดใบเสร็จได้ที่ ${url}`
+        `หอพักได้รับชำระค่าบริการ${month} เรียบร้อยแล้ว`,
+        `จำนวนเงิน ${paid}`,
+        `ช่องทางการชำระ ${pay?.payment_method === 'cash' ? 'เงินสด' : 'โอนผ่านพร้อมเพย์'}`,
+        `ใบเสร็จรับเงินเลขที่ ${pay?.receipt_no || '-'}`,
+        '',
+        'ท่านสามารถดูและดาวน์โหลดใบเสร็จรับเงินได้ที่',
+        url,
+        'ขอขอบคุณที่ใช้บริการ'
       );
       break;
     case 'reject':
+      top('แจ้งผลการตรวจสอบหลักฐานการชำระเงิน');
       lines.push(
-        'สลิปไม่ผ่านการตรวจสอบ',
-        head,
-        `${per} ยอด ${baht(Number(pay?.amount_paid ?? inv.total_amount))}`,
-        `เหตุผล: ${pay?.reject_reason || '-'}`,
-        `กรุณาแนบสลิปใหม่ที่ ${url}`
+        `หลักฐานการชำระค่าบริการ${month} จำนวน ${paid} ไม่ผ่านการตรวจสอบ`,
+        `เหตุผล ${pay?.reject_reason || '-'}`,
+        '',
+        'กรุณาแนบหลักฐานการชำระเงินใหม่อีกครั้งได้ที่',
+        url
       );
       break;
     case 'slip':
       lines.push(
-        'มีสลิปรอตรวจสอบ',
-        `${head}${tenantName ? ' · ' + tenantName : ''}`,
-        `${per} ยอด ${baht(Number(pay?.amount_paid ?? inv.total_amount))}`,
-        `ตรวจสอบได้ที่ ${url}`
+        'แจ้งหลักฐานการชำระเงินรอตรวจสอบ',
+        `${dorm} ห้อง ${room}${tenantName ? ' คุณ' + tenantName : ''}`,
+        '',
+        `ใบแจ้งหนี้${month} จำนวน ${paid}`,
+        'ผู้เช่าแนบหลักฐานการชำระเงินเข้าระบบแล้ว',
+        '',
+        'กรุณาตรวจสอบและอนุมัติได้ที่',
+        url
       );
       break;
   }

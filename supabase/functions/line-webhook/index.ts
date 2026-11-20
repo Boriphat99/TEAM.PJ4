@@ -15,14 +15,14 @@ const json = (b: unknown, s = 200) =>
 // deno-lint-ignore no-explicit-any
 const helpText = (S: any) => {
   const url = S?.system_url || 'https://boriphat99.github.io/TEAM.PJ4/';
-  const ask = S?.line_id
-    ? `\n\nบอทนี้ใช้ส่งแจ้งเตือนอย่างเดียว ตอบคำถามไม่ได้\nสอบถามเพิ่มเติมทาง LINE: ${S.line_id}`
-    : '';
+  const dorm = S?.dorm_name || 'T&T Mansion';
+  const ask = S?.line_id ? `\n\nหากมีข้อสงสัย กรุณาติดต่อผู้ดูแลหอพักทาง LINE ID ${S.line_id}` : '';
   return (
-    'เชื่อมบัญชีกับระบบหอพักได้ดังนี้\n' +
-    `1. เข้าเว็บไซต์หอพัก ${url} แล้วเปิดหน้าโปรไฟล์\n` +
-    '2. กด "ขอรหัส" ในการ์ดแจ้งเตือนทาง LINE\n' +
-    '3. พิมพ์รหัส 6 หลักส่งมาในแชทนี้ (รหัสใช้ได้ 10 นาที)' +
+    `บัญชีนี้ใช้สำหรับส่งการแจ้งเตือนจากระบบหอพัก ${dorm} และไม่สามารถตอบข้อความได้\n\n` +
+    'วิธีเชื่อมบัญชีเพื่อรับการแจ้งเตือน\n' +
+    `1. เข้าสู่ระบบที่ ${url} แล้วไปที่หน้าโปรไฟล์\n` +
+    '2. กด "ขอรหัส" ในหัวข้อแจ้งเตือนทาง LINE\n' +
+    '3. ส่งรหัส 6 หลักที่ได้รับมาในแชทนี้ภายใน 10 นาที' +
     ask
   );
 };
@@ -91,8 +91,13 @@ Deno.serve(async req => {
   const help = async () => {
     if (!S)
       S =
-        (await sb.from('app_settings').select('system_url, line_id').limit(1).maybeSingle()).data ||
-        {};
+        (
+          await sb
+            .from('app_settings')
+            .select('system_url, line_id, dorm_name')
+            .limit(1)
+            .maybeSingle()
+        ).data || {};
     return helpText(S);
   };
 
@@ -101,7 +106,8 @@ Deno.serve(async req => {
     if (!lineUser || ev.source?.type !== 'user') continue;
 
     if (ev.type === 'follow') {
-      await reply(ev.replyToken, 'ขอบคุณที่เพิ่มเพื่อนครับ\n\n' + (await help()));
+      const h = await help();
+      await reply(ev.replyToken, `ขอบคุณที่เพิ่ม ${S?.dorm_name || 'T&T Mansion'} เป็นเพื่อน\n\n` + h);
       continue;
     }
     if (ev.type === 'unfollow') {
@@ -123,7 +129,10 @@ Deno.serve(async req => {
       .eq('line_user_id', lineUser)
       .gte('at', hourAgo);
     if ((count || 0) >= MAX_FAILS) {
-      await reply(ev.replyToken, 'ใส่รหัสผิดหลายครั้งเกินไป กรุณาลองใหม่ในอีก 1 ชั่วโมง');
+      await reply(
+        ev.replyToken,
+        'ท่านกรอกรหัสไม่ถูกต้องเกินจำนวนครั้งที่กำหนด กรุณาลองใหม่อีกครั้งหลังจาก 1 ชั่วโมง'
+      );
       continue;
     }
 
@@ -135,7 +144,7 @@ Deno.serve(async req => {
       .maybeSingle();
     if (!code) {
       await sb.from('line_link_fails').insert({ line_user_id: lineUser });
-      await reply(ev.replyToken, 'รหัสไม่ถูกต้องหรือหมดอายุแล้ว กรุณาขอรหัสใหม่จากหน้าโปรไฟล์');
+      await reply(ev.replyToken, 'รหัสไม่ถูกต้องหรือหมดอายุแล้ว กรุณาขอรหัสใหม่จากหน้าโปรไฟล์ในระบบ');
       continue;
     }
 
@@ -148,7 +157,7 @@ Deno.serve(async req => {
         { onConflict: 'user_id' }
       );
     if (error) {
-      await reply(ev.replyToken, 'เชื่อมบัญชีไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
+      await reply(ev.replyToken, 'ไม่สามารถเชื่อมบัญชีได้ในขณะนี้ กรุณาลองใหม่อีกครั้ง');
       continue;
     }
     await sb.from('line_link_codes').delete().eq('code', text);
@@ -168,14 +177,14 @@ Deno.serve(async req => {
     // deno-lint-ignore no-explicit-any
     const act = ((t?.contracts as any[]) || []).find((c: any) => c.status === 'active');
     if (act?.rooms?.room_no) room = '\nห้อง ' + act.rooms.room_no;
-    const who = u?.full_name ? '\nชื่อ ' + u.full_name : '';
+    const who = u?.full_name ? '\nชื่อ คุณ' + u.full_name : '';
     const tail =
       u?.role === 'tenant'
-        ? '\n\nต่อไปนี้จะได้รับแจ้งเตือนบิล วันครบกำหนด และใบเสร็จทางแชทนี้'
+        ? '\n\nท่านจะได้รับการแจ้งเตือนใบแจ้งหนี้ กำหนดชำระ และใบเสร็จรับเงินผ่านช่องทางนี้'
         : u?.role === 'admin'
-          ? '\n\nต่อไปนี้จะได้รับแจ้งเตือนเมื่อมีผู้เช่าส่งสลิป'
+          ? '\n\nท่านจะได้รับการแจ้งเตือนเมื่อมีผู้เช่าแนบหลักฐานการชำระเงิน'
           : '';
-    await reply(ev.replyToken, 'เชื่อมบัญชีสำเร็จ' + who + room + tail);
+    await reply(ev.replyToken, 'เชื่อมบัญชีเรียบร้อยแล้ว' + who + room + tail);
   }
 
   return json({ ok: true });
