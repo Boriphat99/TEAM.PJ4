@@ -318,7 +318,7 @@ function eu(id) {
     go2 = $('#f_s').value == 'out';
   if (!n || !m) return alert('กรอกชื่อและอีเมล');
   if (D.users.some(x => x.id != id && x.email == m)) return alert('อีเมลนี้ถูกใช้แล้ว');
-  if (w && w.length < 4) return alert('รหัสผ่านสั้นเกินไป');
+  if (w && pwBad(w, m)) return alert(pwBad(w, m));
   if (!go2 && r) {
     const o = act(r),
       rr = D.rooms.find(x => x.n == r);

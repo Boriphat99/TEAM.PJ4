@@ -39,12 +39,7 @@ const home0 = () => {
     ['3', 'กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า'],
     ['฿' + D.set.rate, 'ค่าไฟต่อหน่วย คำนวณอัตโนมัติ'],
   ];
-  const steps = [
-    'ดูใบแจ้งหนี้ของห้องคุณ',
-    'สแกน QR ยอดขึ้นอัตโนมัติ',
-    'แนบสลิปโอนเงิน',
-    'ผู้ดูแลอนุมัติ รับใบเสร็จ',
-  ];
+  const steps = ['ดูใบแจ้งหนี้ของห้องคุณ', 'สแกน QR ยอดขึ้นอัตโนมัติ', 'แนบสลิปโอนเงิน', 'ผู้ดูแลอนุมัติ รับใบเสร็จ'];
   return `<div class="apl">
 <header class="ap-nav np"><div class="ap-in">
   <a class="ap-logo" onclick="scrollTo({top:0,behavior:'smooth'})"><img class="lgi" src="${LG}" alt=""><span>T&T MANSION</span></a>
@@ -193,9 +188,13 @@ function enter(u, pg2, how) {
 function genPw() {
   const c = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let s = '';
-  const a = new Uint32Array(8);
-  crypto.getRandomValues(a);
-  for (const v of a) s += c[v % c.length];
+  // สุ่มจนได้รหัสที่มีทั้งตัวอักษรและตัวเลข (ผ่านเกณฑ์ pwBad)
+  do {
+    s = '';
+    const a = new Uint32Array(8);
+    crypto.getRandomValues(a);
+    for (const v of a) s += c[v % c.length];
+  } while (pwBad(s));
   return s;
 }
 const forgot = () =>
@@ -204,7 +203,7 @@ const forgot = () =>
     : auth(
         'ลืมรหัสผ่าน',
         'ยืนยันตัวตนด้วยอีเมลและเบอร์โทรที่ลงทะเบียนไว้ แล้วตั้งรหัสผ่านใหม่',
-        `<div class="ah"><span class="ib">${IC.key}</span><div><h2>ตั้งรหัสผ่านใหม่</h2><small class="mu">ใช้ได้เมื่อบัญชีมีเบอร์โทร</small></div><b class="ac bk" onclick="go('login')">‹ กลับ</b></div>${fld('em', 'อีเมล', '✉', 'email')}${fld('rt', 'เบอร์โทรที่ลงทะเบียน', '☎', 'tel')}${fld('pw', 'รหัสผ่านใหม่ (อย่างน้อย 6 ตัว)', '🔑', 'password')}${fld('pw2', 'ยืนยันรหัสผ่านใหม่', '🔑', 'password')}<button class="b go" style="width:100%" onclick="fp()">ตั้งรหัสผ่านใหม่ →</button><div class="note">หากบัญชียังไม่มีเบอร์โทร (เช่น ผู้ดูแลระบบ) ให้ติดต่อผู้ดูแลเพื่อรีเซ็ตรหัสผ่านให้</div>`,
+        `<div class="ah"><span class="ib">${IC.key}</span><div><h2>ตั้งรหัสผ่านใหม่</h2><small class="mu">ใช้ได้เมื่อบัญชีมีเบอร์โทร</small></div><b class="ac bk" onclick="go('login')">‹ กลับ</b></div>${fld('em', 'อีเมล', '✉', 'email')}${fld('rt', 'เบอร์โทรที่ลงทะเบียน', '☎', 'tel')}${fld('pw', 'รหัสผ่านใหม่ (อย่างน้อย 8 ตัว)', '🔑', 'password')}${fld('pw2', 'ยืนยันรหัสผ่านใหม่', '🔑', 'password')}<button class="b go" style="width:100%" onclick="fp()">ตั้งรหัสผ่านใหม่ →</button><div class="note">หากบัญชียังไม่มีเบอร์โทร (เช่น ผู้ดูแลระบบ) ให้ติดต่อผู้ดูแลเพื่อรีเซ็ตรหัสผ่านให้</div>`,
         'จำรหัสผ่านได้แล้ว?',
         'เข้าสู่ระบบ',
         'login'
@@ -218,7 +217,7 @@ function fp() {
   if (!u || !u.tel) return alert('ไม่พบบัญชี หรือบัญชีนี้ยังไม่มีเบอร์โทร กรุณาติดต่อผู้ดูแลระบบ');
   if (u.tel.replace(/\D/g, '') != t) return alert('เบอร์โทรไม่ตรงกับที่ลงทะเบียนไว้');
   if (u.out) return alert('บัญชีนี้ย้ายออกแล้ว กรุณาติดต่อผู้ดูแล');
-  if (w.length < 6) return alert('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัว');
+  if (pwBad(w, m)) return alert(pwBad(w, m));
   if (w != $('#pw2').value) return alert('ยืนยันรหัสผ่านไม่ตรงกัน');
   u.pw = w;
   save();

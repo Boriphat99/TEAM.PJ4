@@ -58,7 +58,7 @@ const forgotSB = () =>
     auth(
       'ตั้งรหัสผ่านใหม่',
       'กรอกรหัสผ่านใหม่ของคุณ',
-      `<div class="ah"><span class="ib">${IC.key}</span><div><h2>ตั้งรหัสผ่านใหม่</h2><small class="mu">จากลิงก์ในอีเมล</small></div></div>${fld('pw', 'รหัสผ่านใหม่ (อย่างน้อย 6 ตัว)', '🔑', 'password')}${fld('pw2', 'ยืนยันรหัสผ่านใหม่', '🔑', 'password')}<button class="b go" style="width:100%" onclick="rp()">บันทึกรหัสผ่านใหม่ →</button>`,
+      `<div class="ah"><span class="ib">${IC.key}</span><div><h2>ตั้งรหัสผ่านใหม่</h2><small class="mu">จากลิงก์ในอีเมล</small></div></div>${fld('pw', 'รหัสผ่านใหม่ (อย่างน้อย 8 ตัว)', '🔑', 'password')}${fld('pw2', 'ยืนยันรหัสผ่านใหม่', '🔑', 'password')}<button class="b go" style="width:100%" onclick="rp()">บันทึกรหัสผ่านใหม่ →</button>`,
       'ยกเลิก?',
       'เข้าสู่ระบบ',
       'login'

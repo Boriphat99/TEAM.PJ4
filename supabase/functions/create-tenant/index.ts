@@ -67,7 +67,9 @@ Deno.serve(async req => {
   const start_meter = sm0 === undefined || sm0 === null || sm0 === '' ? null : Number(sm0);
   if (!full_name) return bad('กรุณากรอกชื่อ - นามสกุล');
   if (!/^\S+@\S+\.\S+$/.test(email)) return bad('รูปแบบอีเมลไม่ถูกต้อง');
-  if (password.length < 6) return bad('รหัสผ่านต้องมีอย่างน้อย 6 ตัว');
+  if (password.length < 8) return bad('รหัสผ่านต้องมีอย่างน้อย 8 ตัว');
+  if (!/[A-Za-z\u0E00-\u0E7F]/.test(password) || !/[0-9]/.test(password))
+    return bad('รหัสผ่านต้องมีทั้งตัวอักษรและตัวเลข');
   if (phone && !/^[0-9\-+ ]{9,15}$/.test(phone)) return bad('เบอร์โทรไม่ถูกต้อง');
   if (!room_no) return bad('กรุณาเลือกห้อง');
   if (!isDate(start_date)) return bad('กรุณาระบุวันเริ่มสัญญา');

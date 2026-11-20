@@ -330,6 +330,11 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
 รหัสผ่านปัจจุบันไม่ถูกต้อง|Current password is incorrect
 รหัสผ่านปัจจุบัน|Current password
 รหัสผ่านสั้นเกินไป|Password is too short
+รหัสผ่านต้องมีอย่างน้อย 8 ตัว|Password must be at least 8 characters
+รหัสผ่านต้องมีทั้งตัวอักษรและตัวเลข|Password must contain both letters and numbers
+รหัสผ่านนี้คาดเดาง่ายเกินไป กรุณาตั้งใหม่|This password is too easy to guess. Please choose another
+รหัสผ่านอย่างน้อย 8 ตัว มีตัวอักษรและตัวเลข|At least 8 characters with letters and numbers
+(อย่างน้อย 8 ตัว มีตัวอักษรและตัวเลข)|(at least 8 characters, letters and numbers)
 รหัสผ่านใหม่ (เว้นว่างถ้าไม่เปลี่ยน)|New password (leave blank to keep)
 รหัสผ่านใหม่ (อย่างน้อย|New password (at least
 รหัสผ่านใหม่ต้องมีอย่างน้อย|New password must be at least

@@ -29,7 +29,7 @@ function atf(n) {
       </div>
       <div class="atf-sec"><b>3 · บัญชีเข้าสู่ระบบ</b>
         <label>อีเมล *</label><input id="af_e" type="email" inputmode="email" placeholder="name@example.com" autocomplete="off">
-        <label>รหัสผ่านเริ่มต้น * <small class="mu">(อย่างน้อย 6 ตัว)</small></label>
+        <label>รหัสผ่านเริ่มต้น * <small class="mu">(อย่างน้อย 8 ตัว มีตัวอักษรและตัวเลข)</small></label>
         <div class="atf-pw"><input id="af_p" value="${genPw()}" autocomplete="new-password" spellcheck="false"><button type="button" class="b b2 sm" onclick="$('#af_p').value=genPw()">สุ่มใหม่</button></div>
         <small class="mu">ผู้เช่าจะได้รับการแจ้งเตือนให้เปลี่ยนรหัสผ่านเองหลังเข้าสู่ระบบครั้งแรก</small>
       </div>
@@ -59,7 +59,7 @@ async function atfGo() {
     file = fEl && fEl.files[0];
   if (!name) return alert('กรุณากรอกชื่อ - นามสกุล');
   if (!/^\S+@\S+\.\S+$/.test(em)) return alert('รูปแบบอีเมลไม่ถูกต้อง');
-  if (pw.length < 6) return alert('รหัสผ่านต้องมีอย่างน้อย 6 ตัว');
+  if (pwBad(pw, em)) return alert(pwBad(pw, em));
   if (tel && !/^[0-9\-+ ]{9,15}$/.test(tel)) return alert('เบอร์โทรไม่ถูกต้อง');
   if (!s) return alert('กรุณาระบุวันเริ่มสัญญา');
   const sm = smRead('af_m', n);

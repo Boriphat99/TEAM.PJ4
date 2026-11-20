@@ -55,12 +55,12 @@ function sl(el) {
   r.onload = () => {
     const m = new Image();
     m.onload = () => {
-      const k = Math.min(1, 800 / Math.max(m.width, m.height)),
+      const k = Math.min(1, 1600 / Math.max(m.width, m.height)),
         c = document.createElement('canvas');
       c.width = m.width * k;
       c.height = m.height * k;
       c.getContext('2d').drawImage(m, 0, 0, c.width, c.height);
-      SLIP = c.toDataURL('image/jpeg', 0.7);
+      SLIP = c.toDataURL('image/jpeg', 0.85);
     };
     m.src = r.result;
   };

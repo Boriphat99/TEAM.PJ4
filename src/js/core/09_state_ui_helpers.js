@@ -1,5 +1,37 @@
 /* 09_state_ui_helpers.js — ตัวแปรสถานะหน้าเว็บ, บทบาท, รอบบิล, toast/dialog/modal
    (แยกมาจาก script.js บรรทัด 846-899; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
+// ---- ตรวจความปลอดภัยของรหัสผ่านใหม่ (คืนข้อความเตือน หรือ '' ถ้าใช้ได้) ----
+// อย่างน้อย 8 ตัว · มีทั้งตัวอักษรและตัวเลข · ไม่ใช่รหัสที่คาดเดาง่าย · ไม่มีชื่ออีเมลอยู่ในรหัส
+const PW_WEAK = [
+  'password',
+  'password1',
+  'passw0rd',
+  'qwerty123',
+  'qwertyui',
+  'abc12345',
+  'abcd1234',
+  'a1234567',
+  '1234abcd',
+  'iloveyou1',
+  'admin123',
+  'admin1234',
+  'welcome1',
+  'tenant123',
+  'test1234',
+  'p@ssw0rd',
+];
+function pwBad(w, email) {
+  w = String(w || '');
+  if (w.length < 8) return 'รหัสผ่านต้องมีอย่างน้อย 8 ตัว';
+  if (!/[A-Za-z\u0E00-\u0E7F]/.test(w) || !/[0-9]/.test(w)) return 'รหัสผ่านต้องมีทั้งตัวอักษรและตัวเลข';
+  const lw = w.toLowerCase(),
+    me = String(email || '')
+      .toLowerCase()
+      .split('@')[0];
+  if (PW_WEAK.includes(lw) || /^(.)\1+$/.test(w) || (me.length >= 4 && lw.includes(me)))
+    return 'รหัสผ่านนี้คาดเดาง่ายเกินไป กรุณาตั้งใหม่';
+  return '';
+}
 // ---- state ----
 let U = null,
   P = 'home',

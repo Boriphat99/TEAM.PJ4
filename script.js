@@ -355,6 +355,11 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
 รหัสผ่านปัจจุบันไม่ถูกต้อง|Current password is incorrect
 รหัสผ่านปัจจุบัน|Current password
 รหัสผ่านสั้นเกินไป|Password is too short
+รหัสผ่านต้องมีอย่างน้อย 8 ตัว|Password must be at least 8 characters
+รหัสผ่านต้องมีทั้งตัวอักษรและตัวเลข|Password must contain both letters and numbers
+รหัสผ่านนี้คาดเดาง่ายเกินไป กรุณาตั้งใหม่|This password is too easy to guess. Please choose another
+รหัสผ่านอย่างน้อย 8 ตัว มีตัวอักษรและตัวเลข|At least 8 characters with letters and numbers
+(อย่างน้อย 8 ตัว มีตัวอักษรและตัวเลข)|(at least 8 characters, letters and numbers)
 รหัสผ่านใหม่ (เว้นว่างถ้าไม่เปลี่ยน)|New password (leave blank to keep)
 รหัสผ่านใหม่ (อย่างน้อย|New password (at least
 รหัสผ่านใหม่ต้องมีอย่างน้อย|New password must be at least
@@ -945,6 +950,38 @@ function ppay(id, amt) {
 
 /* 09_state_ui_helpers.js — ตัวแปรสถานะหน้าเว็บ, บทบาท, รอบบิล, toast/dialog/modal
    (แยกมาจาก script.js บรรทัด 846-899; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
+// ---- ตรวจความปลอดภัยของรหัสผ่านใหม่ (คืนข้อความเตือน หรือ '' ถ้าใช้ได้) ----
+// อย่างน้อย 8 ตัว · มีทั้งตัวอักษรและตัวเลข · ไม่ใช่รหัสที่คาดเดาง่าย · ไม่มีชื่ออีเมลอยู่ในรหัส
+const PW_WEAK = [
+  'password',
+  'password1',
+  'passw0rd',
+  'qwerty123',
+  'qwertyui',
+  'abc12345',
+  'abcd1234',
+  'a1234567',
+  '1234abcd',
+  'iloveyou1',
+  'admin123',
+  'admin1234',
+  'welcome1',
+  'tenant123',
+  'test1234',
+  'p@ssw0rd',
+];
+function pwBad(w, email) {
+  w = String(w || '');
+  if (w.length < 8) return 'รหัสผ่านต้องมีอย่างน้อย 8 ตัว';
+  if (!/[A-Za-z\u0E00-\u0E7F]/.test(w) || !/[0-9]/.test(w)) return 'รหัสผ่านต้องมีทั้งตัวอักษรและตัวเลข';
+  const lw = w.toLowerCase(),
+    me = String(email || '')
+      .toLowerCase()
+      .split('@')[0];
+  if (PW_WEAK.includes(lw) || /^(.)\1+$/.test(w) || (me.length >= 4 && lw.includes(me)))
+    return 'รหัสผ่านนี้คาดเดาง่ายเกินไป กรุณาตั้งใหม่';
+  return '';
+}
 // ---- state ----
 let U = null,
   P = 'home',
@@ -1080,12 +1117,7 @@ const home0 = () => {
     ['3', 'กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า'],
     ['฿' + D.set.rate, 'ค่าไฟต่อหน่วย คำนวณอัตโนมัติ'],
   ];
-  const steps = [
-    'ดูใบแจ้งหนี้ของห้องคุณ',
-    'สแกน QR ยอดขึ้นอัตโนมัติ',
-    'แนบสลิปโอนเงิน',
-    'ผู้ดูแลอนุมัติ รับใบเสร็จ',
-  ];
+  const steps = ['ดูใบแจ้งหนี้ของห้องคุณ', 'สแกน QR ยอดขึ้นอัตโนมัติ', 'แนบสลิปโอนเงิน', 'ผู้ดูแลอนุมัติ รับใบเสร็จ'];
   return `<div class="apl">
 <header class="ap-nav np"><div class="ap-in">
   <a class="ap-logo" onclick="scrollTo({top:0,behavior:'smooth'})"><img class="lgi" src="${LG}" alt=""><span>T&T MANSION</span></a>
@@ -1234,9 +1266,13 @@ function enter(u, pg2, how) {
 function genPw() {
   const c = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let s = '';
-  const a = new Uint32Array(8);
-  crypto.getRandomValues(a);
-  for (const v of a) s += c[v % c.length];
+  // สุ่มจนได้รหัสที่มีทั้งตัวอักษรและตัวเลข (ผ่านเกณฑ์ pwBad)
+  do {
+    s = '';
+    const a = new Uint32Array(8);
+    crypto.getRandomValues(a);
+    for (const v of a) s += c[v % c.length];
+  } while (pwBad(s));
   return s;
 }
 const forgot = () =>
@@ -1245,7 +1281,7 @@ const forgot = () =>
     : auth(
         'ลืมรหัสผ่าน',
         'ยืนยันตัวตนด้วยอีเมลและเบอร์โทรที่ลงทะเบียนไว้ แล้วตั้งรหัสผ่านใหม่',
-        `<div class="ah"><span class="ib">${IC.key}</span><div><h2>ตั้งรหัสผ่านใหม่</h2><small class="mu">ใช้ได้เมื่อบัญชีมีเบอร์โทร</small></div><b class="ac bk" onclick="go('login')">‹ กลับ</b></div>${fld('em', 'อีเมล', '✉', 'email')}${fld('rt', 'เบอร์โทรที่ลงทะเบียน', '☎', 'tel')}${fld('pw', 'รหัสผ่านใหม่ (อย่างน้อย 6 ตัว)', '🔑', 'password')}${fld('pw2', 'ยืนยันรหัสผ่านใหม่', '🔑', 'password')}<button class="b go" style="width:100%" onclick="fp()">ตั้งรหัสผ่านใหม่ →</button><div class="note">หากบัญชียังไม่มีเบอร์โทร (เช่น ผู้ดูแลระบบ) ให้ติดต่อผู้ดูแลเพื่อรีเซ็ตรหัสผ่านให้</div>`,
+        `<div class="ah"><span class="ib">${IC.key}</span><div><h2>ตั้งรหัสผ่านใหม่</h2><small class="mu">ใช้ได้เมื่อบัญชีมีเบอร์โทร</small></div><b class="ac bk" onclick="go('login')">‹ กลับ</b></div>${fld('em', 'อีเมล', '✉', 'email')}${fld('rt', 'เบอร์โทรที่ลงทะเบียน', '☎', 'tel')}${fld('pw', 'รหัสผ่านใหม่ (อย่างน้อย 8 ตัว)', '🔑', 'password')}${fld('pw2', 'ยืนยันรหัสผ่านใหม่', '🔑', 'password')}<button class="b go" style="width:100%" onclick="fp()">ตั้งรหัสผ่านใหม่ →</button><div class="note">หากบัญชียังไม่มีเบอร์โทร (เช่น ผู้ดูแลระบบ) ให้ติดต่อผู้ดูแลเพื่อรีเซ็ตรหัสผ่านให้</div>`,
         'จำรหัสผ่านได้แล้ว?',
         'เข้าสู่ระบบ',
         'login'
@@ -1259,7 +1295,7 @@ function fp() {
   if (!u || !u.tel) return alert('ไม่พบบัญชี หรือบัญชีนี้ยังไม่มีเบอร์โทร กรุณาติดต่อผู้ดูแลระบบ');
   if (u.tel.replace(/\D/g, '') != t) return alert('เบอร์โทรไม่ตรงกับที่ลงทะเบียนไว้');
   if (u.out) return alert('บัญชีนี้ย้ายออกแล้ว กรุณาติดต่อผู้ดูแล');
-  if (w.length < 6) return alert('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัว');
+  if (pwBad(w, m)) return alert(pwBad(w, m));
   if (w != $('#pw2').value) return alert('ยืนยันรหัสผ่านไม่ตรงกัน');
   u.pw = w;
   save();
@@ -1858,7 +1894,7 @@ function eu(id) {
     go2 = $('#f_s').value == 'out';
   if (!n || !m) return alert('กรอกชื่อและอีเมล');
   if (D.users.some(x => x.id != id && x.email == m)) return alert('อีเมลนี้ถูกใช้แล้ว');
-  if (w && w.length < 4) return alert('รหัสผ่านสั้นเกินไป');
+  if (w && pwBad(w, m)) return alert(pwBad(w, m));
   if (!go2 && r) {
     const o = act(r),
       rr = D.rooms.find(x => x.n == r);
@@ -2241,12 +2277,12 @@ function sl(el) {
   r.onload = () => {
     const m = new Image();
     m.onload = () => {
-      const k = Math.min(1, 800 / Math.max(m.width, m.height)),
+      const k = Math.min(1, 1600 / Math.max(m.width, m.height)),
         c = document.createElement('canvas');
       c.width = m.width * k;
       c.height = m.height * k;
       c.getContext('2d').drawImage(m, 0, 0, c.width, c.height);
-      SLIP = c.toDataURL('image/jpeg', 0.7);
+      SLIP = c.toDataURL('image/jpeg', 0.85);
     };
     m.src = r.result;
   };
@@ -2468,7 +2504,7 @@ pg.prof = () => {
   const ad = U.role != 'tenant';
   return `<h2>โปรไฟล์ของฉัน</h2><p class="mu">ดูและแก้ไขข้อมูลส่วนตัว</p><div class="pf" style="margin-top:14px"><div class="cd" style="text-align:center;display:grid;gap:10px;justify-items:center;align-content:start">${av(U, 120)}<h3>${e(U.name)}</h3><span class="pl ${ad ? 'p' : 'g'}">${U.role == 'owner' ? 'เจ้าของกิจการ' : ad ? 'ผู้ดูแลระบบ' : 'ผู้เช่า'}</span>${ad ? '' : `<p class="mu" style="margin:0">${U.room ? 'ห้อง ' + U.room : 'รอผู้ดูแลจัดห้อง'}<br>เงินแรกเข้า ฿${fm(D.set.dep)}</p>`}<input type="file" id="pf" accept="image/jpeg,image/png,image/webp" hidden onchange="pa(this)"><div><button class="b" onclick="$('#pf').click()">เปลี่ยนรูปโปรไฟล์</button>${U.av ? ` <button class="b b2" onclick="pr()">ลบรูป</button>` : ''}</div><small class="mu">JPG / PNG / WebP · ไม่เกิน 5MB · ครอปรูปได้ก่อนบันทึก</small></div>
 <div style="display:grid;gap:14px"><div class="cd"><h3>การแสดงผล</h3><br><div class="bd" style="margin-bottom:16px"><b>ภาษา</b><span class="seg"><span class="${LANG == 'th' ? 'on' : ''}" onclick="setPf('lang','th')">TH</span><span class="${LANG == 'en' ? 'on' : ''}" onclick="setPf('lang','en')">EN</span></span></div><div class="bd"><b>${document.documentElement.dataset.theme == 'dark' ? 'โหมดกลางคืน' : 'โหมดกลางวัน'}</b><div class="tsw ${document.documentElement.dataset.theme == 'dark' ? 'on' : ''}" role="switch" onclick="setPf('theme','${document.documentElement.dataset.theme == 'dark' ? 'light' : 'dark'}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><i></i></div></div></div><div class="cd"><h3>ข้อมูลส่วนตัว</h3><br><label>ชื่อ - นามสกุล</label><input id="p_n" value="${e(U.name)}"><div class="row"><div><label>เบอร์โทร</label><input id="p_t" value="${e(U.tel || '')}" placeholder="08x-xxx-xxxx"></div><div><label>อีเมล</label><input id="p_e" value="${e(U.email)}"></div></div><label>เพศ</label><select id="p_g">${['', 'ชาย', 'หญิง', 'อื่นๆ'].map(v => `<option value="${v}" ${U.g == v ? 'selected' : ''}>${v || 'ไม่ระบุ'}</option>`).join('')}</select>${ad ? '' : `<label>ห้องพัก (แก้ไขได้โดยผู้ดูแล)</label><input value="${U.room || 'รอผู้ดูแลจัดห้อง'}" disabled>`}<button class="b" onclick="ps()">บันทึกข้อมูล</button></div>
-<div class="cd"><h3>เปลี่ยนรหัสผ่าน</h3><br><label>รหัสผ่านปัจจุบัน</label><input id="p_o" type="password"><div class="row"><div><label>รหัสผ่านใหม่ (อย่างน้อย 6 ตัว)</label><input id="p_w" type="password"></div><div><label>ยืนยันรหัสผ่านใหม่</label><input id="p_c" type="password"></div></div><button class="b b2" onclick="pc()">เปลี่ยนรหัสผ่าน</button></div></div></div>`;
+<div class="cd"><h3>เปลี่ยนรหัสผ่าน</h3><br><label>รหัสผ่านปัจจุบัน</label><input id="p_o" type="password"><div class="row"><div><label>รหัสผ่านใหม่ (อย่างน้อย 8 ตัว)</label><input id="p_w" type="password"></div><div><label>ยืนยันรหัสผ่านใหม่</label><input id="p_c" type="password"></div></div><button class="b b2" onclick="pc()">เปลี่ยนรหัสผ่าน</button></div></div></div>`;
 };
 let CR = null;
 function pa(el) {
@@ -2587,7 +2623,7 @@ function pc() {
   const o = $('#p_o').value,
     w = $('#p_w').value;
   if (o != U.pw) return alert('รหัสผ่านปัจจุบันไม่ถูกต้อง');
-  if (w.length < 6) return alert('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัว');
+  if (pwBad(w, U.email)) return alert(pwBad(w, U.email));
   if (w != $('#p_c').value) return alert('ยืนยันรหัสผ่านไม่ตรงกัน');
   U.pw = w;
   lg('เปลี่ยนรหัสผ่าน');
@@ -3370,7 +3406,7 @@ const forgotSB = () =>
     auth(
       'ตั้งรหัสผ่านใหม่',
       'กรอกรหัสผ่านใหม่ของคุณ',
-      `<div class="ah"><span class="ib">${IC.key}</span><div><h2>ตั้งรหัสผ่านใหม่</h2><small class="mu">จากลิงก์ในอีเมล</small></div></div>${fld('pw', 'รหัสผ่านใหม่ (อย่างน้อย 6 ตัว)', '🔑', 'password')}${fld('pw2', 'ยืนยันรหัสผ่านใหม่', '🔑', 'password')}<button class="b go" style="width:100%" onclick="rp()">บันทึกรหัสผ่านใหม่ →</button>`,
+      `<div class="ah"><span class="ib">${IC.key}</span><div><h2>ตั้งรหัสผ่านใหม่</h2><small class="mu">จากลิงก์ในอีเมล</small></div></div>${fld('pw', 'รหัสผ่านใหม่ (อย่างน้อย 8 ตัว)', '🔑', 'password')}${fld('pw2', 'ยืนยันรหัสผ่านใหม่', '🔑', 'password')}<button class="b go" style="width:100%" onclick="rp()">บันทึกรหัสผ่านใหม่ →</button>`,
       'ยกเลิก?',
       'เข้าสู่ระบบ',
       'login'
@@ -3563,6 +3599,10 @@ async function sbLoad() {
     L.push(o);
   });
   D.users = L;
+  // ห้องที่มีผู้เช่า ฐานข้อมูลเก็บ busy ไว้ · ในหน้าเว็บสถานะนี้มาจากผู้เช่า ไม่ใช่ค่าที่แอดมินตั้ง
+  D.rooms.forEach(r => {
+    if (r.st == 'busy' && tn(r.n)) r.st = undefined;
+  });
   const itBy = {},
     pmBy = {};
   it.forEach(x => (itBy[x.invoice_id] = itBy[x.invoice_id] || []).push(x));
@@ -3715,7 +3755,8 @@ function sbRows() {
       A('rooms', r._id, {
         id: r._id,
         room_no: String(r.n),
-        occupancy_status: r.st || 'free',
+        // มีผู้เช่า = busy · ไม่มีผู้เช่า = ค่าที่แอดมินตั้ง (ว่าง/ไม่ว่าง/ปิดปรับปรุง)
+        occupancy_status: r.st || (tn(r.n) ? 'busy' : 'free'),
         current_meter: r.m,
       })
   );
@@ -4012,7 +4053,7 @@ if (SBON) {
   };
   rp = async function () {
     const w = $('#pw').value;
-    if (w.length < 6) return alert('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัว');
+    if (pwBad(w)) return alert(pwBad(w));
     if (w != $('#pw2').value) return alert('ยืนยันรหัสผ่านไม่ตรงกัน');
     const { error } = await SBX.cl.auth.updateUser({ password: w });
     if (error) return alert(error.message);
@@ -4055,7 +4096,7 @@ if (SBON) {
   pc = async function () {
     const o = $('#p_o').value,
       w = $('#p_w').value;
-    if (w.length < 6) return alert('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัว');
+    if (pwBad(w, U.email)) return alert(pwBad(w, U.email));
     if (w != $('#p_c').value) return alert('ยืนยันรหัสผ่านไม่ตรงกัน');
     const a = await SBX.cl.auth.signInWithPassword({ email: U.email, password: o });
     if (a.error) return alert('รหัสผ่านปัจจุบันไม่ถูกต้อง');
@@ -4616,7 +4657,7 @@ if (SBON) sbBoot().catch(x => alert('เชื่อมต่อ Supabase ไม
       p_e: [v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), 'รูปแบบอีเมลไม่ถูกต้อง'],
       at: [v => !v || /^[0-9+\-\s]{9,15}$/.test(v), 'เบอร์โทรไม่ถูกต้อง'],
       p_t: [v => !v || /^[0-9+\-\s]{9,15}$/.test(v), 'เบอร์โทรไม่ถูกต้อง'],
-      ap: [v => v.length >= 6, 'รหัสผ่านอย่างน้อย 6 ตัว'],
+      ap: [v => !pwBad(v), 'รหัสผ่านอย่างน้อย 8 ตัว มีตัวอักษรและตัวเลข'],
     };
     const mark = el => {
       const r = RULES[el.id];
@@ -4837,7 +4878,7 @@ function atf(n) {
       </div>
       <div class="atf-sec"><b>3 · บัญชีเข้าสู่ระบบ</b>
         <label>อีเมล *</label><input id="af_e" type="email" inputmode="email" placeholder="name@example.com" autocomplete="off">
-        <label>รหัสผ่านเริ่มต้น * <small class="mu">(อย่างน้อย 6 ตัว)</small></label>
+        <label>รหัสผ่านเริ่มต้น * <small class="mu">(อย่างน้อย 8 ตัว มีตัวอักษรและตัวเลข)</small></label>
         <div class="atf-pw"><input id="af_p" value="${genPw()}" autocomplete="new-password" spellcheck="false"><button type="button" class="b b2 sm" onclick="$('#af_p').value=genPw()">สุ่มใหม่</button></div>
         <small class="mu">ผู้เช่าจะได้รับการแจ้งเตือนให้เปลี่ยนรหัสผ่านเองหลังเข้าสู่ระบบครั้งแรก</small>
       </div>
@@ -4867,7 +4908,7 @@ async function atfGo() {
     file = fEl && fEl.files[0];
   if (!name) return alert('กรุณากรอกชื่อ - นามสกุล');
   if (!/^\S+@\S+\.\S+$/.test(em)) return alert('รูปแบบอีเมลไม่ถูกต้อง');
-  if (pw.length < 6) return alert('รหัสผ่านต้องมีอย่างน้อย 6 ตัว');
+  if (pwBad(pw, em)) return alert(pwBad(pw, em));
   if (tel && !/^[0-9\-+ ]{9,15}$/.test(tel)) return alert('เบอร์โทรไม่ถูกต้อง');
   if (!s) return alert('กรุณาระบุวันเริ่มสัญญา');
   const sm = smRead('af_m', n);

@@ -121,6 +121,10 @@ async function sbLoad() {
     L.push(o);
   });
   D.users = L;
+  // ห้องที่มีผู้เช่า ฐานข้อมูลเก็บ busy ไว้ · ในหน้าเว็บสถานะนี้มาจากผู้เช่า ไม่ใช่ค่าที่แอดมินตั้ง
+  D.rooms.forEach(r => {
+    if (r.st == 'busy' && tn(r.n)) r.st = undefined;
+  });
   const itBy = {},
     pmBy = {};
   it.forEach(x => (itBy[x.invoice_id] = itBy[x.invoice_id] || []).push(x));
@@ -273,7 +277,8 @@ function sbRows() {
       A('rooms', r._id, {
         id: r._id,
         room_no: String(r.n),
-        occupancy_status: r.st || 'free',
+        // มีผู้เช่า = busy · ไม่มีผู้เช่า = ค่าที่แอดมินตั้ง (ว่าง/ไม่ว่าง/ปิดปรับปรุง)
+        occupancy_status: r.st || (tn(r.n) ? 'busy' : 'free'),
         current_meter: r.m,
       })
   );

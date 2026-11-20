@@ -59,7 +59,7 @@ if (SBON) {
   };
   rp = async function () {
     const w = $('#pw').value;
-    if (w.length < 6) return alert('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัว');
+    if (pwBad(w)) return alert(pwBad(w));
     if (w != $('#pw2').value) return alert('ยืนยันรหัสผ่านไม่ตรงกัน');
     const { error } = await SBX.cl.auth.updateUser({ password: w });
     if (error) return alert(error.message);
@@ -102,7 +102,7 @@ if (SBON) {
   pc = async function () {
     const o = $('#p_o').value,
       w = $('#p_w').value;
-    if (w.length < 6) return alert('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัว');
+    if (pwBad(w, U.email)) return alert(pwBad(w, U.email));
     if (w != $('#p_c').value) return alert('ยืนยันรหัสผ่านไม่ตรงกัน');
     const a = await SBX.cl.auth.signInWithPassword({ email: U.email, password: o });
     if (a.error) return alert('รหัสผ่านปัจจุบันไม่ถูกต้อง');
