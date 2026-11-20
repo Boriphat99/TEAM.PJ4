@@ -109,6 +109,30 @@ const bar = (l, t, w, c) =>
         'Z';
     return `${big ? `<div class="cw" data-v='${JSON.stringify(v)}' data-l='${JSON.stringify(l)}' data-c="${c}" data-n="${nm}">` : ''}<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c}" stop-opacity=".25"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></linearGradient></defs>${big ? [0, 0.5, 1].map(t => `<line x1="${pl}" x2="${W - 10}" y1="${y(mx * t)}" y2="${y(mx * t)}" stroke="#f3dcdc"/><text x="${pl - 8}" y="${y(mx * t) + 4}" text-anchor="end" font-size="11" fill="#9ca3af">฿${fm(Math.round(mx * t))}</text>`).join('') : ''}${big ? v.map((a, i) => `<line x1="${x(i)}" x2="${x(i)}" y1="${pt}" y2="${H - pb}" stroke="#f3dcdc" stroke-dasharray="3 4"/>`).join('') : ''}<path d="${area}" fill="url(#${id})"/><polyline points="${pts.join(' ')}" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/>${big ? v.map((a, i) => `<circle cx="${x(i)}" cy="${y(a)}" r="4" fill="#fff" stroke="${c}" stroke-width="2"/><text x="${x(i)}" y="${H - 6}" text-anchor="${i == n - 1 && n > 1 ? 'end' : 'middle'}" font-size="11" fill="#6b7280">${l[i]}</text>`).join('') : ''}${big ? `<line class="hv" x1="0" x2="0" y1="${pt}" y2="${H - pb}" stroke="${c}" stroke-dasharray="4 4" opacity="0"/><circle class="hd" r="6" fill="${c}" stroke="#fff" stroke-width="2" opacity="0"/>` : ''}</svg>${big ? '<div class="tp"></div></div>' : ''}`;
   };
+// กราฟแท่งรายรับ (แดชบอร์ด): แท่งเดือนล่าสุดสีเต็ม เดือนก่อนหน้าสีจาง มียอดบนแท่งและชื่อเดือนใต้แท่ง
+const bc = (v, l) => {
+  const W = 300,
+    H = 150,
+    pt = 18,
+    pb = 22,
+    n = v.length,
+    mx = Math.max(...v, 1),
+    bw = (W / n) * 0.56,
+    cx = i => (W / n) * (i + 0.5),
+    hh = a => (H - pt - pb) * (a / mx),
+    k = a =>
+      a >= 1e3
+        ? (a / 1e3).toFixed(a >= 1e4 ? 0 : 1).replace(/\.0$/, '') + 'k'
+        : String(Math.round(a));
+  return `<svg class="bch" viewBox="0 0 ${W} ${H}" role="img" aria-label="รายรับ 6 เดือน" style="width:100%;height:auto;display:block;color:var(--ac)"><line x1="0" x2="${W}" y1="${H - pb}" y2="${H - pb}" stroke="currentColor" stroke-opacity=".18"/>${v
+    .map((a, i) => {
+      const h = Math.max(a ? 3 : 0, hh(a)),
+        y = H - pb - h,
+        on = i == n - 1;
+      return `<rect x="${cx(i) - bw / 2}" y="${y}" width="${bw}" height="${h}" rx="4" fill="currentColor" fill-opacity="${on ? 1 : 0.32}"><title>${l[i]}: ฿${fm(a)}</title></rect>${a ? `<text x="${cx(i)}" y="${y - 5}" text-anchor="middle" font-size="10.5" font-weight="${on ? 700 : 500}" fill="currentColor">${k(a)}</text>` : ''}<text x="${cx(i)}" y="${H - 6}" text-anchor="middle" font-size="10" fill="var(--mu)">${l[i]}</text>`;
+    })
+    .join('')}</svg>`;
+};
 let RQ = '',
   RV = 0,
   TT = 'in',
@@ -193,11 +217,7 @@ function repTop() {
       ['yr', 'ปีนี้'],
     ];
   return (
-    hdr(
-      '☰',
-      'รายงานรายรับ',
-      'สรุปรายรับที่ชำระแล้วในช่วงเวลาที่เลือก พิมพ์เป็น PDF หรือส่งออก CSV'
-    ) +
+    hdr('☰', 'รายงานรายรับ', 'สรุปรายรับที่ชำระแล้วในช่วงเวลาที่เลือก พิมพ์เป็น PDF หรือส่งออก CSV') +
     `<div class="cd" style="display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap"><div><label>ช่วงเวลา</label><select onchange="RP=this.value;R()" style="margin-bottom:0;min-width:200px">${sel.map(x => `<option value="${x[0]}" ${RP == x[0] ? 'selected' : ''}>${x[1]}</option>`).join('')}</select></div><span style="flex:1"></span><button class="b b2 np" onclick="xc()">ส่งออก CSV</button><button class="b np" onclick="document.body.classList.add('pr');print();setTimeout(()=>document.body.classList.remove('pr'),600)">พิมพ์ / PDF</button></div>
 <div class="s4c"><div class="cd" style="background:#fff1f1"><small class="mu">รายรับรวม</small><div class="k ac">฿${fm(T)}</div></div><div class="cd"><small class="mu">ใบที่ชำระแล้ว</small><div class="k">${P.length}</div></div><div class="cd"><small class="mu">จำนวนรอบบิล</small><div class="k">${new Set(P.map(i => i.per)).size}</div></div><div class="cd"><small class="mu">ระยะเช่าเฉลี่ย</small><div class="k">${am.toFixed(1)} <small class="mu">เดือน</small></div></div></div>
 <div class="cd"><h3>รายรับตามประเภท</h3><div style="display:flex;gap:24px;align-items:center;flex-wrap:wrap;margin-top:12px"><div>${dn3(

@@ -77,6 +77,14 @@ const IC = {
     '<rect x="4.5" y="10.5" width="15" height="10" rx="2.4"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>'
   ),
   chev: SV('<path d="m15 18-6-6 6-6"/>'),
+  cash: SV(
+    '<rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 9.5v5M18 9.5v5"/>'
+  ),
+  warn: SV('<path d="M12 3.5 2.5 20h19z"/><path d="M12 10v4.5M12 17.2h.01"/>'),
+  doc: SV('<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h4"/>'),
+  ok: SV('<circle cx="12" cy="12" r="9"/><path d="m8 12.3 2.7 2.7L16.2 9.5"/>'),
+  info: SV('<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.8h.01"/>'),
+  up: SV('<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>'),
   top: SV('<path d="m6 15 6-6 6 6"/>'),
   sun: SV(
     '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
@@ -95,6 +103,8 @@ const IG = {
   '🔑': IC.key,
   '🔒': IC.lock,
 };
+// ไอคอนเส้นเล็กสำหรับวางหน้าข้อความ (แทนอีโมจิ)
+const NI = n => `<i class="ni">${IC[n]}</i>`;
 const T2 = s => (LANG == 'en' ? tl(s) : s);
 const THB = () =>
   `<button class="thm" type="button" onclick="toggleTheme()" aria-label="Theme" data-tip="${T2('สลับธีม')}">${IC.sun}${IC.moon}</button>`;
@@ -238,5 +248,5 @@ function R0() {
             ['prof', 'โปรไฟล์', '◉'],
           ];
   if (!nv.some(n => n[0] == P)) P = nv[0][0];
-  a.innerHTML = `<div class="app"><div class="sb np"><div class="logo" style="margin-bottom:14px"><img class="lgi" src="${LG}" alt=""><div>T&T MANSION<br><small class="ac">PAYMENT SYSTEM</small></div></div>${nv.map(n => `<div class="nv ${P == n[0] ? 'on' : ''}" onclick="go('${n[0]}')" data-tip="${T2(n[1])}"><i>${IC[n[0]] || n[2]}</i><span>${n[1]}</span></div>`).join('')}<button class="sbt np" type="button" onclick="toggleSb()" data-tip="${T2('ย่อ/ขยายเมนู')}">${IC.chev}<span>ย่อเมนู</span></button></div><div class="mn${ow ? ' ro' : ''}"><div class="top np">${ad ? `<input placeholder="ค้นหาห้อง ผู้เช่า หรือเลขที่บิล (กด Enter)" value="${e(Q)}" onkeydown="if(event.key=='Enter'){Q=this.value;F='all';go('pay')}">` : '<span style="flex:1"></span>'}<span class="me" onclick="go('prof')" data-tip="${T2('โปรไฟล์ของฉัน')}">${av(U, 36)}<b>${e(U.name)}</b></span>${THB()}<span class="seg"><span class="${LANG == 'th' ? 'on' : ''}" onclick="setPf('lang','th')">TH</span><span class="${LANG == 'en' ? 'on' : ''}" onclick="setPf('lang','en')">EN</span></span><button class="b b2 sm lo" onclick="askOut()" data-tip="${T2('ออกจากระบบ')}">${IC.out}<span class="lbl">ออกจากระบบ</span></button></div>${pg[P]()}<p class="mu np" style="text-align:center;font-size:11px;margin:28px 0 0">เวอร์ชันระบบ ${APP_V}</p></div></div>`;
+  a.innerHTML = `<div class="app"><div class="sb np"><div class="logo" style="margin-bottom:14px"><img class="lgi" src="${LG}" alt=""><div>T&T MANSION<br><small class="ac">PAYMENT SYSTEM</small></div></div>${nv.map(n => `<div class="nv ${P == n[0] ? 'on' : ''}" onclick="go('${n[0]}')" data-tip="${T2(n[1])}"><i>${IC[n[0]] || n[2]}</i><span>${n[1]}</span></div>`).join('')}<button class="sbt np" type="button" onclick="toggleSb()" data-tip="${T2('ย่อ/ขยายเมนู')}">${IC.chev}<span>ย่อเมนู</span></button></div><div class="mn${ow ? ' ro' : ''}" data-pg="${P}"><div class="top np">${ad ? `<input placeholder="ค้นหาห้อง ผู้เช่า หรือเลขที่บิล (กด Enter)" value="${e(Q)}" onkeydown="if(event.key=='Enter'){Q=this.value;F='all';go('pay')}">` : '<span style="flex:1"></span>'}<span class="me" onclick="go('prof')" data-tip="${T2('โปรไฟล์ของฉัน')}">${av(U, 36)}<b>${e(U.name)}</b></span>${THB()}<span class="seg"><span class="${LANG == 'th' ? 'on' : ''}" onclick="setPf('lang','th')">TH</span><span class="${LANG == 'en' ? 'on' : ''}" onclick="setPf('lang','en')">EN</span></span><button class="b b2 sm lo" onclick="askOut()" data-tip="${T2('ออกจากระบบ')}">${IC.out}<span class="lbl">ออกจากระบบ</span></button></div>${pg[P]()}<p class="mu np appv">เวอร์ชันระบบ ${APP_V}</p></div></div>`;
 }

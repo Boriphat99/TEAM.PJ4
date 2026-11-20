@@ -72,7 +72,10 @@ const pg = {
           `<div class="bd" style="font-size:13px"><span><i class="dt" style="background:${x[2]}"></i> ${x[0]}</span><b>${x[1]}</b></div>`
       )
       .join('')}</div>
-<div class="cd live"><div class="ch"><b>วิเคราะห์เชิงลึก</b><span class="pl g">LIVE</span></div><div class="mt3"><div><small>เก็บเงิน</small><b>${rate}%</b></div><div><small>ค้างชำระ</small><b>${un + ov} ใบ</b></div><div><small>รายรับเดือนนี้</small><b>฿${fm(ic)}</b></div></div><small class="mu">แนวโน้มรายรับ 6 เดือน</small>${lc(ps.map(inc), 0, '#dc2626')}</div></div>
+<div class="cd live"><div class="ch"><b>วิเคราะห์เชิงลึก</b><span class="pl g live-dot" title="อัปเดตอัตโนมัติ"></span></div><div class="mt3"><div><small>เก็บเงิน</small><b>${rate}%</b></div><div><small>ค้างชำระ</small><b>${un + ov} ใบ</b></div><div><small>รายรับเดือนนี้</small><b>฿${fm(ic)}</b></div></div><small class="mu">รายรับ 6 เดือนล่าสุด (บาท)</small>${bc(
+      ps.map(inc),
+      ps.map(q => ms(q).split(' ')[0])
+    )}</div></div>
 <div class="ch" style="justify-content:flex-start;gap:12px;margin:28px 0 12px"><i class="ci">▥</i><div><h3>วิเคราะห์เชิงลึก</h3><small class="mu">ข้อมูลจากใบเรียกเก็บเงินและห้องพักทั้งหมด</small></div></div>
 <div class="dg3b"><div class="cd"><small class="mu">เดือนที่แล้ว</small><div class="k">฿${fm(ip)}</div></div><div class="cd"><small class="mu">รวมทั้งปี</small><div class="k">฿${fm(yr)}</div></div><div class="cd"><small class="mu">เทียบเดือนก่อน</small><div class="k" style="color:${dlt < 0 ? '#dc2626' : '#16a34a'}">${dlt > 0 ? '+' : ''}${dlt}%</div></div></div>
 <div class="dg3b"><div class="cd" style="text-align:center"><h3 style="text-align:left;margin-bottom:10px">เก็บเงินเดือนนี้</h3>${dn(rate)}<br><small class="mu">${cp}/${C.length} ใบที่ชำระแล้ว</small></div>
@@ -156,12 +159,7 @@ const pg = {
         )
         .sort((a, b) => (a.room || 0) - (b.room || 0));
     return (
-      hdr(
-        PI,
-        'ผู้เช่า',
-        `${T.length} ราย`,
-        `<button class="b" onclick="at0()">+ เพิ่มผู้เช่า</button>`
-      ) +
+      hdr(PI, 'ผู้เช่า', `${T.length} ราย`, `<button class="b" onclick="at0()">+ เพิ่มผู้เช่า</button>`) +
       `<div class="s4c">${[
         [inn.length, 'ใช้งาน', '#dc2626'],
         [od.size, 'ค้างชำระ', '#ef4444'],
@@ -185,8 +183,8 @@ const pg = {
     const L = plock(PER),
       oc = D.rooms.filter(r => tn(r.n)),
       bn = L
-        ? `<div class="note" style="border-color:#f59e0b88">🔒 รอบ ${mon(PER)} ปิดแล้ว (เกินวันที่ 10 ของเดือนถัดไป) · ดูบิลที่ออกไปแล้วได้อย่างเดียว ไม่สามารถออกบิลย้อนหลัง หรือแก้ไขเลขมิเตอร์/ค่าใช้จ่ายได้</div>`
-        : `<div class="note">🟢 รอบ ${mon(PER)} เปิดอยู่ · ออกบิลและแก้ไขได้ถึงวันที่ 10 ของ${mon(padd(PER, 1))} (23:59 น.)</div>`;
+        ? `<div class="note" style="border-color:#f59e0b88">${NI('lock')}รอบ ${mon(PER)} ปิดแล้ว (เกินวันที่ 10 ของเดือนถัดไป) · ดูบิลที่ออกไปแล้วได้อย่างเดียว ไม่สามารถออกบิลย้อนหลัง หรือแก้ไขเลขมิเตอร์/ค่าใช้จ่ายได้</div>`
+        : `<div class="note">${NI('ok')}รอบ ${mon(PER)} เปิดอยู่ · ออกบิลและแก้ไขได้ถึงวันที่ 10 ของ${mon(padd(PER, 1))} (23:59 น.)</div>`;
     return `<h2>มิเตอร์ & ออกบิล</h2><p class="mu">จดมิเตอร์วันที่ 27 · ออกบิลวันที่ 28 · ครบกำหนดวันที่ ${D.set.due} ของเดือนถัดไป · ออกบิลย้อนหลังได้ไม่เกินวันที่ 10 ของเดือนถัดไป</p><div class="cd" style="margin-top:14px"><label>รอบบิล</label><select onchange="PER=this.value;R()">${ps.map(p => `<option value="${p}" ${p == PER ? 'selected' : ''}>${plock(p) ? '🔒 ' : '🟢 '}${mon(p)}${plock(p) ? ' (ปิดรอบ)' : ''}</option>`).join('')}</select>${bn}<div class="sc"><table><tr><th>ห้อง</th><th>ผู้เช่า</th><th>เลขก่อนหน้า</th><th>เลขล่าสุด</th><th>หน่วย</th><th>ค่าไฟ</th><th>ค่าใช้จ่ายเพิ่มเติม</th><th>หมายเหตุ</th><th>รวม (ก่อนค่าปรับ)</th></tr>${oc
       .map(r => {
         const x = gi('INV' + PER.replace('-', '') + '-' + r.n);
@@ -295,11 +293,7 @@ function rsv(n) {
     tt('✓ บันทึกสถานะห้อง ' + n + ' แล้ว');
   };
   if (t && sv != 'busy')
-    return mvo(
-      t.id,
-      () => fin(1),
-      sv == 'maint' ? 'ปิดปรับปรุง · ย้ายผู้เช่าออก' : 'ย้ายผู้เช่าออก'
-    );
+    return mvo(t.id, () => fin(1), sv == 'maint' ? 'ปิดปรับปรุง · ย้ายผู้เช่าออก' : 'ย้ายผู้เช่าออก');
   fin();
 }
 function et(id) {
@@ -359,9 +353,7 @@ function eb(id) {
   const i = gi(id);
   if (plock(i.per)) return alert(LKM(i.per));
   if (i.s != 'unpaid')
-    return alert(
-      'บิลนี้รอตรวจสอบหรือชำระแล้ว จึงแก้ไขไม่ได้\n(ถ้าผู้เช่าส่งสลิปผิด ให้ปฏิเสธสลิปก่อน แล้วค่อยแก้ไขบิล)'
-    );
+    return alert('บิลนี้รอตรวจสอบหรือชำระแล้ว จึงแก้ไขไม่ได้\n(ถ้าผู้เช่าส่งสลิปผิด ให้ปฏิเสธสลิปก่อน แล้วค่อยแก้ไขบิล)');
   const last = !D.inv.some(k => k.room == i.room && k.per > i.per);
   mo(
     `<h3>แก้ไขบิล ${id}</h3><label>เลขมิเตอร์ก่อนหน้า 🔒</label><input value="${i.pv}" disabled><label>เลขมิเตอร์ล่าสุด</label><input id="eb_m" type="number" value="${i.pv + i.u}" ${last ? '' : 'disabled'}>${last ? '' : '<small class="mu">แก้เลขมิเตอร์ไม่ได้ เพราะออกบิลรอบถัดไปของห้องนี้แล้ว</small>'}<label>ค่าใช้จ่ายเพิ่มเติม (บาท)</label><input id="xa" type="number" value="${i.x || ''}"><label>หมายเหตุ</label><input id="xb" value="${e(i.xn || '')}"><div class="note">แก้ไขได้จนกว่าผู้เช่าจะแจ้งชำระ หรือปิดรอบบิล (เกินวันที่ 10 ของเดือนถัดไป)</div><button class="b" onclick="ebs('${id}')">บันทึก</button> <button class="b b2" onclick="cm()">ยกเลิก</button>`

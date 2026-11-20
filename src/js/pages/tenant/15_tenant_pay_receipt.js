@@ -3,13 +3,13 @@
 // ---- tenant pages ----
 pg.my = () => {
   const l = D.inv.filter(i => mine(i) && i.s != 'paid');
-  return `<h2>ใบแจ้งหนี้ของฉัน</h2><p class="mu">${U.room ? 'ห้อง ' + U.room : U.out ? 'ย้ายออกแล้ว' : 'ยังไม่ได้จัดห้อง'} · ${e(U.name)}</p>${U.room || U.out ? '' : '<div class="note">⏳ ลงทะเบียนสำเร็จแล้ว รอผู้ดูแลจัดห้องพักให้ จึงจะมีใบแจ้งหนี้</div>'}${U.out ? '<div class="note">คุณย้ายออกแล้ว · ชำระบิลที่ค้างอยู่ได้ที่หน้านี้ หลังชำระครบบัญชีจะเข้าใช้งานไม่ได้อีก</div>' : ''}<div class="note">💵 ชำระผ่าน PromptPay QR · หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div><div style="margin-top:14px;display:grid;gap:14px">${
+  return `<h2>ใบแจ้งหนี้ของฉัน</h2><p class="mu">${U.room ? 'ห้อง ' + U.room : U.out ? 'ย้ายออกแล้ว' : 'ยังไม่ได้จัดห้อง'} · ${e(U.name)}</p>${U.room || U.out ? '' : `<div class="note">${NI('info')}ลงทะเบียนสำเร็จแล้ว รอผู้ดูแลจัดห้องพักให้ จึงจะมีใบแจ้งหนี้</div>`}${U.out ? '<div class="note">คุณย้ายออกแล้ว · ชำระบิลที่ค้างอยู่ได้ที่หน้านี้ หลังชำระครบบัญชีจะเข้าใช้งานไม่ได้อีก</div>' : ''}<div class="note">${NI('cash')}ชำระผ่าน PromptPay QR · หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div><div style="margin-top:14px;display:grid;gap:14px">${
     l
       .map(i => {
         const s = st(i);
-        return `<div class="cd"><div style="display:flex;justify-content:space-between"><b>${mlab(i)}</b>${pill(i)}</div><div class="big">฿${fm(tot(i))}</div>${i.fin ? '' : `<div class="bd mu"><span>ค่าเช่า</span><span>฿${fm(i.rent)}</span></div>`}<div class="bd mu"><span>ค่าไฟ ${i.u} หน่วย × ${D.set.rate}</span><span>฿${fm(i.el)}</span></div>${i.x ? `<div class="bd mu"><span>${e(i.xn || 'ค่าใช้จ่ายเพิ่มเติม')}</span><span>฿${fm(i.x)}</span></div>` : ''}${tot(i) > base(i) ? `<div class="bd" style="color:#fb7185"><span>ค่าปรับ</span><span>฿${fm(tot(i) - base(i))}</span></div>` : ''}<p class="mu">ครบกำหนด ${dt(due(i))}</p>${i.s == 'unpaid' && i.rj ? `<div class="note" style="background:#fee2e2;color:#b91c1c;border-color:#fecaca">⚠ สลิปถูกปฏิเสธ: ${e(i.rj)}<br>กรุณาตรวจสอบแล้วส่งสลิปใหม่</div>` : ''}${i.s == 'pending' ? '<span class="mu">รอผู้ดูแลตรวจสอบ · ส่งสลิปผิดแก้ไขได้ก่อนผู้ดูแลยืนยัน</span> ' : ''}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="b" onclick="vi('${i.id}')">ดูใบแจ้งหนี้</button>${i.s == 'pending' && i.mt != 'cash' ? `<button class="b b2" onclick="pm('${i.id}')">แก้ไข/ส่งสลิปใหม่</button>` : ''}</div></div>`;
+        return `<div class="cd"><div style="display:flex;justify-content:space-between"><b>${mlab(i)}</b>${pill(i)}</div><div class="big">฿${fm(tot(i))}</div>${i.fin ? '' : `<div class="bd mu"><span>ค่าเช่า</span><span>฿${fm(i.rent)}</span></div>`}<div class="bd mu"><span>ค่าไฟ ${i.u} หน่วย × ${D.set.rate}</span><span>฿${fm(i.el)}</span></div>${i.x ? `<div class="bd mu"><span>${e(i.xn || 'ค่าใช้จ่ายเพิ่มเติม')}</span><span>฿${fm(i.x)}</span></div>` : ''}${tot(i) > base(i) ? `<div class="bd" style="color:#fb7185"><span>ค่าปรับ</span><span>฿${fm(tot(i) - base(i))}</span></div>` : ''}<p class="mu">ครบกำหนด ${dt(due(i))}</p>${i.s == 'unpaid' && i.rj ? `<div class="note" style="background:#fee2e2;color:#b91c1c;border-color:#fecaca">${NI('warn')}สลิปถูกปฏิเสธ: ${e(i.rj)}<br>กรุณาตรวจสอบแล้วส่งสลิปใหม่</div>` : ''}${i.s == 'pending' ? '<span class="mu">รอผู้ดูแลตรวจสอบ · ส่งสลิปผิดแก้ไขได้ก่อนผู้ดูแลยืนยัน</span> ' : ''}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="b" onclick="vi('${i.id}')">ดูใบแจ้งหนี้</button>${i.s == 'pending' && i.mt != 'cash' ? `<button class="b b2" onclick="pm('${i.id}')">แก้ไข/ส่งสลิปใหม่</button>` : ''}</div></div>`;
       })
-      .join('') || '<div class="cd mu">ไม่มีบิลค้างชำระ 🎉</div>'
+      .join('') || `<div class="cd mu empty-ok">${NI('ok')}ไม่มีบิลค้างชำระ</div>`
   }</div>`;
 };
 pg.hist = () => {
@@ -26,10 +26,10 @@ function pm(id) {
   mo(`<div class="mh"><h3>${pd ? 'แก้ไขสลิป · ส่งสลิปใหม่' : 'ชำระเงินผ่าน PromptPay'}</h3><span class="mu">${i.id}</span></div>
  <div class="amt"><small>ยอดที่ต้องชำระ</small><div class="big">฿${fm(t)}</div><small>ครบกำหนด ${dt(due(i))}${late(i) > 0 ? ` · <b style="color:#fb7185">เลยกำหนด ${late(i)} วัน</b>` : ''}</small></div>
  <div class="bk">${i.fin ? '' : `<div class="bd"><span>ค่าเช่า</span><span>฿${fm(i.rent)}</span></div>`}<div class="bd"><span>ค่าไฟ ${i.u} หน่วย</span><span>฿${fm(i.el)}</span></div>${i.x ? `<div class="bd"><span>${e(i.xn || 'ค่าใช้จ่ายเพิ่มเติม')}</span><span>฿${fm(i.x)}</span></div>` : ''}${f ? `<div class="bd" style="color:#fb7185"><span>ค่าปรับ (นับถึงวันที่แจ้งชำระ)</span><span>฿${f}</span></div>` : ''}</div>
- ${pd ? '<div class="note">ผู้ดูแลยังไม่ได้ยืนยัน จึงส่งสลิปใหม่ได้ · เมื่อผู้ดูแลยืนยันแล้วจะแก้ไขไม่ได้</div>' : ''}${!pd && i.rj ? `<div class="note" style="background:#fee2e2;color:#b91c1c;border-color:#fecaca">⚠ สลิปครั้งก่อนถูกปฏิเสธ: ${e(i.rj)}</div>` : ''}<div class="st"><b>1</b> สแกน QR ด้วยแอปธนาคาร</div><div class="qrc"><div class="qr" id="qr"></div><small class="mu">ยอดเงินจะขึ้นอัตโนมัติ ไม่ต้องกรอกเอง</small></div>
- <div class="st"><b>2</b> อัปโหลดสลิปโอนเงิน (JPG/PNG)</div><input type="file" id="sf" accept="image/jpeg,image/png" onchange="sl(this)">
+ ${pd ? '<div class="note">ผู้ดูแลยังไม่ได้ยืนยัน จึงส่งสลิปใหม่ได้ · เมื่อผู้ดูแลยืนยันแล้วจะแก้ไขไม่ได้</div>' : ''}${!pd && i.rj ? `<div class="note" style="background:#fee2e2;color:#b91c1c;border-color:#fecaca">${NI('warn')}สลิปครั้งก่อนถูกปฏิเสธ: ${e(i.rj)}</div>` : ''}<div class="st"><b>1</b> สแกน QR ด้วยแอปธนาคาร</div><div class="qrc"><div class="qr" id="qr"></div><small class="mu">ยอดเงินจะขึ้นอัตโนมัติ ไม่ต้องกรอกเอง</small></div>
+ <div class="st"><b>2</b> อัปโหลดสลิปโอนเงิน (JPG/PNG)</div><label class="drop" id="sfz" ondragover="event.preventDefault();this.classList.add('on')" ondragleave="this.classList.remove('on')" ondrop="slDrop(event)"><input type="file" id="sf" accept="image/jpeg,image/png" onchange="sl(this)"><img class="dz-pv" id="sfp" alt="ตัวอย่างสลิป" hidden><span class="dz-ic">${IC.up}</span><span class="dz-t"><b id="sfn">เลือกรูปสลิป</b><span class="dz-or"> หรือลากไฟล์มาวางที่นี่</span></span><small class="mu" id="sfh">JPG หรือ PNG ไม่เกิน 8 MB</small></label>
  <button class="b" style="width:100%" onclick="sub('${id}')">${pd ? 'ส่งสลิปใหม่' : 'แจ้งชำระเงิน'}</button>
- <div class="note">💵 หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div>
+ <div class="note">${NI('cash')}หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div>
  <button class="b b2 sm" style="margin-top:8px" onclick="vi('${id}')">‹ กลับไปดูใบแจ้งหนี้</button>`);
   tm(id);
 }
@@ -43,6 +43,31 @@ function tm(id) {
   } catch (x) {
     $('#qr').textContent = 'สร้าง QR ไม่สำเร็จ';
   }
+}
+// แสดงภาพตัวอย่างสลิปในกรอบ หลังย่อรูปเสร็จ
+function slShow(name) {
+  const z = document.getElementById('sfz'),
+    p = document.getElementById('sfp');
+  if (!z || !p) return;
+  p.src = SLIP;
+  p.hidden = false;
+  z.classList.add('has');
+  z.classList.remove('on');
+  $('#sfn').textContent = name.length > 28 ? name.slice(0, 26) + '…' : name;
+  $('#sfh').textContent = 'กดที่กรอบเพื่อเปลี่ยนรูป';
+}
+// ลากไฟล์มาวางในกรอบ
+function slDrop(ev) {
+  ev.preventDefault();
+  const z = ev.currentTarget,
+    inp = document.getElementById('sf'),
+    fs = ev.dataTransfer && ev.dataTransfer.files;
+  z.classList.remove('on');
+  if (!fs || !fs[0] || !inp) return;
+  try {
+    inp.files = fs;
+  } catch (x) {}
+  sl(inp.files && inp.files[0] ? inp : { files: fs, value: '' });
 }
 function sl(el) {
   const f = el.files[0];
@@ -61,6 +86,7 @@ function sl(el) {
       c.height = m.height * k;
       c.getContext('2d').drawImage(m, 0, 0, c.width, c.height);
       SLIP = c.toDataURL('image/jpeg', 0.85);
+      slShow(f.name);
     };
     m.src = r.result;
   };
@@ -168,7 +194,7 @@ function rcpHTML(i) {
     nm = S.name || 'T&T Mansion',
     pe = S.payee || nm,
     T = tot(i),
-    g = '#15803d',
+    g = '#1d7a4c',
     rows = [
       ...(i.fin ? [] : [['ค่าเช่าห้อง (' + mon(i.per) + ')', i.rent, '']]),
       [
@@ -179,19 +205,18 @@ function rcpHTML(i) {
     ];
   if (i.x) rows.push([i.xn || 'ค่าใช้จ่ายเพิ่มเติม', i.x, '']);
   if (i.fine) rows.push(['ค่าปรับล่าช้า', i.fine, '']);
-  const bx = (h, b, pd) =>
-      `<td style="width:50%;vertical-align:top;${pd}"><div style="border:1px solid #cbd5e1;border-radius:10px;padding:10px 12px;font-size:12px;color:#475569;line-height:1.6;min-height:78px"><div style="color:#64748b">${h}</div>${b}</div></td>`,
-    sg = (n, r) =>
-      `<td style="width:50%;text-align:center;font-size:11px;color:#475569;padding:0 14px"><div style="border-top:1px solid #94a3b8;margin:36px 0 6px"></div>( ${e(n)} )<br>${r}</td>`;
-  return `<div class="doc" style="font-family:Anuphan,Tahoma,Arial,sans-serif;max-width:520px;margin:0 auto;background:#fff;color:#0f172a;padding:22px;border-radius:14px;border:1px solid #e2e8f0;text-align:left;font-size:13px">
-<table style="width:100%;border-collapse:collapse"><tr><td style="vertical-align:top"><div style="font-size:18px;font-weight:700;color:${g}">${e(nm)}</div><div style="font-size:11px;color:#475569;line-height:1.6">${S.addr ? e(S.addr) + '<br>' : ''}${S.tel ? 'เบอร์ติดต่อ: ' + e(S.tel) + '<br>' : ''}${S.tax ? 'เลขประจำตัวผู้เสียภาษี: ' + e(S.tax) : ''}</div></td><td style="vertical-align:top;text-align:right;white-space:nowrap"><div style="font-size:22px;font-weight:700;color:${g}">ใบเสร็จรับเงิน</div><div style="font-size:11px;color:#64748b">Receipt</div></td></tr></table>
-<table style="width:100%;border-collapse:collapse;margin:14px 0"><tr><td style="border:1px solid #cbd5e1;border-radius:10px;padding:10px 12px;font-size:12px"><table style="width:100%;border-collapse:collapse"><tr><td style="color:#64748b">เลขที่ใบเสร็จ</td><td style="color:#64748b;text-align:center">อ้างอิงใบแจ้งหนี้</td><td style="color:#64748b;text-align:right">วันที่รับเงิน</td></tr><tr><td style="font-weight:700">${e(i.rc || '-')}</td><td style="font-weight:700;text-align:center">${e(i.id)}</td><td style="font-weight:700;text-align:right">${dt(i.paid)}</td></tr></table></td></tr></table>
-<table style="width:100%;border-collapse:collapse"><tr>${bx('ผู้รับเงิน', '<b style="color:#0f172a;font-size:14px">' + e(pe) + '</b><br>' + (S.tax ? 'เลขประจำตัวผู้เสียภาษี: ' + e(S.tax) + '<br>' : '') + (S.addr ? e(S.addr) : ''), 'padding-right:5px')}${bx('ผู้จ่ายเงิน', '<b style="color:#0f172a;font-size:14px">' + e(u.name || '-') + '</b><br>ห้อง: ' + i.room + (u.tel ? ' | โทร: ' + e(u.tel) : ''), 'padding-left:5px')}</tr></table>
-<table style="width:100%;border-collapse:collapse;margin-top:16px;font-size:12px"><tr style="color:#64748b"><td style="padding:6px 4px;border-bottom:2px solid #94a3b8;width:42px">ลำดับ</td><td style="padding:6px 4px;border-bottom:2px solid #94a3b8">รายการ</td><td style="padding:6px 4px;border-bottom:2px solid #94a3b8;text-align:right">จำนวนเงิน</td></tr>${rows.map((r, k) => `<tr><td style="padding:8px 4px;border-bottom:1px solid #e2e8f0;vertical-align:top">${k + 1}</td><td style="padding:8px 4px;border-bottom:1px solid #e2e8f0">${e(r[0])}${r[2] ? '<div style="font-size:11px;color:#64748b">' + e(r[2]) + '</div>' : ''}</td><td style="padding:8px 4px;border-bottom:1px solid #e2e8f0;text-align:right;font-weight:700;vertical-align:top">${Number(r[1]).toLocaleString(LOCF(), { minimumFractionDigits: 2 })}</td></tr>`).join('')}</table>
-<table style="width:100%;border-collapse:collapse;margin-top:14px"><tr><td style="vertical-align:middle"><div style="font-size:15px;font-weight:700;white-space:nowrap">ยอดเงินที่ได้รับ</div><div style="font-size:11px;color:#64748b">(${bahtText(T)})</div></td><td style="text-align:right;vertical-align:middle;white-space:nowrap"><span style="font-size:18px;font-weight:700">${Number(T).toLocaleString(LOCF(), { minimumFractionDigits: 2 })} บาท</span> <span style="display:inline-block;border:2px solid #16a34a;color:#16a34a;border-radius:6px;padding:2px 8px;font-weight:700;font-size:12px;margin-left:6px;transform:rotate(-6deg)">ชำระเงินแล้ว</span></td></tr></table>
-<div style="background:#f1f5f9;border-radius:10px;padding:12px;margin:16px 0 0"><span style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#16a34a;color:#fff;text-align:center;line-height:18px;font-size:11px;margin-right:8px">✓</span>ได้รับชำระเงินเรียบร้อยแล้ว<div style="color:#475569;margin:4px 0 0 26px;font-size:12px">วิธีชำระ: ${i.mt == 'qr' ? 'โอนเงิน (PromptPay)' : 'เงินสด'}</div></div>
-<table style="width:100%;border-collapse:collapse"><tr>${sg(u.name || '-', 'ผู้จ่ายเงิน')}${sg(pe, 'ผู้รับเงิน')}</tr></table>
-<div style="text-align:center;font-size:11px;color:#94a3b8;margin-top:14px">ขอบคุณที่ใช้บริการ ${e(nm)}</div></div>`;
+  const nf = v => Number(v).toLocaleString(LOCF(), { minimumFractionDigits: 2 }),
+    td = 'padding:8px 4px;border-bottom:1px solid #eee7e3',
+    th = 'padding:6px 4px;border-bottom:2px solid #a8a29e';
+  return `<div class="doc" style="font-family:Anuphan,Tahoma,Arial,sans-serif;max-width:520px;margin:0 auto;background:#fff;color:#1c1917;padding:22px;border-radius:14px;border:1px solid #e7e0dc;text-align:left;font-size:13px;position:relative;overflow:hidden">
+${docHead('ใบเสร็จรับเงิน', 'Receipt')}
+<table style="width:100%;border-collapse:collapse;font-size:12px;border:1px solid #e7e0dc;border-radius:10px"><tr style="color:#78716c"><td style="padding:8px 12px 0">เลขที่ใบเสร็จ</td><td style="padding:8px 12px 0;text-align:center">อ้างอิงใบแจ้งหนี้</td><td style="padding:8px 12px 0;text-align:right">วันที่รับเงิน</td></tr><tr style="font-weight:700"><td style="padding:2px 12px 8px">${e(i.rc || '-')}</td><td style="padding:2px 12px 8px;text-align:center">${e(i.id)}</td><td style="padding:2px 12px 8px;text-align:right">${dt(i.paid)}</td></tr></table>
+<table style="width:100%;border-collapse:collapse;margin-top:10px"><tr>${DOC_BOX('ผู้รับเงิน', '<b style="color:#1c1917;font-size:14px">' + e(pe) + '</b>' + (S.tax ? '<br>เลขประจำตัวผู้เสียภาษี ' + e(S.tax) : ''), 'padding-right:5px')}${DOC_BOX('ผู้จ่ายเงิน', '<b style="color:#1c1917;font-size:14px">คุณ' + e(u.name || '-') + '</b><br>ห้อง ' + i.room + (u.tel ? ' · โทร ' + e(u.tel) : ''), 'padding-left:5px')}</tr></table>
+<table style="width:100%;border-collapse:collapse;margin-top:14px;font-size:12px"><tr style="color:#78716c"><td style="${th};width:42px">ลำดับ</td><td style="${th}">รายการ</td><td style="${th};text-align:right">จำนวนเงิน (บาท)</td></tr>${rows.map((r, k) => `<tr><td style="${td};vertical-align:top">${k + 1}</td><td style="${td}">${e(r[0])}${r[2] ? '<div style="font-size:11px;color:#78716c">' + e(r[2]) + '</div>' : ''}</td><td style="${td};text-align:right;font-weight:700;vertical-align:top;font-variant-numeric:tabular-nums">${nf(r[1])}</td></tr>`).join('')}</table>
+<table style="width:100%;border-collapse:collapse;margin-top:12px"><tr><td style="vertical-align:middle"><div style="font-size:15px;font-weight:700">ยอดเงินที่ได้รับ</div><div style="font-size:11px;color:#78716c">(${bahtText(T)})</div></td><td style="text-align:right;vertical-align:middle;white-space:nowrap"><span style="display:inline-block;vertical-align:middle;border:3px double ${g};color:${g};border-radius:8px;padding:3px 10px;font-weight:700;font-size:14px;letter-spacing:.06em;transform:rotate(-8deg);margin-right:14px;text-align:center;line-height:1.15">ชำระแล้ว<span style="display:block;font-size:9px;letter-spacing:.04em;font-weight:600">${dt(i.paid)}</span></span><span style="font-size:20px;font-weight:700;color:${DOC_C};font-variant-numeric:tabular-nums;vertical-align:middle">${nf(T)} บาท</span></td></tr></table>
+<div style="background:#f3f7f4;border:1px solid #d7e8dc;border-radius:10px;padding:10px 12px;margin-top:14px;font-size:12px;color:#365a44">ได้รับชำระเงินเรียบร้อยแล้ว · ช่องทาง ${i.mt == 'qr' ? 'โอนเงินผ่านพร้อมเพย์' : 'เงินสด'}</div>
+<table style="width:100%;border-collapse:collapse"><tr>${DOC_SIGN(u.name || '-', 'ผู้จ่ายเงิน')}${DOC_SIGN(pe, 'ผู้รับเงิน')}</tr></table>
+<div style="text-align:center;font-size:11px;color:#a8a29e;margin-top:14px">ขอบคุณที่ใช้บริการ ${e(nm)} · เอกสารนี้ออกโดยระบบ</div></div>`;
 }
 let RCA = 0,
   RCF = 'all';

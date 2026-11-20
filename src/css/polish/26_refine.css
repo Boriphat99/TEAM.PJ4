@@ -1,0 +1,232 @@
+/* 26_refine.css — ปรับหน้าตาให้เรียบและเป็นทางการขึ้น (โหลดหลังสุด ไม่เปลี่ยนการทำงาน)
+   1) หน้าในระบบใช้พื้นเรียบ (รูปอาคารเหลือเฉพาะหน้าต้อนรับและหน้าเข้าสู่ระบบ)
+   2) ช่องแนบสลิปแบบลากวาง พร้อมภาพตัวอย่าง
+   3) ไอคอนเส้นแทนอีโมจิ · ซ่อนป้าย LIVE · ย้ายเลขเวอร์ชันไปท้ายเมนู
+   4) การ์ดบิลของผู้เช่ากว้างพอดีอ่าน · ตัวเลขเรียงหลัก
+   5) ใบแจ้งหนี้/ใบเสร็จแบบเอกสาร
+   6) โครงร่างระหว่างโหลด · ตัวเลขนับขึ้น · เครื่องหมายถูกเมื่อสำเร็จ
+   7) กราฟรายรับแบบแท่ง */
+
+/* ===== 1. พื้นหลังหน้าในระบบ: เรียบ อุ่น มีแสงสีประจำหอบาง ๆ ===== */
+html:not([data-theme='dark']) body .app::before {
+  background:
+    radial-gradient(1100px 520px at 100% -8%, rgba(142, 36, 54, 0.07), transparent 62%),
+    radial-gradient(900px 480px at -8% 108%, rgba(148, 99, 24, 0.06), transparent 60%), #f7f2ed !important;
+}
+html[data-theme='dark'] body .app::before {
+  background:
+    radial-gradient(1100px 520px at 100% -8%, rgba(246, 134, 143, 0.08), transparent 62%),
+    radial-gradient(900px 480px at -8% 108%, rgba(241, 194, 108, 0.05), transparent 60%), #0f0d15 !important;
+}
+@media (max-width: 800px) {
+  html:not([data-theme='dark']) body .app::before {
+    background:
+      radial-gradient(600px 360px at 100% -6%, rgba(142, 36, 54, 0.07), transparent 62%), #f7f2ed !important;
+  }
+  html[data-theme='dark'] body .app::before {
+    background:
+      radial-gradient(600px 360px at 100% -6%, rgba(246, 134, 143, 0.08), transparent 62%), #0f0d15 !important;
+  }
+}
+/* การ์ดบนพื้นเรียบ: ทึบ ขอบบาง เงานุ่ม (ไม่ต้องใช้กระจกเบลอแล้ว) */
+.app {
+  --s-card: #fffdfb;
+  --s-card-m: #fffdfb;
+  --s-edge: rgba(84, 56, 50, 0.1);
+  --s-sh: 0 1px 2px rgba(60, 30, 25, 0.04), 0 10px 28px -18px rgba(80, 40, 30, 0.22);
+  --gh-bar: rgba(247, 242, 237, 0.86);
+}
+html[data-theme='dark'] .app {
+  --s-card: #17141f;
+  --s-card-m: #17141f;
+  --s-edge: rgba(226, 216, 255, 0.08);
+  --s-sh: 0 1px 2px rgba(0, 0, 0, 0.4), 0 14px 32px -20px rgba(0, 0, 0, 0.8);
+  --gh-bar: rgba(15, 13, 21, 0.86);
+}
+.app .mn > h1,
+.app .mn > h2,
+.app .mn > p.mu,
+.app .top .me,
+html[data-theme='dark'] .app .mn > h1,
+html[data-theme='dark'] .app .mn > h2,
+html[data-theme='dark'] .app .mn > p.mu,
+html[data-theme='dark'] .app .top .me {
+  text-shadow: none;
+}
+
+/* ===== 2. ช่องแนบสลิป: กรอบลากวาง + ภาพตัวอย่าง ===== */
+.drop {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 18px 14px;
+  margin: 6px 0 12px;
+  border: 1.5px dashed color-mix(in srgb, var(--ac) 38%, transparent);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--ac) 4%, var(--cd));
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color 0.18s,
+    background-color 0.18s,
+    transform 0.18s;
+}
+.drop:hover,
+.drop.on {
+  border-color: var(--ac);
+  background: color-mix(in srgb, var(--ac) 8%, var(--cd));
+}
+.drop.on {
+  transform: scale(1.01);
+}
+.drop input[type='file'] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+.drop .dz-ic {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ac) 12%, transparent);
+  color: var(--ac);
+}
+.drop .dz-ic svg {
+  width: 22px;
+  height: 22px;
+}
+.drop .dz-t {
+  font-size: 14px;
+}
+.drop .dz-t b {
+  color: var(--ac);
+}
+.drop small {
+  font-size: 12px;
+}
+.drop .dz-pv {
+  max-height: 180px;
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px -10px rgba(0, 0, 0, 0.45);
+  margin-bottom: 6px;
+}
+.drop.has {
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--ok) 55%, transparent);
+  background: color-mix(in srgb, var(--ok) 5%, var(--cd));
+}
+.drop.has .dz-ic,
+.drop.has .dz-or {
+  display: none;
+}
+.drop.has .dz-t b {
+  color: var(--tx);
+  font-weight: 600;
+}
+
+/* ===== 3. ไอคอนเส้นหน้าข้อความ · ป้ายอัปเดตอัตโนมัติ · เลขเวอร์ชัน ===== */
+.ni {
+  display: inline-flex;
+  vertical-align: -3px;
+  margin-right: 7px;
+  font-style: normal;
+}
+.ni svg {
+  width: 16px;
+  height: 16px;
+}
+.empty-ok {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.empty-ok .ni {
+  color: var(--ok);
+}
+.pwn-ico svg {
+  width: 30px;
+  height: 30px;
+}
+.pl.live-dot {
+  width: 9px;
+  height: 9px;
+  min-width: 0;
+  padding: 0 !important;
+  border-radius: 50%;
+  background: var(--ok) !important;
+  background-image: none !important;
+  border: 0 !important;
+  opacity: 1 !important;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ok) 18%, transparent);
+  font-size: 0;
+}
+.pl.live-dot::before {
+  display: none;
+}
+.appv {
+  text-align: center;
+  font-size: 11px;
+  margin: 32px 0 4px;
+  opacity: 0.55;
+  letter-spacing: 0.02em;
+}
+
+/* ===== 4. ตัวเลขเรียงหลัก · การ์ดบิลของผู้เช่าไม่กว้างเกินอ่าน ===== */
+.big,
+.bd span:last-child,
+.app td,
+.app .kv b,
+.amt .big {
+  font-variant-numeric: tabular-nums;
+}
+.mn[data-pg='my'] > div[style*='display:grid'],
+.mn[data-pg='my'] > .note {
+  max-width: 680px;
+}
+.mn[data-pg='my'] > div[style*='display:grid'] > .cd {
+  padding: 20px 22px;
+}
+.mn[data-pg='my'] > div[style*='display:grid'] > .cd .bd {
+  padding: 5px 0;
+  border-bottom: 1px dashed var(--ln);
+}
+.mn[data-pg='my'] > div[style*='display:grid'] > .cd .bd + p.mu {
+  margin-top: 10px;
+}
+
+/* ===== 5. เอกสาร (ใบแจ้งหนี้/ใบเสร็จ): ไม่รับเส้น/ระยะของตารางในระบบ ใช้ค่าในเอกสารเท่านั้น ===== */
+.doc table,
+.doc tr,
+.doc td {
+  border: 0;
+  background: none;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  box-shadow: none;
+}
+.doc tr:hover td {
+  background: none !important;
+}
+.app .doc td,
+.mo .doc td,
+.doc td {
+  border-bottom: 0 !important;
+}
+.app .doc td[style*='border-bottom:1px'],
+.mo .doc td[style*='border-bottom:1px'],
+.doc td[style*='border-bottom:1px'] {
+  border-bottom: 1px solid #eee7e3 !important;
+}
+.app .doc td[style*='border-bottom:2px'],
+.mo .doc td[style*='border-bottom:2px'],
+.doc td[style*='border-bottom:2px'] {
+  border-bottom: 2px solid #a8a29e !important;
+}

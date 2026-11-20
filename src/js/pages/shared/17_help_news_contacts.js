@@ -198,7 +198,7 @@ const pdfc = (u, ad) => {
   const f = u && u.cpdf,
     id = u && u.id;
   return f
-    ? `<button class="b b2 sm" style="border:1px solid var(--ac);color:var(--ac);max-width:100%;text-align:left" title="${e(f.name)}" onclick="cpv(${id})">📄 ${e(f.name.length > 24 ? f.name.slice(0, 22) + '…' : f.name)}</button><br><small class="mu">${Math.round(f.size / 1024)} KB</small>${ad ? ` <button class="b b2 sm" onclick="CPU=${id};$('#cpi').click()">เปลี่ยน</button> <button class="b b2 sm" onclick="cpd(${id})">ลบ</button>` : ''}`
+    ? `<button class="b b2 sm" style="border:1px solid var(--ac);color:var(--ac);max-width:100%;text-align:left" title="${e(f.name)}" onclick="cpv(${id})">${NI('doc')}${e(f.name.length > 24 ? f.name.slice(0, 22) + '…' : f.name)}</button><br><small class="mu">${Math.round(f.size / 1024)} KB</small>${ad ? ` <button class="b b2 sm" onclick="CPU=${id};$('#cpi').click()">เปลี่ยน</button> <button class="b b2 sm" onclick="cpd(${id})">ลบ</button>` : ''}`
     : ad
       ? `<button class="b b2 sm" onclick="CPU=${id};$('#cpi').click()">อัปโหลด PDF</button>`
       : '<small class="mu">ยังไม่มีไฟล์</small>';

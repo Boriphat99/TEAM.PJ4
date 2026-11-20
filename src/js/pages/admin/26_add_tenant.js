@@ -237,7 +237,7 @@ async function pwnCheck() {
 function pwnModal() {
   if (!PWN || !U) return;
   if (getComputedStyle($('#mo')).display != 'none') return;
-  mo(`<div class="pwn-ico">🔐</div><h3 style="text-align:center">อย่าลืมเปลี่ยนรหัสผ่าน</h3>
+  mo(`<div class="pwn-ico">${IC.lock}</div><h3 style="text-align:center">อย่าลืมเปลี่ยนรหัสผ่าน</h3>
     <p class="mu" style="text-align:center;margin:8px 0 0">คุณกำลังใช้รหัสผ่านเริ่มต้นที่ผู้ดูแลตั้งให้<br>เพื่อความปลอดภัยของบัญชี กรุณาเปลี่ยนเป็นรหัสผ่านของคุณเองที่หน้า <b>โปรไฟล์</b></p>
     <div class="acts" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:16px">
       <button class="b b2" onclick="cm()">ไว้ทีหลัง</button>
@@ -263,7 +263,7 @@ function pwnBanner() {
   const d = document.createElement('div');
   d.className = 'note pwn';
   d.innerHTML =
-    '🔐 คุณยังใช้รหัสผ่านเริ่มต้นจากผู้ดูแล — อย่าลืมเปลี่ยนรหัสผ่านเป็นของคุณเอง <button class="b sm" onclick="pwnGo()">เปลี่ยนรหัสผ่าน</button>';
+    NI('lock') + 'คุณยังใช้รหัสผ่านเริ่มต้นจากผู้ดูแล — อย่าลืมเปลี่ยนรหัสผ่านเป็นของคุณเอง <button class="b sm" onclick="pwnGo()">เปลี่ยนรหัสผ่าน</button>';
   const sub =
     h.nextElementSibling && h.nextElementSibling.matches('p,small,.mu') ? h.nextElementSibling : h;
   sub.after(d);

@@ -134,35 +134,53 @@ function pc() {
 
 const B = n =>
   '฿' + Number(n).toLocaleString(LOCF(), { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+// หัวกระดาษของเอกสาร (ใบแจ้งหนี้/ใบเสร็จ): โลโก้ ชื่อ ที่อยู่ เลขผู้เสียภาษี + ชื่อเอกสารด้านขวา
+// ใช้ inline style ทั้งหมด เพื่อให้บันทึกเป็นรูป (html2canvas) และพิมพ์ได้เหมือนบนจอ
+const DOC_C = '#8e2436';
+function docHead(th, en) {
+  const S = D.set,
+    nm = S.name || 'T&T Mansion';
+  return `<table style="width:100%;border-collapse:collapse"><tr><td style="vertical-align:top"><table style="border-collapse:collapse"><tr><td style="vertical-align:top;padding-right:10px"><img src="${LG}" alt="" width="46" height="46" style="display:block;border-radius:10px"></td><td style="vertical-align:top"><div style="font-size:17px;font-weight:700;color:${DOC_C};letter-spacing:.02em">${e(nm)}</div><div style="font-size:11px;color:#57534e;line-height:1.6">${S.addr ? e(S.addr) + '<br>' : ''}${S.tel ? 'โทร ' + e(S.tel) : ''}${S.tax ? (S.tel ? ' · ' : '') + 'เลขประจำตัวผู้เสียภาษี ' + e(S.tax) : ''}</div></td></tr></table></td><td style="vertical-align:top;text-align:right;white-space:nowrap"><div style="font-size:22px;font-weight:700;color:${DOC_C}">${th}</div><div style="font-size:11px;color:#78716c;letter-spacing:.12em;text-transform:uppercase">${en}</div></td></tr></table><div style="height:3px;background:linear-gradient(90deg,${DOC_C},#c08a3e);border-radius:2px;margin:12px 0 14px"></div>`;
+}
+const DOC_BOX = (h, b, pd) =>
+  `<td style="width:50%;vertical-align:top;${pd}"><div style="border:1px solid #e7e0dc;border-radius:10px;padding:10px 12px;font-size:12px;color:#57534e;line-height:1.6;min-height:70px"><div style="color:#78716c">${h}</div>${b}</div></td>`;
+const DOC_SIGN = (n, r) =>
+  `<td style="width:50%;text-align:center;font-size:11px;color:#57534e;padding:0 14px"><div style="border-top:1px solid #a8a29e;margin:36px 0 6px"></div>( ${e(n)} )<br>${r}</td>`;
 function docHTML(i, k, nl) {
   if (k == 'rcp') return rcpHTML(i);
   const S = D.set,
-    inv = k == 'inv',
-    c = inv ? '#a8122c' : '#16a34a',
     u = tu(i) || {},
     nm = S.name || 'T&T Mansion',
-    f = inv ? 0 : i.fine || 0,
-    T = inv ? base(i) : tot(i),
+    T = base(i),
+    nf = v => Number(v).toLocaleString(LOCF(), { minimumFractionDigits: 2 }),
     rows = [
-      ...(i.fin ? [] : [['ค่าเช่าห้อง', i.rent]]),
-      ['ค่าไฟฟ้า (' + i.pv + ' - ' + (i.pv + i.u) + ') ใช้ ' + i.u + ' หน่วย × ' + S.rate, i.el],
-    ];
-  if (i.x) rows.push([i.xn || 'ค่าใช้จ่ายเพิ่มเติม', i.x]);
-  if (f) rows.push(['ค่าปรับล่าช้า', f]);
-  const H = (l, v, b) =>
-      `<tr><td style="padding:6px 0;color:#64748b;vertical-align:top">${e(l)}</td><td style="padding:6px 0 6px 12px;text-align:right;${b ? 'font-weight:700;color:#0f172a' : 'color:#0f172a'}">${v}</td></tr>`,
-    url = /^https?:\/\//.test(S.url || '') ? e(S.url) : '';
-  return `<div class="doc" style="font-family:Tahoma,Arial,sans-serif;max-width:480px;margin:0 auto;background:#fff;color:#0f172a;border-radius:16px;overflow:hidden;border:1px solid #e2e8f0;text-align:left">
-<div style="background:${c};color:#fff;text-align:center;padding:24px 16px"><div style="font-size:26px;font-weight:700">${inv ? 'ใบแจ้งหนี้' : 'ใบเสร็จรับเงิน'}</div><div>${e(nm)}</div></div>
-<div style="padding:20px;font-size:14px"><table style="width:100%;border-collapse:collapse">${H('ผู้เช่า', 'คุณ ' + e(u.name || '-') + ' ห้อง ' + i.room, 1)}${H('เลขที่บิล', i.id, 1)}${H('รอบบิล', mlab(i), 1)}${H(inv ? 'ครบกำหนด' : 'วันที่ชำระ', inv ? dt(due(i)) : dt(i.paid), 1)}</table>
-<div style="border-top:1px solid #e2e8f0;margin:12px 0"></div><div style="font-weight:700">รายละเอียด</div><table style="width:100%;border-collapse:collapse">${rows.map(r => H(r[0], B(r[1]))).join('')}</table>
-<div style="background:${inv ? '#f9eef0' : '#dcfce7'};border-radius:12px;text-align:center;padding:16px;margin:16px 0"><div style="color:#64748b">${inv ? 'ยอดชำระทั้งสิ้น' : 'ยอดที่ชำระ'}</div><div style="font-size:32px;font-weight:700;color:${c}">${B(T)}</div></div>
-${
-  inv
-    ? `<div style="font-weight:700">ช่องทางการชำระเงิน</div><div style="color:#475569;margin:6px 0">ชำระผ่าน PromptPay QR ในระบบ แล้วแนบสลิปโอนเงิน${S.pp ? '<br>PromptPay: <b style="color:#0f172a">' + e(S.pp) + '</b>' : ''}<br>หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div><div style="color:#b45309;font-size:12px">ชำระหลังวันที่ ${S.due} ของเดือนถัดไป มีค่าปรับวันละ 50 บาท สูงสุด ${S.max} บาท</div>${url && !nl ? `<a href="${url}" style="display:block;background:${c};color:#fff;text-align:center;text-decoration:none;padding:12px;border-radius:10px;margin-top:14px;font-weight:700">ดูใบแจ้งหนี้ / ชำระเงิน</a>` : ''}`
-    : `<div style="background:#f1f5f9;border-radius:10px;padding:12px;color:#166534">✓ ได้รับชำระเงินเรียบร้อยแล้ว<br><span style="color:#475569">วิธีชำระ: ${i.mt == 'qr' ? 'โอนเงิน (PromptPay)' : 'เงินสด'}</span></div><div style="color:#475569;margin-top:12px">ผู้รับเงิน: ${e(S.payee || nm)}</div>`
-}
-<div style="color:#94a3b8;font-size:12px;text-align:center;margin-top:16px">${S.addr ? e(S.addr) + '<br>' : ''}${S.tel ? 'โทร ' + e(S.tel) + '<br>' : ''}ขอบคุณที่ใช้บริการ ${e(nm)}</div></div></div>`;
+      ...(i.fin ? [] : [['ค่าเช่าห้อง (' + mon(i.per) + ')', i.rent, '']]),
+      [
+        'ค่าไฟฟ้า',
+        i.el,
+        'เลขมิเตอร์ ' +
+          i.pv +
+          ' ถึง ' +
+          (i.pv + i.u) +
+          ' ใช้ ' +
+          i.u +
+          ' หน่วย × ' +
+          B(S.rate) +
+          '/หน่วย',
+      ],
+    ],
+    td = 'padding:8px 4px;border-bottom:1px solid #eee7e3',
+    th = 'padding:6px 4px;border-bottom:2px solid #a8a29e';
+  if (i.x) rows.push([i.xn || 'ค่าใช้จ่ายเพิ่มเติม', i.x, '']);
+  return `<div class="doc" style="font-family:Anuphan,Tahoma,Arial,sans-serif;max-width:520px;margin:0 auto;background:#fff;color:#1c1917;padding:22px;border-radius:14px;border:1px solid #e7e0dc;text-align:left;font-size:13px">
+${docHead('ใบแจ้งหนี้', 'Invoice')}
+<table style="width:100%;border-collapse:collapse;font-size:12px;border:1px solid #e7e0dc;border-radius:10px"><tr style="color:#78716c"><td style="padding:8px 12px 0">เลขที่</td><td style="padding:8px 12px 0;text-align:center">รอบบิล</td><td style="padding:8px 12px 0;text-align:right">ครบกำหนดชำระ</td></tr><tr style="font-weight:700"><td style="padding:2px 12px 8px">${e(i.id)}</td><td style="padding:2px 12px 8px;text-align:center">${mlab(i)}</td><td style="padding:2px 12px 8px;text-align:right;color:${DOC_C}">${dt(due(i))}</td></tr></table>
+<table style="width:100%;border-collapse:collapse;margin-top:10px"><tr>${DOC_BOX('เรียน (ผู้เช่า)', '<b style="color:#1c1917;font-size:14px">คุณ' + e(u.name || '-') + '</b><br>ห้อง ' + i.room + (u.tel ? ' · โทร ' + e(u.tel) : ''), 'padding-right:5px')}${DOC_BOX('ช่องทางชำระเงิน', 'สแกน PromptPay QR ในระบบ แล้วแนบสลิป' + (S.pp ? '<br>พร้อมเพย์ <b style="color:#1c1917">' + e(S.pp) + '</b>' : '') + '<br>หรือชำระเงินสดที่เคาน์เตอร์', 'padding-left:5px')}</tr></table>
+<table style="width:100%;border-collapse:collapse;margin-top:14px;font-size:12px"><tr style="color:#78716c"><td style="${th};width:42px">ลำดับ</td><td style="${th}">รายการ</td><td style="${th};text-align:right">จำนวนเงิน (บาท)</td></tr>${rows.map((r, n) => `<tr><td style="${td};vertical-align:top">${n + 1}</td><td style="${td}">${e(r[0])}${r[2] ? '<div style="font-size:11px;color:#78716c">' + e(r[2]) + '</div>' : ''}</td><td style="${td};text-align:right;font-weight:700;vertical-align:top;font-variant-numeric:tabular-nums">${nf(r[1])}</td></tr>`).join('')}</table>
+<table style="width:100%;border-collapse:collapse;margin-top:12px"><tr><td style="vertical-align:middle"><div style="font-size:15px;font-weight:700">ยอดที่ต้องชำระ</div><div style="font-size:11px;color:#78716c">(${bahtText(T)})</div></td><td style="text-align:right;vertical-align:middle;white-space:nowrap"><span style="font-size:20px;font-weight:700;color:${DOC_C};font-variant-numeric:tabular-nums">${nf(T)} บาท</span></td></tr></table>
+<div style="background:#fbf3ea;border:1px solid #f0dfc8;border-radius:10px;padding:10px 12px;margin-top:14px;font-size:12px;color:#7c5a1e;line-height:1.6">กรุณาชำระภายในวันที่ ${dt(due(i))} · หากชำระหลังวันครบกำหนด คิดค่าปรับวันละ ${fm(S.fpd || 50)} บาท สูงสุดไม่เกิน ${fm(S.max)} บาท${i.fin ? '' : ' · หากพ้นวันที่ 10 ถือว่าผิดนัดชำระตามสัญญาเช่า'}</div>
+<table style="width:100%;border-collapse:collapse"><tr>${DOC_SIGN(u.name || '-', 'ผู้เช่า')}${DOC_SIGN(S.payee || nm, 'ผู้ออกใบแจ้งหนี้')}</tr></table>
+<div style="text-align:center;font-size:11px;color:#a8a29e;margin-top:14px">เอกสารนี้ออกโดยระบบ ${e(nm)}</div></div>`;
 }
 const vi = id => {
   const i = gi(id),
