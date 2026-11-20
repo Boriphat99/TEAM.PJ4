@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>ตรวจสอบใบเสร็จรับเงิน · T&amp;T Mansion</title>
+    <link rel="icon" href="static/icon-192.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=Noto+Serif+Thai:wght@600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- หน้าตรวจสอบใบเสร็จจาก QR บนใบเสร็จ: เปิดได้โดยไม่ต้องเข้าสู่ระบบ
+         ส่งเลขใบเสร็จ + รหัสตรวจสอบไปถามฐานข้อมูล (RPC verify_receipt) แล้วแสดงผลจริง/ไม่จริง
+         ไม่แสดงชื่อหรือข้อมูลส่วนตัวของผู้เช่า -->
+    <style>
+      :root {
+        --ac: #8e2436;
+        --ok: #1d7a4c;
+        --er: #b3262f;
+        --tx: #1f1a1c;
+        --mu: #6b5f61;
+        --ln: rgba(84, 56, 50, 0.14);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Anuphan, Tahoma, sans-serif;
+        color: var(--tx);
+        background:
+          linear-gradient(180deg, rgba(251, 247, 245, 0.82), rgba(251, 247, 245, 0.92)),
+          url('static/bg-photo-d-m.webp') center / cover no-repeat fixed,
+          #f7f2ed;
+        display: grid;
+        place-items: center;
+        padding: 24px 16px;
+      }
+      .card {
+        width: 100%;
+        max-width: 420px;
+        background: #fffdfb;
+        border: 1px solid var(--ln);
+        border-radius: 18px;
+        box-shadow: 0 18px 48px -24px rgba(80, 40, 30, 0.4);
+        overflow: hidden;
+      }
+      .hd {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 18px 20px;
+        border-bottom: 3px solid transparent;
+        border-image: linear-gradient(90deg, var(--ac), #c08a3e) 1;
+      }
+      .hd img {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+      }
+      .hd b {
+        font-family: 'Noto Serif Thai', serif;
+        font-size: 17px;
+        color: var(--ac);
+        letter-spacing: 0.03em;
+      }
+      .hd small {
+        display: block;
+        color: var(--mu);
+        font-size: 12px;
+      }
+      .bd {
+        padding: 22px 20px 20px;
+      }
+      .st {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+      }
+      .st svg {
+        flex: none;
+        width: 34px;
+        height: 34px;
+      }
+      .st b {
+        display: block;
+        font-size: 16px;
+      }
+      .st span {
+        font-size: 13px;
+      }
+      .st.ok {
+        background: #eef7f1;
+        color: var(--ok);
+        border: 1px solid #cfe6d8;
+      }
+      .st.er {
+        background: #fcefef;
+        color: var(--er);
+        border: 1px solid #f3d0d2;
+      }
+      .st.ld {
+        background: #f6f1ee;
+        color: var(--mu);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      td {
+        padding: 9px 0;
+        border-bottom: 1px dashed var(--ln);
+      }
+      td:last-child {
+        text-align: right;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+      }
+      td:first-child {
+        color: var(--mu);
+      }
+      .amt td:last-child {
+        color: var(--ac);
+        font-size: 18px;
+      }
+      .note {
+        margin-top: 16px;
+        font-size: 12px;
+        color: var(--mu);
+        line-height: 1.6;
+      }
+      .ft {
+        text-align: center;
+        font-size: 12px;
+        padding: 14px;
+        border-top: 1px solid var(--ln);
+      }
+      .ft a {
+        color: var(--ac);
+        text-decoration: none;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="hd">
+        <img src="static/icon-192.png" alt="" />
+        <div>
+          <b id="dorm">T&amp;T Mansion</b>
+          <small>ตรวจสอบใบเสร็จรับเงิน</small>
+        </div>
+      </div>
+      <div class="bd" id="out">
+        <div class="st ld"><span>กำลังตรวจสอบใบเสร็จ…</span></div>
+      </div>
+      <div class="ft"><a href="./">ไปที่ระบบหอพัก</a></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+    <script>
+      // ค่าเชื่อมต่อแบบสาธารณะ (anon key) ชุดเดียวกับหน้าเว็บหลัก
+      const URL_ = 'https://hpliogcnsxtnrvuyykzd.supabase.co',
+        KEY =
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwbGlvZ2Nuc3h0bnJ2dXl5a3pkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2ODEyMTMsImV4cCI6MjEwNzI1NzIxM30.DZSHUiux5-7ZOFAd26rKql7boEC7W7OqVhnmlekXPwo';
+      const $o = document.getElementById('out'),
+        esc = s =>
+          String(s ?? '').replace(
+            /[&<>"']/g,
+            c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]
+          ),
+        OK =
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="m7.8 12.4 2.9 2.9 5.6-6"/></svg>',
+        NO =
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="m9 9 6 6M15 9l-6 6"/></svg>',
+        bad = msg =>
+          ($o.innerHTML = `<div class="st er">${NO}<div><b>ไม่พบใบเสร็จนี้ในระบบ</b><span>${msg}</span></div></div><div class="note">ใบเสร็จที่ถูกต้องต้องตรวจพบในระบบ และยอดเงินต้องตรงกับที่แสดงในหน้านี้ หากมีข้อสงสัย กรุณาติดต่อผู้ดูแลหอพัก</div>`),
+        q = new URLSearchParams(location.search),
+        no = (q.get('r') || '').trim(),
+        code = (q.get('k') || '').trim();
+      const monthTh = ym => {
+        const [y, m] = String(ym).split('-').map(Number);
+        return y
+          ? new Date(y, m - 1, 15).toLocaleDateString('th-TH', { month: 'long', year: 'numeric' })
+          : '-';
+      };
+      (async () => {
+        if (!no || !code) return bad('ลิงก์ไม่ครบ กรุณาสแกน QR บนใบเสร็จอีกครั้ง');
+        try {
+          const cl = supabase.createClient(URL_, KEY, { auth: { persistSession: false } });
+          const { data, error } = await cl.rpc('verify_receipt', { p_no: no, p_code: code });
+          if (error) throw error;
+          if (!data || !data.ok) return bad('เลขใบเสร็จหรือรหัสตรวจสอบไม่ถูกต้อง');
+          if (data.dorm_name) document.getElementById('dorm').textContent = data.dorm_name;
+          const amt = Number(data.amount).toLocaleString('en-US', { minimumFractionDigits: 2 }),
+            paid = data.paid_at
+              ? new Date(data.paid_at).toLocaleDateString('th-TH', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                  timeZone: 'Asia/Bangkok',
+                })
+              : '-';
+          $o.innerHTML = `<div class="st ok">${OK}<div><b>ใบเสร็จนี้ออกโดยระบบจริง</b><span>ตรวจพบในฐานข้อมูลของหอพัก</span></div></div>
+<table>
+<tr><td>เลขที่ใบเสร็จ</td><td>${esc(data.receipt_no)}</td></tr>
+<tr><td>อ้างอิงใบแจ้งหนี้</td><td>${esc(data.invoice_code)}</td></tr>
+<tr><td>ห้อง</td><td>${esc(data.room_no)}</td></tr>
+<tr><td>รอบบิล</td><td>${data.kind == 'final' ? 'งวดสุดท้าย (ย้ายออก) ' : ''}${esc(monthTh(data.billing_month))}</td></tr>
+<tr><td>วันที่รับเงิน</td><td>${esc(paid)}</td></tr>
+<tr><td>ช่องทางชำระ</td><td>${data.method == 'cash' ? 'เงินสด' : 'โอนผ่านพร้อมเพย์'}</td></tr>
+<tr class="amt"><td>จำนวนเงิน</td><td>${esc(amt)} บาท</td></tr>
+</table>
+<div class="note">ตรวจดูว่าเลขที่และจำนวนเงินตรงกับใบเสร็จที่ได้รับ หากไม่ตรง แสดงว่าใบเสร็จถูกแก้ไข เพื่อความเป็นส่วนตัว หน้านี้ไม่แสดงชื่อผู้เช่า</div>`;
+        } catch (x) {
+          $o.innerHTML = `<div class="st er">${NO}<div><b>ตรวจสอบไม่สำเร็จ</b><span>กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่อีกครั้ง</span></div></div>`;
+        }
+      })();
+    </script>
+  </body>
+</html>

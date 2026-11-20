@@ -188,6 +188,29 @@ function bahtText(n) {
     sa = Math.round((n - b) * 100);
   return b || sa ? (b ? mm(b) + 'บาท' : '') + (sa ? rd(sa) + 'สตางค์' : 'ถ้วน') : 'ศูนย์บาทถ้วน';
 }
+// QR ตรวจสอบใบเสร็จ: ลิงก์ไปหน้า verify.html พร้อมเลขใบเสร็จและรหัสตรวจสอบ (12 ตัวแรกของรหัสการชำระเงินที่สุ่มไว้)
+// มีเฉพาะใบเสร็จที่บันทึกในฐานข้อมูลแล้ว (โหมดทดลองที่ไม่มีฐานข้อมูลจะไม่แสดง QR)
+function rcQR(i) {
+  if (!i.rc || !i._pid || !window.qrcode) return '';
+  try {
+    let b = /^https?:\/\//.test(D.set.url || '')
+      ? D.set.url
+      : location.origin + location.pathname.replace(/[^/]*$/, '');
+    if (!b.endsWith('/')) b += '/';
+    const u =
+        b +
+        'verify.html?r=' +
+        encodeURIComponent(i.rc) +
+        '&k=' +
+        String(i._pid).replace(/-/g, '').slice(0, 12),
+      k = qrcode(0, 'M');
+    k.addData(u);
+    k.make();
+    return `<img src="${k.createDataURL(3, 0)}" alt="QR ตรวจสอบใบเสร็จ" width="76" height="76" style="display:inline-block;image-rendering:pixelated">`;
+  } catch (x) {
+    return '';
+  }
+}
 function rcpHTML(i) {
   const S = D.set,
     u = tu(i) || {},
@@ -205,7 +228,8 @@ function rcpHTML(i) {
     ];
   if (i.x) rows.push([i.xn || 'ค่าใช้จ่ายเพิ่มเติม', i.x, '']);
   if (i.fine) rows.push(['ค่าปรับล่าช้า', i.fine, '']);
-  const nf = v => Number(v).toLocaleString(LOCF(), { minimumFractionDigits: 2 }),
+  const vq = rcQR(i),
+    nf = v => Number(v).toLocaleString(LOCF(), { minimumFractionDigits: 2 }),
     td = 'padding:8px 4px;border-bottom:1px solid #eee7e3',
     th = 'padding:6px 4px;border-bottom:2px solid #a8a29e';
   return `<div class="doc" style="font-family:Anuphan,Tahoma,Arial,sans-serif;max-width:520px;margin:0 auto;background:#fff;color:#1c1917;padding:22px;border-radius:14px;border:1px solid #e7e0dc;text-align:left;font-size:13px;position:relative;overflow:hidden">
@@ -216,6 +240,11 @@ ${docHead('ใบเสร็จรับเงิน', 'Receipt')}
 <table style="width:100%;border-collapse:collapse;margin-top:12px"><tr><td style="vertical-align:middle"><div style="font-size:15px;font-weight:700">ยอดเงินที่ได้รับ</div><div style="font-size:11px;color:#78716c">(${bahtText(T)})</div></td><td style="text-align:right;vertical-align:middle;white-space:nowrap"><span style="display:inline-block;vertical-align:middle;border:3px double ${g};color:${g};border-radius:8px;padding:3px 10px;font-weight:700;font-size:14px;letter-spacing:.06em;transform:rotate(-8deg);margin-right:14px;text-align:center;line-height:1.15">ชำระแล้ว<span style="display:block;font-size:9px;letter-spacing:.04em;font-weight:600">${dt(i.paid)}</span></span><span style="font-size:20px;font-weight:700;color:${DOC_C};font-variant-numeric:tabular-nums;vertical-align:middle">${nf(T)} บาท</span></td></tr></table>
 <div style="background:#f3f7f4;border:1px solid #d7e8dc;border-radius:10px;padding:10px 12px;margin-top:14px;font-size:12px;color:#365a44">ได้รับชำระเงินเรียบร้อยแล้ว · ช่องทาง ${i.mt == 'qr' ? 'โอนเงินผ่านพร้อมเพย์' : 'เงินสด'}</div>
 <table style="width:100%;border-collapse:collapse"><tr>${DOC_SIGN(u.name || '-', 'ผู้จ่ายเงิน')}${DOC_SIGN(pe, 'ผู้รับเงิน')}</tr></table>
+${
+  vq
+    ? `<table style="width:100%;border-collapse:collapse;margin-top:14px;border-top:1px dashed #e7e0dc"><tr><td style="vertical-align:middle;font-size:11px;color:#78716c;line-height:1.6;padding-top:10px"><b style="color:#1c1917;font-size:12px">ตรวจสอบใบเสร็จ</b><br>สแกน QR เพื่อตรวจว่าใบเสร็จนี้ออกโดยระบบจริง<br>และจำนวนเงินตรงกับข้อมูลของหอพัก</td><td style="width:84px;text-align:right;vertical-align:middle;padding-top:10px">${vq}</td></tr></table>`
+    : ''
+}
 <div style="text-align:center;font-size:11px;color:#a8a29e;margin-top:14px">ขอบคุณที่ใช้บริการ ${e(nm)} · เอกสารนี้ออกโดยระบบ</div></div>`;
 }
 let RCA = 0,
