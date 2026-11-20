@@ -1,7 +1,50 @@
 /* 03_i18n_dictionary.js — พจนานุกรมแปลภาษา ไทย/อังกฤษ (ขนาดใหญ่)
    (แยกมาจาก script.js บรรทัด 12-656; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
-  ENm = `LINE ติดต่อสอบถาม|LINE for questions
+  ENm = `หรือลากไฟล์มาวางที่นี่| or drop the file here
+เลือกรูปสลิป|Choose slip image
+JPG หรือ PNG ไม่เกิน 8 MB|JPG or PNG, up to 8 MB
+กดที่กรอบเพื่อเปลี่ยนรูป|Tap the box to change the image
+กำลังตรวจ QR บนสลิป…|Checking the QR on the slip…
+พบ QR ของสลิป|Slip QR found
+ไม่พบ QR บนสลิป · ควรใช้รูปสลิปจากแอปธนาคารแบบเต็มใบ ไม่ตัดมุม|No QR found on the slip · use the full, uncropped slip from your banking app
+QR บนสลิปถูกต้อง|Slip QR is valid
+ไม่ซ้ำกับสลิปอื่นในระบบ|not used by any other slip
+ยอดเงินยังต้องตรวจกับรายการเงินเข้าบัญชี หรือสแกน QR ด้วยแอปธนาคาร|The amount still needs checking against the account statement or by scanning the QR in a banking app
+ไม่พบ QR บนรูปสลิปนี้ · ควรตรวจกับรายการเงินเข้าบัญชีอย่างละเอียด|No QR found on this slip · check it carefully against the account statement
+สลิปนี้ถูกใช้ซ้ำ ใช้แจ้งชำระไม่ได้ กรุณาแนบสลิปของรายการโอนครั้งนี้|This slip has already been used. Please attach the slip for this transfer
+ระบบไม่พบ QR บนรูปสลิปนี้|No QR was found on this slip
+ผู้ดูแลอาจต้องใช้เวลาตรวจสอบนานขึ้น|The admin may need longer to check it
+ต้องการส่งสลิปนี้ต่อหรือไม่?|Send this slip anyway?
+เลขอ้างอิง|Reference
+ธนาคารกรุงเทพ|Bangkok Bank
+ธนาคารกสิกรไทย|Kasikornbank
+ธนาคารกรุงไทย|Krungthai Bank
+ธนาคารทหารไทยธนชาต|TTB
+ธนาคารไทยพาณิชย์|SCB
+ธนาคารกรุงศรีอยุธยา|Krungsri
+ธนาคารออมสิน|Government Savings Bank
+ธนาคารซีไอเอ็มบี ไทย|CIMB Thai
+ธนาคารยูโอบี|UOB
+ธนาคารเกียรตินาคินภัทร|Kiatnakin Phatra
+เรียน (ผู้เช่า)|To (tenant)
+สแกน PromptPay QR ในระบบ แล้วแนบสลิป|Scan the PromptPay QR in the system, then attach the slip
+หรือชำระเงินสดที่เคาน์เตอร์|or pay cash at the counter
+กรุณาชำระภายในวันที่|Please pay by
+หากชำระหลังวันครบกำหนด คิดค่าปรับวันละ|after the due date the late fee is
+หากพ้นวันที่ 10 ถือว่าผิดนัดชำระตามสัญญาเช่า|after the 10th the payment is in default under the lease
+ผู้ออกใบแจ้งหนี้|Issued by
+เอกสารนี้ออกโดยระบบ|Issued by the system
+โอนเงินผ่านพร้อมเพย์|PromptPay transfer
+ตรวจสอบใบเสร็จ|Verify this receipt
+สแกน QR เพื่อตรวจว่าใบเสร็จนี้ออกโดยระบบจริง|Scan the QR to check this receipt was issued by the system
+และจำนวนเงินตรงกับข้อมูลของหอพัก|and that the amount matches the dorm's records
+ไม่มีบิลค้างชำระ|No outstanding bills
+รายรับ 6 เดือนล่าสุด (บาท)|Income, last 6 months (baht)
+สูงสุดไม่เกิน|up to
+เลขมิเตอร์|Meter
+พร้อมเพย์ |PromptPay 
+LINE ติดต่อสอบถาม|LINE for questions
 ติดต่อสอบถาม|Contact us
 สแกน QR หรือค้นหา LINE ID เพื่อพูดคุยกับผู้ดูแลหอพัก|Scan the QR or search the LINE ID to chat with the dorm staff
 LINE ID สำหรับพูดคุย (LINE ส่วนตัว หรือ OA ที่มีคนตอบ)|LINE ID for chatting (a personal LINE or a staffed OA)
