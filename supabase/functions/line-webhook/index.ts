@@ -181,7 +181,7 @@ Deno.serve(async req => {
     const tail =
       u?.role === 'tenant'
         ? '\n\nท่านจะได้รับการแจ้งเตือนใบแจ้งหนี้ กำหนดชำระ และใบเสร็จรับเงินผ่านช่องทางนี้'
-        : u?.role === 'admin'
+        : u?.role === 'admin' || u?.role === 'owner'
           ? '\n\nท่านจะได้รับการแจ้งเตือนเมื่อมีผู้เช่าแนบหลักฐานการชำระเงิน'
           : '';
     await reply(ev.replyToken, 'เชื่อมบัญชีเรียบร้อยแล้ว' + who + room + tail);

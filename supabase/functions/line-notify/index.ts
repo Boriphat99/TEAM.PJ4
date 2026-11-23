@@ -5,7 +5,7 @@
 //   ตรวจ secret ด้วย RPC notify_secret_ok() (secret อยู่ใน Vault ไม่ออกจากฐานข้อมูล)
 // body: { kind, invoice_id?, payment_id? }
 //   kind: bill | due_soon | overdue | last_day | manual | receipt | reject | slip
-// ผู้รับ: slip → ผู้ดูแลระบบทุกคนที่เชื่อม LINE · อื่น ๆ → ผู้เช่าเจ้าของบิล (ถ้าเชื่อม LINE)
+// ผู้รับ: slip → ผู้ดูแลระบบและเจ้าของกิจการทุกคนที่เชื่อม LINE · อื่น ๆ → ผู้เช่าเจ้าของบิล (ถ้าเชื่อม LINE)
 // กันส่งซ้ำ: เหตุการณ์อัตโนมัติส่งครั้งเดียวต่อ (บิลหรือการชำระ, ชนิด, ผู้รับ) · manual ส่งซ้ำได้
 // ทุกการส่งบันทึกใน notify_log · ยังไม่ได้ใส่ LINE_CHANNEL_ACCESS_TOKEN → บันทึก error 'no token'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.4';
@@ -244,8 +244,8 @@ Deno.serve(async req => {
       break;
     case 'slip':
       lines.push(
-        'แจ้งหลักฐานการชำระเงินรอตรวจสอบ',
-        `${dorm} ห้อง ${room}${tenantName ? ' คุณ' + tenantName : ''}`,
+        `สลิปโอนเงินจากห้อง ${room} รอตรวจสอบ`,
+        `${dorm}${tenantName ? ' · คุณ' + tenantName : ''}`,
         '',
         `ใบแจ้งหนี้${month} จำนวน ${paid}`,
         'ผู้เช่าแนบหลักฐานการชำระเงินเข้าระบบแล้ว',
@@ -260,7 +260,7 @@ Deno.serve(async req => {
   // ---------- ผู้รับ ----------
   let users: string[] = [];
   if (kind === 'slip') {
-    const { data } = await sb.from('users').select('id').eq('role', 'admin');
+    const { data } = await sb.from('users').select('id').in('role', ['admin', 'owner']);
     users = (data || []).map((x: { id: string }) => x.id);
   } else if (inv.contracts?.tenants?.user_id) users = [inv.contracts.tenants.user_id];
   if (!users.length) return json({ skipped: 'no recipient' });

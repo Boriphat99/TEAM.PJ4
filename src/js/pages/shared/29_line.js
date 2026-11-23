@@ -42,9 +42,8 @@ const lnAdd = () => {
   return id ? lnUrl(id) : '';
 };
 
-// ---------- การ์ดในหน้าโปรไฟล์ (ผู้เช่า + ผู้ดูแลระบบ) ----------
+// ---------- การ์ดในหน้าโปรไฟล์ (ผู้เช่า + ผู้ดูแลระบบ + เจ้าของกิจการ) ----------
 function lnCard() {
-  if (U.role == 'owner') return '';
   const h = '<h3>แจ้งเตือนทาง LINE</h3>';
   if (!SBX.cl)
     return `<div class="cd" id="lnc">${h}<p class="mu" style="margin:8px 0 0">ใช้ได้เมื่อเชื่อมฐานข้อมูลจริง</p></div>`;
