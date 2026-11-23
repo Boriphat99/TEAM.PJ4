@@ -3762,11 +3762,11 @@ html:not([data-theme='dark']) {
   --mu: #5a5052;
   --ln: rgba(84, 56, 50, 0.12);
   --ln2: rgba(84, 56, 50, 0.2);
-  --ac: #8e2436; /* แดงเลือดหมู ผนังอาคาร */
-  --ac2: #721b2b;
-  --ac3: #ab3449;
-  --acs: #f8eded;
-  --acs2: #f1dcde;
+  --ac: #b01030; /* แดงคริมสัน เข้มสด */
+  --ac2: #870b24;
+  --ac3: #d0233f;
+  --acs: #fcebee;
+  --acs2: #f8d5db;
   --gd: #946318; /* ทองขอบอาคาร (อ่านได้บนพื้นขาว) */
   --gd-bg: #fbf1de;
   --ok: #1d7a4c;
@@ -3804,11 +3804,11 @@ html:not([data-theme='dark']) {
   --gh-bar: rgba(255, 251, 246, 0.74);
   --gh-modal: rgba(255, 253, 250, 0.97);
   --gh-field: rgba(255, 255, 255, 0.94);
-  --gh-th: rgba(142, 36, 54, 0.045);
-  --gh-btn: linear-gradient(180deg, #a3304a, #8e2436 55%, #78202f);
+  --gh-th: rgba(176, 16, 48, 0.05);
+  --gh-btn: linear-gradient(180deg, #d42a46, #b01030 55%, #8f0c27);
   --gh-btn2: rgba(255, 255, 255, 0.8);
-  --gh-nav-on: linear-gradient(90deg, #f1dcde, #f8eded);
-  --gh-nav-on-tx: #8e2436;
+  --gh-nav-on: linear-gradient(90deg, #f8d5db, #fcebee);
+  --gh-nav-on-tx: #a40f2d;
 }
 html[data-theme='dark'] {
   --bg: #0e0c17;
@@ -3818,11 +3818,11 @@ html[data-theme='dark'] {
   --mu: #b4adbf;
   --ln: rgba(226, 216, 255, 0.09);
   --ln2: rgba(226, 216, 255, 0.15);
-  --ac: #f6868f; /* ชมพูอิฐ อ่านชัดบนพื้นเข้ม */
-  --ac2: #c4404f;
-  --ac3: #ff99a3;
-  --acs: rgba(242, 122, 135, 0.12);
-  --acs2: rgba(242, 122, 135, 0.2);
+  --ac: #ff5470; /* แดงทับทิมสด อ่านชัดบนพื้นเข้ม */
+  --ac2: #e0294a;
+  --ac3: #ff7d91;
+  --acs: rgba(255, 84, 112, 0.13);
+  --acs2: rgba(255, 84, 112, 0.22);
   --gd: #f1c26c; /* แสงไฟทอง */
   --gd-bg: rgba(241, 194, 108, 0.12);
   --ok: #5fd39d;
@@ -3861,10 +3861,10 @@ html[data-theme='dark'] {
   --gh-modal: rgba(22, 19, 34, 0.97);
   --gh-field: rgba(0, 0, 0, 0.26);
   --gh-th: rgba(226, 216, 255, 0.045);
-  --gh-btn: linear-gradient(180deg, #d4566a, #bf4257 55%, #a5344a);
+  --gh-btn: linear-gradient(180deg, #f2475f, #d81f3f 55%, #b0142f);
   --gh-btn2: rgba(255, 255, 255, 0.07);
-  --gh-nav-on: linear-gradient(90deg, rgba(242, 122, 135, 0.2), rgba(242, 122, 135, 0.08));
-  --gh-nav-on-tx: #ff9ea8;
+  --gh-nav-on: linear-gradient(90deg, rgba(255, 84, 112, 0.22), rgba(255, 84, 112, 0.08));
+  --gh-nav-on-tx: #ff8a9c;
 }
 html:has(.app),
 html:has(.au) {
@@ -4098,8 +4098,8 @@ html[data-theme='dark'] .ts {
 
 /* ===================== หน้าต้อนรับ ===================== */
 .apl {
-  --ap-ac: #8e2436;
-  --ap-ac2: #c0475c;
+  --ap-ac: #b01030;
+  --ap-ac2: #d84a62;
   /* ฟิล์มส่วนเนื้อหา (บนภาพนุ่ม) */
   --ap-film: linear-gradient(
     180deg,
@@ -4115,8 +4115,8 @@ html[data-theme='dark'] .ts {
   --ap-mu: #4f4648;
 }
 html[data-theme='dark'] .apl {
-  --ap-ac: #ff8f9b;
-  --ap-ac2: #ffb3a1;
+  --ap-ac: #ff6f86;
+  --ap-ac2: #ffa0ae;
   --ap-film: linear-gradient(
     180deg,
     rgba(12, 10, 26, 0.74),
@@ -4164,7 +4164,7 @@ html[data-theme='dark'] .apl .ap-foot {
 /* ปุ่มหลักหน้าต้อนรับ */
 .apl .ap-btn,
 .apl .ap-login {
-  background: linear-gradient(180deg, #a83450, #8e2436 60%, #7a1f2f) !important;
+  background: linear-gradient(180deg, #d42a46, #b01030 60%, #8f0c27) !important;
   color: #fff !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.22),
@@ -4234,7 +4234,7 @@ html[data-theme='dark'] {
   --ch-gold: #f1c26c;
   --ch-or: #f4a46a;
   --ch-gr: #6f6782;
-  --ch-trk: rgba(242, 122, 135, 0.16);
+  --ch-trk: rgba(255, 84, 112, 0.16);
 }
 :where(.app, #mo) :is([style*='color:#dc2626'], [style*='color:#ef4444']) {
   color: var(--ac) !important;

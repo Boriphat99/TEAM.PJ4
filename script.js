@@ -2894,7 +2894,7 @@ const B = n =>
   '฿' + Number(n).toLocaleString(LOCF(), { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 // หัวกระดาษของเอกสาร (ใบแจ้งหนี้/ใบเสร็จ): โลโก้ ชื่อ ที่อยู่ เลขผู้เสียภาษี + ชื่อเอกสารด้านขวา
 // ใช้ inline style ทั้งหมด เพื่อให้บันทึกเป็นรูป (html2canvas) และพิมพ์ได้เหมือนบนจอ
-const DOC_C = '#8e2436';
+const DOC_C = '#9e0f2c';
 function docHead(th, en) {
   const S = D.set,
     nm = S.name || 'T&T Mansion';
