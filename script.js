@@ -37,6 +37,10 @@ QR บนสลิปถูกต้อง|Slip QR is valid
 ไม่ซ้ำกับสลิปอื่นในระบบ|not used by any other slip
 ยอดเงินยังต้องตรวจกับรายการเงินเข้าบัญชี หรือสแกน QR ด้วยแอปธนาคาร|The amount still needs checking against the account statement or by scanning the QR in a banking app
 ไม่พบ QR บนรูปสลิปนี้ · ควรตรวจกับรายการเงินเข้าบัญชีอย่างละเอียด|No QR found on this slip · check it carefully against the account statement
+โอนจาก|Sent from 
+กำลังอ่าน QR บนรูปสลิป…|Reading the slip QR…
+เลขอ้างอิงบนสลิปนี้ซ้ำกับสลิปของห้อง|This slip reference matches the slip of room
+ควรตรวจสอบก่อนอนุมัติ|check before approving
 สลิปนี้ถูกใช้ซ้ำ ใช้แจ้งชำระไม่ได้ กรุณาแนบสลิปของรายการโอนครั้งนี้|This slip has already been used. Please attach the slip for this transfer
 ระบบไม่พบ QR บนรูปสลิปนี้|No QR was found on this slip
 ผู้ดูแลอาจต้องใช้เวลาตรวจสอบนานขึ้น|The admin may need longer to check it
@@ -2441,7 +2445,7 @@ function slQRShow() {
     z.className = 'slq slq-ok';
     z.innerHTML =
       NI('ok') +
-      `<span>พบ QR ของสลิป · ${e(bankName(SLIPQ.bank))}<br><small>เลขอ้างอิง ${e(SLIPQ.ref)}</small></span>`;
+      `<span>พบ QR ของสลิป · โอนจาก${e(bankName(SLIPQ.bank))}<br><small>เลขอ้างอิง ${e(SLIPQ.ref)}</small></span>`;
   } else {
     z.className = 'slq slq-wa';
     z.innerHTML = NI('warn') + '<span>ไม่พบ QR บนสลิป · ควรใช้รูปสลิปจากแอปธนาคารแบบเต็มใบ ไม่ตัดมุม</span>';
@@ -5108,8 +5112,8 @@ async function vsl(id) {
     </div>${
       i.slip && i.mt != 'cash'
         ? i.sref
-          ? `<div class="slq slq-ok">${NI('ok')}<span>QR บนสลิปถูกต้อง · ${e(bankName(i.sbank))}<br><small>เลขอ้างอิง ${e(i.sref)} · ไม่ซ้ำกับสลิปอื่นในระบบ</small><br><small>ยอดเงินยังต้องตรวจกับรายการเงินเข้าบัญชี หรือสแกน QR ด้วยแอปธนาคาร</small></span></div>`
-          : `<div class="slq slq-wa">${NI('warn')}<span>ไม่พบ QR บนรูปสลิปนี้ · ควรตรวจกับรายการเงินเข้าบัญชีอย่างละเอียด</span></div>`
+          ? `<div class="slq slq-ok">${NI('ok')}<span>QR บนสลิปถูกต้อง · โอนจาก${e(bankName(i.sbank))}<br><small>เลขอ้างอิง ${e(i.sref)} · ไม่ซ้ำกับสลิปอื่นในระบบ</small><br><small>ยอดเงินยังต้องตรวจกับรายการเงินเข้าบัญชี หรือสแกน QR ด้วยแอปธนาคาร</small></span></div>`
+          : `<div class="slq slq-ld" id="slvq">${NI('info')}<span>กำลังอ่าน QR บนรูปสลิป…</span></div>`
         : ''
     }`;
   const btns = `<div class="np acts" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
@@ -5140,6 +5144,41 @@ async function vsl(id) {
   };
   im.onclick = () => window.open(src, '_blank');
   im.src = src;
+  if (!i.sref && i.mt != 'cash') slvScan(i, src);
+}
+// สลิปที่ไม่มีผลตรวจเก็บไว้ (เช่น ส่งก่อนมีระบบตรวจ QR) → อ่าน QR จากรูปตอนเปิดดู
+async function slvScan(i, src) {
+  const box = () => $('#slvq');
+  const show = (cls, ic, html) => {
+    const z = box();
+    if (!z) return;
+    z.className = 'slq ' + cls;
+    z.innerHTML = NI(ic) + '<span>' + html + '</span>';
+  };
+  let q = null;
+  try {
+    const im = new Image();
+    im.crossOrigin = 'anonymous';
+    im.src = src;
+    await im.decode();
+    q = typeof readSlipQR == 'function' ? await readSlipQR(im) : null;
+  } catch (x) {
+    q = null;
+  }
+  if (!q)
+    return show('slq-wa', 'warn', 'ไม่พบ QR บนรูปสลิปนี้ · ควรตรวจกับรายการเงินเข้าบัญชีอย่างละเอียด');
+  const dup = D.inv.find(x => x.id != i.id && x.sref == q.ref);
+  if (dup)
+    return show(
+      'slq-wa',
+      'warn',
+      `เลขอ้างอิงบนสลิปนี้ซ้ำกับสลิปของห้อง ${e(dup.room)} (${e(dup.id)})<br><small>เลขอ้างอิง ${e(q.ref)} · ควรตรวจสอบก่อนอนุมัติ</small>`
+    );
+  show(
+    'slq-ok',
+    'ok',
+    `QR บนสลิปถูกต้อง · โอนจาก${e(bankName(q.bank))}<br><small>เลขอ้างอิง ${e(q.ref)} · ไม่ซ้ำกับสลิปอื่นในระบบ</small><br><small>ยอดเงินยังต้องตรวจกับรายการเงินเข้าบัญชี หรือสแกน QR ด้วยแอปธนาคาร</small>`
+  );
 }
 // vs(id) = ปุ่ม "สลิป" เดิมในหน้ารับชำระเงิน/ประวัติ/รายงาน → ใช้หน้าต่างดูสลิปนี้
 function vs(id) {

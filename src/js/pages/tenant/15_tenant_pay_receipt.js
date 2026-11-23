@@ -161,7 +161,7 @@ function slQRShow() {
     z.className = 'slq slq-ok';
     z.innerHTML =
       NI('ok') +
-      `<span>พบ QR ของสลิป · ${e(bankName(SLIPQ.bank))}<br><small>เลขอ้างอิง ${e(SLIPQ.ref)}</small></span>`;
+      `<span>พบ QR ของสลิป · โอนจาก${e(bankName(SLIPQ.bank))}<br><small>เลขอ้างอิง ${e(SLIPQ.ref)}</small></span>`;
   } else {
     z.className = 'slq slq-wa';
     z.innerHTML = NI('warn') + '<span>ไม่พบ QR บนสลิป · ควรใช้รูปสลิปจากแอปธนาคารแบบเต็มใบ ไม่ตัดมุม</span>';

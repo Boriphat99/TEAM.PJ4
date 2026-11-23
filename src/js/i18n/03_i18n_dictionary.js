@@ -12,6 +12,10 @@ QR บนสลิปถูกต้อง|Slip QR is valid
 ไม่ซ้ำกับสลิปอื่นในระบบ|not used by any other slip
 ยอดเงินยังต้องตรวจกับรายการเงินเข้าบัญชี หรือสแกน QR ด้วยแอปธนาคาร|The amount still needs checking against the account statement or by scanning the QR in a banking app
 ไม่พบ QR บนรูปสลิปนี้ · ควรตรวจกับรายการเงินเข้าบัญชีอย่างละเอียด|No QR found on this slip · check it carefully against the account statement
+โอนจาก|Sent from 
+กำลังอ่าน QR บนรูปสลิป…|Reading the slip QR…
+เลขอ้างอิงบนสลิปนี้ซ้ำกับสลิปของห้อง|This slip reference matches the slip of room
+ควรตรวจสอบก่อนอนุมัติ|check before approving
 สลิปนี้ถูกใช้ซ้ำ ใช้แจ้งชำระไม่ได้ กรุณาแนบสลิปของรายการโอนครั้งนี้|This slip has already been used. Please attach the slip for this transfer
 ระบบไม่พบ QR บนรูปสลิปนี้|No QR was found on this slip
 ผู้ดูแลอาจต้องใช้เวลาตรวจสอบนานขึ้น|The admin may need longer to check it

@@ -70,8 +70,8 @@ async function vsl(id) {
     </div>${
       i.slip && i.mt != 'cash'
         ? i.sref
-          ? `<div class="slq slq-ok">${NI('ok')}<span>QR บนสลิปถูกต้อง · ${e(bankName(i.sbank))}<br><small>เลขอ้างอิง ${e(i.sref)} · ไม่ซ้ำกับสลิปอื่นในระบบ</small><br><small>ยอดเงินยังต้องตรวจกับรายการเงินเข้าบัญชี หรือสแกน QR ด้วยแอปธนาคาร</small></span></div>`
-          : `<div class="slq slq-wa">${NI('warn')}<span>ไม่พบ QR บนรูปสลิปนี้ · ควรตรวจกับรายการเงินเข้าบัญชีอย่างละเอียด</span></div>`
+          ? `<div class="slq slq-ok">${NI('ok')}<span>QR บนสลิปถูกต้อง · โอนจาก${e(bankName(i.sbank))}<br><small>เลขอ้างอิง ${e(i.sref)} · ไม่ซ้ำกับสลิปอื่นในระบบ</small><br><small>ยอดเงินยังต้องตรวจกับรายการเงินเข้าบัญชี หรือสแกน QR ด้วยแอปธนาคาร</small></span></div>`
+          : `<div class="slq slq-ld" id="slvq">${NI('info')}<span>กำลังอ่าน QR บนรูปสลิป…</span></div>`
         : ''
     }`;
   const btns = `<div class="np acts" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
@@ -102,6 +102,41 @@ async function vsl(id) {
   };
   im.onclick = () => window.open(src, '_blank');
   im.src = src;
+  if (!i.sref && i.mt != 'cash') slvScan(i, src);
+}
+// สลิปที่ไม่มีผลตรวจเก็บไว้ (เช่น ส่งก่อนมีระบบตรวจ QR) → อ่าน QR จากรูปตอนเปิดดู
+async function slvScan(i, src) {
+  const box = () => $('#slvq');
+  const show = (cls, ic, html) => {
+    const z = box();
+    if (!z) return;
+    z.className = 'slq ' + cls;
+    z.innerHTML = NI(ic) + '<span>' + html + '</span>';
+  };
+  let q = null;
+  try {
+    const im = new Image();
+    im.crossOrigin = 'anonymous';
+    im.src = src;
+    await im.decode();
+    q = typeof readSlipQR == 'function' ? await readSlipQR(im) : null;
+  } catch (x) {
+    q = null;
+  }
+  if (!q)
+    return show('slq-wa', 'warn', 'ไม่พบ QR บนรูปสลิปนี้ · ควรตรวจกับรายการเงินเข้าบัญชีอย่างละเอียด');
+  const dup = D.inv.find(x => x.id != i.id && x.sref == q.ref);
+  if (dup)
+    return show(
+      'slq-wa',
+      'warn',
+      `เลขอ้างอิงบนสลิปนี้ซ้ำกับสลิปของห้อง ${e(dup.room)} (${e(dup.id)})<br><small>เลขอ้างอิง ${e(q.ref)} · ควรตรวจสอบก่อนอนุมัติ</small>`
+    );
+  show(
+    'slq-ok',
+    'ok',
+    `QR บนสลิปถูกต้อง · โอนจาก${e(bankName(q.bank))}<br><small>เลขอ้างอิง ${e(q.ref)} · ไม่ซ้ำกับสลิปอื่นในระบบ</small><br><small>ยอดเงินยังต้องตรวจกับรายการเงินเข้าบัญชี หรือสแกน QR ด้วยแอปธนาคาร</small>`
+  );
 }
 // vs(id) = ปุ่ม "สลิป" เดิมในหน้ารับชำระเงิน/ประวัติ/รายงาน → ใช้หน้าต่างดูสลิปนี้
 function vs(id) {
