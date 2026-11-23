@@ -183,7 +183,7 @@
 }
 
 /* ===== ผลตรวจ QR บนสลิป (ใต้กรอบแนบสลิป และในหน้าดูสลิปของผู้ดูแล) ===== */
-.sq {
+.slq {
   display: flex !important;
   align-items: flex-start;
   gap: 2px;
@@ -195,35 +195,35 @@
   line-height: 1.55;
   border: 1px solid transparent;
 }
-.sq[hidden] {
+.slq[hidden] {
   display: none !important;
 }
-.sq > span {
+.slq > span {
   flex: 1;
   min-width: 0;
 }
-.sq .ni {
+.slq .ni {
   margin-top: 2px;
 }
-.sq small {
+.slq small {
   font-size: 12px;
   opacity: 0.9;
   word-break: break-all;
 }
-.sq-ld {
+.slq-ld {
   background: color-mix(in srgb, var(--mu) 10%, transparent);
   color: var(--mu);
 }
-.sq-ok {
+.slq-ok {
   background: var(--ok-bg, #e8f5ed);
   border-color: var(--ok-ln, #cbe6d6);
   color: var(--ok, #1d7a4c);
 }
-.sq-wa {
+.slq-wa {
   background: var(--wa-bg, #fcf3dc);
   border-color: var(--wa-ln, #efdcaa);
   color: var(--wa, #8a5900);
 }
-.slv-info + .sq {
+.slv-info + .slq {
   margin: 12px 0 0;
 }

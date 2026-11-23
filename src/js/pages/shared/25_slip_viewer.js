@@ -70,8 +70,8 @@ async function vsl(id) {
     </div>${
       i.slip && i.mt != 'cash'
         ? i.sref
-          ? `<div class="sq sq-ok">${NI('ok')}<span>QR บนสลิปถูกต้อง · ${e(bankName(i.sbank))}<br><small>เลขอ้างอิง ${e(i.sref)} · ไม่ซ้ำกับสลิปอื่นในระบบ</small><br><small>ยอดเงินยังต้องตรวจกับรายการเงินเข้าบัญชี หรือสแกน QR ด้วยแอปธนาคาร</small></span></div>`
-          : `<div class="sq sq-wa">${NI('warn')}<span>ไม่พบ QR บนรูปสลิปนี้ · ควรตรวจกับรายการเงินเข้าบัญชีอย่างละเอียด</span></div>`
+          ? `<div class="slq slq-ok">${NI('ok')}<span>QR บนสลิปถูกต้อง · ${e(bankName(i.sbank))}<br><small>เลขอ้างอิง ${e(i.sref)} · ไม่ซ้ำกับสลิปอื่นในระบบ</small><br><small>ยอดเงินยังต้องตรวจกับรายการเงินเข้าบัญชี หรือสแกน QR ด้วยแอปธนาคาร</small></span></div>`
+          : `<div class="slq slq-wa">${NI('warn')}<span>ไม่พบ QR บนรูปสลิปนี้ · ควรตรวจกับรายการเงินเข้าบัญชีอย่างละเอียด</span></div>`
         : ''
     }`;
   const btns = `<div class="np acts" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">

@@ -2305,7 +2305,7 @@ function pm(id) {
  <div class="amt"><small>ยอดที่ต้องชำระ</small><div class="big">฿${fm(t)}</div><small>ครบกำหนด ${dt(due(i))}${late(i) > 0 ? ` · <b style="color:#fb7185">เลยกำหนด ${late(i)} วัน</b>` : ''}</small></div>
  <div class="bk">${i.fin ? '' : `<div class="bd"><span>ค่าเช่า</span><span>฿${fm(i.rent)}</span></div>`}<div class="bd"><span>ค่าไฟ ${i.u} หน่วย</span><span>฿${fm(i.el)}</span></div>${i.x ? `<div class="bd"><span>${e(i.xn || 'ค่าใช้จ่ายเพิ่มเติม')}</span><span>฿${fm(i.x)}</span></div>` : ''}${f ? `<div class="bd" style="color:#fb7185"><span>ค่าปรับ (นับถึงวันที่แจ้งชำระ)</span><span>฿${f}</span></div>` : ''}</div>
  ${pd ? '<div class="note">ผู้ดูแลยังไม่ได้ยืนยัน จึงส่งสลิปใหม่ได้ · เมื่อผู้ดูแลยืนยันแล้วจะแก้ไขไม่ได้</div>' : ''}${!pd && i.rj ? `<div class="note" style="background:#fee2e2;color:#b91c1c;border-color:#fecaca">${NI('warn')}สลิปครั้งก่อนถูกปฏิเสธ: ${e(i.rj)}</div>` : ''}<div class="st"><b>1</b> สแกน QR ด้วยแอปธนาคาร</div><div class="qrc"><div class="qr" id="qr"></div><small class="mu">ยอดเงินจะขึ้นอัตโนมัติ ไม่ต้องกรอกเอง</small></div>
- <div class="st"><b>2</b> อัปโหลดสลิปโอนเงิน (JPG/PNG)</div><label class="drop" id="sfz" ondragover="event.preventDefault();this.classList.add('on')" ondragleave="this.classList.remove('on')" ondrop="slDrop(event)"><input type="file" id="sf" accept="image/jpeg,image/png" onchange="sl(this)"><img class="dz-pv" id="sfp" alt="ตัวอย่างสลิป" hidden><span class="dz-ic">${IC.up}</span><span class="dz-t"><b id="sfn">เลือกรูปสลิป</b><span class="dz-or"> หรือลากไฟล์มาวางที่นี่</span></span><small class="mu" id="sfh">JPG หรือ PNG ไม่เกิน 8 MB</small></label><div id="sfq" class="sq" hidden></div>
+ <div class="st"><b>2</b> อัปโหลดสลิปโอนเงิน (JPG/PNG)</div><label class="drop" id="sfz" ondragover="event.preventDefault();this.classList.add('on')" ondragleave="this.classList.remove('on')" ondrop="slDrop(event)"><input type="file" id="sf" accept="image/jpeg,image/png" onchange="sl(this)"><img class="dz-pv" id="sfp" alt="ตัวอย่างสลิป" hidden><span class="dz-ic">${IC.up}</span><span class="dz-t"><b id="sfn">เลือกรูปสลิป</b><span class="dz-or"> หรือลากไฟล์มาวางที่นี่</span></span><small class="mu" id="sfh">JPG หรือ PNG ไม่เกิน 8 MB</small></label><div id="sfq" class="slq" hidden></div>
  <button class="b" style="width:100%" onclick="sub('${id}')">${pd ? 'ส่งสลิปใหม่' : 'แจ้งชำระเงิน'}</button>
  <div class="note">${NI('cash')}หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div>
  <button class="b b2 sm" style="margin-top:8px" onclick="vi('${id}')">‹ กลับไปดูใบแจ้งหนี้</button>`);
@@ -2432,15 +2432,15 @@ function slQRShow() {
   if (!z) return;
   z.hidden = false;
   if (!SLIPQ) {
-    z.className = 'sq sq-ld';
+    z.className = 'slq slq-ld';
     z.innerHTML = NI('info') + '<span>กำลังตรวจ QR บนสลิป…</span>';
   } else if (SLIPQ.ref) {
-    z.className = 'sq sq-ok';
+    z.className = 'slq slq-ok';
     z.innerHTML =
       NI('ok') +
       `<span>พบ QR ของสลิป · ${e(bankName(SLIPQ.bank))}<br><small>เลขอ้างอิง ${e(SLIPQ.ref)}</small></span>`;
   } else {
-    z.className = 'sq sq-wa';
+    z.className = 'slq slq-wa';
     z.innerHTML = NI('warn') + '<span>ไม่พบ QR บนสลิป · ควรใช้รูปสลิปจากแอปธนาคารแบบเต็มใบ ไม่ตัดมุม</span>';
   }
 }
@@ -2898,7 +2898,7 @@ const DOC_C = '#9e0f2c';
 function docHead(th, en) {
   const S = D.set,
     nm = S.name || 'T&T Mansion';
-  return `<table style="width:100%;border-collapse:collapse"><tr><td style="vertical-align:top"><table style="border-collapse:collapse"><tr><td style="vertical-align:top;padding-right:10px"><img src="${LG}" alt="" width="46" height="46" style="display:block;border-radius:10px"></td><td style="vertical-align:top"><div style="font-size:17px;font-weight:700;color:${DOC_C};letter-spacing:.02em">${e(nm)}</div><div style="font-size:11px;color:#57534e;line-height:1.6">${S.addr ? e(S.addr) + '<br>' : ''}${S.tel ? 'โทร ' + e(S.tel) : ''}${S.tax ? (S.tel ? ' · ' : '') + 'เลขประจำตัวผู้เสียภาษี ' + e(S.tax) : ''}</div></td></tr></table></td><td style="vertical-align:top;text-align:right;white-space:nowrap"><div style="font-size:22px;font-weight:700;color:${DOC_C}">${th}</div><div style="font-size:11px;color:#78716c;letter-spacing:.12em;text-transform:uppercase">${en}</div></td></tr></table><div style="height:3px;background:linear-gradient(90deg,${DOC_C},#c08a3e);border-radius:2px;margin:12px 0 14px"></div>`;
+  return `<table style="width:100%;border-collapse:collapse"><tr><td style="vertical-align:top"><table style="border-collapse:collapse"><tr><td style="vertical-align:top;padding-right:10px;width:46px;min-width:46px"><img src="${LG}" alt="" width="46" height="46" style="display:block;width:46px;min-width:46px;max-width:none;height:46px;object-fit:cover;border-radius:10px"></td><td style="vertical-align:top"><div style="font-size:17px;font-weight:700;color:${DOC_C};letter-spacing:.02em">${e(nm)}</div><div style="font-size:11px;color:#57534e;line-height:1.6">${S.addr ? e(S.addr) + '<br>' : ''}${S.tel ? 'โทร ' + e(S.tel) : ''}${S.tax ? (S.tel ? ' · ' : '') + 'เลขประจำตัวผู้เสียภาษี ' + e(S.tax) : ''}</div></td></tr></table></td><td style="vertical-align:top;text-align:right;white-space:nowrap"><div style="font-size:22px;font-weight:700;color:${DOC_C}">${th}</div><div style="font-size:11px;color:#78716c;letter-spacing:.12em;text-transform:uppercase">${en}</div></td></tr></table><div style="height:3px;background:linear-gradient(90deg,${DOC_C},#c08a3e);border-radius:2px;margin:12px 0 14px"></div>`;
 }
 const DOC_BOX = (h, b, pd) =>
   `<td style="width:50%;vertical-align:top;${pd}"><div style="border:1px solid #e7e0dc;border-radius:10px;padding:10px 12px;font-size:12px;color:#57534e;line-height:1.6;min-height:70px"><div style="color:#78716c">${h}</div>${b}</div></td>`;
@@ -5105,8 +5105,8 @@ async function vsl(id) {
     </div>${
       i.slip && i.mt != 'cash'
         ? i.sref
-          ? `<div class="sq sq-ok">${NI('ok')}<span>QR บนสลิปถูกต้อง · ${e(bankName(i.sbank))}<br><small>เลขอ้างอิง ${e(i.sref)} · ไม่ซ้ำกับสลิปอื่นในระบบ</small><br><small>ยอดเงินยังต้องตรวจกับรายการเงินเข้าบัญชี หรือสแกน QR ด้วยแอปธนาคาร</small></span></div>`
-          : `<div class="sq sq-wa">${NI('warn')}<span>ไม่พบ QR บนรูปสลิปนี้ · ควรตรวจกับรายการเงินเข้าบัญชีอย่างละเอียด</span></div>`
+          ? `<div class="slq slq-ok">${NI('ok')}<span>QR บนสลิปถูกต้อง · ${e(bankName(i.sbank))}<br><small>เลขอ้างอิง ${e(i.sref)} · ไม่ซ้ำกับสลิปอื่นในระบบ</small><br><small>ยอดเงินยังต้องตรวจกับรายการเงินเข้าบัญชี หรือสแกน QR ด้วยแอปธนาคาร</small></span></div>`
+          : `<div class="slq slq-wa">${NI('warn')}<span>ไม่พบ QR บนรูปสลิปนี้ · ควรตรวจกับรายการเงินเข้าบัญชีอย่างละเอียด</span></div>`
         : ''
     }`;
   const btns = `<div class="np acts" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
