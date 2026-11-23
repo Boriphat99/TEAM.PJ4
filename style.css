@@ -9601,7 +9601,7 @@ html[data-theme='dark'] .apl .ap-foot {
 }
 html[data-theme='dark'] .apl .ap-btn,
 html[data-theme='dark'] .apl .ap-login {
-  background: linear-gradient(180deg, #d4566a, #bf4257 60%, #a5344a) !important;
+  background: linear-gradient(180deg, #d42a46, #b01030 60%, #8f0c27) !important;
 }
 /* ตัวเลขเด่น/ไอคอนในการ์ด */
 .apl .ap-st b {
