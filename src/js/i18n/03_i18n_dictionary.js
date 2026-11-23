@@ -87,6 +87,9 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
 ส่งไม่สำเร็จ|failed
 ส่งเตือน|Remind
 เชื่อม LINE แล้ว|LINE linked
+ยังไม่เชื่อม LINE|LINE not linked
+ได้รับแจ้งเตือนบิลทาง LINE|Receives bill alerts on LINE
+ยังไม่ได้รับแจ้งเตือนทาง LINE|Not receiving LINE alerts
 ค้างชำระ|Unpaid
 เลขมิเตอร์ตอนย้ายเข้า|Move-in meter reading
 จดจากมิเตอร์จริงในวันที่เข้าพัก · บิลแรกจะคิดค่าไฟจากเลขนี้|Read the actual meter on move-in day · the first bill charges electricity from this number
