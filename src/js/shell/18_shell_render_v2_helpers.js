@@ -107,7 +107,7 @@ const IG = {
 const NI = n => `<i class="ni">${IC[n]}</i>`;
 const T2 = s => (LANG == 'en' ? tl(s) : s);
 const THB = () =>
-  `<button class="thm" type="button" onclick="toggleTheme()" aria-label="Theme" data-tip="${T2('สลับธีม')}">${IC.sun}${IC.moon}</button>`;
+  `<button class="thm" type="button" onclick="toggleTheme()" aria-label="สลับธีม" data-tip="${T2('สลับธีม')}">${IC.sun}${IC.moon}</button>`;
 const TGL = c =>
   `<span class="tgl ${c || ''}"><span class="seg"><span class="${LANG == 'th' ? 'on' : ''}" onclick="setPf('lang','th')">TH</span><span class="${LANG == 'en' ? 'on' : ''}" onclick="setPf('lang','en')">EN</span></span>${THB()}</span>`;
 function applyTheme(v) {

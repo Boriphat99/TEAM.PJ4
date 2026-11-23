@@ -1,7 +1,56 @@
 /* 03_i18n_dictionary.js — พจนานุกรมแปลภาษา ไทย/อังกฤษ (ขนาดใหญ่)
    (แยกมาจาก script.js บรรทัด 12-656; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
-  ENm = `หรือลากไฟล์มาวางที่นี่| or drop the file here
+  ENm = `ขอบคุณที่ใช้บริการ T&T Mansion · เอกสารนี้ออกโดยระบบ|Thank you for your payment · T&T Mansion · Issued by the system
+คำขอความช่วยเหลือจากผู้ใช้|Help requests from users
+ตัวเลขอ้างอิงจากการตั้งค่าของหอพัก|Figures based on the settings of
+พื้นที่ใส่ QR LINE|LINE QR area
+ยอด QR ขึ้นอัตโนมัติ|QR amount filled in automatically
+ยังไม่ได้ตั้งค่า LINE ID|LINE ID not set
+รายรับค่าไฟ 6 เดือนล่าสุด|Electricity revenue, last 6 months
+รายได้ 6 เดือนล่าสุด|Income, last 6 months
+สร้าง QR ตามยอดสุทธิของใบแจ้งหนี้อัตโนมัติ|QR is generated automatically from the invoice total
+สแกน QR ยอดขึ้นอัตโนมัติ|Scan the QR, the amount fills in automatically
+เอกสารนี้ออกโดยระบบ T&T Mansion|Issued by the T&T Mansion system
+ช้าเฉลี่ย|Avg. delay
+สร้างบัญชีเข้าสู่ระบบให้ผู้เช่า พร้อมเปิดสัญญาเช่า|Create a login for the tenant and open the lease
+สร้างบัญชีและเปิดสัญญา|Create account and open lease
+บัญชีเข้าสู่ระบบ|Login account
+ข้อมูลผู้เช่า|Tenant details
+รหัสผ่านเริ่มต้น|Initial password
+สุ่มใหม่|Regenerate
+ผู้เช่าจะได้รับการแจ้งเตือนให้เปลี่ยนรหัสผ่านเองหลังเข้าสู่ระบบครั้งแรก|The tenant will be asked to change the password after the first sign-in
+เว้นวันสิ้นสุดว่างไว้ = ไม่กำหนด|Leave the end date empty for no end date
+(บันทึกครั้งเดียว ณ วันเริ่มสัญญา)|(recorded once on the contract start date)
+ไฟล์สัญญาเช่า (PDF ไม่บังคับ)|Lease file (PDF, optional)
+สลิปโอนเงินที่ผู้เช่าส่งมา|Transfer slip sent by the tenant
+สลิปที่ผู้เช่าส่ง|Slips sent by tenants
+ดูสลิป|View slip
+ยอดที่แจ้งชำระ|Amount reported
+(ปิดรอบ)|(closed)
+เปิดอยู่ · ออกบิลและแก้ไขได้ถึงวันที่ 10 ของ|is open · you can issue invoices and edit until the 10th of 
+บิล · รวม|bills · total
+บิล|bills
+เกิน |Over 
+ ใช้ | used 
+ใช้ |used 
+อัปเดตอัตโนมัติ|Updates automatically
+รายรับ 6 เดือนล่าสุด|Income, last 6 months
+รายรับ 6 เดือน|6-month income
+พร้อมเพย์|PromptPay
+ครบกำหนดชำระ|Payment due
+ช่องทางชำระเงิน|Payment channel
+วันสิ้นสุดสัญญา|Contract end date
+จำนวนห้องพักทั้งหมดในระบบ|Total rooms in the system
+ยอดรวมใบเรียกเก็บที่ชำระแล้วของรอบบิลปัจจุบัน|Total of paid bills in the current billing cycle
+รายได้ที่ชำระแล้วของรอบบิลก่อนหน้า|Paid income of the previous billing cycle
+รายได้ที่ชำระแล้วสะสมตั้งแต่ต้นปี|Paid income since the start of the year
+เปอร์เซ็นต์การเปลี่ยนแปลงของรายได้เทียบกับเดือนก่อน|Income change compared with last month (%)
+ใบเรียกเก็บที่ผู้เช่ายังไม่แจ้งชำระ|Bills the tenant has not paid yet
+ใบเรียกเก็บที่เกินวันที่ 10 ของเดือนถัดไปและยังไม่ชำระ|Bills past the 10th of the next month and still unpaid
+ไม่เกิน 5MB|up to 5MB
+รอบ |Cycle 
+หรือลากไฟล์มาวางที่นี่| or drop the file here
 เลือกรูปสลิป|Choose slip image
 JPG หรือ PNG ไม่เกิน 8 MB|JPG or PNG, up to 8 MB
 กดที่กรอบเพื่อเปลี่ยนรูป|Tap the box to change the image
@@ -718,7 +767,12 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
     if (!THR.test(t)) return t;
     for (const [a, b] of ENm) if (t.includes(a)) t = t.split(a).join(b);
     return t
+      .replace(/\byou(?=[A-Z\u0E00-\u0E7F])/g, '')
+      .replace(/\bAccount (SCB|KBank|KTB|BBL|BAY|TTB|GSB)\b/g, '$1 account')
+      .replace(/^(\d+) Floor$/, (m, n) => n + (n == '1' ? ' floor' : ' floors'))
+      .replace(/^(\d+) Vacant$/, '$1 vacant')
       .replace(/(\d+) Room\b/g, '$1 rooms')
+      .replace(/\bmax (\d+) image\b/g, 'max $1 images')
       .replace(
         /\b1 (bills|persons|times|days|items|invoices|units|rooms)\b/g,
         (m, a) => '1 ' + a.slice(0, -1)
@@ -730,7 +784,7 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
       const v = tl(n.nodeValue);
       if (v !== n.nodeValue) n.nodeValue = v;
     } else if (n.nodeType == 1 && n.tagName != 'SCRIPT' && n.tagName != 'STYLE') {
-      ['placeholder', 'title', 'alt'].forEach(a => {
+      ['placeholder', 'title', 'alt', 'aria-label'].forEach(a => {
         if (n.hasAttribute(a)) {
           const o = n.getAttribute(a),
             v = tl(o);

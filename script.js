@@ -26,7 +26,56 @@ try {
 /* 03_i18n_dictionary.js — พจนานุกรมแปลภาษา ไทย/อังกฤษ (ขนาดใหญ่)
    (แยกมาจาก script.js บรรทัด 12-656; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
-  ENm = `หรือลากไฟล์มาวางที่นี่| or drop the file here
+  ENm = `ขอบคุณที่ใช้บริการ T&T Mansion · เอกสารนี้ออกโดยระบบ|Thank you for your payment · T&T Mansion · Issued by the system
+คำขอความช่วยเหลือจากผู้ใช้|Help requests from users
+ตัวเลขอ้างอิงจากการตั้งค่าของหอพัก|Figures based on the settings of
+พื้นที่ใส่ QR LINE|LINE QR area
+ยอด QR ขึ้นอัตโนมัติ|QR amount filled in automatically
+ยังไม่ได้ตั้งค่า LINE ID|LINE ID not set
+รายรับค่าไฟ 6 เดือนล่าสุด|Electricity revenue, last 6 months
+รายได้ 6 เดือนล่าสุด|Income, last 6 months
+สร้าง QR ตามยอดสุทธิของใบแจ้งหนี้อัตโนมัติ|QR is generated automatically from the invoice total
+สแกน QR ยอดขึ้นอัตโนมัติ|Scan the QR, the amount fills in automatically
+เอกสารนี้ออกโดยระบบ T&T Mansion|Issued by the T&T Mansion system
+ช้าเฉลี่ย|Avg. delay
+สร้างบัญชีเข้าสู่ระบบให้ผู้เช่า พร้อมเปิดสัญญาเช่า|Create a login for the tenant and open the lease
+สร้างบัญชีและเปิดสัญญา|Create account and open lease
+บัญชีเข้าสู่ระบบ|Login account
+ข้อมูลผู้เช่า|Tenant details
+รหัสผ่านเริ่มต้น|Initial password
+สุ่มใหม่|Regenerate
+ผู้เช่าจะได้รับการแจ้งเตือนให้เปลี่ยนรหัสผ่านเองหลังเข้าสู่ระบบครั้งแรก|The tenant will be asked to change the password after the first sign-in
+เว้นวันสิ้นสุดว่างไว้ = ไม่กำหนด|Leave the end date empty for no end date
+(บันทึกครั้งเดียว ณ วันเริ่มสัญญา)|(recorded once on the contract start date)
+ไฟล์สัญญาเช่า (PDF ไม่บังคับ)|Lease file (PDF, optional)
+สลิปโอนเงินที่ผู้เช่าส่งมา|Transfer slip sent by the tenant
+สลิปที่ผู้เช่าส่ง|Slips sent by tenants
+ดูสลิป|View slip
+ยอดที่แจ้งชำระ|Amount reported
+(ปิดรอบ)|(closed)
+เปิดอยู่ · ออกบิลและแก้ไขได้ถึงวันที่ 10 ของ|is open · you can issue invoices and edit until the 10th of 
+บิล · รวม|bills · total
+บิล|bills
+เกิน |Over 
+ ใช้ | used 
+ใช้ |used 
+อัปเดตอัตโนมัติ|Updates automatically
+รายรับ 6 เดือนล่าสุด|Income, last 6 months
+รายรับ 6 เดือน|6-month income
+พร้อมเพย์|PromptPay
+ครบกำหนดชำระ|Payment due
+ช่องทางชำระเงิน|Payment channel
+วันสิ้นสุดสัญญา|Contract end date
+จำนวนห้องพักทั้งหมดในระบบ|Total rooms in the system
+ยอดรวมใบเรียกเก็บที่ชำระแล้วของรอบบิลปัจจุบัน|Total of paid bills in the current billing cycle
+รายได้ที่ชำระแล้วของรอบบิลก่อนหน้า|Paid income of the previous billing cycle
+รายได้ที่ชำระแล้วสะสมตั้งแต่ต้นปี|Paid income since the start of the year
+เปอร์เซ็นต์การเปลี่ยนแปลงของรายได้เทียบกับเดือนก่อน|Income change compared with last month (%)
+ใบเรียกเก็บที่ผู้เช่ายังไม่แจ้งชำระ|Bills the tenant has not paid yet
+ใบเรียกเก็บที่เกินวันที่ 10 ของเดือนถัดไปและยังไม่ชำระ|Bills past the 10th of the next month and still unpaid
+ไม่เกิน 5MB|up to 5MB
+รอบ |Cycle 
+หรือลากไฟล์มาวางที่นี่| or drop the file here
 เลือกรูปสลิป|Choose slip image
 JPG หรือ PNG ไม่เกิน 8 MB|JPG or PNG, up to 8 MB
 กดที่กรอบเพื่อเปลี่ยนรูป|Tap the box to change the image
@@ -743,7 +792,12 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
     if (!THR.test(t)) return t;
     for (const [a, b] of ENm) if (t.includes(a)) t = t.split(a).join(b);
     return t
+      .replace(/\byou(?=[A-Z\u0E00-\u0E7F])/g, '')
+      .replace(/\bAccount (SCB|KBank|KTB|BBL|BAY|TTB|GSB)\b/g, '$1 account')
+      .replace(/^(\d+) Floor$/, (m, n) => n + (n == '1' ? ' floor' : ' floors'))
+      .replace(/^(\d+) Vacant$/, '$1 vacant')
       .replace(/(\d+) Room\b/g, '$1 rooms')
+      .replace(/\bmax (\d+) image\b/g, 'max $1 images')
       .replace(
         /\b1 (bills|persons|times|days|items|invoices|units|rooms)\b/g,
         (m, a) => '1 ' + a.slice(0, -1)
@@ -755,7 +809,7 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
       const v = tl(n.nodeValue);
       if (v !== n.nodeValue) n.nodeValue = v;
     } else if (n.nodeType == 1 && n.tagName != 'SCRIPT' && n.tagName != 'STYLE') {
-      ['placeholder', 'title', 'alt'].forEach(a => {
+      ['placeholder', 'title', 'alt', 'aria-label'].forEach(a => {
         if (n.hasAttribute(a)) {
           const o = n.getAttribute(a),
             v = tl(o);
@@ -1191,7 +1245,7 @@ const home0 = () => {
     <h2 class="ap-r">ทุกอย่างของหอพัก ในหน้าจอเดียว</h2>
     <div class="ap-who ap-r"><small>รองรับผู้ใช้งาน 3 กลุ่ม</small><div><span>${IC.rooms} เจ้าของหอพัก</span><span>${IC.set} ผู้ดูแลระบบ</span><span>${PI} ผู้เช่า</span></div></div>
     <div class="ap-st">${stats.map(x => `<div class="ap-r"><b>${x[0]}</b><small>${x[1]}</small></div>`).join('')}</div>
-    <p class="ap-note">ตัวเลขอ้างอิงจากการตั้งค่าของหอพัก T&T แมนชั่น</p>
+    <p class="ap-note">ตัวเลขอ้างอิงจากการตั้งค่าของหอพัก ${e(D.set.name || 'T&T Mansion')}</p>
   </div>
 </section>
 
@@ -3147,7 +3201,7 @@ pg.help = () => {
 <div class="hlp" style="max-width:780px"><h3 style="margin:18px 0 4px">ช่องทางการติดต่อ</h3><p class="mu" style="margin:0 0 12px">ติดต่อเราผ่านช่องทางที่คุณสะดวก</p>
 <div class="ln2"><div class="lnh"><i class="lni"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.5 1.4 4.7 3.7 6.2-.2.8-.7 2.7-.8 3.1 0 0-.1.3.2.4.2.1.4 0 .4 0 .5-.1 3-2 4.1-2.8.8.1 1.6.2 2.4.2 5.5 0 10-3.6 10-8S17.5 3 12 3z"/></svg></i><b>LINE ติดต่อสอบถาม</b></div><div class="lnb"><div class="lq">${S.lineqr ? `<img src="${S.lineqr}" alt="QR LINE">` : 'พื้นที่ใส่ QR LINE<br>' + (ad ? '(กดแก้ไขเพื่อเพิ่ม)' : '(ผู้ดูแลยังไม่ได้เพิ่ม)')}</div><div class="lnx"><h3 class="lid">${id ? e(id) : 'ยังไม่ได้ตั้งค่า LINE ID'}</h3><small class="mu lns">ติดต่อสอบถาม · ${PN()}</small><p class="mu lnt">สแกน QR หรือค้นหา LINE ID เพื่อพูดคุยกับผู้ดูแลหอพัก</p><div class="lna">${id ? `<a class="b lgb" target="_blank" rel="noopener" href="${lnUrl(id)}">เพิ่มเพื่อนใน LINE</a>` : ''}${ad ? '<button class="b b2 sm" onclick="le()">แก้ไข LINE</button>' : ''}</div></div></div>${lnBotRow(ad)}</div>
 ${ad ? '' : contactCard()}${ad ? '' : `<h3 style="margin:28px 0 12px">ส่งคำขอใหม่</h3><div class="cd"><label>หมวดหมู่</label><select id="tkc"><option value="">เลือกหมวดหมู่</option>${['ปัญหาการชำระเงิน', 'ใบแจ้งหนี้ / ค่าไฟ', 'ซ่อมบำรุง', 'บัญชีผู้ใช้', 'อื่นๆ'].map(x => `<option>${x}</option>`).join('')}</select><label>หัวข้อ</label><input id="tkt" placeholder="อธิบายปัญหาโดยย่อ" maxlength="100"><label>รายละเอียด</label><textarea id="tkb" rows="4" placeholder="กรุณาอธิบายปัญหาอย่างละเอียด..."></textarea><label>แนบรูปภาพ (ไม่บังคับ)</label><div style="margin:6px 0"><input type="file" id="tkf" accept="image/jpeg,image/png,image/webp" multiple hidden onchange="tki(this)"><button class="b b2 sm" onclick="$('#tkf').click()">แนบรูปภาพ</button> <small class="mu">สูงสุด 5 รูป (JPEG, PNG, WebP) · ไม่เกิน 5MB ต่อรูป</small></div><div id="tkp" class="fl"></div><div style="text-align:right"><button class="b" onclick="tks()">ส่งคำขอ</button></div></div>`}
-<h3 style="margin:28px 0 12px">${ad ? 'คำขอจากผู้ใช้ (ช่วยเหลือผู้ส่งคำขอ)' : 'คำขอของฉัน'}</h3>${
+<h3 style="margin:28px 0 12px">${ad ? 'คำขอความช่วยเหลือจากผู้ใช้' : 'คำขอของฉัน'}</h3>${
     tk
       .map(
         t =>
@@ -3495,7 +3549,7 @@ const IG = {
 const NI = n => `<i class="ni">${IC[n]}</i>`;
 const T2 = s => (LANG == 'en' ? tl(s) : s);
 const THB = () =>
-  `<button class="thm" type="button" onclick="toggleTheme()" aria-label="Theme" data-tip="${T2('สลับธีม')}">${IC.sun}${IC.moon}</button>`;
+  `<button class="thm" type="button" onclick="toggleTheme()" aria-label="สลับธีม" data-tip="${T2('สลับธีม')}">${IC.sun}${IC.moon}</button>`;
 const TGL = c =>
   `<span class="tgl ${c || ''}"><span class="seg"><span class="${LANG == 'th' ? 'on' : ''}" onclick="setPf('lang','th')">TH</span><span class="${LANG == 'en' ? 'on' : ''}" onclick="setPf('lang','en')">EN</span></span>${THB()}</span>`;
 function applyTheme(v) {
@@ -4852,7 +4906,7 @@ if (SBON) sbBoot().catch(x => alert('เชื่อมต่อ Supabase ไม
     up.className = 'totop np';
     up.type = 'button';
     up.innerHTML = IC.top;
-    up.setAttribute('aria-label', 'Back to top');
+    up.setAttribute('aria-label', 'กลับขึ้นด้านบน');
     up.onclick = () => window.scrollTo({ top: 0, behavior: RM ? 'auto' : 'smooth' });
     body.appendChild(up);
     let sf = 0;

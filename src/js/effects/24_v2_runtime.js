@@ -10,7 +10,7 @@
     up.className = 'totop np';
     up.type = 'button';
     up.innerHTML = IC.top;
-    up.setAttribute('aria-label', 'Back to top');
+    up.setAttribute('aria-label', 'กลับขึ้นด้านบน');
     up.onclick = () => window.scrollTo({ top: 0, behavior: RM ? 'auto' : 'smooth' });
     body.appendChild(up);
     let sf = 0;

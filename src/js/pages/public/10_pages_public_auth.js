@@ -63,7 +63,7 @@ const home0 = () => {
     <h2 class="ap-r">ทุกอย่างของหอพัก ในหน้าจอเดียว</h2>
     <div class="ap-who ap-r"><small>รองรับผู้ใช้งาน 3 กลุ่ม</small><div><span>${IC.rooms} เจ้าของหอพัก</span><span>${IC.set} ผู้ดูแลระบบ</span><span>${PI} ผู้เช่า</span></div></div>
     <div class="ap-st">${stats.map(x => `<div class="ap-r"><b>${x[0]}</b><small>${x[1]}</small></div>`).join('')}</div>
-    <p class="ap-note">ตัวเลขอ้างอิงจากการตั้งค่าของหอพัก T&T แมนชั่น</p>
+    <p class="ap-note">ตัวเลขอ้างอิงจากการตั้งค่าของหอพัก ${e(D.set.name || 'T&T Mansion')}</p>
   </div>
 </section>
 
