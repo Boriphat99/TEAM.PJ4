@@ -98,7 +98,7 @@ function finBill(u, end) {
     per,
     pv: p0,
     u: units,
-    el: units * D.set.rate,
+    el: elc(units),
     x: 0,
     xn: '',
     rent: 0,
@@ -116,7 +116,7 @@ function lv(n) {
     v = $('#m' + n).value,
     u = v === '' ? null : +v - pvOf(r),
     x = +$('#x' + n).value || 0,
-    el = u == null || u < 0 ? null : u * D.set.rate;
+    el = u == null || u < 0 ? null : elc(u);
   $('#u' + n).textContent = u == null ? '-' : u;
   $('#a' + n).textContent = el == null ? '-' : '฿' + fm(el);
   $('#t' + n).textContent = el == null ? '-' : '฿' + fm(el + x + D.set.rent);
@@ -164,7 +164,7 @@ function iss2() {
       })(),
       pv: p0,
       u: v - p0,
-      el: (v - p0) * D.set.rate,
+      el: elc(v - p0),
       x,
       xn: $('#xn' + r.n).value.trim(),
       rent: D.set.rent,

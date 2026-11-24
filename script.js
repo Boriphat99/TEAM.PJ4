@@ -1082,6 +1082,12 @@ const e = s => String(s || '').replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) +
   },
   pill = i => `<span class="pl ${SL[st(i)][1]}">${SL[st(i)][0]}</span>`,
   base = i => i.rent + i.el + (i.x || 0),
+  // ค่าไฟต่อหน่วยของบิลนั้น (คิดจากยอดที่ออกบิลจริง) เปลี่ยนอัตราในตั้งค่าแล้ว บิลเก่าไม่เปลี่ยนตาม
+  brate = i => (i.u > 0 ? Math.round((i.el / i.u) * 100) / 100 : D.set.rate),
+  // เงินแรกเข้าของสัญญานั้น (ค่าที่ใช้ตอนเปิดสัญญา) ไม่ใช่ค่าตั้งปัจจุบัน
+  udep = u => (u && u.dep != null ? u.dep : D.set.dep),
+  // ค่าไฟ = หน่วย × อัตรา ปัดเป็นสตางค์ (กันทศนิยมเพี้ยน เช่น 7.1 × 3)
+  elc = n => Math.round(n * D.set.rate * 100) / 100,
   // รอบบิล + ป้าย "บิลย้ายออก" สำหรับบิลสุดท้ายตอนย้ายออก (ค่าไฟอย่างเดียว)
   mlab = i => (typeof mon == 'function' ? mon(i.per) : i.per) + (i.fin ? ' · บิลย้ายออก' : ''),
   tot = i => base(i) + (i.s == 'unpaid' ? fine(i) : i.fine || 0),
@@ -1969,7 +1975,7 @@ const pg = {
         .join('')}</div>
 <div class="tabs" style="max-width:320px"><span class="${TT == 'in' ? 'on' : ''}" onclick="TT='in';R()">ปัจจุบัน (${inn.length})</span><span class="${TT == 'in' ? '' : 'on'}" onclick="TT='out';R()">อดีต (${outn.length})</span></div>
 <div class="tb2" style="margin:14px 0"><input placeholder="ค้นหาผู้เช่า..." value="${e(TQ)}" onchange="TQ=this.value;R()" style="min-width:260px"><select onchange="TS=this.value;R()"><option value="">สถานะ: ทั้งหมด</option><option value="od" ${TS == 'od' ? 'selected' : ''}>ค้างชำระ</option><option value="nr" ${TS == 'nr' ? 'selected' : ''}>รอจัดห้อง</option>${SBX.cl ? `<option value="nl" ${TS == 'nl' ? 'selected' : ''}>ยังไม่เชื่อม LINE</option>` : ''}</select></div>
-<div class="cd sc" style="padding:8px 18px"><table><tr><th>ผู้เช่า</th><th>ที่ตั้ง</th><th>ค่าเช่าต่อเดือน</th><th>สัญญา</th><th>เงินแรกเข้า</th><th></th><th></th></tr>${L.map(u => `<tr><td><span class="tc">${av(u, 40)}<span><b>${e(u.name)}</b> ${u.out ? '<span class="pl" style="color:#94a3b8;border-color:#334155;background:#0f172a">ย้ายออกแล้ว</span>' : '<span class="pl g">ใช้งาน</span>'}${SBX.cl && !u.out ? (lnOn(u._uid) ? ' <span class="pl g" title="ได้รับแจ้งเตือนบิลทาง LINE">เชื่อม LINE แล้ว</span>' : ' <span class="pl y" title="ยังไม่ได้รับแจ้งเตือนทาง LINE">ยังไม่เชื่อม LINE</span>') : ''}<br><small class="mu">${e(u.tel || '-')} · ${e(u.email)}</small></span></span></td><td>${PN()}<br><small class="mu">${u.room ? 'ห้อง ' + u.room + ' · ห้องปรับอากาศ' : '<span class="pl y">รอจัดห้อง</span>'}</small></td><td><b class="ac">฿${fm(D.set.rent)}/เดือน</b></td><td><small class="mu">${dt(u.cs || u.id)} → ${u.ce ? dt(u.ce) : 'ไม่กำหนด'}</small></td><td>฿${fm(D.set.dep)}</td><td>${u.room ? `<button class="b b2 sm" onclick="rm(${u.room})">ดูห้อง →</button>` : `<button class="b sm" onclick="asr(${u.id})">จัดห้อง</button>`}</td><td><span class="mm" onclick="mnu(event,this)">⋯<span class="mdd"><button onclick="et(${u.id})">แก้ไข</button><button onclick="th(${u.id})">ประวัติชำระ</button>${u.out ? `<button onclick="rv(${u.id})">ย้ายกลับเข้าพัก</button>` : `<button onclick="mv(${u.id})">ย้ายออก</button>`}</span></span></td></tr>`).join('') || '<tr><td colspan=7 class=mu>ไม่มีผู้เช่า</td></tr>'}</table></div>`
+<div class="cd sc" style="padding:8px 18px"><table><tr><th>ผู้เช่า</th><th>ที่ตั้ง</th><th>ค่าเช่าต่อเดือน</th><th>สัญญา</th><th>เงินแรกเข้า</th><th></th><th></th></tr>${L.map(u => `<tr><td><span class="tc">${av(u, 40)}<span><b>${e(u.name)}</b> ${u.out ? '<span class="pl" style="color:#94a3b8;border-color:#334155;background:#0f172a">ย้ายออกแล้ว</span>' : '<span class="pl g">ใช้งาน</span>'}${SBX.cl && !u.out ? (lnOn(u._uid) ? ' <span class="pl g" title="ได้รับแจ้งเตือนบิลทาง LINE">เชื่อม LINE แล้ว</span>' : ' <span class="pl y" title="ยังไม่ได้รับแจ้งเตือนทาง LINE">ยังไม่เชื่อม LINE</span>') : ''}<br><small class="mu">${e(u.tel || '-')} · ${e(u.email)}</small></span></span></td><td>${PN()}<br><small class="mu">${u.room ? 'ห้อง ' + u.room + ' · ห้องปรับอากาศ' : '<span class="pl y">รอจัดห้อง</span>'}</small></td><td><b class="ac">฿${fm(D.set.rent)}/เดือน</b></td><td><small class="mu">${dt(u.cs || u.id)} → ${u.ce ? dt(u.ce) : 'ไม่กำหนด'}</small></td><td>฿${fm(udep(u))}</td><td>${u.room ? `<button class="b b2 sm" onclick="rm(${u.room})">ดูห้อง →</button>` : `<button class="b sm" onclick="asr(${u.id})">จัดห้อง</button>`}</td><td><span class="mm" onclick="mnu(event,this)">⋯<span class="mdd"><button onclick="et(${u.id})">แก้ไข</button><button onclick="th(${u.id})">ประวัติชำระ</button>${u.out ? `<button onclick="rv(${u.id})">ย้ายกลับเข้าพัก</button>` : `<button onclick="mv(${u.id})">ย้ายออก</button>`}</span></span></td></tr>`).join('') || '<tr><td colspan=7 class=mu>ไม่มีผู้เช่า</td></tr>'}</table></div>`
     );
   },
   met() {
@@ -2125,9 +2131,10 @@ function et(id) {
 function eu(id) {
   const u = D.users.find(x => x.id == id),
     n = $('#f_n').value.trim(),
-    m = $('#f_e').value.trim().toLowerCase(),
+    // ฐานข้อมูลจริง: อีเมล/รหัสผ่านแก้ที่นี่ไม่ได้ (ช่องถูกซ่อน) ใช้ค่าเดิม
+    m = SBON ? u.email : $('#f_e').value.trim().toLowerCase(),
     r = +$('#f_r').value,
-    w = $('#f_w').value,
+    w = SBON ? '' : $('#f_w').value,
     go2 = $('#f_s').value == 'out';
   if (!n || !m) return alert('กรอกชื่อและอีเมล');
   const tel = $('#f_t').value.trim();
@@ -2185,19 +2192,21 @@ function ebs(id) {
   if (plock(i.per)) return alert(LKM(i.per));
   if (i.s != 'unpaid') return alert('บิลนี้รอตรวจสอบหรือชำระแล้ว จึงแก้ไขไม่ได้');
   const last = !D.inv.some(k => k.room == i.room && k.per > i.per),
-    m = $('#eb_m');
+    m = $('#eb_m'),
+    xr = $('#xa').value.trim(),
+    x = xr === '' ? 0 : Number(xr);
+  // ตรวจทุกช่องก่อน แล้วค่อยแก้บิล (เดิมแก้เลขมิเตอร์ไปก่อน แล้วค่อยเจอค่าใช้จ่ายติดลบ บิลค้างครึ่งทาง)
+  if (!(x >= 0)) return alert('ค่าใช้จ่ายเพิ่มเติมต้องเป็นตัวเลขและไม่ติดลบ');
   if (last && m && m.value !== '') {
     const v = +m.value;
     if (!Number.isInteger(v) || v < i.pv)
       return alert('เลขมิเตอร์ล่าสุดต้องเป็นจำนวนเต็มและไม่น้อยกว่าเลขก่อนหน้า (' + i.pv + ')');
-    const rt = i.u > 0 ? i.el / i.u : D.set.rate,
+    const rt = brate(i),
       r = D.rooms.find(x => x.n == i.room);
     i.u = v - i.pv;
     i.el = Math.round(i.u * rt * 100) / 100;
     if (r) r.m = v;
   }
-  const x = +$('#xa').value || 0;
-  if (x < 0) return alert('ค่าใช้จ่ายเพิ่มเติมต้องไม่ติดลบ');
   i.x = x;
   i.xn = $('#xb').value.trim();
   lg('แก้ไขบิล ' + id);
@@ -2390,7 +2399,7 @@ function finBill(u, end) {
     per,
     pv: p0,
     u: units,
-    el: units * D.set.rate,
+    el: elc(units),
     x: 0,
     xn: '',
     rent: 0,
@@ -2408,7 +2417,7 @@ function lv(n) {
     v = $('#m' + n).value,
     u = v === '' ? null : +v - pvOf(r),
     x = +$('#x' + n).value || 0,
-    el = u == null || u < 0 ? null : u * D.set.rate;
+    el = u == null || u < 0 ? null : elc(u);
   $('#u' + n).textContent = u == null ? '-' : u;
   $('#a' + n).textContent = el == null ? '-' : '฿' + fm(el);
   $('#t' + n).textContent = el == null ? '-' : '฿' + fm(el + x + D.set.rent);
@@ -2456,7 +2465,7 @@ function iss2() {
       })(),
       pv: p0,
       u: v - p0,
-      el: (v - p0) * D.set.rate,
+      el: elc(v - p0),
       x,
       xn: $('#xn' + r.n).value.trim(),
       rent: D.set.rent,
@@ -2484,7 +2493,7 @@ pg.my = () => {
     l
       .map(i => {
         const s = st(i);
-        return `<div class="cd"><div style="display:flex;justify-content:space-between"><b>${mlab(i)}</b>${pill(i)}</div><div class="big">฿${fm(tot(i))}</div>${i.fin ? '' : `<div class="bd mu"><span>ค่าเช่า</span><span>฿${fm(i.rent)}</span></div>`}<div class="bd mu"><span>ค่าไฟ ${i.u} หน่วย × ${D.set.rate}</span><span>฿${fm(i.el)}</span></div>${i.x ? `<div class="bd mu"><span>${e(i.xn || 'ค่าใช้จ่ายเพิ่มเติม')}</span><span>฿${fm(i.x)}</span></div>` : ''}${tot(i) > base(i) ? `<div class="bd" style="color:#fb7185"><span>ค่าปรับ</span><span>฿${fm(tot(i) - base(i))}</span></div>` : ''}<p class="mu">ครบกำหนด ${dt(due(i))}</p>${i.s == 'unpaid' && i.rj ? `<div class="note" style="background:#fee2e2;color:#b91c1c;border-color:#fecaca">${NI('warn')}สลิปถูกปฏิเสธ: ${e(i.rj)}<br>กรุณาตรวจสอบแล้วส่งสลิปใหม่</div>` : ''}${i.s == 'pending' ? '<span class="mu">รอผู้ดูแลตรวจสอบ · ส่งสลิปผิดแก้ไขได้ก่อนผู้ดูแลยืนยัน</span> ' : ''}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="b" onclick="vi('${i.id}')">ดูใบแจ้งหนี้</button>${i.s == 'pending' && i.mt != 'cash' ? `<button class="b b2" onclick="pm('${i.id}')">แก้ไข/ส่งสลิปใหม่</button>` : ''}</div></div>`;
+        return `<div class="cd"><div style="display:flex;justify-content:space-between"><b>${mlab(i)}</b>${pill(i)}</div><div class="big">฿${fm(tot(i))}</div>${i.fin ? '' : `<div class="bd mu"><span>ค่าเช่า</span><span>฿${fm(i.rent)}</span></div>`}<div class="bd mu"><span>ค่าไฟ ${i.u} หน่วย × ${brate(i)}</span><span>฿${fm(i.el)}</span></div>${i.x ? `<div class="bd mu"><span>${e(i.xn || 'ค่าใช้จ่ายเพิ่มเติม')}</span><span>฿${fm(i.x)}</span></div>` : ''}${tot(i) > base(i) ? `<div class="bd" style="color:#fb7185"><span>ค่าปรับ</span><span>฿${fm(tot(i) - base(i))}</span></div>` : ''}<p class="mu">ครบกำหนด ${dt(due(i))}</p>${i.s == 'unpaid' && i.rj ? `<div class="note" style="background:#fee2e2;color:#b91c1c;border-color:#fecaca">${NI('warn')}สลิปถูกปฏิเสธ: ${e(i.rj)}<br>กรุณาตรวจสอบแล้วส่งสลิปใหม่</div>` : ''}${i.s == 'pending' ? '<span class="mu">รอผู้ดูแลตรวจสอบ · ส่งสลิปผิดแก้ไขได้ก่อนผู้ดูแลยืนยัน</span> ' : ''}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="b" onclick="vi('${i.id}')">ดูใบแจ้งหนี้</button>${i.s == 'pending' && i.mt != 'cash' ? `<button class="b b2" onclick="pm('${i.id}')">แก้ไข/ส่งสลิปใหม่</button>` : ''}</div></div>`;
       })
       .join('') || `<div class="cd mu empty-ok">${NI('ok')}ไม่มีบิลค้างชำระ</div>`
   }</div>`;
@@ -2849,7 +2858,7 @@ function rcpHTML(i) {
       [
         'ค่าไฟฟ้า',
         i.el,
-        '(' + i.pv + ' - ' + (i.pv + i.u) + ') ใช้ ' + i.u + ' หน่วย × ' + B(S.rate) + '/หน่วย',
+        '(' + i.pv + ' - ' + (i.pv + i.u) + ') ใช้ ' + i.u + ' หน่วย × ' + B(brate(i)) + '/หน่วย',
       ],
     ];
   if (i.x) rows.push([i.xn || 'ค่าใช้จ่ายเพิ่มเติม', i.x, '']);
@@ -2960,7 +2969,7 @@ async function si(id) {
    (แยกมาจาก script.js บรรทัด 1153-1210; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 pg.prof = () => {
   const ad = U.role != 'tenant';
-  return `<h2>โปรไฟล์ของฉัน</h2><p class="mu">ดูและแก้ไขข้อมูลส่วนตัว</p><div class="pf" style="margin-top:14px"><div class="cd" style="text-align:center;display:grid;gap:10px;justify-items:center;align-content:start">${av(U, 120)}<h3>${e(U.name)}</h3><span class="pl ${ad ? 'p' : 'g'}">${U.role == 'owner' ? 'เจ้าของกิจการ' : ad ? 'ผู้ดูแลระบบ' : 'ผู้เช่า'}</span>${ad ? '' : `<p class="mu" style="margin:0">${U.room ? 'ห้อง ' + U.room : 'รอผู้ดูแลจัดห้อง'}<br>เงินแรกเข้า ฿${fm(D.set.dep)}</p>`}<input type="file" id="pf" accept="image/jpeg,image/png,image/webp" hidden onchange="pa(this)"><div><button class="b" onclick="$('#pf').click()">เปลี่ยนรูปโปรไฟล์</button>${U.av ? ` <button class="b b2" onclick="pr()">ลบรูป</button>` : ''}</div><small class="mu">JPG / PNG / WebP · ไม่เกิน 5MB · ครอปรูปได้ก่อนบันทึก</small></div>
+  return `<h2>โปรไฟล์ของฉัน</h2><p class="mu">ดูและแก้ไขข้อมูลส่วนตัว</p><div class="pf" style="margin-top:14px"><div class="cd" style="text-align:center;display:grid;gap:10px;justify-items:center;align-content:start">${av(U, 120)}<h3>${e(U.name)}</h3><span class="pl ${ad ? 'p' : 'g'}">${U.role == 'owner' ? 'เจ้าของกิจการ' : ad ? 'ผู้ดูแลระบบ' : 'ผู้เช่า'}</span>${ad ? '' : `<p class="mu" style="margin:0">${U.room ? 'ห้อง ' + U.room : 'รอผู้ดูแลจัดห้อง'}<br>เงินแรกเข้า ฿${fm(udep(U))}</p>`}<input type="file" id="pf" accept="image/jpeg,image/png,image/webp" hidden onchange="pa(this)"><div><button class="b" onclick="$('#pf').click()">เปลี่ยนรูปโปรไฟล์</button>${U.av ? ` <button class="b b2" onclick="pr()">ลบรูป</button>` : ''}</div><small class="mu">JPG / PNG / WebP · ไม่เกิน 5MB · ครอปรูปได้ก่อนบันทึก</small></div>
 <div style="display:grid;gap:14px"><div class="cd"><h3>การแสดงผล</h3><br><div class="bd" style="margin-bottom:16px"><b>ภาษา</b><span class="seg"><span class="${LANG == 'th' ? 'on' : ''}" onclick="setPf('lang','th')">TH</span><span class="${LANG == 'en' ? 'on' : ''}" onclick="setPf('lang','en')">EN</span></span></div><div class="bd"><b>${document.documentElement.dataset.theme == 'dark' ? 'โหมดกลางคืน' : 'โหมดกลางวัน'}</b><div class="tsw ${document.documentElement.dataset.theme == 'dark' ? 'on' : ''}" role="switch" onclick="setPf('theme','${document.documentElement.dataset.theme == 'dark' ? 'light' : 'dark'}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><i></i></div></div></div><div class="cd"><h3>ข้อมูลส่วนตัว</h3><br><label>ชื่อ - นามสกุล</label><input id="p_n" value="${e(U.name)}"><div class="row"><div><label>เบอร์โทร</label><input id="p_t" value="${e(U.tel || '')}" placeholder="08x-xxx-xxxx"></div><div><label>อีเมล</label><input id="p_e" value="${e(U.email)}"></div></div><label>เพศ</label><select id="p_g">${['', 'ชาย', 'หญิง', 'อื่นๆ'].map(v => `<option value="${v}" ${U.g == v ? 'selected' : ''}>${v || 'ไม่ระบุ'}</option>`).join('')}</select>${ad ? '' : `<label>ห้องพัก (แก้ไขได้โดยผู้ดูแล)</label><input value="${U.room || 'รอผู้ดูแลจัดห้อง'}" disabled>`}<button class="b" onclick="ps()">บันทึกข้อมูล</button></div>
 <div class="cd"><h3>เปลี่ยนรหัสผ่าน</h3><br><label>รหัสผ่านปัจจุบัน</label><input id="p_o" type="password"><div class="row"><div><label>รหัสผ่านใหม่ (อย่างน้อย 8 ตัว)</label><input id="p_w" type="password"></div><div><label>ยืนยันรหัสผ่านใหม่</label><input id="p_c" type="password"></div></div><button class="b b2" onclick="pc()">เปลี่ยนรหัสผ่าน</button></div></div></div>`;
 };
@@ -3123,7 +3132,7 @@ function docHTML(i, k, nl) {
           ' ใช้ ' +
           i.u +
           ' หน่วย × ' +
-          B(S.rate) +
+          B(brate(i)) +
           '/หน่วย',
       ],
     ],
@@ -3157,7 +3166,7 @@ pg.con = () => {
     t = D.users
       .filter(u => u.role == 'tenant' && u.room && (U.role != 'tenant' || u.id == U.id))
       .sort((a, b) => !!a.out - !!b.out || a.room - b.room);
-  return `<h2>สัญญาเช่า</h2><input type="file" id="cpi" accept="application/pdf" hidden onchange="cpf(this)"><p class="mu">เงินแรกเข้า ฿${fm(D.set.dep)} (มัดจำ + ค่าเช่าล่วงหน้า) บันทึกครั้งเดียว ณ วันเริ่มสัญญา</p><div class="cd sc" style="margin-top:14px"><table><tr><th>ห้อง</th><th>ผู้เช่า</th><th>เริ่มสัญญา</th><th>สิ้นสุด</th><th>เงินแรกเข้า</th><th>สถานะ</th><th>ไฟล์สัญญา (PDF)</th>${ad ? '<th></th>' : ''}</tr>${t.map(u => `<tr><td>${u.room}</td><td>${e(u.name)}</td><td>${dt(u.cs || u.id)}</td><td>${u.ce ? dt(u.ce) : 'ไม่กำหนด'}</td><td>฿${fm(D.set.dep)}</td><td>${u.out ? '<span class="pl r">สิ้นสุดสัญญา</span>' : '<span class="pl g">มีผลบังคับใช้</span>'}</td><td>${pdfc(u, ad)}</td>${ad ? `<td><button class="b b2 sm" onclick="ec(${u.id})">แก้ไขวันที่</button></td>` : ''}</tr>`).join('') || '<tr><td colspan=8 class=mu>ไม่มีข้อมูล</td></tr>'}</table></div>`;
+  return `<h2>สัญญาเช่า</h2><input type="file" id="cpi" accept="application/pdf" hidden onchange="cpf(this)"><p class="mu">เงินแรกเข้า ฿${fm(D.set.dep)} (มัดจำ + ค่าเช่าล่วงหน้า) บันทึกครั้งเดียว ณ วันเริ่มสัญญา</p><div class="cd sc" style="margin-top:14px"><table><tr><th>ห้อง</th><th>ผู้เช่า</th><th>เริ่มสัญญา</th><th>สิ้นสุด</th><th>เงินแรกเข้า</th><th>สถานะ</th><th>ไฟล์สัญญา (PDF)</th>${ad ? '<th></th>' : ''}</tr>${t.map(u => `<tr><td>${u.room}</td><td>${e(u.name)}</td><td>${dt(u.cs || u.id)}</td><td>${u.ce ? dt(u.ce) : 'ไม่กำหนด'}</td><td>฿${fm(udep(u))}</td><td>${u.out ? '<span class="pl r">สิ้นสุดสัญญา</span>' : '<span class="pl g">มีผลบังคับใช้</span>'}</td><td>${pdfc(u, ad)}</td>${ad ? `<td><button class="b b2 sm" onclick="ec(${u.id})">แก้ไขวันที่</button></td>` : ''}</tr>`).join('') || '<tr><td colspan=8 class=mu>ไม่มีข้อมูล</td></tr>'}</table></div>`;
 };
 const iv = ts =>
   ts ? new Date(ts - new Date(ts).getTimezoneOffset() * 6e4).toISOString().slice(0, 10) : '';
@@ -3205,7 +3214,12 @@ async function xc() {
       'สถานะ',
       'วิธีชำระ',
     ],
-    q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"',
+    // กันสูตรใน Excel: ข้อความที่ขึ้นต้นด้วย = + - @ ให้ใส่ ' นำหน้า (ตัวเลขไม่แตะ)
+    q = v => {
+      let s = String(v ?? '');
+      if (typeof v != 'number' && /^[=+\-@\t\r]/.test(s)) s = "'" + s;
+      return '"' + s.replace(/"/g, '""') + '"';
+    },
     rows = D.inv.map(i => [
       i.id,
       i.room,
@@ -3217,7 +3231,7 @@ async function xc() {
       tot(i) - base(i),
       tot(i),
       SL[st(i)][0],
-      i.mt || '',
+      i.mt == 'qr' ? 'QR' : i.mt == 'cash' ? 'เงินสด' : '',
     ]),
     txt = '\ufeff' + [h, ...rows].map(x => x.map(q).join(',')).join('\n'),
     blob = new Blob([txt], { type: 'text/csv;charset=utf-8' });
@@ -4071,6 +4085,7 @@ async function sbLoad() {
       o.cs = D2T(c0.start_date);
       if (c0.end_date) o.ce = D2T(c0.end_date);
       if (c0.status == 'ended') o.out = tsv(c0.moved_out_at) || Date.now();
+      if (c0.deposit_amount != null) o.dep = +c0.deposit_amount; // เงินแรกเข้าของสัญญานี้
       if (c0.start_meter != null) o.sm = +c0.start_meter; // เลขมิเตอร์ตอนย้ายเข้า
       if (c0.end_meter != null) o.em = +c0.end_meter; // เลขมิเตอร์ตอนย้ายออก
       if (c0.pdf_path)
@@ -4197,6 +4212,7 @@ function sbPrep() {
   D.users.forEach(u => {
     if (u.role == 'tenant' && u._tid && u.room && (!u._cid || u._crm != u.room)) {
       u._oldc = u._cid && u._crm != u.room ? u._cid : null;
+      u.dep = D.set.dep; // สัญญาใหม่ใช้เงินแรกเข้าตามค่าตั้งตอนเปิดสัญญา
       u._cid = NEWID();
       u._crm = u.room;
     }
@@ -4273,7 +4289,7 @@ function sbRows() {
           room_id: rr._id,
           start_date: DD(u.cs),
           end_date: u.ce ? DD(u.ce) : null,
-          deposit_amount: D.set.dep,
+          deposit_amount: udep(u),
           status: u.out ? 'ended' : 'active',
           moved_out_at: u.out ? ISO(u.out) : null,
           start_meter: u.sm ?? null,
@@ -4623,31 +4639,8 @@ if (SBON) {
       if (m) m.disabled = true;
     };
   }
-  eu = function (id) {
-    const u = D.users.find(x => x.id == id),
-      n = $('#f_n').value.trim(),
-      r = +$('#f_r').value,
-      go2 = $('#f_s').value == 'out';
-    if (!n) return alert('กรอกชื่อ');
-    const tel = $('#f_t').value.trim();
-    if (tel && !/^0\d{8,9}$/.test(tel.replace(/[\s-]/g, ''))) return alert('เบอร์โทรไม่ถูกต้อง');
-    if (!go2 && r) {
-      const o = act(r),
-        rr = D.rooms.find(x => x.n == r);
-      if (o && o.id != id) return alert('ห้อง ' + r + ' มีผู้เช่าอยู่แล้ว');
-      if (rr.st) return alert('ห้อง ' + r + ' ไม่ว่าง/ปิดปรับปรุง กรุณาเปลี่ยนสถานะห้องเป็นว่างก่อน');
-    }
-    if (!u.room && r) u.cs = Date.now();
-    Object.assign(u, { name: n, tel: $('#f_t').value.trim(), room: r || null });
-    if (go2) {
-      if (!u.out) u.out = Date.now();
-    } else delete u.out;
-    lg('แก้ไขผู้เช่า ' + n);
-    save();
-    cm();
-    R();
-    tt('✓ บันทึกข้อมูลผู้เช่าแล้ว');
-  };
+  // แก้ไขผู้เช่า: ใช้ขั้นตอนเดียวกับโหมดปกติ (ย้ายออก/ย้ายห้อง/จัดห้อง ต้องจดเลขมิเตอร์และออกบิลสุดท้าย)
+  // เดิมโหมดฐานข้อมูลจริงตั้งย้ายออกตรงๆ ไม่ผ่านหน้าจดมิเตอร์ ไม่ออกบิลสุดท้าย
   ss = function () {
     const er = ssCheck();
     if (er) return alert(er);
@@ -4739,6 +4732,7 @@ if (SBON) {
     $('#mc').style.maxWidth = '860px';
   };
   crs = async function () {
+    if (!CR) return; // กดซ้ำระหว่างอัปโหลด
     const o = document.createElement('canvas');
     o.width = o.height = 256;
     o.getContext('2d').drawImage(
@@ -4816,6 +4810,15 @@ if (SBON) {
     tt('✓ บันทึกแล้ว');
   };
   tks = async function () {
+    if (tks.busy) return; // กันส่งคำขอซ้ำระหว่างอัปโหลดรูป
+    tks.busy = 1;
+    try {
+      return await tks0();
+    } finally {
+      tks.busy = 0;
+    }
+  };
+  const tks0 = async function () {
     const c = $('#tkc').value,
       t = $('#tkt').value.trim(),
       b = $('#tkb').value.trim();
@@ -5755,7 +5758,7 @@ function mvoCalc() {
   const v = $('#mo_m').value,
     n = v === '' ? null : +v - MVO.p0;
   $('#mo_u').textContent = n == null ? '-' : n < 0 ? 'ต้องไม่น้อยกว่า ' + MVO.p0 : n;
-  $('#mo_a').textContent = n == null || n < 0 ? '-' : '฿' + fm(n * D.set.rate);
+  $('#mo_a').textContent = n == null || n < 0 ? '-' : '฿' + fm(elc(n));
 }
 function mvoGo() {
   if (!MVO) return;
@@ -5876,6 +5879,8 @@ function mvrGo() {
     if (!Number.isInteger(end) || end < p0)
       return alert('เลขมิเตอร์ตอนย้ายออกต้องเป็นจำนวนเต็มและไม่น้อยกว่าเลขก่อนหน้า (' + p0 + ')');
   }
+  const tr = D.rooms.find(x => x.n == to);
+  if (!tr || !vac(tr)) return alert('ห้อง ' + to + ' ไม่ว่างแล้ว');
   const sm = smRead('mr_n', to);
   if (sm == null) return;
   const from = u.room,
@@ -6022,7 +6027,9 @@ pg.debt = () => {
 };
 async function lnRemind(code) {
   const i = D.inv.find(x => x.id == code);
-  if (!i) return;
+  if (!i || lnRemind[code]) return; // กันกดส่งเตือนซ้ำ
+  lnRemind[code] = 1;
+  setTimeout(() => delete lnRemind[code], 5000);
   const r = await SBX.cl.rpc('line_remind', { p_invoice: i._id });
   if (r.error) return alert('ส่งเตือนไม่สำเร็จ: ' + r.error.message);
   tt('✓ ส่งเตือนห้อง ' + i.room + ' แล้ว');

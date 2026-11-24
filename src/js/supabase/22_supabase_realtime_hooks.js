@@ -140,31 +140,8 @@ if (SBON) {
       if (m) m.disabled = true;
     };
   }
-  eu = function (id) {
-    const u = D.users.find(x => x.id == id),
-      n = $('#f_n').value.trim(),
-      r = +$('#f_r').value,
-      go2 = $('#f_s').value == 'out';
-    if (!n) return alert('กรอกชื่อ');
-    const tel = $('#f_t').value.trim();
-    if (tel && !/^0\d{8,9}$/.test(tel.replace(/[\s-]/g, ''))) return alert('เบอร์โทรไม่ถูกต้อง');
-    if (!go2 && r) {
-      const o = act(r),
-        rr = D.rooms.find(x => x.n == r);
-      if (o && o.id != id) return alert('ห้อง ' + r + ' มีผู้เช่าอยู่แล้ว');
-      if (rr.st) return alert('ห้อง ' + r + ' ไม่ว่าง/ปิดปรับปรุง กรุณาเปลี่ยนสถานะห้องเป็นว่างก่อน');
-    }
-    if (!u.room && r) u.cs = Date.now();
-    Object.assign(u, { name: n, tel: $('#f_t').value.trim(), room: r || null });
-    if (go2) {
-      if (!u.out) u.out = Date.now();
-    } else delete u.out;
-    lg('แก้ไขผู้เช่า ' + n);
-    save();
-    cm();
-    R();
-    tt('✓ บันทึกข้อมูลผู้เช่าแล้ว');
-  };
+  // แก้ไขผู้เช่า: ใช้ขั้นตอนเดียวกับโหมดปกติ (ย้ายออก/ย้ายห้อง/จัดห้อง ต้องจดเลขมิเตอร์และออกบิลสุดท้าย)
+  // เดิมโหมดฐานข้อมูลจริงตั้งย้ายออกตรงๆ ไม่ผ่านหน้าจดมิเตอร์ ไม่ออกบิลสุดท้าย
   ss = function () {
     const er = ssCheck();
     if (er) return alert(er);
@@ -256,6 +233,7 @@ if (SBON) {
     $('#mc').style.maxWidth = '860px';
   };
   crs = async function () {
+    if (!CR) return; // กดซ้ำระหว่างอัปโหลด
     const o = document.createElement('canvas');
     o.width = o.height = 256;
     o.getContext('2d').drawImage(
@@ -333,6 +311,15 @@ if (SBON) {
     tt('✓ บันทึกแล้ว');
   };
   tks = async function () {
+    if (tks.busy) return; // กันส่งคำขอซ้ำระหว่างอัปโหลดรูป
+    tks.busy = 1;
+    try {
+      return await tks0();
+    } finally {
+      tks.busy = 0;
+    }
+  };
+  const tks0 = async function () {
     const c = $('#tkc').value,
       t = $('#tkt').value.trim(),
       b = $('#tkb').value.trim();

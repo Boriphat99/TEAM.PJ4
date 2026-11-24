@@ -58,7 +58,7 @@ function mvoCalc() {
   const v = $('#mo_m').value,
     n = v === '' ? null : +v - MVO.p0;
   $('#mo_u').textContent = n == null ? '-' : n < 0 ? 'ต้องไม่น้อยกว่า ' + MVO.p0 : n;
-  $('#mo_a').textContent = n == null || n < 0 ? '-' : '฿' + fm(n * D.set.rate);
+  $('#mo_a').textContent = n == null || n < 0 ? '-' : '฿' + fm(elc(n));
 }
 function mvoGo() {
   if (!MVO) return;
@@ -179,6 +179,8 @@ function mvrGo() {
     if (!Number.isInteger(end) || end < p0)
       return alert('เลขมิเตอร์ตอนย้ายออกต้องเป็นจำนวนเต็มและไม่น้อยกว่าเลขก่อนหน้า (' + p0 + ')');
   }
+  const tr = D.rooms.find(x => x.n == to);
+  if (!tr || !vac(tr)) return alert('ห้อง ' + to + ' ไม่ว่างแล้ว');
   const sm = smRead('mr_n', to);
   if (sm == null) return;
   const from = u.room,

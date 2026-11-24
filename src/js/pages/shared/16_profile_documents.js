@@ -2,7 +2,7 @@
    (แยกมาจาก script.js บรรทัด 1153-1210; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 pg.prof = () => {
   const ad = U.role != 'tenant';
-  return `<h2>โปรไฟล์ของฉัน</h2><p class="mu">ดูและแก้ไขข้อมูลส่วนตัว</p><div class="pf" style="margin-top:14px"><div class="cd" style="text-align:center;display:grid;gap:10px;justify-items:center;align-content:start">${av(U, 120)}<h3>${e(U.name)}</h3><span class="pl ${ad ? 'p' : 'g'}">${U.role == 'owner' ? 'เจ้าของกิจการ' : ad ? 'ผู้ดูแลระบบ' : 'ผู้เช่า'}</span>${ad ? '' : `<p class="mu" style="margin:0">${U.room ? 'ห้อง ' + U.room : 'รอผู้ดูแลจัดห้อง'}<br>เงินแรกเข้า ฿${fm(D.set.dep)}</p>`}<input type="file" id="pf" accept="image/jpeg,image/png,image/webp" hidden onchange="pa(this)"><div><button class="b" onclick="$('#pf').click()">เปลี่ยนรูปโปรไฟล์</button>${U.av ? ` <button class="b b2" onclick="pr()">ลบรูป</button>` : ''}</div><small class="mu">JPG / PNG / WebP · ไม่เกิน 5MB · ครอปรูปได้ก่อนบันทึก</small></div>
+  return `<h2>โปรไฟล์ของฉัน</h2><p class="mu">ดูและแก้ไขข้อมูลส่วนตัว</p><div class="pf" style="margin-top:14px"><div class="cd" style="text-align:center;display:grid;gap:10px;justify-items:center;align-content:start">${av(U, 120)}<h3>${e(U.name)}</h3><span class="pl ${ad ? 'p' : 'g'}">${U.role == 'owner' ? 'เจ้าของกิจการ' : ad ? 'ผู้ดูแลระบบ' : 'ผู้เช่า'}</span>${ad ? '' : `<p class="mu" style="margin:0">${U.room ? 'ห้อง ' + U.room : 'รอผู้ดูแลจัดห้อง'}<br>เงินแรกเข้า ฿${fm(udep(U))}</p>`}<input type="file" id="pf" accept="image/jpeg,image/png,image/webp" hidden onchange="pa(this)"><div><button class="b" onclick="$('#pf').click()">เปลี่ยนรูปโปรไฟล์</button>${U.av ? ` <button class="b b2" onclick="pr()">ลบรูป</button>` : ''}</div><small class="mu">JPG / PNG / WebP · ไม่เกิน 5MB · ครอปรูปได้ก่อนบันทึก</small></div>
 <div style="display:grid;gap:14px"><div class="cd"><h3>การแสดงผล</h3><br><div class="bd" style="margin-bottom:16px"><b>ภาษา</b><span class="seg"><span class="${LANG == 'th' ? 'on' : ''}" onclick="setPf('lang','th')">TH</span><span class="${LANG == 'en' ? 'on' : ''}" onclick="setPf('lang','en')">EN</span></span></div><div class="bd"><b>${document.documentElement.dataset.theme == 'dark' ? 'โหมดกลางคืน' : 'โหมดกลางวัน'}</b><div class="tsw ${document.documentElement.dataset.theme == 'dark' ? 'on' : ''}" role="switch" onclick="setPf('theme','${document.documentElement.dataset.theme == 'dark' ? 'light' : 'dark'}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><i></i></div></div></div><div class="cd"><h3>ข้อมูลส่วนตัว</h3><br><label>ชื่อ - นามสกุล</label><input id="p_n" value="${e(U.name)}"><div class="row"><div><label>เบอร์โทร</label><input id="p_t" value="${e(U.tel || '')}" placeholder="08x-xxx-xxxx"></div><div><label>อีเมล</label><input id="p_e" value="${e(U.email)}"></div></div><label>เพศ</label><select id="p_g">${['', 'ชาย', 'หญิง', 'อื่นๆ'].map(v => `<option value="${v}" ${U.g == v ? 'selected' : ''}>${v || 'ไม่ระบุ'}</option>`).join('')}</select>${ad ? '' : `<label>ห้องพัก (แก้ไขได้โดยผู้ดูแล)</label><input value="${U.room || 'รอผู้ดูแลจัดห้อง'}" disabled>`}<button class="b" onclick="ps()">บันทึกข้อมูล</button></div>
 <div class="cd"><h3>เปลี่ยนรหัสผ่าน</h3><br><label>รหัสผ่านปัจจุบัน</label><input id="p_o" type="password"><div class="row"><div><label>รหัสผ่านใหม่ (อย่างน้อย 8 ตัว)</label><input id="p_w" type="password"></div><div><label>ยืนยันรหัสผ่านใหม่</label><input id="p_c" type="password"></div></div><button class="b b2" onclick="pc()">เปลี่ยนรหัสผ่าน</button></div></div></div>`;
 };
@@ -165,7 +165,7 @@ function docHTML(i, k, nl) {
           ' ใช้ ' +
           i.u +
           ' หน่วย × ' +
-          B(S.rate) +
+          B(brate(i)) +
           '/หน่วย',
       ],
     ],
@@ -199,7 +199,7 @@ pg.con = () => {
     t = D.users
       .filter(u => u.role == 'tenant' && u.room && (U.role != 'tenant' || u.id == U.id))
       .sort((a, b) => !!a.out - !!b.out || a.room - b.room);
-  return `<h2>สัญญาเช่า</h2><input type="file" id="cpi" accept="application/pdf" hidden onchange="cpf(this)"><p class="mu">เงินแรกเข้า ฿${fm(D.set.dep)} (มัดจำ + ค่าเช่าล่วงหน้า) บันทึกครั้งเดียว ณ วันเริ่มสัญญา</p><div class="cd sc" style="margin-top:14px"><table><tr><th>ห้อง</th><th>ผู้เช่า</th><th>เริ่มสัญญา</th><th>สิ้นสุด</th><th>เงินแรกเข้า</th><th>สถานะ</th><th>ไฟล์สัญญา (PDF)</th>${ad ? '<th></th>' : ''}</tr>${t.map(u => `<tr><td>${u.room}</td><td>${e(u.name)}</td><td>${dt(u.cs || u.id)}</td><td>${u.ce ? dt(u.ce) : 'ไม่กำหนด'}</td><td>฿${fm(D.set.dep)}</td><td>${u.out ? '<span class="pl r">สิ้นสุดสัญญา</span>' : '<span class="pl g">มีผลบังคับใช้</span>'}</td><td>${pdfc(u, ad)}</td>${ad ? `<td><button class="b b2 sm" onclick="ec(${u.id})">แก้ไขวันที่</button></td>` : ''}</tr>`).join('') || '<tr><td colspan=8 class=mu>ไม่มีข้อมูล</td></tr>'}</table></div>`;
+  return `<h2>สัญญาเช่า</h2><input type="file" id="cpi" accept="application/pdf" hidden onchange="cpf(this)"><p class="mu">เงินแรกเข้า ฿${fm(D.set.dep)} (มัดจำ + ค่าเช่าล่วงหน้า) บันทึกครั้งเดียว ณ วันเริ่มสัญญา</p><div class="cd sc" style="margin-top:14px"><table><tr><th>ห้อง</th><th>ผู้เช่า</th><th>เริ่มสัญญา</th><th>สิ้นสุด</th><th>เงินแรกเข้า</th><th>สถานะ</th><th>ไฟล์สัญญา (PDF)</th>${ad ? '<th></th>' : ''}</tr>${t.map(u => `<tr><td>${u.room}</td><td>${e(u.name)}</td><td>${dt(u.cs || u.id)}</td><td>${u.ce ? dt(u.ce) : 'ไม่กำหนด'}</td><td>฿${fm(udep(u))}</td><td>${u.out ? '<span class="pl r">สิ้นสุดสัญญา</span>' : '<span class="pl g">มีผลบังคับใช้</span>'}</td><td>${pdfc(u, ad)}</td>${ad ? `<td><button class="b b2 sm" onclick="ec(${u.id})">แก้ไขวันที่</button></td>` : ''}</tr>`).join('') || '<tr><td colspan=8 class=mu>ไม่มีข้อมูล</td></tr>'}</table></div>`;
 };
 const iv = ts =>
   ts ? new Date(ts - new Date(ts).getTimezoneOffset() * 6e4).toISOString().slice(0, 10) : '';
@@ -247,7 +247,12 @@ async function xc() {
       'สถานะ',
       'วิธีชำระ',
     ],
-    q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"',
+    // กันสูตรใน Excel: ข้อความที่ขึ้นต้นด้วย = + - @ ให้ใส่ ' นำหน้า (ตัวเลขไม่แตะ)
+    q = v => {
+      let s = String(v ?? '');
+      if (typeof v != 'number' && /^[=+\-@\t\r]/.test(s)) s = "'" + s;
+      return '"' + s.replace(/"/g, '""') + '"';
+    },
     rows = D.inv.map(i => [
       i.id,
       i.room,
@@ -259,7 +264,7 @@ async function xc() {
       tot(i) - base(i),
       tot(i),
       SL[st(i)][0],
-      i.mt || '',
+      i.mt == 'qr' ? 'QR' : i.mt == 'cash' ? 'เงินสด' : '',
     ]),
     txt = '\ufeff' + [h, ...rows].map(x => x.map(q).join(',')).join('\n'),
     blob = new Blob([txt], { type: 'text/csv;charset=utf-8' });

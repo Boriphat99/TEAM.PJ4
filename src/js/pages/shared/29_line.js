@@ -127,7 +127,9 @@ pg.debt = () => {
 };
 async function lnRemind(code) {
   const i = D.inv.find(x => x.id == code);
-  if (!i) return;
+  if (!i || lnRemind[code]) return; // กันกดส่งเตือนซ้ำ
+  lnRemind[code] = 1;
+  setTimeout(() => delete lnRemind[code], 5000);
   const r = await SBX.cl.rpc('line_remind', { p_invoice: i._id });
   if (r.error) return alert('ส่งเตือนไม่สำเร็จ: ' + r.error.message);
   tt('✓ ส่งเตือนห้อง ' + i.room + ' แล้ว');

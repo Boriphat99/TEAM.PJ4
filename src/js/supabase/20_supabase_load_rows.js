@@ -107,6 +107,7 @@ async function sbLoad() {
       o.cs = D2T(c0.start_date);
       if (c0.end_date) o.ce = D2T(c0.end_date);
       if (c0.status == 'ended') o.out = tsv(c0.moved_out_at) || Date.now();
+      if (c0.deposit_amount != null) o.dep = +c0.deposit_amount; // เงินแรกเข้าของสัญญานี้
       if (c0.start_meter != null) o.sm = +c0.start_meter; // เลขมิเตอร์ตอนย้ายเข้า
       if (c0.end_meter != null) o.em = +c0.end_meter; // เลขมิเตอร์ตอนย้ายออก
       if (c0.pdf_path)
@@ -233,6 +234,7 @@ function sbPrep() {
   D.users.forEach(u => {
     if (u.role == 'tenant' && u._tid && u.room && (!u._cid || u._crm != u.room)) {
       u._oldc = u._cid && u._crm != u.room ? u._cid : null;
+      u.dep = D.set.dep; // สัญญาใหม่ใช้เงินแรกเข้าตามค่าตั้งตอนเปิดสัญญา
       u._cid = NEWID();
       u._crm = u.room;
     }
@@ -309,7 +311,7 @@ function sbRows() {
           room_id: rr._id,
           start_date: DD(u.cs),
           end_date: u.ce ? DD(u.ce) : null,
-          deposit_amount: D.set.dep,
+          deposit_amount: udep(u),
           status: u.out ? 'ended' : 'active',
           moved_out_at: u.out ? ISO(u.out) : null,
           start_meter: u.sm ?? null,
