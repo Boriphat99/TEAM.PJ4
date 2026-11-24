@@ -34,7 +34,8 @@ try {
 /* 03_i18n_dictionary.js — พจนานุกรมแปลภาษา ไทย/อังกฤษ (ขนาดใหญ่)
    (แยกมาจาก script.js บรรทัด 12-656; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
-  ENm = `: เลขมิเตอร์ต้องเป็นจำนวนเต็ม|: meter reading must be a whole number
+  ENm = `เลขมิเตอร์ต้องเป็นจำนวนเต็ม ไม่ติดลบ|Meter reading must be a whole number, not negative
+: เลขมิเตอร์ต้องเป็นจำนวนเต็ม|: meter reading must be a whole number
 : ค่าใช้จ่ายเพิ่มเติมต้องเป็นตัวเลขและไม่ติดลบ|: extra charge must be a number and not negative
 ค่าเช่าห้องพักต้องเป็นตัวเลขมากกว่า 0|Room rent must be a number greater than 0
 ค่าไฟฟ้าต่อหน่วยต้องเป็นตัวเลขมากกว่า 0|Electricity rate must be a number greater than 0
@@ -1057,7 +1058,13 @@ const e = s => String(s || '').replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) +
       .map(Number);
     return new Date(p[0], p[1] - 1, p[2]);
   },
+  // วันครบกำหนดของบิล: ใช้วันที่ที่บันทึกไว้ตอนออกบิล (i.dd) ถ้ามี
+  // เปลี่ยน "วันครบกำหนด" ในตั้งค่าแล้ว มีผลกับบิลใหม่เท่านั้น บิลเก่าไม่เลื่อนตาม
   due = i => {
+    if (i.dd) {
+      const [a, b, c] = String(i.dd).split('-').map(Number);
+      return new Date(a, b - 1, c);
+    }
     const [y, m] = i.per.split('-').map(Number);
     return new Date(y, m, D.set.due);
   },
@@ -1579,6 +1586,8 @@ function tbl() {
 }
 function ap(id, y) {
   const i = gi(id);
+  // กันกดซ้ำ: ทำได้เฉพาะรายการที่ยังรอตรวจสอบ
+  if (!i || i.s != 'pending') return;
   if (y) {
     i.s = 'paid';
     i.paid = Date.now();
@@ -1597,6 +1606,7 @@ function apr(id) {
     a = $('#rj_s').value,
     t = $('#rj_t').value.trim();
   if (!a) return alert('เลือกเหตุผลที่ปฏิเสธ');
+  if (!i || i.s != 'pending') return cm();
   const rs = a + (t ? ' · ' + t : '');
   i._rjr = rs;
   i.rj = rs;
@@ -1611,7 +1621,9 @@ function apr(id) {
 }
 function cs(id) {
   const i = gi(id);
+  if (!i || i.s == 'paid') return;
   cf('ยืนยันรับเงินสดห้อง ' + i.room + ' ยอด ฿' + fm(tot(i)) + '?', () => {
+    if (i.s == 'paid') return;
     i.fine = fine(i);
     i.mt = 'cash';
     i.sub = Date.now();
@@ -2083,6 +2095,7 @@ function rsv(n) {
     v = $('#rmm').value,
     sv = $('#rs').value,
     li = D.inv.filter(i => i.room == n).sort((a, b) => (a.per < b.per ? 1 : -1))[0];
+  if (v !== '' && !/^\d+$/.test(String(v).trim())) return alert('เลขมิเตอร์ต้องเป็นจำนวนเต็ม ไม่ติดลบ');
   if (v !== '' && +v != r.m && li)
     return alert(
       'เลขมิเตอร์ถูกล็อกตามบิลล่าสุดของห้องนี้ (' +
@@ -2117,6 +2130,8 @@ function eu(id) {
     w = $('#f_w').value,
     go2 = $('#f_s').value == 'out';
   if (!n || !m) return alert('กรอกชื่อและอีเมล');
+  const tel = $('#f_t').value.trim();
+  if (tel && !/^0\d{8,9}$/.test(tel.replace(/[\s-]/g, ''))) return alert('เบอร์โทรไม่ถูกต้อง');
   if (D.users.some(x => x.id != id && x.email == m)) return alert('อีเมลนี้ถูกใช้แล้ว');
   if (w && pwBad(w, m)) return alert(pwBad(w, m));
   if (!go2 && r) {
@@ -2413,6 +2428,8 @@ function iss2() {
   for (const r of D.rooms.filter(r => tn(r.n))) {
     const el = $('#m' + r.n);
     if (!el || el.value.trim() === '') continue;
+    // ห้องที่มีบิลรอบนี้แล้ว ข้าม (กันออกบิลซ้ำ)
+    if (D.inv.some(i => i.room == r.n && i.per == PER && !i.fin)) continue;
     const raw = el.value.trim().replace(/,/g, ''),
       v = Number(raw),
       p0 = pvOf(r),
@@ -2432,6 +2449,11 @@ function iss2() {
       room: r.n,
       uid: act(r.n).id,
       per: PER,
+      dd: (() => {
+        const [y, m] = PER.split('-').map(Number),
+          d = new Date(y, m, D.set.due);
+        return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+      })(),
       pv: p0,
       u: v - p0,
       el: (v - p0) * D.set.rate,
@@ -4086,6 +4108,7 @@ async function sbLoad() {
       room: rn(c0.room_id) ?? (+String(v.code).split('-')[1] || null),
       uid: tn0.app_id == null ? undefined : +tn0.app_id,
       per: v.billing_month,
+      dd: v.due_date || undefined,
       pv: v.kind == 'final' ? +v.meter_from || 0 : +m.previous_reading || 0,
       u: v.kind == 'final' ? +v.meter_to - +v.meter_from || 0 : +m.units_used || 0,
       el: +(g('electricity') || {}).amount || 0,
@@ -4606,6 +4629,8 @@ if (SBON) {
       r = +$('#f_r').value,
       go2 = $('#f_s').value == 'out';
     if (!n) return alert('กรอกชื่อ');
+    const tel = $('#f_t').value.trim();
+    if (tel && !/^0\d{8,9}$/.test(tel.replace(/[\s-]/g, ''))) return alert('เบอร์โทรไม่ถูกต้อง');
     if (!go2 && r) {
       const o = act(r),
         rr = D.rooms.find(x => x.n == r);
@@ -4636,6 +4661,16 @@ if (SBON) {
     tt('✓ บันทึกแล้ว');
   };
   sub = async function (id) {
+    // กันกดส่งซ้ำระหว่างกำลังอัปโหลด (เดิมได้ไฟล์สลิปซ้ำค้างในที่เก็บ)
+    if (sub.busy) return;
+    sub.busy = 1;
+    try {
+      return await sub0(id);
+    } finally {
+      sub.busy = 0;
+    }
+  };
+  const sub0 = async function (id) {
     const i = gi(id),
       pd = i.s == 'pending';
     if (!SLIP) return alert('กรุณาอัปโหลดสลิปโอนเงิน');

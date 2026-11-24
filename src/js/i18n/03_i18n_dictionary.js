@@ -1,7 +1,8 @@
 /* 03_i18n_dictionary.js — พจนานุกรมแปลภาษา ไทย/อังกฤษ (ขนาดใหญ่)
    (แยกมาจาก script.js บรรทัด 12-656; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
-  ENm = `: เลขมิเตอร์ต้องเป็นจำนวนเต็ม|: meter reading must be a whole number
+  ENm = `เลขมิเตอร์ต้องเป็นจำนวนเต็ม ไม่ติดลบ|Meter reading must be a whole number, not negative
+: เลขมิเตอร์ต้องเป็นจำนวนเต็ม|: meter reading must be a whole number
 : ค่าใช้จ่ายเพิ่มเติมต้องเป็นตัวเลขและไม่ติดลบ|: extra charge must be a number and not negative
 ค่าเช่าห้องพักต้องเป็นตัวเลขมากกว่า 0|Room rent must be a number greater than 0
 ค่าไฟฟ้าต่อหน่วยต้องเป็นตัวเลขมากกว่า 0|Electricity rate must be a number greater than 0

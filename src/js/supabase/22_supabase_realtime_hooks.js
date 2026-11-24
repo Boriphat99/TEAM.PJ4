@@ -146,6 +146,8 @@ if (SBON) {
       r = +$('#f_r').value,
       go2 = $('#f_s').value == 'out';
     if (!n) return alert('กรอกชื่อ');
+    const tel = $('#f_t').value.trim();
+    if (tel && !/^0\d{8,9}$/.test(tel.replace(/[\s-]/g, ''))) return alert('เบอร์โทรไม่ถูกต้อง');
     if (!go2 && r) {
       const o = act(r),
         rr = D.rooms.find(x => x.n == r);
@@ -176,6 +178,16 @@ if (SBON) {
     tt('✓ บันทึกแล้ว');
   };
   sub = async function (id) {
+    // กันกดส่งซ้ำระหว่างกำลังอัปโหลด (เดิมได้ไฟล์สลิปซ้ำค้างในที่เก็บ)
+    if (sub.busy) return;
+    sub.busy = 1;
+    try {
+      return await sub0(id);
+    } finally {
+      sub.busy = 0;
+    }
+  };
+  const sub0 = async function (id) {
     const i = gi(id),
       pd = i.s == 'pending';
     if (!SLIP) return alert('กรุณาอัปโหลดสลิปโอนเงิน');

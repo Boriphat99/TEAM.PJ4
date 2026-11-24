@@ -31,6 +31,8 @@ function tbl() {
 }
 function ap(id, y) {
   const i = gi(id);
+  // กันกดซ้ำ: ทำได้เฉพาะรายการที่ยังรอตรวจสอบ
+  if (!i || i.s != 'pending') return;
   if (y) {
     i.s = 'paid';
     i.paid = Date.now();
@@ -49,6 +51,7 @@ function apr(id) {
     a = $('#rj_s').value,
     t = $('#rj_t').value.trim();
   if (!a) return alert('เลือกเหตุผลที่ปฏิเสธ');
+  if (!i || i.s != 'pending') return cm();
   const rs = a + (t ? ' · ' + t : '');
   i._rjr = rs;
   i.rj = rs;
@@ -63,7 +66,9 @@ function apr(id) {
 }
 function cs(id) {
   const i = gi(id);
+  if (!i || i.s == 'paid') return;
   cf('ยืนยันรับเงินสดห้อง ' + i.room + ' ยอด ฿' + fm(tot(i)) + '?', () => {
+    if (i.s == 'paid') return;
     i.fine = fine(i);
     i.mt = 'cash';
     i.sub = Date.now();

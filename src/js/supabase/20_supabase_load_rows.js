@@ -144,6 +144,7 @@ async function sbLoad() {
       room: rn(c0.room_id) ?? (+String(v.code).split('-')[1] || null),
       uid: tn0.app_id == null ? undefined : +tn0.app_id,
       per: v.billing_month,
+      dd: v.due_date || undefined,
       pv: v.kind == 'final' ? +v.meter_from || 0 : +m.previous_reading || 0,
       u: v.kind == 'final' ? +v.meter_to - +v.meter_from || 0 : +m.units_used || 0,
       el: +(g('electricity') || {}).amount || 0,

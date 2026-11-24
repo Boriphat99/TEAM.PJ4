@@ -136,6 +136,8 @@ function iss2() {
   for (const r of D.rooms.filter(r => tn(r.n))) {
     const el = $('#m' + r.n);
     if (!el || el.value.trim() === '') continue;
+    // ห้องที่มีบิลรอบนี้แล้ว ข้าม (กันออกบิลซ้ำ)
+    if (D.inv.some(i => i.room == r.n && i.per == PER && !i.fin)) continue;
     const raw = el.value.trim().replace(/,/g, ''),
       v = Number(raw),
       p0 = pvOf(r),
@@ -155,6 +157,11 @@ function iss2() {
       room: r.n,
       uid: act(r.n).id,
       per: PER,
+      dd: (() => {
+        const [y, m] = PER.split('-').map(Number),
+          d = new Date(y, m, D.set.due);
+        return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+      })(),
       pv: p0,
       u: v - p0,
       el: (v - p0) * D.set.rate,

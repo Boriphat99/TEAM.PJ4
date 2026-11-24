@@ -299,6 +299,7 @@ function rsv(n) {
     v = $('#rmm').value,
     sv = $('#rs').value,
     li = D.inv.filter(i => i.room == n).sort((a, b) => (a.per < b.per ? 1 : -1))[0];
+  if (v !== '' && !/^\d+$/.test(String(v).trim())) return alert('เลขมิเตอร์ต้องเป็นจำนวนเต็ม ไม่ติดลบ');
   if (v !== '' && +v != r.m && li)
     return alert(
       'เลขมิเตอร์ถูกล็อกตามบิลล่าสุดของห้องนี้ (' +
@@ -333,6 +334,8 @@ function eu(id) {
     w = $('#f_w').value,
     go2 = $('#f_s').value == 'out';
   if (!n || !m) return alert('กรอกชื่อและอีเมล');
+  const tel = $('#f_t').value.trim();
+  if (tel && !/^0\d{8,9}$/.test(tel.replace(/[\s-]/g, ''))) return alert('เบอร์โทรไม่ถูกต้อง');
   if (D.users.some(x => x.id != id && x.email == m)) return alert('อีเมลนี้ถูกใช้แล้ว');
   if (w && pwBad(w, m)) return alert(pwBad(w, m));
   if (!go2 && r) {

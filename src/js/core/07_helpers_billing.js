@@ -14,7 +14,13 @@ const e = s => String(s || '').replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) +
       .map(Number);
     return new Date(p[0], p[1] - 1, p[2]);
   },
+  // วันครบกำหนดของบิล: ใช้วันที่ที่บันทึกไว้ตอนออกบิล (i.dd) ถ้ามี
+  // เปลี่ยน "วันครบกำหนด" ในตั้งค่าแล้ว มีผลกับบิลใหม่เท่านั้น บิลเก่าไม่เลื่อนตาม
   due = i => {
+    if (i.dd) {
+      const [a, b, c] = String(i.dd).split('-').map(Number);
+      return new Date(a, b - 1, c);
+    }
     const [y, m] = i.per.split('-').map(Number);
     return new Date(y, m, D.set.due);
   },
