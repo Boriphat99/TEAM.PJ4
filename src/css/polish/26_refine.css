@@ -395,3 +395,7 @@
     display: none !important;
   }
 }
+/* หัวการ์ด LINE: เขียว LINE สว่างกับตัวอักษรขาวอ่านยาก (2.3:1) → ใช้เขียวเข้มขึ้น (5.4:1) */
+.lnh {
+  background: #047a38 !important;
+}

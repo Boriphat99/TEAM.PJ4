@@ -7,7 +7,8 @@ const SLIPC = {};
 async function slipSrc(i) {
   const p = i && i.slip;
   if (!p) return null;
-  if (/^data:|^https?:/.test(p)) return p;
+  // โหมดเชื่อมฐานข้อมูล: รูปสลิปต้องมาจากที่เก็บสลิปเท่านั้น ไม่เปิดลิงก์จากเว็บอื่น
+  if (/^data:|^https?:/.test(p)) return SBON ? null : p;
   const c = SLIPC[p];
   if (c && c.exp > Date.now()) return c.url;
   if (!SBON || !SBX.cl) return null;
@@ -25,7 +26,7 @@ async function fillSlips() {
       p = i && i.slip;
     if (!p) continue;
     if (/^data:|^https?:/.test(p)) {
-      im.src = p;
+      if (!SBON) im.src = p;
       continue;
     }
     const c = SLIPC[p];
