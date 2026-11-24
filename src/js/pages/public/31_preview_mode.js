@@ -8,7 +8,7 @@
 function pvLoginBox() {
   if (!window.TTM_PV)
     return `<div class="pvb"><small class="mu">อยากดูหน้าตาระบบก่อน? ไม่ต้องมีบัญชี</small><button class="b b2" style="width:100%" onclick="pvOpen()">ดูตัวอย่างระบบ (ข้อมูลสมมติ)</button></div>`;
-  return `<div class="pvb on"><b>โหมดตัวอย่างระบบ</b><small class="mu">ข้อมูลทั้งหมดเป็นข้อมูลสมมติ · ดูได้อย่างเดียว แก้ไขไม่ได้ · เลือกมุมมองที่อยากดู</small><div class="pvr"><button class="b" onclick="pvEnter('admin')">ผู้ดูแลระบบ</button><button class="b" onclick="pvEnter('owner')">เจ้าของกิจการ</button><button class="b" onclick="pvEnter('tenant')">ผู้เช่า</button></div><span class="ac" style="cursor:pointer;font-size:13px" onclick="pvExit()">ออกจากโหมดตัวอย่าง</span></div>`;
+  return `<div class="pvb on"><b>โหมดตัวอย่างระบบ</b><small class="mu">ข้อมูลทั้งหมดเป็นข้อมูลสมมติ · ดูได้อย่างเดียว แก้ไขไม่ได้ · เลือกมุมมองที่อยากดู</small><div class="pvr"><button class="b" onclick="pvEnter('admin')">ผู้ดูแลระบบ</button><button class="b" onclick="pvEnter('tenant')">ผู้เช่า</button></div><span class="ac" style="cursor:pointer;font-size:13px" onclick="pvExit()">ออกจากโหมดตัวอย่าง</span></div>`;
 }
 function pvOpen() {
   location.href = location.pathname + '?preview';
