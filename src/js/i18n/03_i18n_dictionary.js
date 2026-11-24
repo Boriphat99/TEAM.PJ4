@@ -1,7 +1,18 @@
 /* 03_i18n_dictionary.js — พจนานุกรมแปลภาษา ไทย/อังกฤษ (ขนาดใหญ่)
    (แยกมาจาก script.js บรรทัด 12-656; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
-  ENm = `ขอบคุณที่ใช้บริการ T&T Mansion · เอกสารนี้ออกโดยระบบ|Thank you for your payment · T&T Mansion · Issued by the system
+  ENm = `เข้าสู่ระบบสำเร็จ|Signed in
+ออกจากระบบสำเร็จ|Signed out
+ตอบคำขอ |Replied to request 
+ย้ายออก ห้อง |Moved out, room 
+ลบไฟล์สัญญา ห้อง |Deleted lease file, room 
+อัปโหลดไฟล์สัญญา ห้อง |Uploaded lease file, room 
+แก้ไขช่องทาง LINE|Edited LINE contact
+ส่งสลิปใหม่ |Resent slip 
+ ห้อง รอบ | rooms, cycle 
+ · ออกบิลสุดท้าย | · final bill 
+ ให้ | to 
+ขอบคุณที่ใช้บริการ T&T Mansion · เอกสารนี้ออกโดยระบบ|Thank you for your payment · T&T Mansion · Issued by the system
 คำขอความช่วยเหลือจากผู้ใช้|Help requests from users
 ตัวเลขอ้างอิงจากการตั้งค่าของหอพัก|Figures based on the settings of
 พื้นที่ใส่ QR LINE|LINE QR area
@@ -776,9 +787,49 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
     .filter(x => x.length == 2 && x[0])
     .sort((a, b) => b[0].length - a[0].length),
   THR = /[\u0E00-\u0E7F]/,
+  ENK = new Set(ENm.map(x => x[0])),
+  // ข้อมูลที่ผู้ใช้พิมพ์เอง (ชื่อคน ที่อยู่ ข่าว คำขอ หมายเหตุบิล) ห้ามแปลทีละคำ
+  // เช่น "สมชาย" จะกลายเป็น "สมMale" · เก็บรายการไว้ 1 วินาที เพื่อไม่ต้องสร้างใหม่ทุกข้อความ
+  TLD = { t: 0, k: '', a: [] },
+  tlData = () => {
+    const n = Date.now();
+    let k = '';
+    try {
+      k = [D.users, D.news, D.tk, D.inv, D.log].map(x => (x || []).length).join() + (U ? U.id : '');
+    } catch (x) {}
+    if (k == TLD.k && n - TLD.t < 1000) return TLD.a;
+    TLD.k = k;
+    const s = new Set(),
+      add = v => {
+        if (typeof v != 'string') return;
+        v = v.trim();
+        if (v.length > 1 && THR.test(v) && !ENK.has(v)) s.add(v);
+      };
+    try {
+      (D.users || []).forEach(u => add(u.name));
+      const S = D.set || {};
+      [S.name, S.addr, S.payee].forEach(add);
+      (D.news || []).forEach(x => [x.title, x.body, x.by].forEach(add));
+      (D.tk || []).forEach(x => [x.name, x.title, x.body, x.reply, x.rby].forEach(add));
+      (D.inv || []).forEach(i => add(i.xn));
+      (D.log || []).forEach(l => add(l.by));
+    } catch (x) {}
+    TLD.t = n;
+    TLD.a = [...s].sort((a, b) => b.length - a.length).slice(0, 6000);
+    return TLD.a;
+  },
   tl = t => {
     if (!THR.test(t)) return t;
+    // กันข้อมูลผู้ใช้ไว้ก่อน (แทนด้วยอักขระพิเศษ) แปลส่วนที่เหลือ แล้วค่อยใส่กลับ
+    const keep = [];
+    for (const d of tlData())
+      if (t.includes(d)) {
+        t = t.split(d).join(String.fromCharCode(0xe000 + keep.length));
+        keep.push(d);
+        if (keep.length > 6000) break;
+      }
     for (const [a, b] of ENm) if (t.includes(a)) t = t.split(a).join(b);
+    if (keep.length) t = t.replace(/[\ue000-\uf8ff]/g, c => keep[c.charCodeAt(0) - 0xe000] ?? c);
     return t
       .replace(/\byou(?=[A-Z\u0E00-\u0E7F])/g, '')
       .replace(/\bAccount (SCB|KBank|KTB|BBL|BAY|TTB|GSB)\b/g, '$1 account')
