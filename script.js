@@ -45,6 +45,8 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 สร้าง QR ตามยอดสุทธิของใบแจ้งหนี้อัตโนมัติ|QR is generated automatically from the invoice total
 สแกน QR ยอดขึ้นอัตโนมัติ|Scan the QR, the amount fills in automatically
 เอกสารนี้ออกโดยระบบ T&T Mansion|Issued by the T&T Mansion system
+QR ตัวอย่าง|Sample QR
+สแกนจ่ายเงินไม่ได้|cannot be used to pay
 อยากดูหน้าตาระบบก่อน? ไม่ต้องมีบัญชี|Want to look around first? No account needed
 ดูตัวอย่างระบบ (ข้อมูลสมมติ)|Preview the system (sample data)
 โหมดตัวอย่างระบบ|System preview mode
@@ -6275,7 +6277,7 @@ function pvSeed() {
     due: 5,
     max: 250,
     fpd: 50,
-    pp: '0800000000',
+    pp: 'xxx-xxx-xxxx (ตัวอย่าง)',
     name: 'T&T Mansion (ตัวอย่าง)',
     addr: '99/9 ถนนตัวอย่าง ตำบลตัวอย่าง อำเภอเมือง จังหวัดตัวอย่าง 10000',
     tel: '080-000-0000',
@@ -6498,6 +6500,27 @@ function pvSeed() {
 
 // ---------- เริ่มโหมดตัวอย่าง ----------
 if (window.TTM_PV) {
+  // QR ชำระเงินในโหมดตัวอย่าง: ไม่ใช่ QR พร้อมเพย์ สแกนด้วยแอปธนาคารแล้วจ่ายไม่ได้
+  // กันคนสแกนแล้วโอนเงินไปเบอร์สมมติที่อาจเป็นของคนอื่นจริง
+  tm = function (id) {
+    const z = $('#qr');
+    if (!z) return;
+    try {
+      const k = qrcode(0, 'M');
+      k.addData('T&T Mansion preview - sample only, not a payment QR');
+      k.make();
+      z.innerHTML =
+        '<div class="pvqr">' +
+        k.createSvgTag(5, 2) +
+        '<b>' +
+        T2('QR ตัวอย่าง') +
+        '</b><small>' +
+        T2('สแกนจ่ายเงินไม่ได้') +
+        '</small></div>';
+    } catch (x) {
+      z.textContent = T2('QR ตัวอย่าง');
+    }
+  };
   document.documentElement.classList.add('pv-mode');
   if (!D._pv) pvSeed();
   // เปิดลิงก์ ?preview ครั้งแรก: ไปหน้าเลือกมุมมองเลย

@@ -308,3 +308,30 @@
     display: none;
   }
 }
+.pvqr {
+  position: relative;
+  display: inline-block;
+}
+.pvqr svg {
+  opacity: 0.25;
+  filter: grayscale(1);
+}
+.pvqr b,
+.pvqr small {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: #fff;
+  color: #b01030;
+  padding: 2px 10px;
+  border-radius: 8px;
+}
+.pvqr b {
+  top: 38%;
+  font-size: 16px;
+}
+.pvqr small {
+  top: 54%;
+  font-size: 12px;
+}

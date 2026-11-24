@@ -45,7 +45,7 @@ function pvSeed() {
     due: 5,
     max: 250,
     fpd: 50,
-    pp: '0800000000',
+    pp: 'xxx-xxx-xxxx (ตัวอย่าง)',
     name: 'T&T Mansion (ตัวอย่าง)',
     addr: '99/9 ถนนตัวอย่าง ตำบลตัวอย่าง อำเภอเมือง จังหวัดตัวอย่าง 10000',
     tel: '080-000-0000',
@@ -268,6 +268,27 @@ function pvSeed() {
 
 // ---------- เริ่มโหมดตัวอย่าง ----------
 if (window.TTM_PV) {
+  // QR ชำระเงินในโหมดตัวอย่าง: ไม่ใช่ QR พร้อมเพย์ สแกนด้วยแอปธนาคารแล้วจ่ายไม่ได้
+  // กันคนสแกนแล้วโอนเงินไปเบอร์สมมติที่อาจเป็นของคนอื่นจริง
+  tm = function (id) {
+    const z = $('#qr');
+    if (!z) return;
+    try {
+      const k = qrcode(0, 'M');
+      k.addData('T&T Mansion preview - sample only, not a payment QR');
+      k.make();
+      z.innerHTML =
+        '<div class="pvqr">' +
+        k.createSvgTag(5, 2) +
+        '<b>' +
+        T2('QR ตัวอย่าง') +
+        '</b><small>' +
+        T2('สแกนจ่ายเงินไม่ได้') +
+        '</small></div>';
+    } catch (x) {
+      z.textContent = T2('QR ตัวอย่าง');
+    }
+  };
   document.documentElement.classList.add('pv-mode');
   if (!D._pv) pvSeed();
   // เปิดลิงก์ ?preview ครั้งแรก: ไปหน้าเลือกมุมมองเลย
