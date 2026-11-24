@@ -347,3 +347,51 @@
 .pv-mode label.drop.pv-lock {
   pointer-events: auto;
 }
+
+/* ===== พิมพ์ใบแจ้งหนี้ / ใบเสร็จ =====
+   เดิมพิมพ์แล้วได้ 8 หน้า: เอกสารอยู่ใต้ฉากหลังสีเทา และหน้าเว็บที่ซ่อนไว้ยังกินพื้นที่เป็นหน้าว่าง
+   ตอนนี้: เปิดหน้าต่างเอกสารอยู่ → พิมพ์เฉพาะเอกสาร พื้นขาว ไม่มีปุ่ม */
+@media print {
+  html,
+  body {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+  body:has(#mo[style*='flex']) > *:not(#mo) {
+    display: none !important;
+  }
+  #mo[style*='flex'] {
+    position: static !important;
+    inset: auto !important;
+    display: block !important;
+    background: #fff !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+  #mo[style*='flex'] #mc {
+    position: static !important;
+    transform: none !important;
+    animation: none !important;
+    max-width: 720px !important;
+    width: 100% !important;
+    max-height: none !important;
+    overflow: visible !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+  }
+  #mo .np,
+  #mo button,
+  #mc > .b,
+  .ts,
+  .pvtag {
+    display: none !important;
+  }
+}
