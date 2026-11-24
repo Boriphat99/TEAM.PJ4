@@ -1,10 +1,10 @@
 {
   "name": "T&T Mansion Payment System",
   "short_name": "T&T Mansion",
-  "description": "ระบบชำระค่าบริการหอพัก T&T แมนชั่น",
+  "description": "ระบบชำระค่าบริการหอพัก T&T Mansion",
   "lang": "th",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "../",
+  "scope": "../",
   "display": "standalone",
   "background_color": "#faf7f4",
   "theme_color": "#7a0c20",
