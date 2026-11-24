@@ -1,0 +1,4 @@
+{
+  "buildCommand": "node build.js && rm -rf public && mkdir public && cp -r index.html verify.html style.css script.js static public/",
+  "outputDirectory": "public"
+}
