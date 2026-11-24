@@ -131,14 +131,25 @@ function iss() {
 function iss2() {
   let c = 0;
   if (plock(PER)) return alert(LKM(PER));
+  // ตรวจทุกห้องให้ผ่านก่อน แล้วค่อยออกบิล (เดิมออกบิลห้องแรก ๆ ไปแล้วค่อยเจอห้องที่ผิด ข้อมูลค้างครึ่งทาง)
+  const todo = [];
   for (const r of D.rooms.filter(r => tn(r.n))) {
     const el = $('#m' + r.n);
-    if (!el || el.value === '') continue;
-    const v = +el.value,
-      p0 = pvOf(r);
+    if (!el || el.value.trim() === '') continue;
+    const raw = el.value.trim().replace(/,/g, ''),
+      v = Number(raw),
+      p0 = pvOf(r),
+      xe = $('#x' + r.n),
+      xr = xe ? xe.value.trim().replace(/,/g, '') : '',
+      x = xr === '' ? 0 : Number(xr);
     if (D.inv.some(i => i.room == r.n && i.per > PER && !i.fin))
       return alert('ห้อง ' + r.n + ': มีบิลของเดือนถัดไปออกแล้ว ไม่สามารถออกบิลย้อนหลังได้');
+    if (!/^\d+$/.test(raw)) return alert('ห้อง ' + r.n + ': เลขมิเตอร์ต้องเป็นจำนวนเต็ม');
     if (v < p0) return alert('ห้อง ' + r.n + ': เลขมิเตอร์ต้องไม่น้อยกว่าเดิม (' + p0 + ')');
+    if (!(x >= 0)) return alert('ห้อง ' + r.n + ': ค่าใช้จ่ายเพิ่มเติมต้องเป็นตัวเลขและไม่ติดลบ');
+    todo.push({ r, v, p0, x });
+  }
+  for (const { r, v, p0, x } of todo) {
     D.inv.push({
       id: 'INV' + PER.replace('-', '') + '-' + r.n,
       room: r.n,
@@ -147,7 +158,7 @@ function iss2() {
       pv: p0,
       u: v - p0,
       el: (v - p0) * D.set.rate,
-      x: +$('#x' + r.n).value || 0,
+      x,
       xn: $('#xn' + r.n).value.trim(),
       rent: D.set.rent,
       fine: 0,

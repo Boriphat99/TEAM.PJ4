@@ -34,7 +34,19 @@ try {
 /* 03_i18n_dictionary.js — พจนานุกรมแปลภาษา ไทย/อังกฤษ (ขนาดใหญ่)
    (แยกมาจาก script.js บรรทัด 12-656; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
-  ENm = `เข้าสู่ระบบสำเร็จ|Signed in
+  ENm = `: เลขมิเตอร์ต้องเป็นจำนวนเต็ม|: meter reading must be a whole number
+: ค่าใช้จ่ายเพิ่มเติมต้องเป็นตัวเลขและไม่ติดลบ|: extra charge must be a number and not negative
+ค่าเช่าห้องพักต้องเป็นตัวเลขมากกว่า 0|Room rent must be a number greater than 0
+ค่าไฟฟ้าต่อหน่วยต้องเป็นตัวเลขมากกว่า 0|Electricity rate must be a number greater than 0
+เงินแรกเข้าต้องเป็นตัวเลข 0 ขึ้นไป|Initial deposit must be 0 or more
+วันครบกำหนดชำระต้องเป็นวันที่ 1–28|Payment due day must be between 1 and 28
+ค่าปรับสูงสุดต้องเป็นตัวเลข 0 ขึ้นไป|Maximum late fee must be 0 or more
+PromptPay ต้องเป็นเบอร์มือถือ 10 หลัก หรือเลขบัตรประชาชน/เลขผู้เสียภาษี 13 หลัก|PromptPay must be a 10-digit mobile number or a 13-digit ID/tax number
+เลขประจำตัวผู้เสียภาษีต้องมี 13 หลัก|Tax ID must have 13 digits
+เบอร์ติดต่อไม่ถูกต้อง|Invalid contact number
+กรุณากรอกชื่อหอพัก|Please enter the dorm name
+ลิงก์เว็บระบบต้องขึ้นต้นด้วย https://|System link must start with https://
+เข้าสู่ระบบสำเร็จ|Signed in
 ออกจากระบบสำเร็จ|Signed out
 ตอบคำขอ |Replied to request 
 ย้ายออก ห้อง |Moved out, room 
@@ -1996,7 +2008,29 @@ const pg = {
     return `<h2>ตั้งค่าระบบ</h2><p class="mu">แก้ไขกฎการคำนวณค่าบริการ</p><div class="cd" style="margin-top:14px"><h3>กฎการเรียกเก็บเงิน</h3><small class="mu">แก้ไขแล้วกดบันทึก ระบบจะใช้กับใบแจ้งหนี้รอบถัดไป</small><div class="g4 sg" style="grid-template-columns:repeat(3,1fr)">${f('rent', 'ค่าเช่าห้องพัก', 'บาท/เดือน')}${f('rate', 'ค่าไฟฟ้า', 'บาท/หน่วย')}${f('dep', 'เงินแรกเข้า', 'บาท')}${f('due', 'วันครบกำหนดชำระ', 'ของเดือน')}${f('max', 'ค่าปรับสูงสุด', 'บาท')}${f('pp', 'PromptPay (เบอร์/เลข ปชช.)', 'บัญชี SCB')}${f('tax', 'เลขประจำตัวผู้เสียภาษี', '')}${f('name', 'ชื่อหอพัก (บนเอกสาร)', '')}${f('payee', 'ชื่อผู้รับเงิน', '')}${f('tel', 'เบอร์ติดต่อ', '')}${f('addr', 'ที่อยู่', '')}${f('url', 'ลิงก์เว็บระบบ', '')}</div><button class="b" onclick="ss()">บันทึกการตั้งค่า</button></div>`;
   },
 };
+// ตรวจค่าตั้งระบบก่อนบันทึก (เดิมไม่ตรวจ: ลบช่องค่าเช่าแล้วกดบันทึก ค่าเช่าจะกลายเป็น 0)
+function ssCheck() {
+  const v = k => $('#s_' + k).value.trim(),
+    num = k => (v(k) === '' ? NaN : Number(v(k).replace(/,/g, ''))),
+    dg = k => v(k).replace(/[\s-]/g, '');
+  if (!(num('rent') > 0)) return 'ค่าเช่าห้องพักต้องเป็นตัวเลขมากกว่า 0';
+  if (!(num('rate') > 0)) return 'ค่าไฟฟ้าต่อหน่วยต้องเป็นตัวเลขมากกว่า 0';
+  if (!(num('dep') >= 0)) return 'เงินแรกเข้าต้องเป็นตัวเลข 0 ขึ้นไป';
+  const d = num('due');
+  if (!(Number.isInteger(d) && d >= 1 && d <= 28)) return 'วันครบกำหนดชำระต้องเป็นวันที่ 1–28';
+  if (!(num('max') >= 0)) return 'ค่าปรับสูงสุดต้องเป็นตัวเลข 0 ขึ้นไป';
+  if (!/^(0\d{9}|\d{13})$/.test(dg('pp')))
+    return 'PromptPay ต้องเป็นเบอร์มือถือ 10 หลัก หรือเลขบัตรประชาชน/เลขผู้เสียภาษี 13 หลัก';
+  if (dg('tax') && !/^\d{13}$/.test(dg('tax'))) return 'เลขประจำตัวผู้เสียภาษีต้องมี 13 หลัก';
+  if (dg('tel') && !/^0\d{8,9}$/.test(dg('tel'))) return 'เบอร์ติดต่อไม่ถูกต้อง';
+  if (!v('name')) return 'กรุณากรอกชื่อหอพัก';
+  if (v('url') && !/^https:\/\/\S+$/.test(v('url'))) return 'ลิงก์เว็บระบบต้องขึ้นต้นด้วย https://';
+  ['rent', 'rate', 'dep', 'max'].forEach(k => ($('#s_' + k).value = String(num(k))));
+  return '';
+}
 function ss() {
+  const er = ssCheck();
+  if (er) return alert(er);
   const s = D.set;
   ['rent', 'rate', 'dep', 'due', 'max'].forEach(k => (s[k] = +$('#s_' + k).value || 0));
   ['pp', 'tax', 'name', 'payee', 'tel', 'addr', 'url'].forEach(
@@ -2374,14 +2408,25 @@ function iss() {
 function iss2() {
   let c = 0;
   if (plock(PER)) return alert(LKM(PER));
+  // ตรวจทุกห้องให้ผ่านก่อน แล้วค่อยออกบิล (เดิมออกบิลห้องแรก ๆ ไปแล้วค่อยเจอห้องที่ผิด ข้อมูลค้างครึ่งทาง)
+  const todo = [];
   for (const r of D.rooms.filter(r => tn(r.n))) {
     const el = $('#m' + r.n);
-    if (!el || el.value === '') continue;
-    const v = +el.value,
-      p0 = pvOf(r);
+    if (!el || el.value.trim() === '') continue;
+    const raw = el.value.trim().replace(/,/g, ''),
+      v = Number(raw),
+      p0 = pvOf(r),
+      xe = $('#x' + r.n),
+      xr = xe ? xe.value.trim().replace(/,/g, '') : '',
+      x = xr === '' ? 0 : Number(xr);
     if (D.inv.some(i => i.room == r.n && i.per > PER && !i.fin))
       return alert('ห้อง ' + r.n + ': มีบิลของเดือนถัดไปออกแล้ว ไม่สามารถออกบิลย้อนหลังได้');
+    if (!/^\d+$/.test(raw)) return alert('ห้อง ' + r.n + ': เลขมิเตอร์ต้องเป็นจำนวนเต็ม');
     if (v < p0) return alert('ห้อง ' + r.n + ': เลขมิเตอร์ต้องไม่น้อยกว่าเดิม (' + p0 + ')');
+    if (!(x >= 0)) return alert('ห้อง ' + r.n + ': ค่าใช้จ่ายเพิ่มเติมต้องเป็นตัวเลขและไม่ติดลบ');
+    todo.push({ r, v, p0, x });
+  }
+  for (const { r, v, p0, x } of todo) {
     D.inv.push({
       id: 'INV' + PER.replace('-', '') + '-' + r.n,
       room: r.n,
@@ -2390,7 +2435,7 @@ function iss2() {
       pv: p0,
       u: v - p0,
       el: (v - p0) * D.set.rate,
-      x: +$('#x' + r.n).value || 0,
+      x,
       xn: $('#xn' + r.n).value.trim(),
       rent: D.set.rent,
       fine: 0,
@@ -4579,6 +4624,8 @@ if (SBON) {
     tt('✓ บันทึกข้อมูลผู้เช่าแล้ว');
   };
   ss = function () {
+    const er = ssCheck();
+    if (er) return alert(er);
     const s = D.set;
     ['rent', 'rate', 'dep', 'due', 'max'].forEach(k => (s[k] = +$('#s_' + k).value || 0));
     ['pp', 'tax', 'name', 'payee', 'tel', 'addr', 'url'].forEach(

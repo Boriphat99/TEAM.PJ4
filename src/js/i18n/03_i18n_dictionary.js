@@ -1,7 +1,19 @@
 /* 03_i18n_dictionary.js — พจนานุกรมแปลภาษา ไทย/อังกฤษ (ขนาดใหญ่)
    (แยกมาจาก script.js บรรทัด 12-656; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
-  ENm = `เข้าสู่ระบบสำเร็จ|Signed in
+  ENm = `: เลขมิเตอร์ต้องเป็นจำนวนเต็ม|: meter reading must be a whole number
+: ค่าใช้จ่ายเพิ่มเติมต้องเป็นตัวเลขและไม่ติดลบ|: extra charge must be a number and not negative
+ค่าเช่าห้องพักต้องเป็นตัวเลขมากกว่า 0|Room rent must be a number greater than 0
+ค่าไฟฟ้าต่อหน่วยต้องเป็นตัวเลขมากกว่า 0|Electricity rate must be a number greater than 0
+เงินแรกเข้าต้องเป็นตัวเลข 0 ขึ้นไป|Initial deposit must be 0 or more
+วันครบกำหนดชำระต้องเป็นวันที่ 1–28|Payment due day must be between 1 and 28
+ค่าปรับสูงสุดต้องเป็นตัวเลข 0 ขึ้นไป|Maximum late fee must be 0 or more
+PromptPay ต้องเป็นเบอร์มือถือ 10 หลัก หรือเลขบัตรประชาชน/เลขผู้เสียภาษี 13 หลัก|PromptPay must be a 10-digit mobile number or a 13-digit ID/tax number
+เลขประจำตัวผู้เสียภาษีต้องมี 13 หลัก|Tax ID must have 13 digits
+เบอร์ติดต่อไม่ถูกต้อง|Invalid contact number
+กรุณากรอกชื่อหอพัก|Please enter the dorm name
+ลิงก์เว็บระบบต้องขึ้นต้นด้วย https://|System link must start with https://
+เข้าสู่ระบบสำเร็จ|Signed in
 ออกจากระบบสำเร็จ|Signed out
 ตอบคำขอ |Replied to request 
 ย้ายออก ห้อง |Moved out, room 

@@ -224,7 +224,29 @@ const pg = {
     return `<h2>ตั้งค่าระบบ</h2><p class="mu">แก้ไขกฎการคำนวณค่าบริการ</p><div class="cd" style="margin-top:14px"><h3>กฎการเรียกเก็บเงิน</h3><small class="mu">แก้ไขแล้วกดบันทึก ระบบจะใช้กับใบแจ้งหนี้รอบถัดไป</small><div class="g4 sg" style="grid-template-columns:repeat(3,1fr)">${f('rent', 'ค่าเช่าห้องพัก', 'บาท/เดือน')}${f('rate', 'ค่าไฟฟ้า', 'บาท/หน่วย')}${f('dep', 'เงินแรกเข้า', 'บาท')}${f('due', 'วันครบกำหนดชำระ', 'ของเดือน')}${f('max', 'ค่าปรับสูงสุด', 'บาท')}${f('pp', 'PromptPay (เบอร์/เลข ปชช.)', 'บัญชี SCB')}${f('tax', 'เลขประจำตัวผู้เสียภาษี', '')}${f('name', 'ชื่อหอพัก (บนเอกสาร)', '')}${f('payee', 'ชื่อผู้รับเงิน', '')}${f('tel', 'เบอร์ติดต่อ', '')}${f('addr', 'ที่อยู่', '')}${f('url', 'ลิงก์เว็บระบบ', '')}</div><button class="b" onclick="ss()">บันทึกการตั้งค่า</button></div>`;
   },
 };
+// ตรวจค่าตั้งระบบก่อนบันทึก (เดิมไม่ตรวจ: ลบช่องค่าเช่าแล้วกดบันทึก ค่าเช่าจะกลายเป็น 0)
+function ssCheck() {
+  const v = k => $('#s_' + k).value.trim(),
+    num = k => (v(k) === '' ? NaN : Number(v(k).replace(/,/g, ''))),
+    dg = k => v(k).replace(/[\s-]/g, '');
+  if (!(num('rent') > 0)) return 'ค่าเช่าห้องพักต้องเป็นตัวเลขมากกว่า 0';
+  if (!(num('rate') > 0)) return 'ค่าไฟฟ้าต่อหน่วยต้องเป็นตัวเลขมากกว่า 0';
+  if (!(num('dep') >= 0)) return 'เงินแรกเข้าต้องเป็นตัวเลข 0 ขึ้นไป';
+  const d = num('due');
+  if (!(Number.isInteger(d) && d >= 1 && d <= 28)) return 'วันครบกำหนดชำระต้องเป็นวันที่ 1–28';
+  if (!(num('max') >= 0)) return 'ค่าปรับสูงสุดต้องเป็นตัวเลข 0 ขึ้นไป';
+  if (!/^(0\d{9}|\d{13})$/.test(dg('pp')))
+    return 'PromptPay ต้องเป็นเบอร์มือถือ 10 หลัก หรือเลขบัตรประชาชน/เลขผู้เสียภาษี 13 หลัก';
+  if (dg('tax') && !/^\d{13}$/.test(dg('tax'))) return 'เลขประจำตัวผู้เสียภาษีต้องมี 13 หลัก';
+  if (dg('tel') && !/^0\d{8,9}$/.test(dg('tel'))) return 'เบอร์ติดต่อไม่ถูกต้อง';
+  if (!v('name')) return 'กรุณากรอกชื่อหอพัก';
+  if (v('url') && !/^https:\/\/\S+$/.test(v('url'))) return 'ลิงก์เว็บระบบต้องขึ้นต้นด้วย https://';
+  ['rent', 'rate', 'dep', 'max'].forEach(k => ($('#s_' + k).value = String(num(k))));
+  return '';
+}
 function ss() {
+  const er = ssCheck();
+  if (er) return alert(er);
   const s = D.set;
   ['rent', 'rate', 'dep', 'due', 'max'].forEach(k => (s[k] = +$('#s_' + k).value || 0));
   ['pp', 'tax', 'name', 'payee', 'tel', 'addr', 'url'].forEach(

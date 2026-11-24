@@ -164,6 +164,8 @@ if (SBON) {
     tt('✓ บันทึกข้อมูลผู้เช่าแล้ว');
   };
   ss = function () {
+    const er = ssCheck();
+    if (er) return alert(er);
     const s = D.set;
     ['rent', 'rate', 'dep', 'due', 'max'].forEach(k => (s[k] = +$('#s_' + k).value || 0));
     ['pp', 'tax', 'name', 'payee', 'tel', 'addr', 'url'].forEach(
