@@ -70,7 +70,7 @@ Deno.serve(async req => {
   if (password.length < 8) return bad('รหัสผ่านต้องมีอย่างน้อย 8 ตัว');
   if (!/[A-Za-z\u0E00-\u0E7F]/.test(password) || !/[0-9]/.test(password))
     return bad('รหัสผ่านต้องมีทั้งตัวอักษรและตัวเลข');
-  if (phone && !/^[0-9\-+ ]{9,15}$/.test(phone)) return bad('เบอร์โทรไม่ถูกต้อง');
+  if (phone && !/^0\d{8,9}$/.test(phone.replace(/[\s-]/g, ''))) return bad('เบอร์โทรไม่ถูกต้อง');
   if (!room_no) return bad('กรุณาเลือกห้อง');
   if (!isDate(start_date)) return bad('กรุณาระบุวันเริ่มสัญญา');
   if (end_date && (!isDate(end_date) || String(end_date) < String(start_date)))
@@ -99,6 +99,8 @@ Deno.serve(async req => {
     .eq('room_id', room.id)
     .eq('status', 'active');
   if (busy) return bad('ห้อง ' + room_no + ' มีผู้เช่าอยู่แล้ว');
+  // ห้องที่ผู้ดูแลตั้งเป็น "ไม่ว่าง" เอง (ไม่มีสัญญา) ก็เพิ่มผู้เช่าไม่ได้ เหมือนในหน้าเว็บ
+  if (room.occupancy_status === 'busy') return bad('ห้อง ' + room_no + ' ตั้งสถานะไม่ว่างไว้ กรุณาเปลี่ยนเป็นว่างก่อน');
 
   // 4) สร้างบัญชี (trigger handle_new_user จะสร้างแถว public.users + public.tenants ให้)
   const { data: cu, error: ue } = await admin.auth.admin.createUser({

@@ -116,7 +116,7 @@ if (SBON) {
     const n = $('#p_n').value.trim(),
       t = $('#p_t').value.trim();
     if (!n) return alert('กรอกชื่อ');
-    if (t && !/^[0-9\-+ ]{9,15}$/.test(t)) return alert('เบอร์โทรไม่ถูกต้อง');
+    if (t && !TELOK(t)) return alert('เบอร์โทรไม่ถูกต้อง');
     Object.assign(U, { name: n, tel: t, g: $('#p_g').value });
     lg('แก้ไขโปรไฟล์');
     save();

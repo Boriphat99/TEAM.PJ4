@@ -60,7 +60,7 @@ async function atfGo() {
   if (!name) return alert('กรุณากรอกชื่อ - นามสกุล');
   if (!/^\S+@\S+\.\S+$/.test(em)) return alert('รูปแบบอีเมลไม่ถูกต้อง');
   if (pwBad(pw, em)) return alert(pwBad(pw, em));
-  if (tel && !/^[0-9\-+ ]{9,15}$/.test(tel)) return alert('เบอร์โทรไม่ถูกต้อง');
+  if (tel && !TELOK(tel)) return alert('เบอร์โทรไม่ถูกต้อง (ขึ้นต้นด้วย 0 ยาว 9–10 หลัก)');
   if (!s) return alert('กรุณาระบุวันเริ่มสัญญา');
   const sm = smRead('af_m', n);
   if (sm == null) return;

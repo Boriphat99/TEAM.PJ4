@@ -238,7 +238,7 @@ function ssCheck() {
   if (!/^(0\d{9}|\d{13})$/.test(dg('pp')))
     return 'PromptPay ต้องเป็นเบอร์มือถือ 10 หลัก หรือเลขบัตรประชาชน/เลขผู้เสียภาษี 13 หลัก';
   if (dg('tax') && !/^\d{13}$/.test(dg('tax'))) return 'เลขประจำตัวผู้เสียภาษีต้องมี 13 หลัก';
-  if (dg('tel') && !/^0\d{8,9}$/.test(dg('tel'))) return 'เบอร์ติดต่อไม่ถูกต้อง';
+  if (dg('tel') && !TELOK(dg('tel'))) return 'เบอร์ติดต่อไม่ถูกต้อง';
   if (!v('name')) return 'กรุณากรอกชื่อหอพัก';
   if (v('url') && !/^https:\/\/\S+$/.test(v('url'))) return 'ลิงก์เว็บระบบต้องขึ้นต้นด้วย https://';
   ['rent', 'rate', 'dep', 'max'].forEach(k => ($('#s_' + k).value = String(num(k))));
@@ -336,7 +336,7 @@ function eu(id) {
     go2 = $('#f_s').value == 'out';
   if (!n || !m) return alert('กรอกชื่อและอีเมล');
   const tel = $('#f_t').value.trim();
-  if (tel && !/^0\d{8,9}$/.test(tel.replace(/[\s-]/g, ''))) return alert('เบอร์โทรไม่ถูกต้อง');
+  if (tel && !TELOK(tel)) return alert('เบอร์โทรไม่ถูกต้อง');
   if (D.users.some(x => x.id != id && x.email == m)) return alert('อีเมลนี้ถูกใช้แล้ว');
   if (w && pwBad(w, m)) return alert(pwBad(w, m));
   if (!go2 && r) {

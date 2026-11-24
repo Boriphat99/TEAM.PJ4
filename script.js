@@ -1226,7 +1226,9 @@ const APP_V = 'v2026.10.16-A',
     return bk() >= new Date(y, m, 11);
   },
   MAILOK = m => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(m || '').trim()),
-  MAILMSG = 'ใช้ได้เฉพาะอีเมล Gmail (@gmail.com) และอีเมลมหาวิทยาลัย (@psru.ac.th) เท่านั้น';
+  MAILMSG = 'รูปแบบอีเมลไม่ถูกต้อง',
+  // เบอร์โทรไทย: ขึ้นต้นด้วย 0 ยาว 9–10 หลัก (เว้นวรรค/ขีดได้) ใช้ตรวจแบบเดียวกันทุกฟอร์ม
+  TELOK = t => /^0\d{8,9}$/.test(String(t || '').replace(/[\s-]/g, ''));
 const dper = () => {
   const n = bk(),
     d = n.getDate() >= 27 ? n : new Date(n.getFullYear(), n.getMonth() - 1, 1);
@@ -2040,7 +2042,7 @@ function ssCheck() {
   if (!/^(0\d{9}|\d{13})$/.test(dg('pp')))
     return 'PromptPay ต้องเป็นเบอร์มือถือ 10 หลัก หรือเลขบัตรประชาชน/เลขผู้เสียภาษี 13 หลัก';
   if (dg('tax') && !/^\d{13}$/.test(dg('tax'))) return 'เลขประจำตัวผู้เสียภาษีต้องมี 13 หลัก';
-  if (dg('tel') && !/^0\d{8,9}$/.test(dg('tel'))) return 'เบอร์ติดต่อไม่ถูกต้อง';
+  if (dg('tel') && !TELOK(dg('tel'))) return 'เบอร์ติดต่อไม่ถูกต้อง';
   if (!v('name')) return 'กรุณากรอกชื่อหอพัก';
   if (v('url') && !/^https:\/\/\S+$/.test(v('url'))) return 'ลิงก์เว็บระบบต้องขึ้นต้นด้วย https://';
   ['rent', 'rate', 'dep', 'max'].forEach(k => ($('#s_' + k).value = String(num(k))));
@@ -2138,7 +2140,7 @@ function eu(id) {
     go2 = $('#f_s').value == 'out';
   if (!n || !m) return alert('กรอกชื่อและอีเมล');
   const tel = $('#f_t').value.trim();
-  if (tel && !/^0\d{8,9}$/.test(tel.replace(/[\s-]/g, ''))) return alert('เบอร์โทรไม่ถูกต้อง');
+  if (tel && !TELOK(tel)) return alert('เบอร์โทรไม่ถูกต้อง');
   if (D.users.some(x => x.id != id && x.email == m)) return alert('อีเมลนี้ถูกใช้แล้ว');
   if (w && pwBad(w, m)) return alert(pwBad(w, m));
   if (!go2 && r) {
@@ -3079,7 +3081,7 @@ function ps() {
   if (!n || !m) return alert('กรอกชื่อและอีเมล');
   if (!/^\S+@\S+$/.test(m)) return alert('รูปแบบอีเมลไม่ถูกต้อง');
   if (D.users.some(x => x.id != U.id && x.email == m)) return alert('อีเมลนี้ถูกใช้แล้ว');
-  if (t && !/^[0-9\-+ ]{9,15}$/.test(t)) return alert('เบอร์โทรไม่ถูกต้อง');
+  if (t && !TELOK(t)) return alert('เบอร์โทรไม่ถูกต้อง');
   Object.assign(U, { name: n, email: m, tel: t, g: $('#p_g').value });
   lg('แก้ไขโปรไฟล์');
   save();
@@ -3182,8 +3184,8 @@ function sc2(id) {
     b = $('#c_e').value;
   if (!a) return alert('ระบุวันเริ่มสัญญา');
   if (b && b < a) return alert('วันสิ้นสุดต้องไม่ก่อนวันเริ่มสัญญา');
-  u.cs = new Date(a).getTime();
-  if (b) u.ce = new Date(b).getTime();
+  u.cs = new Date(a + 'T00:00:00').getTime();
+  if (b) u.ce = new Date(b + 'T00:00:00').getTime();
   else delete u.ce;
   lg('แก้ไขสัญญา ห้อง ' + u.room);
   save();
@@ -4615,7 +4617,7 @@ if (SBON) {
     const n = $('#p_n').value.trim(),
       t = $('#p_t').value.trim();
     if (!n) return alert('กรอกชื่อ');
-    if (t && !/^[0-9\-+ ]{9,15}$/.test(t)) return alert('เบอร์โทรไม่ถูกต้อง');
+    if (t && !TELOK(t)) return alert('เบอร์โทรไม่ถูกต้อง');
     Object.assign(U, { name: n, tel: t, g: $('#p_g').value });
     lg('แก้ไขโปรไฟล์');
     save();
@@ -5169,8 +5171,10 @@ if (SBON) sbBoot().catch(x => alert('เชื่อมต่อ Supabase ไม
       em: [v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), 'รูปแบบอีเมลไม่ถูกต้อง'],
       ae: [v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), 'รูปแบบอีเมลไม่ถูกต้อง'],
       p_e: [v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), 'รูปแบบอีเมลไม่ถูกต้อง'],
-      at: [v => !v || /^[0-9+\-\s]{9,15}$/.test(v), 'เบอร์โทรไม่ถูกต้อง'],
-      p_t: [v => !v || /^[0-9+\-\s]{9,15}$/.test(v), 'เบอร์โทรไม่ถูกต้อง'],
+      at: [v => !v || TELOK(v), 'เบอร์โทรไม่ถูกต้อง'],
+      af_t: [v => !v || TELOK(v), 'เบอร์โทรไม่ถูกต้อง'],
+      f_t: [v => !v || TELOK(v), 'เบอร์โทรไม่ถูกต้อง'],
+      p_t: [v => !v || TELOK(v), 'เบอร์โทรไม่ถูกต้อง'],
       ap: [v => !pwBad(v), 'รหัสผ่านอย่างน้อย 8 ตัว มีตัวอักษรและตัวเลข'],
     };
     const mark = el => {
@@ -5463,7 +5467,7 @@ async function atfGo() {
   if (!name) return alert('กรุณากรอกชื่อ - นามสกุล');
   if (!/^\S+@\S+\.\S+$/.test(em)) return alert('รูปแบบอีเมลไม่ถูกต้อง');
   if (pwBad(pw, em)) return alert(pwBad(pw, em));
-  if (tel && !/^[0-9\-+ ]{9,15}$/.test(tel)) return alert('เบอร์โทรไม่ถูกต้อง');
+  if (tel && !TELOK(tel)) return alert('เบอร์โทรไม่ถูกต้อง (ขึ้นต้นด้วย 0 ยาว 9–10 หลัก)');
   if (!s) return alert('กรุณาระบุวันเริ่มสัญญา');
   const sm = smRead('af_m', n);
   if (sm == null) return;

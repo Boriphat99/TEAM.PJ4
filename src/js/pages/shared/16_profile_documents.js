@@ -112,7 +112,7 @@ function ps() {
   if (!n || !m) return alert('กรอกชื่อและอีเมล');
   if (!/^\S+@\S+$/.test(m)) return alert('รูปแบบอีเมลไม่ถูกต้อง');
   if (D.users.some(x => x.id != U.id && x.email == m)) return alert('อีเมลนี้ถูกใช้แล้ว');
-  if (t && !/^[0-9\-+ ]{9,15}$/.test(t)) return alert('เบอร์โทรไม่ถูกต้อง');
+  if (t && !TELOK(t)) return alert('เบอร์โทรไม่ถูกต้อง');
   Object.assign(U, { name: n, email: m, tel: t, g: $('#p_g').value });
   lg('แก้ไขโปรไฟล์');
   save();
@@ -215,8 +215,8 @@ function sc2(id) {
     b = $('#c_e').value;
   if (!a) return alert('ระบุวันเริ่มสัญญา');
   if (b && b < a) return alert('วันสิ้นสุดต้องไม่ก่อนวันเริ่มสัญญา');
-  u.cs = new Date(a).getTime();
-  if (b) u.ce = new Date(b).getTime();
+  u.cs = new Date(a + 'T00:00:00').getTime();
+  if (b) u.ce = new Date(b + 'T00:00:00').getTime();
   else delete u.ce;
   lg('แก้ไขสัญญา ห้อง ' + u.room);
   save();

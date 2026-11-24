@@ -75,7 +75,9 @@ const APP_V = 'v2026.10.16-A',
     return bk() >= new Date(y, m, 11);
   },
   MAILOK = m => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(m || '').trim()),
-  MAILMSG = 'ใช้ได้เฉพาะอีเมล Gmail (@gmail.com) และอีเมลมหาวิทยาลัย (@psru.ac.th) เท่านั้น';
+  MAILMSG = 'รูปแบบอีเมลไม่ถูกต้อง',
+  // เบอร์โทรไทย: ขึ้นต้นด้วย 0 ยาว 9–10 หลัก (เว้นวรรค/ขีดได้) ใช้ตรวจแบบเดียวกันทุกฟอร์ม
+  TELOK = t => /^0\d{8,9}$/.test(String(t || '').replace(/[\s-]/g, ''));
 const dper = () => {
   const n = bk(),
     d = n.getDate() >= 27 ? n : new Date(n.getFullYear(), n.getMonth() - 1, 1);
