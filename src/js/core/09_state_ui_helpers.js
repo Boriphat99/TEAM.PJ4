@@ -84,7 +84,7 @@ const dper = () => {
 // หน้ามิเตอร์ & ออกบิล เปิดที่เดือนล่าสุด (เดือนปัจจุบัน) เสมอ
 let PER = pcur();
 try {
-  const s = +localStorage.getItem('ttm_s');
+  const s = +STO.getItem('ttm_s');
   U = D.users.find(u => u.id == s && !u.out) || null;
   if (U) P = 'x';
 } catch (x) {}

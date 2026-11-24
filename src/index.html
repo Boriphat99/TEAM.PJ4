@@ -19,6 +19,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&family=Noto+Serif+Thai:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
+      // โหมดตัวอย่าง (?preview): ใช้ข้อมูลสมมติในแท็บนี้เท่านั้น ไม่ต่อฐานข้อมูลจริง
+      try {
+        if (/[?&]preview(=|&|$)/.test(location.search)) sessionStorage.setItem('ttm_pv', '1');
+        if (sessionStorage.getItem('ttm_pv') === '1') {
+          window.TTM_SB = { url: '', key: '' };
+          window.TTM_PV = 1;
+        }
+      } catch (e) {}
       // ตั้งธีม ภาษา และขนาดเมนูก่อนหน้าเว็บแสดง เพื่อไม่ให้หน้ากะพริบ
       try {
         var d = document.documentElement;
@@ -108,6 +116,7 @@
     <script src="js/pages/shared/29_line.js"></script>
     <script src="js/effects/27_ux_polish.js"></script>
     <script src="js/effects/30_refine_motion.js"></script>
+    <script src="js/pages/public/31_preview_mode.js"></script>
 </body>
 
 </html>

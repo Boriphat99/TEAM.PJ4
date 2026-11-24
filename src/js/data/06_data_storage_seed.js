@@ -1,6 +1,6 @@
 /* 06_data_storage_seed.js — ข้อมูลตั้งต้น/โหมดทดลอง และการบันทึกในเบราว์เซอร์
    (แยกมาจาก script.js บรรทัด 690-777; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
-const K = 'ttm2',
+const K = window.TTM_PV ? 'ttm_pv_d' : 'ttm2',
   $ = s => document.querySelector(s),
   ROOMS = [];
 for (let f = 1; f <= 3; f++) for (let i = 1; i <= 9; i++) ROOMS.push(f * 100 + i);
@@ -56,7 +56,7 @@ if (SBON) {
   });
 } else {
   try {
-    D = JSON.parse(localStorage.getItem(K));
+    D = JSON.parse(STO.getItem(K));
   } catch (x) {}
   if (!D) D = seed();
 }
@@ -82,7 +82,7 @@ D.news = D.news || [];
 const save = () => {
   if (SBON) return sbSync();
   try {
-    localStorage.setItem(K, JSON.stringify(D));
+    STO.setItem(K, JSON.stringify(D));
   } catch (x) {
     alert('พื้นที่จัดเก็บเต็ม');
   }

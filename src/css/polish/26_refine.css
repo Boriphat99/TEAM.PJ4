@@ -251,3 +251,60 @@
     scrollbar-width: thin;
   }
 }
+/* ===== โหมดตัวอย่างระบบ ===== */
+.pvb {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--ln);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+}
+.pvb.on {
+  border: 1px solid color-mix(in srgb, var(--ac) 35%, transparent);
+  background: color-mix(in srgb, var(--ac) 7%, transparent);
+  border-radius: 14px;
+  padding: 14px;
+}
+.pvb .pvr {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.pvb .pvr .b {
+  padding-left: 6px;
+  padding-right: 6px;
+  white-space: nowrap;
+}
+.pvtag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px 4px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ac) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ac) 35%, transparent);
+  color: var(--ac);
+  font-size: 13px;
+  white-space: nowrap;
+  flex: none;
+}
+.pvtag small {
+  opacity: 0.8;
+}
+.pvtag button {
+  border: 0;
+  border-radius: 999px;
+  padding: 3px 10px;
+  background: var(--ac);
+  color: #fff;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+@media (max-width: 800px) {
+  .pvtag small {
+    display: none;
+  }
+}

@@ -19,6 +19,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&family=Noto+Serif+Thai:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
+      // โหมดตัวอย่าง (?preview): ใช้ข้อมูลสมมติในแท็บนี้เท่านั้น ไม่ต่อฐานข้อมูลจริง
+      try {
+        if (/[?&]preview(=|&|$)/.test(location.search)) sessionStorage.setItem('ttm_pv', '1');
+        if (sessionStorage.getItem('ttm_pv') === '1') {
+          window.TTM_SB = { url: '', key: '' };
+          window.TTM_PV = 1;
+        }
+      } catch (e) {}
       // ตั้งธีม ภาษา และขนาดเมนูก่อนหน้าเว็บแสดง เพื่อไม่ให้หน้ากะพริบ
       try {
         var d = document.documentElement;
@@ -37,7 +45,7 @@
         if (s === '1' || (s === null && innerWidth < 1100)) d.classList.add('sb-mini');
       } catch (e) {}
     </script>
-    <link rel="stylesheet" href="style.css?v=0b9f738a">
+    <link rel="stylesheet" href="style.css?v=2833a86b">
     <style>/* วอลเปเปอร์หน้าต้อนรับ (อ้าง path จากหน้าเว็บ) */
         :root { --hp-bg-l: url('static/bg-photo-d.webp?v=88440f61'); --hp-bg-d: url('static/bg-photo-d.webp?v=88440f61'); --hp-bg-lm: url('static/bg-photo-d-m.webp?v=8e49e76b'); --hp-bg-dm: url('static/bg-photo-d-m.webp?v=8e49e76b'); }
     </style>
@@ -51,7 +59,7 @@
     <div id="dg"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
     <!-- html2canvas โหลดเมื่อกดบันทึกรูปใบเสร็จ (ดู js/effects/27_ux_polish.js) -->
-    <script src="script.js?v=0b9f738a"></script>
+    <script src="script.js?v=2833a86b"></script>
 </body>
 
 </html>

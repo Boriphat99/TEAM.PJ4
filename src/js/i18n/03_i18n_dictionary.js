@@ -12,6 +12,14 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 สร้าง QR ตามยอดสุทธิของใบแจ้งหนี้อัตโนมัติ|QR is generated automatically from the invoice total
 สแกน QR ยอดขึ้นอัตโนมัติ|Scan the QR, the amount fills in automatically
 เอกสารนี้ออกโดยระบบ T&T Mansion|Issued by the T&T Mansion system
+อยากดูหน้าตาระบบก่อน? ไม่ต้องมีบัญชี|Want to look around first? No account needed
+ดูตัวอย่างระบบ (ข้อมูลสมมติ)|Preview the system (sample data)
+โหมดตัวอย่างระบบ|System preview mode
+ข้อมูลทั้งหมดเป็นข้อมูลสมมติ ไม่ใช่ข้อมูลจริง · เลือกมุมมองที่อยากดู|All data here is made up, not real · pick a view
+ออกจากโหมดตัวอย่าง|Leave preview
+โหมดตัวอย่าง|Preview
+ข้อมูลสมมติ|sample data
+(ตัวอย่าง)|(sample)
 ช้าเฉลี่ย|Avg. delay
 สร้างบัญชีเข้าสู่ระบบให้ผู้เช่า พร้อมเปิดสัญญาเช่า|Create a login for the tenant and open the lease
 สร้างบัญชีและเปิดสัญญา|Create account and open lease

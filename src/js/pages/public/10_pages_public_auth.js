@@ -161,7 +161,7 @@ const login = () =>
   auth(
     'ยินดีต้อนรับกลับ',
     'เข้าสู่ระบบเพื่อตรวจสอบบิลและสถานะการชำระเงินของห้องพัก',
-    `<div class="ah"><span class="ib">${IC.lock}</span><div><h2>เข้าสู่ระบบ</h2><small class="mu">สำหรับผู้เช่าและผู้ดูแล</small></div><b class="ac bk" onclick="go('home')">‹ หน้าหลัก</b></div>${fld('em', 'อีเมล', '✉', 'email', `autocomplete="username" placeholder="name@example.com"`)}${fld('pw', 'รหัสผ่าน', '🔑', 'password', `autocomplete="current-password" placeholder="••••••••" onkeydown="if(event.key=='Enter')dl()"`)}<div style="text-align:right;margin:-6px 0 12px"><span class="ac" style="cursor:pointer;font-size:13px" onclick="go('forgot')">ลืมรหัสผ่าน?</span></div><button class="b go" style="width:100%" onclick="dl()">เข้าสู่ระบบ →</button><div class="dm"><small class="mu">ทดลองใช้งาน</small><span><button class="b b2 sm" onclick="fl('admin@ttmansion.local','admin123')">ผู้ดูแล</button> <button class="b b2 sm" onclick="fl('owner@ttmansion.local','owner123')">เจ้าของ</button> <button class="b b2 sm" onclick="fl('nattapol@ttmansion.local','1234')">ผู้เช่า</button></span></div>`,
+    `<div class="ah"><span class="ib">${IC.lock}</span><div><h2>เข้าสู่ระบบ</h2><small class="mu">สำหรับผู้เช่าและผู้ดูแล</small></div><b class="ac bk" onclick="go('home')">‹ หน้าหลัก</b></div>${fld('em', 'อีเมล', '✉', 'email', `autocomplete="username" placeholder="name@example.com"`)}${fld('pw', 'รหัสผ่าน', '🔑', 'password', `autocomplete="current-password" placeholder="••••••••" onkeydown="if(event.key=='Enter')dl()"`)}<div style="text-align:right;margin:-6px 0 12px"><span class="ac" style="cursor:pointer;font-size:13px" onclick="go('forgot')">ลืมรหัสผ่าน?</span></div><button class="b go" style="width:100%" onclick="dl()">เข้าสู่ระบบ →</button>${typeof pvLoginBox == 'function' && (window.TTM_PV || SBON) ? pvLoginBox() : `<div class="dm"><small class="mu">ทดลองใช้งาน</small><span><button class="b b2 sm" onclick="fl('admin@ttmansion.local','admin123')">ผู้ดูแล</button> <button class="b b2 sm" onclick="fl('owner@ttmansion.local','owner123')">เจ้าของ</button> <button class="b b2 sm" onclick="fl('nattapol@ttmansion.local','1234')">ผู้เช่า</button></span></div>`}`,
     'ยังไม่มีบัญชี? ติดต่อผู้ดูแลหอพักเพื่อขอสร้างบัญชี',
     '',
     'login'
@@ -180,7 +180,7 @@ function enter(u, pg2, how) {
   applyPf(u);
   P = pg2 || 'x';
   try {
-    localStorage.setItem('ttm_s', u.id);
+    STO.setItem('ttm_s', u.id);
   } catch (x) {}
   R();
   if (how) tt('✓ เข้าสู่ระบบสำเร็จ · ' + (RL[u.role] || '') + ' ' + u.name);
@@ -275,7 +275,7 @@ function out() {
   U = null;
   P = 'home';
   try {
-    localStorage.removeItem('ttm_s');
+    STO.removeItem('ttm_s');
   } catch (x) {}
   lout(r);
 }
