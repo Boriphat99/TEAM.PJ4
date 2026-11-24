@@ -79,7 +79,7 @@ D.users.forEach(u => {
 });
 D.tk = D.tk || [];
 D.news = D.news || [];
-const save = () => {
+let save = () => {
   if (SBON) return sbSync();
   try {
     STO.setItem(K, JSON.stringify(D));

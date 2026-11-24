@@ -12,6 +12,9 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 สร้าง QR ตามยอดสุทธิของใบแจ้งหนี้อัตโนมัติ|QR is generated automatically from the invoice total
 สแกน QR ยอดขึ้นอัตโนมัติ|Scan the QR, the amount fills in automatically
 เอกสารนี้ออกโดยระบบ T&T Mansion|Issued by the T&T Mansion system
+โหมดตัวอย่าง: ดูได้อย่างเดียว ไม่สามารถแก้ไขข้อมูลได้|Preview mode: view only, data cannot be changed
+โหมดตัวอย่าง: ดูได้อย่างเดียว|Preview mode: view only
+ข้อมูลทั้งหมดเป็นข้อมูลสมมติ · ดูได้อย่างเดียว แก้ไขไม่ได้ · เลือกมุมมองที่อยากดู|All data is made up · view only, nothing can be changed · pick a view
 QR ตัวอย่าง|Sample QR
 สแกนจ่ายเงินไม่ได้|cannot be used to pay
 อยากดูหน้าตาระบบก่อน? ไม่ต้องมีบัญชี|Want to look around first? No account needed

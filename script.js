@@ -45,6 +45,9 @@ const LOCF = () => (LANG == 'en' ? 'en-GB' : 'th-TH'),
 สร้าง QR ตามยอดสุทธิของใบแจ้งหนี้อัตโนมัติ|QR is generated automatically from the invoice total
 สแกน QR ยอดขึ้นอัตโนมัติ|Scan the QR, the amount fills in automatically
 เอกสารนี้ออกโดยระบบ T&T Mansion|Issued by the T&T Mansion system
+โหมดตัวอย่าง: ดูได้อย่างเดียว ไม่สามารถแก้ไขข้อมูลได้|Preview mode: view only, data cannot be changed
+โหมดตัวอย่าง: ดูได้อย่างเดียว|Preview mode: view only
+ข้อมูลทั้งหมดเป็นข้อมูลสมมติ · ดูได้อย่างเดียว แก้ไขไม่ได้ · เลือกมุมมองที่อยากดู|All data is made up · view only, nothing can be changed · pick a view
 QR ตัวอย่าง|Sample QR
 สแกนจ่ายเงินไม่ได้|cannot be used to pay
 อยากดูหน้าตาระบบก่อน? ไม่ต้องมีบัญชี|Want to look around first? No account needed
@@ -966,7 +969,7 @@ D.users.forEach(u => {
 });
 D.tk = D.tk || [];
 D.news = D.news || [];
-const save = () => {
+let save = () => {
   if (SBON) return sbSync();
   try {
     STO.setItem(K, JSON.stringify(D));
@@ -6240,7 +6243,7 @@ NVA.splice(NVA.findIndex(n => n[0] == 'pay') + 1, 0, ['debt', 'ติดตา�
 function pvLoginBox() {
   if (!window.TTM_PV)
     return `<div class="pvb"><small class="mu">อยากดูหน้าตาระบบก่อน? ไม่ต้องมีบัญชี</small><button class="b b2" style="width:100%" onclick="pvOpen()">ดูตัวอย่างระบบ (ข้อมูลสมมติ)</button></div>`;
-  return `<div class="pvb on"><b>โหมดตัวอย่างระบบ</b><small class="mu">ข้อมูลทั้งหมดเป็นข้อมูลสมมติ ไม่ใช่ข้อมูลจริง · เลือกมุมมองที่อยากดู</small><div class="pvr"><button class="b" onclick="pvEnter('admin')">ผู้ดูแลระบบ</button><button class="b" onclick="pvEnter('owner')">เจ้าของกิจการ</button><button class="b" onclick="pvEnter('tenant')">ผู้เช่า</button></div><span class="ac" style="cursor:pointer;font-size:13px" onclick="pvExit()">ออกจากโหมดตัวอย่าง</span></div>`;
+  return `<div class="pvb on"><b>โหมดตัวอย่างระบบ</b><small class="mu">ข้อมูลทั้งหมดเป็นข้อมูลสมมติ · ดูได้อย่างเดียว แก้ไขไม่ได้ · เลือกมุมมองที่อยากดู</small><div class="pvr"><button class="b" onclick="pvEnter('admin')">ผู้ดูแลระบบ</button><button class="b" onclick="pvEnter('owner')">เจ้าของกิจการ</button><button class="b" onclick="pvEnter('tenant')">ผู้เช่า</button></div><span class="ac" style="cursor:pointer;font-size:13px" onclick="pvExit()">ออกจากโหมดตัวอย่าง</span></div>`;
 }
 function pvOpen() {
   location.href = location.pathname + '?preview';
@@ -6528,6 +6531,62 @@ if (window.TTM_PV) {
     P = 'login';
     R();
   }
+  // ---------- ดูได้อย่างเดียว ----------
+  // ปุ่มที่แก้ข้อมูล (อนุมัติ รับเงิน ออกบิล เพิ่ม/แก้ผู้เช่า ตั้งค่า ข่าว แนบสลิป เปลี่ยนรหัส ฯลฯ)
+  // จะถูกล็อก กดแล้วขึ้นข้อความแจ้งแทน · ปุ่มดูข้อมูล (ใบแจ้งหนี้ ใบเสร็จ สลิป ประวัติ) ยังกดได้
+  const PV_LOCK = new Set(
+    (
+      'ap apr cs rsv rm mv mvrGo mvoGo asg asr at0 atf atfGo et eu ec sc2 rv cpf cpd iss eb ebs ' +
+      'ss le lqf nw ns nd tks tkst tkrp tki pa pr pc crs sub sl slDrop lnCode lnUnlink lnRemind ' +
+      'lnRemindAll fp dl fl'
+    ).split(' ')
+  );
+  const pvFn = el => {
+    const a = (el.getAttribute('onclick') || el.getAttribute('onchange') || '').trim(),
+      m = a.match(/^(?:return\s+)?([A-Za-z_$][\w$]*)\s*\(/);
+    return m ? m[1] : '';
+  };
+  const pvLocked = el =>
+    !!el &&
+    (PV_LOCK.has(pvFn(el)) ||
+      el.matches('input[type=file], label.drop, #sfz') ||
+      !!el.closest('label.drop'));
+  const pvSay = () => tt('🔒 ' + T2('โหมดตัวอย่าง: ดูได้อย่างเดียว ไม่สามารถแก้ไขข้อมูลได้'));
+  const pvBlock = ev => {
+    let el = ev.target;
+    while (el && el !== document.body) {
+      if (el.nodeType == 1 && (el.hasAttribute('onclick') || el.hasAttribute('onchange') || el.matches('input[type=file], label.drop'))) break;
+      el = el.parentElement;
+    }
+    if (el && el !== document.body && pvLocked(el)) {
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+      if (ev.type == 'click') pvSay();
+      else R();
+    }
+  };
+  ['click', 'change', 'drop'].forEach(t => document.addEventListener(t, pvBlock, true));
+  // ทำให้ปุ่มที่ล็อกดูเป็นปุ่มกดไม่ได้
+  const pvMark = () =>
+    document.querySelectorAll('[onclick],[onchange],label.drop,input[type=file]').forEach(el => {
+      if (!el.classList.contains('pv-lock') && pvLocked(el)) {
+        el.classList.add('pv-lock');
+        el.title = T2('โหมดตัวอย่าง: ดูได้อย่างเดียว');
+      }
+    });
+  new MutationObserver(pvMark).observe(document.body, { childList: true, subtree: true });
+  // กันพลาด: ถ้ามีทางไหนแก้ข้อมูลได้ จะไม่บันทึก และคืนข้อมูลตัวอย่างเดิมทันที
+  save = function () {
+    try {
+      const d = JSON.parse(STO.getItem(K));
+      if (d) {
+        const id = U && U.id;
+        D = d;
+        if (id) U = D.users.find(u => u.id == id) || U;
+      }
+    } catch (x) {}
+    setTimeout(() => R(), 0);
+  };
   // ป้าย "โหมดตัวอย่าง" บนแถบด้านบนทุกหน้าในระบบ
   const _pvR = R;
   R = function () {
