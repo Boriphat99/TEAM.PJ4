@@ -58,6 +58,8 @@ function mtick() {
       /INPUT|SELECT|TEXTAREA/.test((document.activeElement || {}).tagName || '');
     if (busy) return;
     MK = k;
+    // เปิดหน้านี้ค้างไว้จนขึ้นรอบใหม่: ถ้ายังดูเดือนที่ระบบเลือกให้ ให้เลื่อนไปเดือนปัจจุบัน
+    if (PER == PERA) PER = PERA = pcur();
     R();
   } else MK = k;
 }

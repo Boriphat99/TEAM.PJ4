@@ -84,7 +84,8 @@ const dper = () => {
   return d.getFullYear() + '-' + pad(d.getMonth() + 1);
 };
 // หน้ามิเตอร์ & ออกบิล เปิดที่เดือนล่าสุด (เดือนปัจจุบัน) เสมอ
-let PER = pcur();
+let PER = pcur(),
+  PERA = PER; // เดือนที่ระบบเลือกให้อัตโนมัติ (ถ้าผู้ใช้ไม่ได้เลือกเอง จะเลื่อนตามเดือนปัจจุบัน)
 try {
   const s = +STO.getItem('ttm_s');
   U = D.users.find(u => u.id == s && !u.out) || null;
@@ -155,7 +156,7 @@ const HS = { skip: 0 },
     } catch (_) {}
   };
 const go = (p, nh) => {
-    if (p == 'met' && P != 'met') PER = pcur(); // กดเข้าเมนู → เดือนล่าสุด
+    if (p == 'met' && P != 'met') PER = PERA = pcur(); // กดเข้าเมนู → เดือนล่าสุด
     const from = P;
     if (!nh && U) hsTag();
     P = p;
@@ -166,15 +167,22 @@ const go = (p, nh) => {
   mo = h => {
     $('#mc').style.maxWidth = '';
     $('#mc').innerHTML = h;
-    if (U && $('#mo').style.display != 'flex') hsPush({ p: P, m: 1 });
+    if (HS.pend) {
+      // เพิ่งปิดหน้าต่างแล้วเปิดใหม่ทันที → ใช้ประวัติเดิม ไม่ต้องถอยแล้วเพิ่มใหม่
+      clearTimeout(HS.pend);
+      HS.pend = 0;
+    } else if (U && $('#mo').style.display != 'flex') hsPush({ p: P, m: 1 });
     $('#mo').style.display = 'flex';
   },
   cm = () => {
     $('#mo').style.display = 'none';
-    if (history.state && history.state.ttm && history.state.m) {
-      HS.skip = 1;
-      history.back();
-    }
+    if (history.state && history.state.ttm && history.state.m && !HS.pend)
+      HS.pend = setTimeout(() => {
+        HS.pend = 0;
+        if ($('#mo').style.display == 'flex') return;
+        HS.skip = 1;
+        history.back();
+      }, 0);
   };
 window.addEventListener('popstate', ev => {
   if (HS.skip) {

@@ -1280,7 +1280,8 @@ const dper = () => {
   return d.getFullYear() + '-' + pad(d.getMonth() + 1);
 };
 // หน้ามิเตอร์ & ออกบิล เปิดที่เดือนล่าสุด (เดือนปัจจุบัน) เสมอ
-let PER = pcur();
+let PER = pcur(),
+  PERA = PER; // เดือนที่ระบบเลือกให้อัตโนมัติ (ถ้าผู้ใช้ไม่ได้เลือกเอง จะเลื่อนตามเดือนปัจจุบัน)
 try {
   const s = +STO.getItem('ttm_s');
   U = D.users.find(u => u.id == s && !u.out) || null;
@@ -1351,7 +1352,7 @@ const HS = { skip: 0 },
     } catch (_) {}
   };
 const go = (p, nh) => {
-    if (p == 'met' && P != 'met') PER = pcur(); // กดเข้าเมนู → เดือนล่าสุด
+    if (p == 'met' && P != 'met') PER = PERA = pcur(); // กดเข้าเมนู → เดือนล่าสุด
     const from = P;
     if (!nh && U) hsTag();
     P = p;
@@ -1362,15 +1363,22 @@ const go = (p, nh) => {
   mo = h => {
     $('#mc').style.maxWidth = '';
     $('#mc').innerHTML = h;
-    if (U && $('#mo').style.display != 'flex') hsPush({ p: P, m: 1 });
+    if (HS.pend) {
+      // เพิ่งปิดหน้าต่างแล้วเปิดใหม่ทันที → ใช้ประวัติเดิม ไม่ต้องถอยแล้วเพิ่มใหม่
+      clearTimeout(HS.pend);
+      HS.pend = 0;
+    } else if (U && $('#mo').style.display != 'flex') hsPush({ p: P, m: 1 });
     $('#mo').style.display = 'flex';
   },
   cm = () => {
     $('#mo').style.display = 'none';
-    if (history.state && history.state.ttm && history.state.m) {
-      HS.skip = 1;
-      history.back();
-    }
+    if (history.state && history.state.ttm && history.state.m && !HS.pend)
+      HS.pend = setTimeout(() => {
+        HS.pend = 0;
+        if ($('#mo').style.display == 'flex') return;
+        HS.skip = 1;
+        history.back();
+      }, 0);
   };
 window.addEventListener('popstate', ev => {
   if (HS.skip) {
@@ -1971,11 +1979,14 @@ const pg = {
       el = sm(pc, i => i.el),
       ot = ic - rt - el,
       g = {};
+    // รวมยอดตามตัวผู้เช่า (ไม่ใช่ตามชื่อ ชื่อซ้ำกันจะได้ไม่ถูกรวมเป็นคนเดียว)
     I.filter(pd).forEach(i => {
-      const n = (tu(i) || {}).name || '-';
-      g[n] = (g[n] || 0) + tot(i);
+      const u = tu(i),
+        k = u ? 'u' + u.id : '-';
+      g[k] = g[k] || [u ? u.name + (u.room ? ' (ห้อง ' + u.room + ')' : '') : '-', 0];
+      g[k][1] += tot(i);
     });
-    const tp = Object.entries(g)
+    const tp = Object.values(g)
         .sort((a, b) => b[1] - a[1])
         .slice(0, 5),
       tm = tp[0] ? tp[0][1] : 1,
@@ -2483,6 +2494,8 @@ function mtick() {
       /INPUT|SELECT|TEXTAREA/.test((document.activeElement || {}).tagName || '');
     if (busy) return;
     MK = k;
+    // เปิดหน้านี้ค้างไว้จนขึ้นรอบใหม่: ถ้ายังดูเดือนที่ระบบเลือกให้ ให้เลื่อนไปเดือนปัจจุบัน
+    if (PER == PERA) PER = PERA = pcur();
     R();
   } else MK = k;
 }

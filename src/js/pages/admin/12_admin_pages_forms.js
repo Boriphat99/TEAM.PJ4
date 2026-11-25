@@ -46,11 +46,14 @@ const pg = {
       el = sm(pc, i => i.el),
       ot = ic - rt - el,
       g = {};
+    // รวมยอดตามตัวผู้เช่า (ไม่ใช่ตามชื่อ ชื่อซ้ำกันจะได้ไม่ถูกรวมเป็นคนเดียว)
     I.filter(pd).forEach(i => {
-      const n = (tu(i) || {}).name || '-';
-      g[n] = (g[n] || 0) + tot(i);
+      const u = tu(i),
+        k = u ? 'u' + u.id : '-';
+      g[k] = g[k] || [u ? u.name + (u.room ? ' (ห้อง ' + u.room + ')' : '') : '-', 0];
+      g[k][1] += tot(i);
     });
-    const tp = Object.entries(g)
+    const tp = Object.values(g)
         .sort((a, b) => b[1] - a[1])
         .slice(0, 5),
       tm = tp[0] ? tp[0][1] : 1,
