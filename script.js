@@ -1942,7 +1942,7 @@ const pg = {
         .join('');
     return (
       hdr('▦', PN(), `${S.addr ? e(S.addr) + ' · ' : ''}฿${fm(S.rent)} / เดือน`) +
-      `<div class="dg2"><div class="cd"><div class="ch"><div class="fh"><i class="ci">⚙</i><div><b>ตั้งค่าทรัพย์สิน</b><br><small class="mu">กฎการเรียกเก็บค่าบริการของหอพัก</small></div></div><span class="pl g ${ro ? '' : 'ptr'}" ${ro ? '' : `onclick="go('set')"`}>ตั้งค่าแล้ว ✓</span></div><div class="tb2" style="margin-top:12px"><span class="tg">❄ แอร์ทุกห้อง</span><span class="tg">💧 ค่าน้ำฟรี</span><span class="tg">⚡ ฿${S.rate}/หน่วย</span><span class="tg">📅 ครบกำหนดวันที่ ${S.due}</span><span class="tg">🪙 ค่าปรับสูงสุด ฿${S.max}</span></div></div>
+      `<div class="dg2"><div class="cd"><div class="ch"><div class="fh"><i class="ci">⚙</i><div><b>ตั้งค่าทรัพย์สิน</b><br><small class="mu">กฎการเรียกเก็บค่าบริการของหอพัก</small></div></div><span class="pl g ${ro || window.TTM_PV ? '' : 'ptr'}" ${ro || window.TTM_PV ? '' : `onclick="go('set')"`}>ตั้งค่าแล้ว ✓</span></div><div class="tb2" style="margin-top:12px"><span class="tg">❄ แอร์ทุกห้อง</span><span class="tg">💧 ค่าน้ำฟรี</span><span class="tg">⚡ ฿${S.rate}/หน่วย</span><span class="tg">📅 ครบกำหนดวันที่ ${S.due}</span><span class="tg">🪙 ค่าปรับสูงสุด ฿${S.max}</span></div></div>
 <div class="cd"><div class="ch"><div class="fh"><i class="ci">฿</i><div><b>ข้อมูลการชำระเงิน</b><br><small class="mu">พร้อมเพย์สำหรับใบเรียกเก็บเงิน</small></div></div><span class="pl g">ตั้งค่าแล้ว ✓</span></div><p class="mu" style="margin:12px 0 0;font-size:13px">PromptPay: <b>${e(S.pp || '-')}</b>${S.payee ? ' (' + e(S.payee) + ')' : ''}<br>สร้าง QR ตามยอดสุทธิของใบแจ้งหนี้อัตโนมัติ</p></div></div>
 <div class="ch" style="margin:24px 0 12px"><h3>อาคารและห้อง</h3><div class="tb2"><input placeholder="ค้นหาห้อง / ผู้เช่า..." value="${e(RQ)}" onchange="RQ=this.value;R()">${ro ? '' : `<button class="b b2 sm" onclick="go('ten')">ผู้เช่าทั้งหมด</button>`}</div></div>
 <div class="cd"><div class="ch"><div class="fh"><i class="ci">▦</i><b>อาคาร</b><span class="pl g">3 ชั้น</span><span class="pl g">${N} ห้อง</span><span class="pl y">${fr} ว่าง</span></div><button class="b b2 sm" onclick="RV=${RV ? 0 : 1};R()">${RV ? '✓ ' : ''}เฉพาะห้องว่าง</button></div>${fls || '<p class="mu">ไม่พบห้อง</p>'}</div>`
@@ -3835,7 +3835,10 @@ function R0() {
           ['prof', 'โปรไฟล์', '◉'],
         ]
       : ad
-        ? NVA
+        ? window.TTM_PV
+          ? // โหมดตัวอย่าง: แอดมินเห็นเฉพาะเมนูเหล่านี้ (ไม่แสดง รายงาน ตั้งค่า ช่วยเหลือ ข่าวสาร)
+            NVA.filter(n => ['dash', 'rooms', 'ten', 'con', 'met', 'pay', 'debt', 'prof'].includes(n[0]))
+          : NVA
         : [
             ['my', 'ใบแจ้งหนี้ของฉัน', '▤'],
             ['hist', 'ประวัติ & ใบเสร็จ', '☰'],
