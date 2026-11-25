@@ -222,6 +222,19 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
 กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า|user groups: owner · admin · tenant
 กลุ่ม|groups
 การดำเนินการด่วน|Quick actions
+เก็บค่าเช่า ค่าไฟ และออกใบเสร็จผ่านหน้าเว็บ|Collect rent and electricity and issue receipts on the web
+ดูบิลออนไลน์|Bills online
+ตัวเลขของหอพัก|The dorm in numbers
+ระบบทำอะไรได้บ้าง|What the system does
+ผู้เช่าชำระเงินอย่างไร|How tenants pay
+ดูบิลและชำระค่าหอ|View bills and pay rent
+สถิติ|Statistics
+ทางลัด|Shortcuts
+ตั้งค่าหอพัก|Dorm settings
+เบอร์โทรและ LINE ของหอพัก|Dorm phone and LINE
+ส่งเรื่องถึงผู้ดูแล คำตอบจะขึ้นในหน้านี้|Send a request to the admin. Replies appear on this page
+ส่งคำขอแล้ว|Request sent
+เลือกเหตุผล|Select a reason
 การแสดงผล|Display
 กำลังดำเนินการ|In progress
 กำลังสร้างรูปใบเสร็จ|Creating receipt image

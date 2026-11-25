@@ -44,8 +44,8 @@ pg.help = () => {
     ad = U.role == 'admin',
     tk = (D.tk = D.tk || []).filter(t => ad || t.uid == U.id).sort((a, b) => b.t - a.t),
     id = (S.line || '').trim();
-  return `<div class="hd2"><div><h2>ศูนย์ช่วยเหลือ</h2><p class="mu" style="margin:2px 0">ส่งคำขอ — เราจะตอบกลับโดยเร็วที่สุด</p></div></div>
-<div class="hlp" style="max-width:780px"><h3 style="margin:18px 0 4px">ช่องทางการติดต่อ</h3><p class="mu" style="margin:0 0 12px">ติดต่อเราผ่านช่องทางที่คุณสะดวก</p>
+  return `<div class="hd2"><div><h2>ศูนย์ช่วยเหลือ</h2><p class="mu" style="margin:2px 0">ส่งเรื่องถึงผู้ดูแล คำตอบจะขึ้นในหน้านี้</p></div></div>
+<div class="hlp" style="max-width:780px"><h3 style="margin:18px 0 4px">ช่องทางการติดต่อ</h3><p class="mu" style="margin:0 0 12px">เบอร์โทรและ LINE ของหอพัก</p>
 <div class="ln2"><div class="lnh"><i class="lni"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.5 1.4 4.7 3.7 6.2-.2.8-.7 2.7-.8 3.1 0 0-.1.3.2.4.2.1.4 0 .4 0 .5-.1 3-2 4.1-2.8.8.1 1.6.2 2.4.2 5.5 0 10-3.6 10-8S17.5 3 12 3z"/></svg></i><b>LINE ติดต่อสอบถาม</b></div><div class="lnb"><div class="lq">${S.lineqr ? `<img src="${S.lineqr}" alt="QR LINE">` : 'พื้นที่ใส่ QR LINE<br>' + (ad ? '(กดแก้ไขเพื่อเพิ่ม)' : '(ผู้ดูแลยังไม่ได้เพิ่ม)')}</div><div class="lnx"><h3 class="lid">${id ? e(id) : 'ยังไม่ได้ตั้งค่า LINE ID'}</h3><small class="mu lns">ติดต่อสอบถาม · ${PN()}</small><p class="mu lnt">สแกน QR หรือค้นหา LINE ID เพื่อพูดคุยกับผู้ดูแลหอพัก</p><div class="lna">${id ? `<a class="b lgb" target="_blank" rel="noopener" href="${lnUrl(id)}">เพิ่มเพื่อนใน LINE</a>` : ''}${ad ? '<button class="b b2 sm" onclick="le()">แก้ไข LINE</button>' : ''}</div></div></div>${lnBotRow(ad)}</div>
 ${ad ? '' : contactCard()}${ad ? '' : `<h3 style="margin:28px 0 12px">ส่งคำขอใหม่</h3><div class="cd"><label>หมวดหมู่</label><select id="tkc"><option value="">เลือกหมวดหมู่</option>${['ปัญหาการชำระเงิน', 'ใบแจ้งหนี้ / ค่าไฟ', 'ซ่อมบำรุง', 'บัญชีผู้ใช้', 'อื่นๆ'].map(x => `<option>${x}</option>`).join('')}</select><label>หัวข้อ</label><input id="tkt" placeholder="อธิบายปัญหาโดยย่อ" maxlength="100"><label>รายละเอียด</label><textarea id="tkb" rows="4" placeholder="กรุณาอธิบายปัญหาอย่างละเอียด..."></textarea><label>แนบรูปภาพ (ไม่บังคับ)</label><div style="margin:6px 0"><input type="file" id="tkf" accept="image/jpeg,image/png,image/webp" multiple hidden onchange="tki(this)"><button class="b b2 sm" onclick="$('#tkf').click()">แนบรูปภาพ</button> <small class="mu">สูงสุด 5 รูป (JPEG, PNG, WebP) · ไม่เกิน 5MB ต่อรูป</small></div><div id="tkp" class="fl"></div><div style="text-align:right"><button class="b" onclick="tks()">ส่งคำขอ</button></div></div>`}
 <h3 style="margin:28px 0 12px">${ad ? 'คำขอความช่วยเหลือจากผู้ใช้' : 'คำขอของฉัน'}</h3>${
@@ -107,7 +107,7 @@ function tks() {
   lg('ส่งคำขอช่วยเหลือ: ' + t);
   save();
   R();
-  tt('✓ ส่งคำขอแล้ว เราจะตอบกลับโดยเร็วที่สุด');
+  tt('✓ ส่งคำขอแล้ว');
 }
 function tkst(id, v) {
   const t = D.tk.find(x => x.id == id);

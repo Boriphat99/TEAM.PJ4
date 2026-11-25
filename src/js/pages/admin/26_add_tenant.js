@@ -263,7 +263,7 @@ function pwnBanner() {
   const d = document.createElement('div');
   d.className = 'note pwn';
   d.innerHTML =
-    NI('lock') + 'คุณยังใช้รหัสผ่านเริ่มต้นจากผู้ดูแล — อย่าลืมเปลี่ยนรหัสผ่านเป็นของคุณเอง <button class="b sm" onclick="pwnGo()">เปลี่ยนรหัสผ่าน</button>';
+    NI('lock') + 'คุณยังใช้รหัสผ่านเริ่มต้นจากผู้ดูแล อย่าลืมเปลี่ยนรหัสผ่านเป็นของคุณเอง <button class="b sm" onclick="pwnGo()">เปลี่ยนรหัสผ่าน</button>';
   const sub =
     h.nextElementSibling && h.nextElementSibling.matches('p,small,.mu') ? h.nextElementSibling : h;
   sub.after(d);

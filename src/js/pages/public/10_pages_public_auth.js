@@ -50,9 +50,9 @@ const home0 = () => {
 <section class="ap-hero">
   <div class="ap-hero-tx">
     <h1>ยินดีต้อนรับสู่<br><em>ระบบชำระค่าบริการของหอพัก</em></h1>
-    <p class="ap-sub">เก็บค่าเช่า ค่าไฟ และออกใบเสร็จ ครบในที่เดียว</p>
+    <p class="ap-sub">เก็บค่าเช่า ค่าไฟ และออกใบเสร็จผ่านหน้าเว็บ</p>
     <div class="ap-cta"><button class="ap-btn" onclick="go('login')">เริ่มใช้งาน</button><a class="ap-more" onclick="scr('hf')">ดูฟีเจอร์ ›</a></div>
-    <div class="ap-ck"><span>แบบออนไลน์เรียลไทม์</span><span>ไม่ต้องติดตั้งแอป</span><span>ใช้ได้ทั้งมือถือและคอมพิวเตอร์</span><span>ยอด QR ขึ้นอัตโนมัติ</span></div>
+    <div class="ap-ck"><span>ดูบิลออนไลน์</span><span>ไม่ต้องติดตั้งแอป</span><span>ใช้ได้ทั้งมือถือและคอมพิวเตอร์</span><span>ยอด QR ขึ้นอัตโนมัติ</span></div>
     <div class="ap-dev"><div class="pvw"><div class="pv"><div class="pvb"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div><div class="pvx"><div class="pvd"><div class="app"><div class="sb np"><div class="logo" style="margin-bottom:14px"><img class="lgi" src="${LG}" alt=""><div>T&T MANSION<br><small class="ac">PAYMENT SYSTEM</small></div></div>${NVA.map(n => `<div class="nv ${n[0] == 'dash' ? 'on' : ''}"><i>${IC[n[0]] || n[2]}</i><span>${n[1]}</span></div>`).join('')}</div><div class="mn"><div class="top np"><input placeholder="ค้นหาห้อง ผู้เช่า หรือเลขที่บิล (กด Enter)"><span class="me">${av(AD, 36)}<b>${e(AD.name)}</b></span><span class="seg"><span class="${LANG == 'th' ? 'on' : ''}">TH</span><span class="${LANG == 'en' ? 'on' : ''}">EN</span></span><button class="b b2 sm">ออกจากระบบ</button></div>${pg.dash()}</div></div></div></div><span class="pvf">● แดชบอร์ดผู้ดูแลระบบ</span></div>
 <div class="ph"><div class="pnt"></div><div class="phs"><div class="phtop"><span class="me">${av(AD, 26)}<b>${e(AD.name)}</b></span><span class="seg"><span class="${LANG == 'th' ? 'on' : ''}">TH</span><span class="${LANG == 'en' ? 'on' : ''}">EN</span></span></div><b class="pht">ภาพรวมการจัดการ</b><div class="po"><div class="phr">${BLD(30)}<div><b>${nm}</b><small>หอพัก · พิษณุโลก</small></div></div><small>${OC}/${K.N} ห้อง</small><b>${K.op}%</b><div class="pb"><i style="width:${K.op}%"></i></div></div><div class="pt2"><div><small>ห้องทั้งหมด</small><b>${K.N}</b></div><div><small>รายได้เดือนนี้</small><b>฿${fm(K.ic)}</b></div><div><small>ยังไม่ชำระ</small><b>${K.un}</b></div><div><small>ผิดนัดชำระ</small><b>${K.ov}</b></div></div></div><div class="pnb">${NVA.map(n => `<span class="${n[0] == 'dash' ? 'on' : ''}"><i>${IC[n[0]] || n[2]}</i>${n[1]}</span>`).join('')}</div></div></div>
   </div>
@@ -60,7 +60,7 @@ const home0 = () => {
 
 <section class="ap-sec ap-stats">
   <div class="ap-in">
-    <h2 class="ap-r">ทุกอย่างของหอพัก ในหน้าจอเดียว</h2>
+    <h2 class="ap-r">ตัวเลขของหอพัก</h2>
     <div class="ap-who ap-r"><small>รองรับผู้ใช้งาน 3 กลุ่ม</small><div><span>${IC.rooms} เจ้าของหอพัก</span><span>${IC.set} ผู้ดูแลระบบ</span><span>${PI} ผู้เช่า</span></div></div>
     <div class="ap-st">${stats.map(x => `<div class="ap-r"><b>${x[0]}</b><small>${x[1]}</small></div>`).join('')}</div>
     <p class="ap-note">ตัวเลขอ้างอิงจากการตั้งค่าของหอพัก ${e(D.set.name || 'T&T Mansion')}</p>
@@ -69,14 +69,14 @@ const home0 = () => {
 
 <section class="ap-sec ap-feat" id="hf">
   <div class="ap-in">
-    <h2 class="ap-r">ครบทุกขั้นตอนการเก็บค่าหอพัก</h2>
+    <h2 class="ap-r">ระบบทำอะไรได้บ้าง</h2>
     <div class="ap-grid">${feats.map(f => `<div class="ap-tile ap-r"><i>${IG[f[0]] || f[0]}</i><b>${f[1]}</b><small>${f[2]}</small></div>`).join('')}</div>
   </div>
 </section>
 
 <section class="ap-sec ap-steps" id="hst">
   <div class="ap-in">
-    <h2 class="ap-r">ชำระเงินง่ายใน 4 ขั้นตอน</h2>
+    <h2 class="ap-r">ผู้เช่าชำระเงินอย่างไร</h2>
     <ol class="ap-ol">${steps.map((t, i) => `<li class="ap-r"><b>${i + 1}</b><span>${t}</span></li>`).join('')}</ol>
     <div class="ap-cta ap-r"><button class="ap-btn" onclick="go('login')">เริ่มใช้งาน</button></div>
   </div>
@@ -159,7 +159,7 @@ const auth = (t, s, h, l, lk, lq) =>
   `${bgL(0)}${TGL('fx-tr')}<div class="wrap au"><div class="al"><div class="rings px" style="--k:14"><i class="r1"><b></b></i><i class="r2"><b></b></i></div><div class="logo"><img class="lgi" src="${LG}" alt=""> T&T MANSION</div><h1 class="gt">${t}</h1><p class="mu">${s}</p></div><div class="cd gc">${P == 'forgot' ? '' : '<div class="tabs"><span class="' + (P == 'login' ? 'on' : '') + '" onclick="go(\'login\')">เข้าสู่ระบบ</span></div>'}${h}<p style="text-align:center;margin:18px 0 0" class="mu">${l} <b class="ac" style="cursor:pointer" onclick="go('${lq}')">${lk}</b></p></div></div>`;
 const login = () =>
   auth(
-    'ยินดีต้อนรับกลับ',
+    'ดูบิลและชำระค่าหอ',
     'เข้าสู่ระบบเพื่อตรวจสอบบิลและสถานะการชำระเงินของห้องพัก',
     `<div class="ah"><span class="ib">${IC.lock}</span><div><h2>เข้าสู่ระบบ</h2><small class="mu">สำหรับผู้เช่าและผู้ดูแล</small></div><b class="ac bk" onclick="go('home')">‹ หน้าหลัก</b></div>${fld('em', 'อีเมล', '✉', 'email', `autocomplete="username" placeholder="name@example.com"`)}${fld('pw', 'รหัสผ่าน', '🔑', 'password', `autocomplete="current-password" placeholder="••••••••" onkeydown="if(event.key=='Enter')dl()"`)}<div style="text-align:right;margin:-6px 0 12px"><span class="ac" style="cursor:pointer;font-size:13px" onclick="go('forgot')">ลืมรหัสผ่าน?</span></div><button class="b go" style="width:100%" onclick="dl()">เข้าสู่ระบบ →</button>${typeof pvLoginBox == 'function' && (window.TTM_PV || SBON) ? pvLoginBox() : `<div class="dm"><small class="mu">ทดลองใช้งาน</small><span><button class="b b2 sm" onclick="fl('admin@ttmansion.local','admin123')">ผู้ดูแล</button> <button class="b b2 sm" onclick="fl('owner@ttmansion.local','owner123')">เจ้าของ</button> <button class="b b2 sm" onclick="fl('nattapol@ttmansion.local','1234')">ผู้เช่า</button></span></div>`}`,
     'ยังไม่มีบัญชี? ติดต่อผู้ดูแลหอพักเพื่อขอสร้างบัญชี',

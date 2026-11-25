@@ -43,7 +43,7 @@ function ap(id, y) {
     return;
   }
   mo(
-    `<h3>ปฏิเสธสลิป ${id}</h3><small class="mu">ผู้เช่าจะเห็นเหตุผลนี้ในหน้าใบแจ้งหนี้ แล้วส่งสลิปใหม่ได้</small><label>เหตุผล</label><select id="rj_s"><option value="">— เลือกเหตุผล —</option><option>ยอดเงินไม่ตรงกับใบแจ้งหนี้</option><option>สลิปไม่ชัดเจน อ่านข้อมูลไม่ได้</option><option>สลิปไม่ใช่ของรายการนี้หรือเป็นสลิปซ้ำ</option><option>ไม่พบยอดเงินเข้าบัญชี</option><option>อื่นๆ</option></select><label>รายละเอียดเพิ่มเติม (ไม่บังคับ)</label><input id="rj_t" maxlength="120"><div style="display:flex;gap:8px;margin-top:12px"><button class="b" onclick="apr('${id}')">ยืนยันปฏิเสธ</button><button class="b b2" onclick="cm()">ยกเลิก</button></div>`
+    `<h3>ปฏิเสธสลิป ${id}</h3><small class="mu">ผู้เช่าจะเห็นเหตุผลนี้ในหน้าใบแจ้งหนี้ แล้วส่งสลิปใหม่ได้</small><label>เหตุผล</label><select id="rj_s"><option value="">เลือกเหตุผล</option><option>ยอดเงินไม่ตรงกับใบแจ้งหนี้</option><option>สลิปไม่ชัดเจน อ่านข้อมูลไม่ได้</option><option>สลิปไม่ใช่ของรายการนี้หรือเป็นสลิปซ้ำ</option><option>ไม่พบยอดเงินเข้าบัญชี</option><option>อื่นๆ</option></select><label>รายละเอียดเพิ่มเติม (ไม่บังคับ)</label><input id="rj_t" maxlength="120"><div style="display:flex;gap:8px;margin-top:12px"><button class="b" onclick="apr('${id}')">ยืนยันปฏิเสธ</button><button class="b b2" onclick="cm()">ยกเลิก</button></div>`
   );
 }
 function apr(id) {
