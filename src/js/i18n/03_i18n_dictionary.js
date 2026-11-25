@@ -222,6 +222,11 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
 กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า|user groups: owner · admin · tenant
 กลุ่ม|groups
 การดำเนินการด่วน|Quick actions
+แสดงเพิ่ม (เหลืออีก|Show more (
+รายการ)|left)
+ใบเรียกเก็บที่เลยวันครบกำหนดมาเกิน 5 วันและยังไม่ชำระ|Bills more than 5 days past due and still unpaid
+หากพ้นวันที่|After
+ถือว่าผิดนัดชำระตามสัญญาเช่า|the payment is in default under the lease
 ดูบิล จ่ายค่าห้อง และรับใบเสร็จได้ทางออนไลน์|View bills, pay rent and get receipts online
 แจ้งเตือนผ่าน LINE|LINE alerts
 ข้อมูลหอพัก|About the dorm

@@ -10,6 +10,9 @@ const FL = [
 ];
 const flt = () =>
   `<div class="fl">${FL.map(f => `<button class="b ${F == f[0] ? '' : 'b2'}" onclick="F='${f[0]}';R()">${f[1]}</button>`).join('')}</div>`;
+// แสดงทีละ 150 รายการ (ข้อมูลหลายปีจะได้ไม่ช้า) · เปลี่ยนตัวกรอง/คำค้น แล้วเริ่มนับใหม่
+let TBN = 150,
+  TBK = '';
 function tbl() {
   const ro = U && U.role == 'owner',
     q = Q.toLowerCase(),
@@ -20,14 +23,20 @@ function tbl() {
           (!q || (i.id + i.room + ((tu(i) || {}).name || '')).toLowerCase().includes(q))
       )
       .sort((a, b) => b.per.localeCompare(a.per) || a.room - b.room);
+  if (TBK != F + '|' + Q) {
+    TBK = F + '|' + Q;
+    TBN = 150;
+  }
+  const more = l.length - TBN;
   return `<div class="sc"><table><tr><th>เลขที่</th><th>ห้อง</th><th>ผู้เช่า</th><th>รอบบิล</th><th>ยอดสุทธิ</th><th>ครบกำหนด</th><th>วิธีชำระ</th><th>สถานะ</th><th></th></tr>${
     l
+      .slice(0, TBN)
       .map(i => {
         const s = st(i);
         return `<tr><td>${i.id}</td><td>${i.room}</td><td>${e((tu(i) || {}).name)}</td><td>${mlab(i)}</td><td>฿${fm(tot(i))}</td><td>${dt(due(i))}</td><td>${i.mt == 'qr' ? 'QR' : i.mt == 'cash' ? 'เงินสด' : '-'}</td><td>${pill(i)}</td><td>${s == 'pending' ? `${i.slip ? `<button class="b b2 sm" onclick="vs('${i.id}')">สลิป</button> ` : ''}${ro ? '' : `<button class="b sm" onclick="ap('${i.id}',1)">อนุมัติ</button> <button class="b b2 sm" onclick="ap('${i.id}',0)">ปฏิเสธ</button>`}` : s == 'paid' ? `${ro && i.slip ? `<button class="b b2 sm" onclick="vs('${i.id}')">สลิป</button> ` : ''}<button class="b b2 sm" onclick="rc('${i.id}')">ใบเสร็จ</button>` : `<button class="b b2 sm" onclick="vi('${i.id}')">ใบแจ้งหนี้</button>${ro ? '' : ` <button class="b b2 sm" onclick="cs('${i.id}')">รับเงินสด (เคาน์เตอร์)</button>`}`}</td></tr>`;
       })
       .join('') || '<tr><td colspan=9 class=mu>ยังไม่มีรายการ</td></tr>'
-  }</table></div>`;
+  }</table></div>${more > 0 ? `<div style="text-align:center;margin-top:12px"><button class="b b2 sm" onclick="TBN+=150;R()">แสดงเพิ่ม (เหลืออีก ${more} รายการ)</button></div>` : ''}`;
 }
 function ap(id, y) {
   const i = gi(id);

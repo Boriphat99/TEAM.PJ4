@@ -7,11 +7,27 @@ async function sbLoad() {
   const au = (await c.auth.getUser()).data.user;
   if (!au) throw new Error('ยังไม่ได้เข้าสู่ระบบ');
   SBX.uid = au.id;
-  const q = async (t, f) => {
-    const r = await f(c.from(t).select('*'));
-    if (r.error) throw r.error;
-    return r.data || [];
-  };
+  // ดึงทีละ 1000 แถวจนครบ: API ของ Supabase ส่งได้ไม่เกิน 1000 แถวต่อครั้ง
+  // (เดิมดึงครั้งเดียว พอรายการในบิลเกิน 1000 แถว บิลเก่าจะหายยอดไปเงียบๆ)
+  const PG = 1000,
+    q = async (t, f, lim) => {
+      if (lim) {
+        const r = await f(c.from(t).select('*')).limit(lim);
+        if (r.error) throw r.error;
+        return r.data || [];
+      }
+      let all = [];
+      for (let from = 0; ; from += PG) {
+        const r = await f(c.from(t).select('*'))
+          .order('id')
+          .range(from, from + PG - 1);
+        if (r.error) throw r.error;
+        const d = r.data || [];
+        all = all.concat(d);
+        if (d.length < PG) break;
+      }
+      return all;
+    };
   const me = (await q('users', x => x.eq('id', au.id)))[0];
   if (!me) throw new Error('ไม่พบข้อมูลบัญชีในระบบ');
   const ad = me.role == 'admin',
@@ -28,7 +44,7 @@ async function sbLoad() {
     q('payments', x => x),
     q('support_tickets', x => x.order('created_at', { ascending: false })),
     q('news', x => x.order('created_at', { ascending: false })),
-    stf ? q('audit_logs', x => x.order('created_at', { ascending: false }).limit(50)) : [],
+    stf ? q('audit_logs', x => x.order('created_at', { ascending: false }), 50) : [],
   ]);
   const S = st[0] || {},
     rn = id => {

@@ -255,6 +255,11 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
 กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า|user groups: owner · admin · tenant
 กลุ่ม|groups
 การดำเนินการด่วน|Quick actions
+แสดงเพิ่ม (เหลืออีก|Show more (
+รายการ)|left)
+ใบเรียกเก็บที่เลยวันครบกำหนดมาเกิน 5 วันและยังไม่ชำระ|Bills more than 5 days past due and still unpaid
+หากพ้นวันที่|After
+ถือว่าผิดนัดชำระตามสัญญาเช่า|the payment is in default under the lease
 ดูบิล จ่ายค่าห้อง และรับใบเสร็จได้ทางออนไลน์|View bills, pay rent and get receipts online
 แจ้งเตือนผ่าน LINE|LINE alerts
 ข้อมูลหอพัก|About the dorm
@@ -1597,6 +1602,9 @@ const FL = [
 ];
 const flt = () =>
   `<div class="fl">${FL.map(f => `<button class="b ${F == f[0] ? '' : 'b2'}" onclick="F='${f[0]}';R()">${f[1]}</button>`).join('')}</div>`;
+// แสดงทีละ 150 รายการ (ข้อมูลหลายปีจะได้ไม่ช้า) · เปลี่ยนตัวกรอง/คำค้น แล้วเริ่มนับใหม่
+let TBN = 150,
+  TBK = '';
 function tbl() {
   const ro = U && U.role == 'owner',
     q = Q.toLowerCase(),
@@ -1607,14 +1615,20 @@ function tbl() {
           (!q || (i.id + i.room + ((tu(i) || {}).name || '')).toLowerCase().includes(q))
       )
       .sort((a, b) => b.per.localeCompare(a.per) || a.room - b.room);
+  if (TBK != F + '|' + Q) {
+    TBK = F + '|' + Q;
+    TBN = 150;
+  }
+  const more = l.length - TBN;
   return `<div class="sc"><table><tr><th>เลขที่</th><th>ห้อง</th><th>ผู้เช่า</th><th>รอบบิล</th><th>ยอดสุทธิ</th><th>ครบกำหนด</th><th>วิธีชำระ</th><th>สถานะ</th><th></th></tr>${
     l
+      .slice(0, TBN)
       .map(i => {
         const s = st(i);
         return `<tr><td>${i.id}</td><td>${i.room}</td><td>${e((tu(i) || {}).name)}</td><td>${mlab(i)}</td><td>฿${fm(tot(i))}</td><td>${dt(due(i))}</td><td>${i.mt == 'qr' ? 'QR' : i.mt == 'cash' ? 'เงินสด' : '-'}</td><td>${pill(i)}</td><td>${s == 'pending' ? `${i.slip ? `<button class="b b2 sm" onclick="vs('${i.id}')">สลิป</button> ` : ''}${ro ? '' : `<button class="b sm" onclick="ap('${i.id}',1)">อนุมัติ</button> <button class="b b2 sm" onclick="ap('${i.id}',0)">ปฏิเสธ</button>`}` : s == 'paid' ? `${ro && i.slip ? `<button class="b b2 sm" onclick="vs('${i.id}')">สลิป</button> ` : ''}<button class="b b2 sm" onclick="rc('${i.id}')">ใบเสร็จ</button>` : `<button class="b b2 sm" onclick="vi('${i.id}')">ใบแจ้งหนี้</button>${ro ? '' : ` <button class="b b2 sm" onclick="cs('${i.id}')">รับเงินสด (เคาน์เตอร์)</button>`}`}</td></tr>`;
       })
       .join('') || '<tr><td colspan=9 class=mu>ยังไม่มีรายการ</td></tr>'
-  }</table></div>`;
+  }</table></div>${more > 0 ? `<div style="text-align:center;margin-top:12px"><button class="b b2 sm" onclick="TBN+=150;R()">แสดงเพิ่ม (เหลืออีก ${more} รายการ)</button></div>` : ''}`;
 }
 function ap(id, y) {
   const i = gi(id);
@@ -3171,7 +3185,7 @@ ${docHead('ใบแจ้งหนี้', 'Invoice')}
 <table style="width:100%;border-collapse:collapse;margin-top:10px"><tr>${DOC_BOX('เรียน (ผู้เช่า)', '<b style="color:#1c1917;font-size:14px">คุณ' + e(u.name || '-') + '</b><br>ห้อง ' + i.room + (u.tel ? ' · โทร ' + e(u.tel) : ''), 'padding-right:5px')}${DOC_BOX('ช่องทางชำระเงิน', 'สแกน PromptPay QR ในระบบ แล้วแนบสลิป' + (S.pp ? '<br>พร้อมเพย์ <b style="color:#1c1917">' + e(S.pp) + '</b>' : '') + '<br>หรือชำระเงินสดที่เคาน์เตอร์', 'padding-left:5px')}</tr></table>
 <table style="width:100%;border-collapse:collapse;margin-top:14px;font-size:12px"><tr style="color:#78716c"><td style="${th};width:42px">ลำดับ</td><td style="${th}">รายการ</td><td style="${th};text-align:right">จำนวนเงิน (บาท)</td></tr>${rows.map((r, n) => `<tr><td style="${td};vertical-align:top">${n + 1}</td><td style="${td}">${e(r[0])}${r[2] ? '<div style="font-size:11px;color:#78716c">' + e(r[2]) + '</div>' : ''}</td><td style="${td};text-align:right;font-weight:700;vertical-align:top;font-variant-numeric:tabular-nums">${nf(r[1])}</td></tr>`).join('')}</table>
 <table style="width:100%;border-collapse:collapse;margin-top:12px"><tr><td style="vertical-align:middle"><div style="font-size:15px;font-weight:700">ยอดที่ต้องชำระ</div><div style="font-size:11px;color:#78716c">(${bahtText(T)})</div></td><td style="text-align:right;vertical-align:middle;white-space:nowrap"><span style="font-size:20px;font-weight:700;color:${DOC_C};font-variant-numeric:tabular-nums">${nf(T)} บาท</span></td></tr></table>
-<div style="background:#fbf3ea;border:1px solid #f0dfc8;border-radius:10px;padding:10px 12px;margin-top:14px;font-size:12px;color:#7c5a1e;line-height:1.6">กรุณาชำระภายในวันที่ ${dt(due(i))} · หากชำระหลังวันครบกำหนด คิดค่าปรับวันละ ${fm(S.fpd || 50)} บาท สูงสุดไม่เกิน ${fm(S.max)} บาท${i.fin ? '' : ' · หากพ้นวันที่ 10 ถือว่าผิดนัดชำระตามสัญญาเช่า'}</div>
+<div style="background:#fbf3ea;border:1px solid #f0dfc8;border-radius:10px;padding:10px 12px;margin-top:14px;font-size:12px;color:#7c5a1e;line-height:1.6">กรุณาชำระภายในวันที่ ${dt(due(i))} · หากชำระหลังวันครบกำหนด คิดค่าปรับวันละ ${fm(S.fpd || 50)} บาท สูงสุดไม่เกิน ${fm(S.max)} บาท${i.fin ? '' : ' · หากพ้นวันที่ ' + dt(new Date(due(i).getTime() + 5 * 864e5)) + ' ถือว่าผิดนัดชำระตามสัญญาเช่า'}</div>
 <table style="width:100%;border-collapse:collapse"><tr>${DOC_SIGN(u.name || '-', 'ผู้เช่า')}${DOC_SIGN(S.payee || nm, 'ผู้ออกใบแจ้งหนี้')}</tr></table>
 <div style="text-align:center;font-size:11px;color:#a8a29e;margin-top:14px">เอกสารนี้ออกโดยระบบ ${e(nm)}</div></div>`;
 }
@@ -4014,11 +4028,27 @@ async function sbLoad() {
   const au = (await c.auth.getUser()).data.user;
   if (!au) throw new Error('ยังไม่ได้เข้าสู่ระบบ');
   SBX.uid = au.id;
-  const q = async (t, f) => {
-    const r = await f(c.from(t).select('*'));
-    if (r.error) throw r.error;
-    return r.data || [];
-  };
+  // ดึงทีละ 1000 แถวจนครบ: API ของ Supabase ส่งได้ไม่เกิน 1000 แถวต่อครั้ง
+  // (เดิมดึงครั้งเดียว พอรายการในบิลเกิน 1000 แถว บิลเก่าจะหายยอดไปเงียบๆ)
+  const PG = 1000,
+    q = async (t, f, lim) => {
+      if (lim) {
+        const r = await f(c.from(t).select('*')).limit(lim);
+        if (r.error) throw r.error;
+        return r.data || [];
+      }
+      let all = [];
+      for (let from = 0; ; from += PG) {
+        const r = await f(c.from(t).select('*'))
+          .order('id')
+          .range(from, from + PG - 1);
+        if (r.error) throw r.error;
+        const d = r.data || [];
+        all = all.concat(d);
+        if (d.length < PG) break;
+      }
+      return all;
+    };
   const me = (await q('users', x => x.eq('id', au.id)))[0];
   if (!me) throw new Error('ไม่พบข้อมูลบัญชีในระบบ');
   const ad = me.role == 'admin',
@@ -4035,7 +4065,7 @@ async function sbLoad() {
     q('payments', x => x),
     q('support_tickets', x => x.order('created_at', { ascending: false })),
     q('news', x => x.order('created_at', { ascending: false })),
-    stf ? q('audit_logs', x => x.order('created_at', { ascending: false }).limit(50)) : [],
+    stf ? q('audit_logs', x => x.order('created_at', { ascending: false }), 50) : [],
   ]);
   const S = st[0] || {},
     rn = id => {
@@ -5151,7 +5181,7 @@ if (SBON) sbBoot().catch(x => alert('เชื่อมต่อ Supabase ไม
       [
         'ผิดนัดชำระ',
         'Overdue',
-        'ใบเรียกเก็บที่เกินวันที่ 10 ของเดือนถัดไปและยังไม่ชำระ',
+        'ใบเรียกเก็บที่เลยวันครบกำหนดมาเกิน 5 วันและยังไม่ชำระ',
         'Unpaid invoices past the 10th of the following month',
       ],
       [
