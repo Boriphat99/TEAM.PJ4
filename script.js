@@ -255,6 +255,9 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
 กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า|user groups: owner · admin · tenant
 กลุ่ม|groups
 การดำเนินการด่วน|Quick actions
+⚠ บันทึกไม่สำเร็จ|⚠ Could not save
+เชื่อมต่ออินเทอร์เน็ตไม่ได้ กรุณาตรวจสอบสัญญาณแล้วลองใหม่|Cannot connect to the internet. Check your connection and try again
+ระบบจะแสดงข้อมูลล่าสุดที่บันทึกไว้|The page will show the latest saved data
 แสดงเพิ่ม (เหลืออีก|Show more (
 รายการ)|left)
 ใบเรียกเก็บที่เลยวันครบกำหนดมาเกิน 5 วันและยังไม่ชำระ|Bills more than 5 days past due and still unpaid
@@ -2097,6 +2100,7 @@ function ss() {
   lg('แก้ไขการตั้งค่า');
   save();
   tt('✓ บันทึกแล้ว');
+  R(); // แสดงค่าที่บันทึกแล้ว (ช่องไม่ถือว่ายังแก้ค้าง)
 }
 function rg() {
   return `<div class="rg">${D.rooms
@@ -4024,7 +4028,9 @@ function sbReset() {
 // ---------- โหลดข้อมูลจากฐานข้อมูลมาเป็นโครงสร้างที่หน้าเว็บใช้ (RLS กรองให้ตามบทบาท) ----------
 async function sbLoad() {
   const c = SBX.cl;
-  if (U) await sbFlush();
+  // หลังบันทึกไม่สำเร็จ (SBX.drop) ไม่ส่งซ้ำ ให้โหลดของจริงทับเลย
+  if (U && !SBX.drop) await sbFlush();
+  SBX.drop = 0;
   const au = (await c.auth.getUser()).data.user;
   if (!au) throw new Error('ยังไม่ได้เข้าสู่ระบบ');
   SBX.uid = au.id;
@@ -4446,14 +4452,24 @@ function sbRows() {
 /* 21_supabase_save_audit.js — Supabase: บันทึกกลับ (insert/update) และ audit log
    (แยกมาจาก script.js บรรทัด 1390-1416; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 // ---------- บันทึกกลับ: เทียบกับสถานะล่าสุดที่โหลดมา แล้ว insert/update/ลบ เฉพาะส่วนที่เปลี่ยน ----------
+// บันทึกไม่สำเร็จ: แจ้งเป็นกล่องข้อความ (toast หายเร็ว คนอาจไม่ทันเห็น)
+// แล้วโหลดข้อมูลจริงจากฐานข้อมูลกลับมา หน้าจอจะได้ไม่แสดงสิ่งที่ยังไม่ได้บันทึก
+const sbFail = er => {
+  let m = String((er && er.message) || er || '');
+  if (/failed to fetch|network|load failed|timeout/i.test(m))
+    m = 'เชื่อมต่ออินเทอร์เน็ตไม่ได้ กรุณาตรวจสอบสัญญาณแล้วลองใหม่';
+  alert('⚠ บันทึกไม่สำเร็จ\n' + m + '\n\nระบบจะแสดงข้อมูลล่าสุดที่บันทึกไว้');
+  SBX.drop = 1;
+  setTimeout(() => U && sbRefresh(), 300);
+};
 const sbFlush = () => {
   clearTimeout(SBX.t);
-  return (SBX.q = SBX.q.then(sbPush).catch(er => tt('⚠ บันทึกไม่สำเร็จ: ' + (er.message || er))));
+  return (SBX.q = SBX.q.then(sbPush).catch(sbFail));
 };
 function sbSync() {
   clearTimeout(SBX.t);
   SBX.t = setTimeout(() => {
-    SBX.q = SBX.q.then(sbPush).catch(er => tt('⚠ บันทึกไม่สำเร็จ: ' + (er.message || er)));
+    SBX.q = SBX.q.then(sbPush).catch(sbFail);
   }, 250);
 }
 async function sbPush() {
@@ -4569,11 +4585,23 @@ function sbRT() {
     })
     .subscribe();
 }
+// มีช่องที่กรอกค้างไว้แต่ยังไม่บันทึกไหม (เช่น กรอกเลขมิเตอร์ไปครึ่งหนึ่งแล้วลุกไปดูอย่างอื่น)
+// ถ้ามี ยังไม่โหลดหน้าใหม่ ไม่งั้นค่าที่พิมพ์ไว้จะหาย
+function pgDirty() {
+  return [...document.querySelectorAll('.mn input, .mn textarea, .mn select')].some(x =>
+    x.type == 'checkbox' || x.type == 'radio'
+      ? x.checked != x.defaultChecked
+      : x.tagName == 'SELECT'
+        ? x.selectedIndex != Math.max(0, [...x.options].findIndex(o => o.defaultSelected))
+        : x.type != 'file' && x.value != x.defaultValue
+  );
+}
 async function sbRefresh() {
   if (!U) return;
   const busy =
     getComputedStyle($('#mo')).display != 'none' ||
-    /INPUT|SELECT|TEXTAREA/.test((document.activeElement || {}).tagName || '');
+    /INPUT|SELECT|TEXTAREA/.test((document.activeElement || {}).tagName || '') ||
+    pgDirty();
   if (busy) {
     clearTimeout(SBX.rt);
     SBX.rt = setTimeout(sbRefresh, 3000);
@@ -4711,6 +4739,7 @@ if (SBON) {
     lg('แก้ไขการตั้งค่า');
     save();
     tt('✓ บันทึกแล้ว');
+  R(); // แสดงค่าที่บันทึกแล้ว (ช่องไม่ถือว่ายังแก้ค้าง)
   };
   sub = async function (id) {
     // กันกดส่งซ้ำระหว่างกำลังอัปโหลด (เดิมได้ไฟล์สลิปซ้ำค้างในที่เก็บ)

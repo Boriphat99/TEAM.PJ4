@@ -3,7 +3,9 @@
 // ---------- โหลดข้อมูลจากฐานข้อมูลมาเป็นโครงสร้างที่หน้าเว็บใช้ (RLS กรองให้ตามบทบาท) ----------
 async function sbLoad() {
   const c = SBX.cl;
-  if (U) await sbFlush();
+  // หลังบันทึกไม่สำเร็จ (SBX.drop) ไม่ส่งซ้ำ ให้โหลดของจริงทับเลย
+  if (U && !SBX.drop) await sbFlush();
+  SBX.drop = 0;
   const au = (await c.auth.getUser()).data.user;
   if (!au) throw new Error('ยังไม่ได้เข้าสู่ระบบ');
   SBX.uid = au.id;

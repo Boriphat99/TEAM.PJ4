@@ -11,11 +11,23 @@ function sbRT() {
     })
     .subscribe();
 }
+// มีช่องที่กรอกค้างไว้แต่ยังไม่บันทึกไหม (เช่น กรอกเลขมิเตอร์ไปครึ่งหนึ่งแล้วลุกไปดูอย่างอื่น)
+// ถ้ามี ยังไม่โหลดหน้าใหม่ ไม่งั้นค่าที่พิมพ์ไว้จะหาย
+function pgDirty() {
+  return [...document.querySelectorAll('.mn input, .mn textarea, .mn select')].some(x =>
+    x.type == 'checkbox' || x.type == 'radio'
+      ? x.checked != x.defaultChecked
+      : x.tagName == 'SELECT'
+        ? x.selectedIndex != Math.max(0, [...x.options].findIndex(o => o.defaultSelected))
+        : x.type != 'file' && x.value != x.defaultValue
+  );
+}
 async function sbRefresh() {
   if (!U) return;
   const busy =
     getComputedStyle($('#mo')).display != 'none' ||
-    /INPUT|SELECT|TEXTAREA/.test((document.activeElement || {}).tagName || '');
+    /INPUT|SELECT|TEXTAREA/.test((document.activeElement || {}).tagName || '') ||
+    pgDirty();
   if (busy) {
     clearTimeout(SBX.rt);
     SBX.rt = setTimeout(sbRefresh, 3000);
@@ -153,6 +165,7 @@ if (SBON) {
     lg('แก้ไขการตั้งค่า');
     save();
     tt('✓ บันทึกแล้ว');
+  R(); // แสดงค่าที่บันทึกแล้ว (ช่องไม่ถือว่ายังแก้ค้าง)
   };
   sub = async function (id) {
     // กันกดส่งซ้ำระหว่างกำลังอัปโหลด (เดิมได้ไฟล์สลิปซ้ำค้างในที่เก็บ)

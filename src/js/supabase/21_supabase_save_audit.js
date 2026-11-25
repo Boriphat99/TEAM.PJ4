@@ -1,14 +1,24 @@
 /* 21_supabase_save_audit.js — Supabase: บันทึกกลับ (insert/update) และ audit log
    (แยกมาจาก script.js บรรทัด 1390-1416; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
 // ---------- บันทึกกลับ: เทียบกับสถานะล่าสุดที่โหลดมา แล้ว insert/update/ลบ เฉพาะส่วนที่เปลี่ยน ----------
+// บันทึกไม่สำเร็จ: แจ้งเป็นกล่องข้อความ (toast หายเร็ว คนอาจไม่ทันเห็น)
+// แล้วโหลดข้อมูลจริงจากฐานข้อมูลกลับมา หน้าจอจะได้ไม่แสดงสิ่งที่ยังไม่ได้บันทึก
+const sbFail = er => {
+  let m = String((er && er.message) || er || '');
+  if (/failed to fetch|network|load failed|timeout/i.test(m))
+    m = 'เชื่อมต่ออินเทอร์เน็ตไม่ได้ กรุณาตรวจสอบสัญญาณแล้วลองใหม่';
+  alert('⚠ บันทึกไม่สำเร็จ\n' + m + '\n\nระบบจะแสดงข้อมูลล่าสุดที่บันทึกไว้');
+  SBX.drop = 1;
+  setTimeout(() => U && sbRefresh(), 300);
+};
 const sbFlush = () => {
   clearTimeout(SBX.t);
-  return (SBX.q = SBX.q.then(sbPush).catch(er => tt('⚠ บันทึกไม่สำเร็จ: ' + (er.message || er))));
+  return (SBX.q = SBX.q.then(sbPush).catch(sbFail));
 };
 function sbSync() {
   clearTimeout(SBX.t);
   SBX.t = setTimeout(() => {
-    SBX.q = SBX.q.then(sbPush).catch(er => tt('⚠ บันทึกไม่สำเร็จ: ' + (er.message || er)));
+    SBX.q = SBX.q.then(sbPush).catch(sbFail);
   }, 250);
 }
 async function sbPush() {

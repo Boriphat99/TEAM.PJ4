@@ -222,6 +222,9 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
 กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า|user groups: owner · admin · tenant
 กลุ่ม|groups
 การดำเนินการด่วน|Quick actions
+⚠ บันทึกไม่สำเร็จ|⚠ Could not save
+เชื่อมต่ออินเทอร์เน็ตไม่ได้ กรุณาตรวจสอบสัญญาณแล้วลองใหม่|Cannot connect to the internet. Check your connection and try again
+ระบบจะแสดงข้อมูลล่าสุดที่บันทึกไว้|The page will show the latest saved data
 แสดงเพิ่ม (เหลืออีก|Show more (
 รายการ)|left)
 ใบเรียกเก็บที่เลยวันครบกำหนดมาเกิน 5 วันและยังไม่ชำระ|Bills more than 5 days past due and still unpaid
