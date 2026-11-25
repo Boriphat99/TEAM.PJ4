@@ -222,6 +222,8 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
 กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า|user groups: owner · admin · tenant
 กลุ่ม|groups
 การดำเนินการด่วน|Quick actions
+การเข้าสู่ระบบหมดอายุ หรือมีการออกจากระบบจากเครื่องอื่น|Your session has ended, or you were signed out on another device
+กรุณาเข้าสู่ระบบใหม่|Please sign in again
 ระบบยังส่งอีเมลไปที่อีเมลนี้ไม่ได้ กรุณาติดต่อผู้ดูแลหอพักให้ช่วยตั้งรหัสผ่านใหม่|We cannot send email to this address yet. Please ask the dorm admin to reset your password
 การเข้าสู่ระบบหมดอายุ กรุณาออกจากระบบแล้วเข้าสู่ระบบใหม่|Your session has expired. Please sign out and sign in again
 ทำรายการบ่อยเกินไป กรุณารอสักครู่แล้วลองใหม่|Too many attempts. Please wait a moment and try again

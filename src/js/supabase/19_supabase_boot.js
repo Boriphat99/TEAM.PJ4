@@ -82,7 +82,37 @@ async function sbInit() {
       P = 'recover';
       R();
     }
+    // หลุดจากระบบเองระหว่างใช้งาน (ออกจากระบบ/เปลี่ยนรหัสจากเครื่องอื่น หรือเซสชันหมดอายุ)
+    // กดออกจากระบบเองจะล้าง U ก่อน จึงไม่เข้าเงื่อนไขนี้
+    if (ev == 'SIGNED_OUT') setTimeout(sbExpired, 0);
   });
+}
+// พากลับหน้าเข้าสู่ระบบ พร้อมบอกเหตุผล (แทนที่จะค้างหน้าเดิมแล้วบันทึกอะไรไม่ได้)
+async function sbExpired() {
+  if (!U || SBX.recov) return;
+  try {
+    const {
+      data: { session },
+    } = await SBX.cl.auth.getSession();
+    if (session) return;
+  } catch (_) {}
+  if (!U) return;
+  try {
+    sbReset();
+  } catch (_) {}
+  U = null;
+  P = 'login';
+  try {
+    localStorage.removeItem('ttm_s');
+  } catch (_) {}
+  try {
+    $('#mo').style.display = 'none';
+  } catch (_) {}
+  try {
+    pubLoad();
+  } catch (_) {}
+  R();
+  alert('การเข้าสู่ระบบหมดอายุ หรือมีการออกจากระบบจากเครื่องอื่น\nกรุณาเข้าสู่ระบบใหม่');
 }
 async function sbBoot() {
   await sbInit();

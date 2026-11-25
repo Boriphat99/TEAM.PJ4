@@ -255,6 +255,8 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
 กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า|user groups: owner · admin · tenant
 กลุ่ม|groups
 การดำเนินการด่วน|Quick actions
+การเข้าสู่ระบบหมดอายุ หรือมีการออกจากระบบจากเครื่องอื่น|Your session has ended, or you were signed out on another device
+กรุณาเข้าสู่ระบบใหม่|Please sign in again
 ระบบยังส่งอีเมลไปที่อีเมลนี้ไม่ได้ กรุณาติดต่อผู้ดูแลหอพักให้ช่วยตั้งรหัสผ่านใหม่|We cannot send email to this address yet. Please ask the dorm admin to reset your password
 การเข้าสู่ระบบหมดอายุ กรุณาออกจากระบบแล้วเข้าสู่ระบบใหม่|Your session has expired. Please sign out and sign in again
 ทำรายการบ่อยเกินไป กรุณารอสักครู่แล้วลองใหม่|Too many attempts. Please wait a moment and try again
@@ -1872,6 +1874,21 @@ document.addEventListener('click', ev => {
   if (!ev.target.closest('.mm'))
     document.querySelectorAll('.mdd.open').forEach(x => x.classList.remove('open'));
 });
+// ตารางบิลที่ชำระแล้วในรายงาน: แสดงทีละ 150 รายการ (ตอนพิมพ์แสดงครบทุกรายการ)
+let RPN = 150,
+  RPK = '';
+function repPrint() {
+  const n = RPN;
+  RPN = 1e9;
+  R();
+  document.body.classList.add('pr');
+  print();
+  setTimeout(() => {
+    document.body.classList.remove('pr');
+    RPN = n;
+    R();
+  }, 600);
+}
 function repTop() {
   const cur = dper(),
     I = D.inv,
@@ -1881,6 +1898,7 @@ function repTop() {
     ok = i =>
       RP == 'all' || (RP == 'cur' ? i.per == cur : RP == 'yr' ? i.per.startsWith(y) : i.per >= m3),
     P = I.filter(i => i.s == 'paid' && ok(i)).sort((a, b) => (b.paid || 0) - (a.paid || 0)),
+    _rk = RPK != RP && ((RPK = RP), (RPN = 150)),
     sm = (a, f) => a.reduce((t, i) => t + f(i), 0),
     T = sm(P, tot),
     rt = sm(P, i => i.rent),
@@ -1917,7 +1935,7 @@ function repTop() {
     ];
   return (
     hdr('☰', 'รายงานรายรับ', 'สรุปรายรับที่ชำระแล้วในช่วงเวลาที่เลือก พิมพ์เป็น PDF หรือส่งออก CSV') +
-    `<div class="cd" style="display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap"><div><label>ช่วงเวลา</label><select onchange="RP=this.value;R()" style="margin-bottom:0;min-width:200px">${sel.map(x => `<option value="${x[0]}" ${RP == x[0] ? 'selected' : ''}>${x[1]}</option>`).join('')}</select></div><span style="flex:1"></span><button class="b b2 np" onclick="xc()">ส่งออก CSV</button><button class="b np" onclick="document.body.classList.add('pr');print();setTimeout(()=>document.body.classList.remove('pr'),600)">พิมพ์ / PDF</button></div>
+    `<div class="cd" style="display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap"><div><label>ช่วงเวลา</label><select onchange="RP=this.value;R()" style="margin-bottom:0;min-width:200px">${sel.map(x => `<option value="${x[0]}" ${RP == x[0] ? 'selected' : ''}>${x[1]}</option>`).join('')}</select></div><span style="flex:1"></span><button class="b b2 np" onclick="xc()">ส่งออก CSV</button><button class="b np" onclick="repPrint()">พิมพ์ / PDF</button></div>
 <div class="s4c"><div class="cd" style="background:#fff1f1"><small class="mu">รายรับรวม</small><div class="k ac">฿${fm(T)}</div></div><div class="cd"><small class="mu">ใบที่ชำระแล้ว</small><div class="k">${P.length}</div></div><div class="cd"><small class="mu">จำนวนรอบบิล</small><div class="k">${new Set(P.map(i => i.per)).size}</div></div><div class="cd"><small class="mu">ระยะเช่าเฉลี่ย</small><div class="k">${am.toFixed(1)} <small class="mu">เดือน</small></div></div></div>
 <div class="cd"><h3>รายรับตามประเภท</h3><div style="display:flex;gap:24px;align-items:center;flex-wrap:wrap;margin-top:12px"><div>${dn3(
       [
@@ -1929,7 +1947,7 @@ function repTop() {
     )}</div><div style="flex:1;min-width:240px">${bar('ค่าเช่า ' + pc(rt) + '%', '฿' + fm(rt), pc(rt), '#dc2626')}${bar('ค่าไฟ ' + pc(el) + '%', '฿' + fm(el), pc(el), '#f59e0b')}${bar('อื่นๆ / ค่าปรับ ' + pc(ot) + '%', '฿' + fm(ot), pc(ot), '#9ca3af')}</div></div></div>
 <div class="s4c"><div class="cd"><small class="mu">เฉลี่ยต่อบิล</small><div class="k">฿${fm(P.length ? Math.round(T / P.length) : 0)}</div></div><div class="cd tl2"><small class="mu">จ่ายตรงเวลา</small><div class="k" style="color:#15803d">${on}%</div><small class="mu">ช้าเฉลี่ย ${al.toFixed(1)} วัน</small></div><div class="cd tl3"><small class="mu">หน่วยไฟที่เรียกเก็บ</small><div class="k" style="color:#a16207">${fm(sm(P, i => i.u))} <small>หน่วย</small></div></div><div class="cd tl4"><small class="mu">ค่าปรับที่เก็บได้</small><div class="k" style="color:#b91c1c">฿${fm(sm(P, i => i.fine || 0))}</div></div></div>
 <div class="dg2"><div class="cd"><h3 style="margin-bottom:12px">ห้องรายรับสูงสุด</h3>${tp.map((x, k) => bar(k + 1 + '  ห้อง ' + x[0], '฿' + fm(x[1]), Math.round((x[1] / tx) * 100), '#dc2626')).join('') || '<small class="mu">ยังไม่มีข้อมูล</small>'}</div><div class="cd"><h3 style="margin-bottom:12px">ห้องที่จ่ายช้า</h3>${ls.map(x => `<div class="bd"><span><b>ห้อง ${x[0]}</b><br><small class="mu">${e(tn(+x[0]) || '-')}</small></span><span style="text-align:right"><b style="color:#dc2626">${x[1].length} ครั้ง</b><br><small class="mu">ช้าเฉลี่ย ${(x[1].reduce((a, b) => a + b, 0) / x[1].length).toFixed(0)} วัน</small></span></div>`).join('') || '<small class="mu">ไม่มีห้องที่จ่ายช้า</small>'}</div></div>
-<div class="cd sc" style="margin-top:14px"><h3 style="margin-bottom:10px">ใบเรียกเก็บเงินที่ชำระแล้ว</h3><table><tr><th>ชำระเมื่อ</th><th>ห้อง</th><th>ผู้เช่า</th><th>รอบบิล</th><th>จำนวนเงิน</th><th></th></tr>${P.map(i => `<tr><td>${i.paid ? dt(i.paid) : '-'}</td><td>ห้อง ${i.room}</td><td>${e((tu(i) || {}).name)}</td><td>${mlab(i)}</td><td><b>฿${fm(tot(i))}</b></td><td><button class="b b2 sm" onclick="rc('${i.id}')">ใบเสร็จ</button></td></tr>`).join('') || '<tr><td colspan=6 class=mu>ยังไม่มีรายการ</td></tr>'}</table></div>`
+<div class="cd sc" style="margin-top:14px"><h3 style="margin-bottom:10px">ใบเรียกเก็บเงินที่ชำระแล้ว</h3><table><tr><th>ชำระเมื่อ</th><th>ห้อง</th><th>ผู้เช่า</th><th>รอบบิล</th><th>จำนวนเงิน</th><th></th></tr>${P.slice(0, RPN).map(i => `<tr><td>${i.paid ? dt(i.paid) : '-'}</td><td>ห้อง ${i.room}</td><td>${e((tu(i) || {}).name)}</td><td>${mlab(i)}</td><td><b>฿${fm(tot(i))}</b></td><td><button class="b b2 sm" onclick="rc('${i.id}')">ใบเสร็จ</button></td></tr>`).join('') || '<tr><td colspan=6 class=mu>ยังไม่มีรายการ</td></tr>'}</table>${P.length > RPN ? `<div class="np" style="text-align:center;margin-top:12px"><button class="b b2 sm" onclick="RPN+=150;R()">แสดงเพิ่ม (เหลืออีก ${P.length - RPN} รายการ)</button></div>` : ''}</div>`
   );
 }
 
@@ -4072,7 +4090,37 @@ async function sbInit() {
       P = 'recover';
       R();
     }
+    // หลุดจากระบบเองระหว่างใช้งาน (ออกจากระบบ/เปลี่ยนรหัสจากเครื่องอื่น หรือเซสชันหมดอายุ)
+    // กดออกจากระบบเองจะล้าง U ก่อน จึงไม่เข้าเงื่อนไขนี้
+    if (ev == 'SIGNED_OUT') setTimeout(sbExpired, 0);
   });
+}
+// พากลับหน้าเข้าสู่ระบบ พร้อมบอกเหตุผล (แทนที่จะค้างหน้าเดิมแล้วบันทึกอะไรไม่ได้)
+async function sbExpired() {
+  if (!U || SBX.recov) return;
+  try {
+    const {
+      data: { session },
+    } = await SBX.cl.auth.getSession();
+    if (session) return;
+  } catch (_) {}
+  if (!U) return;
+  try {
+    sbReset();
+  } catch (_) {}
+  U = null;
+  P = 'login';
+  try {
+    localStorage.removeItem('ttm_s');
+  } catch (_) {}
+  try {
+    $('#mo').style.display = 'none';
+  } catch (_) {}
+  try {
+    pubLoad();
+  } catch (_) {}
+  R();
+  alert('การเข้าสู่ระบบหมดอายุ หรือมีการออกจากระบบจากเครื่องอื่น\nกรุณาเข้าสู่ระบบใหม่');
 }
 async function sbBoot() {
   await sbInit();
@@ -4549,7 +4597,14 @@ function sbRows() {
 // ---------- บันทึกกลับ: เทียบกับสถานะล่าสุดที่โหลดมา แล้ว insert/update/ลบ เฉพาะส่วนที่เปลี่ยน ----------
 // บันทึกไม่สำเร็จ: แจ้งเป็นกล่องข้อความ (toast หายเร็ว คนอาจไม่ทันเห็น)
 // แล้วโหลดข้อมูลจริงจากฐานข้อมูลกลับมา หน้าจอจะได้ไม่แสดงสิ่งที่ยังไม่ได้บันทึก
-const sbFail = er => {
+const sbFail = async er => {
+  // ถ้าบันทึกไม่ได้เพราะหลุดจากระบบ → พากลับหน้าเข้าสู่ระบบ ไม่ขึ้นว่า "ไม่มีสิทธิ์"
+  try {
+    const {
+      data: { session },
+    } = await SBX.cl.auth.getSession();
+    if (!session && U) return sbExpired();
+  } catch (_) {}
   const m = thErr(er);
   alert('⚠ บันทึกไม่สำเร็จ\n' + m + '\n\nระบบจะแสดงข้อมูลล่าสุดที่บันทึกไว้');
   SBX.drop = 1;

@@ -9197,6 +9197,7 @@ html:not([data-theme='dark']) {
   --acs: #fcebee;
   --acs2: #f8d5db;
   --gd: #946318; /* ทองขอบอาคาร (อ่านได้บนพื้นขาว) */
+  --gd-tx: #7c5410; /* ทองสำหรับตัวหนังสือบนการ์ดโปร่งแสง (ผ่านเกณฑ์ความชัด) */
   --gd-bg: #fbf1de;
   --ok: #1d7a4c;
   --ok-bg: #e8f5ed;
@@ -9253,6 +9254,7 @@ html[data-theme='dark'] {
   --acs: rgba(255, 59, 78, 0.14);
   --acs2: rgba(255, 59, 78, 0.24);
   --gd: #f1c26c; /* แสงไฟทอง */
+  --gd-tx: #f1c26c;
   --gd-bg: rgba(241, 194, 108, 0.12);
   --ok: #5fd39d;
   --ok-bg: rgba(95, 211, 157, 0.11);
@@ -9672,7 +9674,7 @@ html[data-theme='dark'] {
   color: var(--er) !important;
 }
 :where(.app, #mo) [style*='color:#f59e0b'] {
-  color: var(--gd) !important;
+  color: var(--gd-tx, var(--gd)) !important; /* ตัวหนังสือสีทอง: เข้มกว่าเส้น/พื้น ให้อ่านชัด */
 }
 :where(.app, #mo) [style*='color:#ea580c'] {
   color: var(--ch-or) !important;
