@@ -255,6 +255,19 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
 กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า|user groups: owner · admin · tenant
 กลุ่ม|groups
 การดำเนินการด่วน|Quick actions
+การเข้าสู่ระบบหมดอายุ กรุณาออกจากระบบแล้วเข้าสู่ระบบใหม่|Your session has expired. Please sign out and sign in again
+ทำรายการบ่อยเกินไป กรุณารอสักครู่แล้วลองใหม่|Too many attempts. Please wait a moment and try again
+รหัสผ่านใหม่ต้องไม่ซ้ำกับรหัสผ่านเดิม|The new password must differ from the old one
+รหัสผ่านนี้คาดเดาง่ายหรือเคยรั่วไหล กรุณาตั้งรหัสใหม่|This password is weak or has been leaked. Please choose another
+ไม่มีสิทธิ์ทำรายการนี้|You do not have permission to do this
+ไม่พบบิลนี้ กรุณารีเฟรชหน้าแล้วลองใหม่|Bill not found. Please refresh and try again
+บิลนี้ชำระแล้วหรือรอตรวจสอบอยู่ กรุณารีเฟรชหน้า|This bill is already paid or awaiting review. Please refresh
+แก้ไขรายการชำระนี้ไม่ได้แล้ว กรุณารีเฟรชหน้า|This payment can no longer be edited. Please refresh
+ไฟล์ใหญ่เกินกำหนด กรุณาเลือกไฟล์ที่เล็กลง|File too large. Please choose a smaller file
+ชนิดไฟล์นี้ใช้ไม่ได้ กรุณาเลือกรูปภาพ|This file type is not supported. Please choose an image
+ข้อมูลนี้มีอยู่แล้ว กรุณารีเฟรชหน้าแล้วลองใหม่|This already exists. Please refresh and try again
+เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง|Something went wrong. Please try again
+เชื่อมต่อระบบไม่สำเร็จ|Could not connect to the system
 ⚠ บันทึกไม่สำเร็จ|⚠ Could not save
 เชื่อมต่ออินเทอร์เน็ตไม่ได้ กรุณาตรวจสอบสัญญาณแล้วลองใหม่|Cannot connect to the internet. Check your connection and try again
 ระบบจะแสดงข้อมูลล่าสุดที่บันทึกไว้|The page will show the latest saved data
@@ -1296,6 +1309,31 @@ function dg(m, cb) {
     };
 }
 window.alert = m => dg(String(m));
+// แปลงข้อความ error ภาษาอังกฤษจาก Supabase / เบราว์เซอร์ เป็นภาษาไทยที่ผู้ใช้อ่านเข้าใจ
+// (ข้อความไทยจากฐานข้อมูลส่งผ่านไปตามเดิม)
+function thErr(x) {
+  const m = String((x && (x.message || x.error_description || x.error)) || x || '').trim();
+  if (/[\u0E00-\u0E7F]/.test(m)) return m;
+  const L = [
+    [/failed to fetch|networkerror|load failed|network request failed|timeout|timed out/i, 'เชื่อมต่ออินเทอร์เน็ตไม่ได้ กรุณาตรวจสอบสัญญาณแล้วลองใหม่'],
+    [/jwt expired|invalid jwt|auth session missing|refresh token|not authenticated|session.*(expired|not found)/i, 'การเข้าสู่ระบบหมดอายุ กรุณาออกจากระบบแล้วเข้าสู่ระบบใหม่'],
+    [/only request this after (\d+) seconds?/i, s => 'ขอบ่อยเกินไป กรุณารอ ' + s.match(/(\d+) seconds?/i)[1] + ' วินาทีแล้วลองใหม่'],
+    [/rate limit|too many requests/i, 'ทำรายการบ่อยเกินไป กรุณารอสักครู่แล้วลองใหม่'],
+    [/should be different from the old password/i, 'รหัสผ่านใหม่ต้องไม่ซ้ำกับรหัสผ่านเดิม'],
+    [/password should be at least/i, 'รหัสผ่านสั้นเกินไป'],
+    [/weak password|pwned|leaked/i, 'รหัสผ่านนี้คาดเดาง่ายหรือเคยรั่วไหล กรุณาตั้งรหัสใหม่'],
+    [/user not found|invalid login credentials/i, 'อีเมลหรือรหัสผ่านไม่ถูกต้อง'],
+    [/row-level security|permission denied|not allowed|forbidden/i, 'ไม่มีสิทธิ์ทำรายการนี้'],
+    [/invoice not found/i, 'ไม่พบบิลนี้ กรุณารีเฟรชหน้าแล้วลองใหม่'],
+    [/invoice is not payable/i, 'บิลนี้ชำระแล้วหรือรอตรวจสอบอยู่ กรุณารีเฟรชหน้า'],
+    [/payment cannot be edited/i, 'แก้ไขรายการชำระนี้ไม่ได้แล้ว กรุณารีเฟรชหน้า'],
+    [/exceeded the maximum allowed size|payload too large|entity too large/i, 'ไฟล์ใหญ่เกินกำหนด กรุณาเลือกไฟล์ที่เล็กลง'],
+    [/mime type|not supported/i, 'ชนิดไฟล์นี้ใช้ไม่ได้ กรุณาเลือกรูปภาพ'],
+    [/already exists|duplicate key/i, 'ข้อมูลนี้มีอยู่แล้ว กรุณารีเฟรชหน้าแล้วลองใหม่'],
+  ];
+  for (const [re, t] of L) if (re.test(m)) return typeof t == 'function' ? t(m) : t;
+  return m ? 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง (' + m + ')' : 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง';
+}
 const cf = (m, cb) => dg(m, cb);
 const go = p => {
     if (p == 'met' && P != 'met') PER = pcur(); // กดเข้าเมนู → เดือนล่าสุด
@@ -3005,7 +3043,7 @@ async function si(id) {
       `<img src="${c.toDataURL('image/png')}" style="width:100%;border-radius:10px" alt="ใบเสร็จรับเงิน"><p class="mu" style="font-size:13px">กดค้างที่รูป (มือถือ) หรือคลิกขวา (คอมพิวเตอร์) แล้วเลือกบันทึกรูปภาพ</p><button class="b b2" onclick="cm()">ปิด</button>`
     );
   } catch (x) {
-    alert('สร้างรูปไม่สำเร็จ: ' + ((x && x.message) || x));
+    alert('สร้างรูปไม่สำเร็จ: ' + thErr(x));
   }
 }
 
@@ -3990,7 +4028,7 @@ async function sbBoot() {
     try {
       await sbEnter();
     } catch (x) {
-      alert(x.message || x);
+      alert(thErr(x));
     }
     if (!U) R();
   }
@@ -4455,9 +4493,7 @@ function sbRows() {
 // บันทึกไม่สำเร็จ: แจ้งเป็นกล่องข้อความ (toast หายเร็ว คนอาจไม่ทันเห็น)
 // แล้วโหลดข้อมูลจริงจากฐานข้อมูลกลับมา หน้าจอจะได้ไม่แสดงสิ่งที่ยังไม่ได้บันทึก
 const sbFail = er => {
-  let m = String((er && er.message) || er || '');
-  if (/failed to fetch|network|load failed|timeout/i.test(m))
-    m = 'เชื่อมต่ออินเทอร์เน็ตไม่ได้ กรุณาตรวจสอบสัญญาณแล้วลองใหม่';
+  const m = thErr(er);
   alert('⚠ บันทึกไม่สำเร็จ\n' + m + '\n\nระบบจะแสดงข้อมูลล่าสุดที่บันทึกไว้');
   SBX.drop = 1;
   setTimeout(() => U && sbRefresh(), 300);
@@ -4629,7 +4665,7 @@ if (SBON) {
     try {
       await sbEnter(1);
     } catch (x) {
-      alert(x.message || x);
+      alert(thErr(x));
     }
   };
   fp = async function () {
@@ -4639,7 +4675,7 @@ if (SBON) {
     const { error } = await SBX.cl.auth.resetPasswordForEmail(m, {
       redirectTo: location.href.split('#')[0].split('?')[0],
     });
-    if (error) return alert(error.message);
+    if (error) return alert(thErr(error));
     go('login');
     alert('ส่งลิงก์ตั้งรหัสผ่านใหม่ไปที่อีเมลแล้ว กรุณาตรวจสอบกล่องจดหมาย');
   };
@@ -4648,7 +4684,7 @@ if (SBON) {
     if (pwBad(w)) return alert(pwBad(w));
     if (w != $('#pw2').value) return alert('ยืนยันรหัสผ่านไม่ตรงกัน');
     const { error } = await SBX.cl.auth.updateUser({ password: w });
-    if (error) return alert(error.message);
+    if (error) return alert(thErr(error));
     SBX.recov = false;
     await SBX.cl.auth.signOut();
     try {
@@ -4693,7 +4729,7 @@ if (SBON) {
     const a = await SBX.cl.auth.signInWithPassword({ email: U.email, password: o });
     if (a.error) return alert('รหัสผ่านปัจจุบันไม่ถูกต้อง');
     const { error } = await SBX.cl.auth.updateUser({ password: w });
-    if (error) return alert(error.message);
+    if (error) return alert(thErr(error));
     lg('เปลี่ยนรหัสผ่าน');
     R();
     alert('เปลี่ยนรหัสผ่านสำเร็จ\nครั้งต่อไปให้เข้าสู่ระบบด้วยรหัสผ่านใหม่');
@@ -4760,7 +4796,7 @@ if (SBON) {
       up = await SBX.cl.storage
         .from('slips')
         .upload(path, d2b(SLIP), { contentType: 'image/jpeg' });
-    if (up.error) return alert('อัปโหลดสลิปไม่สำเร็จ: ' + up.error.message);
+    if (up.error) return alert('อัปโหลดสลิปไม่สำเร็จ: ' + thErr(up.error));
     const { error } = await SBX.cl.rpc('submit_payment', {
       p_invoice: i._id,
       p_slip: path,
@@ -4769,7 +4805,7 @@ if (SBON) {
     });
     if (error) {
       SBX.cl.storage.from('slips').remove([path]);
-      return alert(error.message);
+      return alert(thErr(error));
     }
     lg((pd ? 'ส่งสลิปใหม่ ' : 'แจ้งชำระ ') + id);
     cm();
@@ -4790,7 +4826,7 @@ if (SBON) {
     const up = await SBX.cl.storage
       .from('contracts')
       .upload(path, f, { upsert: true, contentType: 'application/pdf' });
-    if (up.error) return alert('อัปโหลดไม่สำเร็จ: ' + up.error.message);
+    if (up.error) return alert('อัปโหลดไม่สำเร็จ: ' + thErr(up.error));
     u.cpdf = { name: f.name, size: f.size, path };
     lg('อัปโหลดไฟล์สัญญา ห้อง ' + u.room + ' (' + u.name + ')');
     save();
@@ -4841,9 +4877,9 @@ if (SBON) {
     const up = await SBX.cl.storage
       .from('avatars')
       .upload(path, blob, { contentType: 'image/jpeg' });
-    if (up.error) return alert('อัปโหลดรูปไม่สำเร็จ: ' + up.error.message);
+    if (up.error) return alert('อัปโหลดรูปไม่สำเร็จ: ' + thErr(up.error));
     const r = await SBX.cl.from('users').update({ avatar_path: path }).eq('id', SBX.uid);
-    if (r.error) return alert(r.error.message);
+    if (r.error) return alert(thErr(r.error));
     U.av = pubUrl('avatars', path);
     U._avp = path;
     if (old) SBX.cl.storage.from('avatars').remove([old]);
@@ -4856,7 +4892,7 @@ if (SBON) {
     cf('ลบรูปโปรไฟล์?', async () => {
       const old = U._avp;
       const r = await SBX.cl.from('users').update({ avatar_path: null }).eq('id', SBX.uid);
-      if (r.error) return alert(r.error.message);
+      if (r.error) return alert(thErr(r.error));
       if (old) SBX.cl.storage.from('avatars').remove([old]);
       delete U.av;
       U._avp = null;
@@ -4874,13 +4910,13 @@ if (SBON) {
         up = await SBX.cl.storage
           .from('branding')
           .upload(np, d2b(LQ), { contentType: 'image/png' });
-      if (up.error) return alert('อัปโหลดไม่สำเร็จ: ' + up.error.message);
+      if (up.error) return alert('อัปโหลดไม่สำเร็จ: ' + thErr(up.error));
       upd.line_qr_path = np;
     } else if (!LQ) {
       upd.line_qr_path = null;
     }
     const r = await SBX.cl.from('app_settings').update(upd).eq('id', D.set._id);
-    if (r.error) return alert(r.error.message);
+    if (r.error) return alert(thErr(r.error));
     const oq = D.set._lqp;
     if (upd.line_qr_path !== undefined && oq && oq !== upd.line_qr_path)
       SBX.cl.storage
@@ -4919,7 +4955,7 @@ if (SBON) {
         up = await SBX.cl.storage
           .from('attachments')
           .upload(p, d2b(d), { contentType: 'image/jpeg' });
-      if (up.error) return alert('อัปโหลดรูปไม่สำเร็จ: ' + up.error.message);
+      if (up.error) return alert('อัปโหลดรูปไม่สำเร็จ: ' + thErr(up.error));
       paths.push(p);
     }
     D.tk.unshift({
@@ -4953,7 +4989,7 @@ try {
     setTimeout(() => tt('✓ ออกจากระบบสำเร็จ' + (RL[lo] ? ' · ' + RL[lo] : '')), 400);
   }
 } catch (x) {}
-if (SBON) sbBoot().catch(x => alert('เชื่อมต่อ Supabase ไม่สำเร็จ: ' + (x.message || x)));
+if (SBON) sbBoot().catch(x => alert('เชื่อมต่อระบบไม่สำเร็จ: ' + thErr(x)));
 
 /* 23_ui_polish_effects.js — เอฟเฟกต์เสริม (UI polish) ไม่แตะลอจิกเดิม
    (แยกมาจาก script.js บรรทัด 1525-1579; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
@@ -5594,7 +5630,7 @@ async function atfGo() {
         if (j && j.error) msg = j.error;
       } catch (e2) {}
       done();
-      return alert(msg);
+      return alert(thErr(msg));
     }
     await sbLoad();
     if (file) {
@@ -6062,7 +6098,7 @@ const lnLeft = () => {
 }
 async function lnCode() {
   const r = await SBX.cl.rpc('line_link_code');
-  if (r.error) return alert('ขอรหัสไม่สำเร็จ: ' + r.error.message);
+  if (r.error) return alert('ขอรหัสไม่สำเร็จ: ' + thErr(r.error));
   LN.code = r.data;
   LN.exp = Date.now() + 10 * 60e3;
   clearInterval(LN.tm);
@@ -6094,7 +6130,7 @@ async function lnCheck(say) {
 function lnUnlink() {
   cf('ยกเลิกการเชื่อม LINE?\nจะไม่ได้รับแจ้งเตือนทาง LINE อีกจนกว่าจะเชื่อมใหม่', async () => {
     const r = await SBX.cl.rpc('line_unlink');
-    if (r.error) return alert('ยกเลิกไม่สำเร็จ: ' + r.error.message);
+    if (r.error) return alert('ยกเลิกไม่สำเร็จ: ' + thErr(r.error));
     delete LN.lk[SBX.uid];
     R();
     tt('ยกเลิกการเชื่อม LINE แล้ว');
@@ -6121,14 +6157,14 @@ async function lnRemind(code) {
   lnRemind[code] = 1;
   setTimeout(() => delete lnRemind[code], 5000);
   const r = await SBX.cl.rpc('line_remind', { p_invoice: i._id });
-  if (r.error) return alert('ส่งเตือนไม่สำเร็จ: ' + r.error.message);
+  if (r.error) return alert('ส่งเตือนไม่สำเร็จ: ' + thErr(r.error));
   tt('✓ ส่งเตือนห้อง ' + i.room + ' แล้ว');
   setTimeout(lnAfter, 2500);
 }
 function lnRemindAll() {
   cf('ส่งเตือนทาง LINE ให้ทุกบิลที่เลยกำหนดและผู้เช่าเชื่อม LINE แล้ว?', async () => {
     const r = await SBX.cl.rpc('line_remind_overdue');
-    if (r.error) return alert('ส่งเตือนไม่สำเร็จ: ' + r.error.message);
+    if (r.error) return alert('ส่งเตือนไม่สำเร็จ: ' + thErr(r.error));
     tt('✓ ส่งเตือนแล้ว ' + (r.data || 0) + ' บิล');
     setTimeout(lnAfter, 2500);
   });

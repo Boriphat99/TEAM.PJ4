@@ -101,7 +101,7 @@ async function atfGo() {
         if (j && j.error) msg = j.error;
       } catch (e2) {}
       done();
-      return alert(msg);
+      return alert(thErr(msg));
     }
     await sbLoad();
     if (file) {

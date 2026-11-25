@@ -72,7 +72,7 @@ const lnLeft = () => {
 }
 async function lnCode() {
   const r = await SBX.cl.rpc('line_link_code');
-  if (r.error) return alert('ขอรหัสไม่สำเร็จ: ' + r.error.message);
+  if (r.error) return alert('ขอรหัสไม่สำเร็จ: ' + thErr(r.error));
   LN.code = r.data;
   LN.exp = Date.now() + 10 * 60e3;
   clearInterval(LN.tm);
@@ -104,7 +104,7 @@ async function lnCheck(say) {
 function lnUnlink() {
   cf('ยกเลิกการเชื่อม LINE?\nจะไม่ได้รับแจ้งเตือนทาง LINE อีกจนกว่าจะเชื่อมใหม่', async () => {
     const r = await SBX.cl.rpc('line_unlink');
-    if (r.error) return alert('ยกเลิกไม่สำเร็จ: ' + r.error.message);
+    if (r.error) return alert('ยกเลิกไม่สำเร็จ: ' + thErr(r.error));
     delete LN.lk[SBX.uid];
     R();
     tt('ยกเลิกการเชื่อม LINE แล้ว');
@@ -131,14 +131,14 @@ async function lnRemind(code) {
   lnRemind[code] = 1;
   setTimeout(() => delete lnRemind[code], 5000);
   const r = await SBX.cl.rpc('line_remind', { p_invoice: i._id });
-  if (r.error) return alert('ส่งเตือนไม่สำเร็จ: ' + r.error.message);
+  if (r.error) return alert('ส่งเตือนไม่สำเร็จ: ' + thErr(r.error));
   tt('✓ ส่งเตือนห้อง ' + i.room + ' แล้ว');
   setTimeout(lnAfter, 2500);
 }
 function lnRemindAll() {
   cf('ส่งเตือนทาง LINE ให้ทุกบิลที่เลยกำหนดและผู้เช่าเชื่อม LINE แล้ว?', async () => {
     const r = await SBX.cl.rpc('line_remind_overdue');
-    if (r.error) return alert('ส่งเตือนไม่สำเร็จ: ' + r.error.message);
+    if (r.error) return alert('ส่งเตือนไม่สำเร็จ: ' + thErr(r.error));
     tt('✓ ส่งเตือนแล้ว ' + (r.data || 0) + ' บิล');
     setTimeout(lnAfter, 2500);
   });

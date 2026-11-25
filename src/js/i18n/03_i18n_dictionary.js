@@ -222,6 +222,19 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
 กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า|user groups: owner · admin · tenant
 กลุ่ม|groups
 การดำเนินการด่วน|Quick actions
+การเข้าสู่ระบบหมดอายุ กรุณาออกจากระบบแล้วเข้าสู่ระบบใหม่|Your session has expired. Please sign out and sign in again
+ทำรายการบ่อยเกินไป กรุณารอสักครู่แล้วลองใหม่|Too many attempts. Please wait a moment and try again
+รหัสผ่านใหม่ต้องไม่ซ้ำกับรหัสผ่านเดิม|The new password must differ from the old one
+รหัสผ่านนี้คาดเดาง่ายหรือเคยรั่วไหล กรุณาตั้งรหัสใหม่|This password is weak or has been leaked. Please choose another
+ไม่มีสิทธิ์ทำรายการนี้|You do not have permission to do this
+ไม่พบบิลนี้ กรุณารีเฟรชหน้าแล้วลองใหม่|Bill not found. Please refresh and try again
+บิลนี้ชำระแล้วหรือรอตรวจสอบอยู่ กรุณารีเฟรชหน้า|This bill is already paid or awaiting review. Please refresh
+แก้ไขรายการชำระนี้ไม่ได้แล้ว กรุณารีเฟรชหน้า|This payment can no longer be edited. Please refresh
+ไฟล์ใหญ่เกินกำหนด กรุณาเลือกไฟล์ที่เล็กลง|File too large. Please choose a smaller file
+ชนิดไฟล์นี้ใช้ไม่ได้ กรุณาเลือกรูปภาพ|This file type is not supported. Please choose an image
+ข้อมูลนี้มีอยู่แล้ว กรุณารีเฟรชหน้าแล้วลองใหม่|This already exists. Please refresh and try again
+เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง|Something went wrong. Please try again
+เชื่อมต่อระบบไม่สำเร็จ|Could not connect to the system
 ⚠ บันทึกไม่สำเร็จ|⚠ Could not save
 เชื่อมต่ออินเทอร์เน็ตไม่ได้ กรุณาตรวจสอบสัญญาณแล้วลองใหม่|Cannot connect to the internet. Check your connection and try again
 ระบบจะแสดงข้อมูลล่าสุดที่บันทึกไว้|The page will show the latest saved data

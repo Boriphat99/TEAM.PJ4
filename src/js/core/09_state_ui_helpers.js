@@ -113,6 +113,31 @@ function dg(m, cb) {
     };
 }
 window.alert = m => dg(String(m));
+// แปลงข้อความ error ภาษาอังกฤษจาก Supabase / เบราว์เซอร์ เป็นภาษาไทยที่ผู้ใช้อ่านเข้าใจ
+// (ข้อความไทยจากฐานข้อมูลส่งผ่านไปตามเดิม)
+function thErr(x) {
+  const m = String((x && (x.message || x.error_description || x.error)) || x || '').trim();
+  if (/[\u0E00-\u0E7F]/.test(m)) return m;
+  const L = [
+    [/failed to fetch|networkerror|load failed|network request failed|timeout|timed out/i, 'เชื่อมต่ออินเทอร์เน็ตไม่ได้ กรุณาตรวจสอบสัญญาณแล้วลองใหม่'],
+    [/jwt expired|invalid jwt|auth session missing|refresh token|not authenticated|session.*(expired|not found)/i, 'การเข้าสู่ระบบหมดอายุ กรุณาออกจากระบบแล้วเข้าสู่ระบบใหม่'],
+    [/only request this after (\d+) seconds?/i, s => 'ขอบ่อยเกินไป กรุณารอ ' + s.match(/(\d+) seconds?/i)[1] + ' วินาทีแล้วลองใหม่'],
+    [/rate limit|too many requests/i, 'ทำรายการบ่อยเกินไป กรุณารอสักครู่แล้วลองใหม่'],
+    [/should be different from the old password/i, 'รหัสผ่านใหม่ต้องไม่ซ้ำกับรหัสผ่านเดิม'],
+    [/password should be at least/i, 'รหัสผ่านสั้นเกินไป'],
+    [/weak password|pwned|leaked/i, 'รหัสผ่านนี้คาดเดาง่ายหรือเคยรั่วไหล กรุณาตั้งรหัสใหม่'],
+    [/user not found|invalid login credentials/i, 'อีเมลหรือรหัสผ่านไม่ถูกต้อง'],
+    [/row-level security|permission denied|not allowed|forbidden/i, 'ไม่มีสิทธิ์ทำรายการนี้'],
+    [/invoice not found/i, 'ไม่พบบิลนี้ กรุณารีเฟรชหน้าแล้วลองใหม่'],
+    [/invoice is not payable/i, 'บิลนี้ชำระแล้วหรือรอตรวจสอบอยู่ กรุณารีเฟรชหน้า'],
+    [/payment cannot be edited/i, 'แก้ไขรายการชำระนี้ไม่ได้แล้ว กรุณารีเฟรชหน้า'],
+    [/exceeded the maximum allowed size|payload too large|entity too large/i, 'ไฟล์ใหญ่เกินกำหนด กรุณาเลือกไฟล์ที่เล็กลง'],
+    [/mime type|not supported/i, 'ชนิดไฟล์นี้ใช้ไม่ได้ กรุณาเลือกรูปภาพ'],
+    [/already exists|duplicate key/i, 'ข้อมูลนี้มีอยู่แล้ว กรุณารีเฟรชหน้าแล้วลองใหม่'],
+  ];
+  for (const [re, t] of L) if (re.test(m)) return typeof t == 'function' ? t(m) : t;
+  return m ? 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง (' + m + ')' : 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง';
+}
 const cf = (m, cb) => dg(m, cb);
 const go = p => {
     if (p == 'met' && P != 'met') PER = pcur(); // กดเข้าเมนู → เดือนล่าสุด

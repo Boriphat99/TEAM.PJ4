@@ -475,6 +475,6 @@ async function si(id) {
       `<img src="${c.toDataURL('image/png')}" style="width:100%;border-radius:10px" alt="ใบเสร็จรับเงิน"><p class="mu" style="font-size:13px">กดค้างที่รูป (มือถือ) หรือคลิกขวา (คอมพิวเตอร์) แล้วเลือกบันทึกรูปภาพ</p><button class="b b2" onclick="cm()">ปิด</button>`
     );
   } catch (x) {
-    alert('สร้างรูปไม่สำเร็จ: ' + ((x && x.message) || x));
+    alert('สร้างรูปไม่สำเร็จ: ' + thErr(x));
   }
 }

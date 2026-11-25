@@ -55,7 +55,7 @@ if (SBON) {
     try {
       await sbEnter(1);
     } catch (x) {
-      alert(x.message || x);
+      alert(thErr(x));
     }
   };
   fp = async function () {
@@ -65,7 +65,7 @@ if (SBON) {
     const { error } = await SBX.cl.auth.resetPasswordForEmail(m, {
       redirectTo: location.href.split('#')[0].split('?')[0],
     });
-    if (error) return alert(error.message);
+    if (error) return alert(thErr(error));
     go('login');
     alert('ส่งลิงก์ตั้งรหัสผ่านใหม่ไปที่อีเมลแล้ว กรุณาตรวจสอบกล่องจดหมาย');
   };
@@ -74,7 +74,7 @@ if (SBON) {
     if (pwBad(w)) return alert(pwBad(w));
     if (w != $('#pw2').value) return alert('ยืนยันรหัสผ่านไม่ตรงกัน');
     const { error } = await SBX.cl.auth.updateUser({ password: w });
-    if (error) return alert(error.message);
+    if (error) return alert(thErr(error));
     SBX.recov = false;
     await SBX.cl.auth.signOut();
     try {
@@ -119,7 +119,7 @@ if (SBON) {
     const a = await SBX.cl.auth.signInWithPassword({ email: U.email, password: o });
     if (a.error) return alert('รหัสผ่านปัจจุบันไม่ถูกต้อง');
     const { error } = await SBX.cl.auth.updateUser({ password: w });
-    if (error) return alert(error.message);
+    if (error) return alert(thErr(error));
     lg('เปลี่ยนรหัสผ่าน');
     R();
     alert('เปลี่ยนรหัสผ่านสำเร็จ\nครั้งต่อไปให้เข้าสู่ระบบด้วยรหัสผ่านใหม่');
@@ -186,7 +186,7 @@ if (SBON) {
       up = await SBX.cl.storage
         .from('slips')
         .upload(path, d2b(SLIP), { contentType: 'image/jpeg' });
-    if (up.error) return alert('อัปโหลดสลิปไม่สำเร็จ: ' + up.error.message);
+    if (up.error) return alert('อัปโหลดสลิปไม่สำเร็จ: ' + thErr(up.error));
     const { error } = await SBX.cl.rpc('submit_payment', {
       p_invoice: i._id,
       p_slip: path,
@@ -195,7 +195,7 @@ if (SBON) {
     });
     if (error) {
       SBX.cl.storage.from('slips').remove([path]);
-      return alert(error.message);
+      return alert(thErr(error));
     }
     lg((pd ? 'ส่งสลิปใหม่ ' : 'แจ้งชำระ ') + id);
     cm();
@@ -216,7 +216,7 @@ if (SBON) {
     const up = await SBX.cl.storage
       .from('contracts')
       .upload(path, f, { upsert: true, contentType: 'application/pdf' });
-    if (up.error) return alert('อัปโหลดไม่สำเร็จ: ' + up.error.message);
+    if (up.error) return alert('อัปโหลดไม่สำเร็จ: ' + thErr(up.error));
     u.cpdf = { name: f.name, size: f.size, path };
     lg('อัปโหลดไฟล์สัญญา ห้อง ' + u.room + ' (' + u.name + ')');
     save();
@@ -267,9 +267,9 @@ if (SBON) {
     const up = await SBX.cl.storage
       .from('avatars')
       .upload(path, blob, { contentType: 'image/jpeg' });
-    if (up.error) return alert('อัปโหลดรูปไม่สำเร็จ: ' + up.error.message);
+    if (up.error) return alert('อัปโหลดรูปไม่สำเร็จ: ' + thErr(up.error));
     const r = await SBX.cl.from('users').update({ avatar_path: path }).eq('id', SBX.uid);
-    if (r.error) return alert(r.error.message);
+    if (r.error) return alert(thErr(r.error));
     U.av = pubUrl('avatars', path);
     U._avp = path;
     if (old) SBX.cl.storage.from('avatars').remove([old]);
@@ -282,7 +282,7 @@ if (SBON) {
     cf('ลบรูปโปรไฟล์?', async () => {
       const old = U._avp;
       const r = await SBX.cl.from('users').update({ avatar_path: null }).eq('id', SBX.uid);
-      if (r.error) return alert(r.error.message);
+      if (r.error) return alert(thErr(r.error));
       if (old) SBX.cl.storage.from('avatars').remove([old]);
       delete U.av;
       U._avp = null;
@@ -300,13 +300,13 @@ if (SBON) {
         up = await SBX.cl.storage
           .from('branding')
           .upload(np, d2b(LQ), { contentType: 'image/png' });
-      if (up.error) return alert('อัปโหลดไม่สำเร็จ: ' + up.error.message);
+      if (up.error) return alert('อัปโหลดไม่สำเร็จ: ' + thErr(up.error));
       upd.line_qr_path = np;
     } else if (!LQ) {
       upd.line_qr_path = null;
     }
     const r = await SBX.cl.from('app_settings').update(upd).eq('id', D.set._id);
-    if (r.error) return alert(r.error.message);
+    if (r.error) return alert(thErr(r.error));
     const oq = D.set._lqp;
     if (upd.line_qr_path !== undefined && oq && oq !== upd.line_qr_path)
       SBX.cl.storage
@@ -345,7 +345,7 @@ if (SBON) {
         up = await SBX.cl.storage
           .from('attachments')
           .upload(p, d2b(d), { contentType: 'image/jpeg' });
-      if (up.error) return alert('อัปโหลดรูปไม่สำเร็จ: ' + up.error.message);
+      if (up.error) return alert('อัปโหลดรูปไม่สำเร็จ: ' + thErr(up.error));
       paths.push(p);
     }
     D.tk.unshift({
@@ -379,4 +379,4 @@ try {
     setTimeout(() => tt('✓ ออกจากระบบสำเร็จ' + (RL[lo] ? ' · ' + RL[lo] : '')), 400);
   }
 } catch (x) {}
-if (SBON) sbBoot().catch(x => alert('เชื่อมต่อ Supabase ไม่สำเร็จ: ' + (x.message || x)));
+if (SBON) sbBoot().catch(x => alert('เชื่อมต่อระบบไม่สำเร็จ: ' + thErr(x)));

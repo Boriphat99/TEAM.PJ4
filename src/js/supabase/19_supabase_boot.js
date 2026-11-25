@@ -95,7 +95,7 @@ async function sbBoot() {
     try {
       await sbEnter();
     } catch (x) {
-      alert(x.message || x);
+      alert(thErr(x));
     }
     if (!U) R();
   }
