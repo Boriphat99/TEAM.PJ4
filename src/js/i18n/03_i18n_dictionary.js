@@ -222,6 +222,17 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
 กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า|user groups: owner · admin · tenant
 กลุ่ม|groups
 การดำเนินการด่วน|Quick actions
+ดูบิล จ่ายค่าห้อง และรับใบเสร็จได้ทางออนไลน์|View bills, pay rent and get receipts online
+แจ้งเตือนผ่าน LINE|LINE alerts
+ข้อมูลหอพัก|About the dorm
+ระบบนี้ใช้ทำอะไรได้บ้าง|What you can do here
+วิธีจ่ายค่าห้อง|How to pay rent
+ยินดีต้อนรับ|Welcome
+สรุปการเก็บเงิน|Collection summary
+กราฟและสถิติ|Charts and statistics
+เมนูที่ใช้บ่อย|Common tasks
+ติดต่อหอพักได้ทางโทรศัพท์หรือ LINE|Contact the dorm by phone or LINE
+แจ้งปัญหาหรือสอบถามผู้ดูแลได้ที่นี่ ผู้ดูแลจะตอบกลับในหน้านี้|Report a problem or ask the admin here. Replies appear on this page
 เก็บค่าเช่า ค่าไฟ และออกใบเสร็จผ่านหน้าเว็บ|Collect rent and electricity and issue receipts on the web
 ดูบิลออนไลน์|Bills online
 ตัวเลขของหอพัก|The dorm in numbers

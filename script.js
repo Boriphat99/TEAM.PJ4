@@ -255,6 +255,17 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
 กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า|user groups: owner · admin · tenant
 กลุ่ม|groups
 การดำเนินการด่วน|Quick actions
+ดูบิล จ่ายค่าห้อง และรับใบเสร็จได้ทางออนไลน์|View bills, pay rent and get receipts online
+แจ้งเตือนผ่าน LINE|LINE alerts
+ข้อมูลหอพัก|About the dorm
+ระบบนี้ใช้ทำอะไรได้บ้าง|What you can do here
+วิธีจ่ายค่าห้อง|How to pay rent
+ยินดีต้อนรับ|Welcome
+สรุปการเก็บเงิน|Collection summary
+กราฟและสถิติ|Charts and statistics
+เมนูที่ใช้บ่อย|Common tasks
+ติดต่อหอพักได้ทางโทรศัพท์หรือ LINE|Contact the dorm by phone or LINE
+แจ้งปัญหาหรือสอบถามผู้ดูแลได้ที่นี่ ผู้ดูแลจะตอบกลับในหน้านี้|Report a problem or ask the admin here. Replies appear on this page
 เก็บค่าเช่า ค่าไฟ และออกใบเสร็จผ่านหน้าเว็บ|Collect rent and electricity and issue receipts on the web
 ดูบิลออนไลน์|Bills online
 ตัวเลขของหอพัก|The dorm in numbers
@@ -1344,9 +1355,9 @@ const home0 = () => {
 <section class="ap-hero">
   <div class="ap-hero-tx">
     <h1>ยินดีต้อนรับสู่<br><em>ระบบชำระค่าบริการของหอพัก</em></h1>
-    <p class="ap-sub">เก็บค่าเช่า ค่าไฟ และออกใบเสร็จผ่านหน้าเว็บ</p>
+    <p class="ap-sub">ดูบิล จ่ายค่าห้อง และรับใบเสร็จได้ทางออนไลน์</p>
     <div class="ap-cta"><button class="ap-btn" onclick="go('login')">เริ่มใช้งาน</button><a class="ap-more" onclick="scr('hf')">ดูฟีเจอร์ ›</a></div>
-    <div class="ap-ck"><span>ดูบิลออนไลน์</span><span>ไม่ต้องติดตั้งแอป</span><span>ใช้ได้ทั้งมือถือและคอมพิวเตอร์</span><span>ยอด QR ขึ้นอัตโนมัติ</span></div>
+    <div class="ap-ck"><span>แจ้งเตือนผ่าน LINE</span><span>ไม่ต้องติดตั้งแอป</span><span>ใช้ได้ทั้งมือถือและคอมพิวเตอร์</span><span>ยอด QR ขึ้นอัตโนมัติ</span></div>
     <div class="ap-dev"><div class="pvw"><div class="pv"><div class="pvb"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div><div class="pvx"><div class="pvd"><div class="app"><div class="sb np"><div class="logo" style="margin-bottom:14px"><img class="lgi" src="${LG}" alt=""><div>T&T MANSION<br><small class="ac">PAYMENT SYSTEM</small></div></div>${NVA.map(n => `<div class="nv ${n[0] == 'dash' ? 'on' : ''}"><i>${IC[n[0]] || n[2]}</i><span>${n[1]}</span></div>`).join('')}</div><div class="mn"><div class="top np"><input placeholder="ค้นหาห้อง ผู้เช่า หรือเลขที่บิล (กด Enter)"><span class="me">${av(AD, 36)}<b>${e(AD.name)}</b></span><span class="seg"><span class="${LANG == 'th' ? 'on' : ''}">TH</span><span class="${LANG == 'en' ? 'on' : ''}">EN</span></span><button class="b b2 sm">ออกจากระบบ</button></div>${pg.dash()}</div></div></div></div><span class="pvf">● แดชบอร์ดผู้ดูแลระบบ</span></div>
 <div class="ph"><div class="pnt"></div><div class="phs"><div class="phtop"><span class="me">${av(AD, 26)}<b>${e(AD.name)}</b></span><span class="seg"><span class="${LANG == 'th' ? 'on' : ''}">TH</span><span class="${LANG == 'en' ? 'on' : ''}">EN</span></span></div><b class="pht">ภาพรวมการจัดการ</b><div class="po"><div class="phr">${BLD(30)}<div><b>${nm}</b><small>หอพัก · พิษณุโลก</small></div></div><small>${OC}/${K.N} ห้อง</small><b>${K.op}%</b><div class="pb"><i style="width:${K.op}%"></i></div></div><div class="pt2"><div><small>ห้องทั้งหมด</small><b>${K.N}</b></div><div><small>รายได้เดือนนี้</small><b>฿${fm(K.ic)}</b></div><div><small>ยังไม่ชำระ</small><b>${K.un}</b></div><div><small>ผิดนัดชำระ</small><b>${K.ov}</b></div></div></div><div class="pnb">${NVA.map(n => `<span class="${n[0] == 'dash' ? 'on' : ''}"><i>${IC[n[0]] || n[2]}</i>${n[1]}</span>`).join('')}</div></div></div>
   </div>
@@ -1354,7 +1365,7 @@ const home0 = () => {
 
 <section class="ap-sec ap-stats">
   <div class="ap-in">
-    <h2 class="ap-r">ตัวเลขของหอพัก</h2>
+    <h2 class="ap-r">ข้อมูลหอพัก</h2>
     <div class="ap-who ap-r"><small>รองรับผู้ใช้งาน 3 กลุ่ม</small><div><span>${IC.rooms} เจ้าของหอพัก</span><span>${IC.set} ผู้ดูแลระบบ</span><span>${PI} ผู้เช่า</span></div></div>
     <div class="ap-st">${stats.map(x => `<div class="ap-r"><b>${x[0]}</b><small>${x[1]}</small></div>`).join('')}</div>
     <p class="ap-note">ตัวเลขอ้างอิงจากการตั้งค่าของหอพัก ${e(D.set.name || 'T&T Mansion')}</p>
@@ -1363,14 +1374,14 @@ const home0 = () => {
 
 <section class="ap-sec ap-feat" id="hf">
   <div class="ap-in">
-    <h2 class="ap-r">ระบบทำอะไรได้บ้าง</h2>
+    <h2 class="ap-r">ระบบนี้ใช้ทำอะไรได้บ้าง</h2>
     <div class="ap-grid">${feats.map(f => `<div class="ap-tile ap-r"><i>${IG[f[0]] || f[0]}</i><b>${f[1]}</b><small>${f[2]}</small></div>`).join('')}</div>
   </div>
 </section>
 
 <section class="ap-sec ap-steps" id="hst">
   <div class="ap-in">
-    <h2 class="ap-r">ผู้เช่าชำระเงินอย่างไร</h2>
+    <h2 class="ap-r">วิธีจ่ายค่าห้อง</h2>
     <ol class="ap-ol">${steps.map((t, i) => `<li class="ap-r"><b>${i + 1}</b><span>${t}</span></li>`).join('')}</ol>
     <div class="ap-cta ap-r"><button class="ap-btn" onclick="go('login')">เริ่มใช้งาน</button></div>
   </div>
@@ -1453,7 +1464,7 @@ const auth = (t, s, h, l, lk, lq) =>
   `${bgL(0)}${TGL('fx-tr')}<div class="wrap au"><div class="al"><div class="rings px" style="--k:14"><i class="r1"><b></b></i><i class="r2"><b></b></i></div><div class="logo"><img class="lgi" src="${LG}" alt=""> T&T MANSION</div><h1 class="gt">${t}</h1><p class="mu">${s}</p></div><div class="cd gc">${P == 'forgot' ? '' : '<div class="tabs"><span class="' + (P == 'login' ? 'on' : '') + '" onclick="go(\'login\')">เข้าสู่ระบบ</span></div>'}${h}<p style="text-align:center;margin:18px 0 0" class="mu">${l} <b class="ac" style="cursor:pointer" onclick="go('${lq}')">${lk}</b></p></div></div>`;
 const login = () =>
   auth(
-    'ดูบิลและชำระค่าหอ',
+    'ยินดีต้อนรับ',
     'เข้าสู่ระบบเพื่อตรวจสอบบิลและสถานะการชำระเงินของห้องพัก',
     `<div class="ah"><span class="ib">${IC.lock}</span><div><h2>เข้าสู่ระบบ</h2><small class="mu">สำหรับผู้เช่าและผู้ดูแล</small></div><b class="ac bk" onclick="go('home')">‹ หน้าหลัก</b></div>${fld('em', 'อีเมล', '✉', 'email', `autocomplete="username" placeholder="name@example.com"`)}${fld('pw', 'รหัสผ่าน', '🔑', 'password', `autocomplete="current-password" placeholder="••••••••" onkeydown="if(event.key=='Enter')dl()"`)}<div style="text-align:right;margin:-6px 0 12px"><span class="ac" style="cursor:pointer;font-size:13px" onclick="go('forgot')">ลืมรหัสผ่าน?</span></div><button class="b go" style="width:100%" onclick="dl()">เข้าสู่ระบบ →</button>${typeof pvLoginBox == 'function' && (window.TTM_PV || SBON) ? pvLoginBox() : `<div class="dm"><small class="mu">ทดลองใช้งาน</small><span><button class="b b2 sm" onclick="fl('admin@ttmansion.local','admin123')">ผู้ดูแล</button> <button class="b b2 sm" onclick="fl('owner@ttmansion.local','owner123')">เจ้าของ</button> <button class="b b2 sm" onclick="fl('nattapol@ttmansion.local','1234')">ผู้เช่า</button></span></div>`}`,
     'ยังไม่มีบัญชี? ติดต่อผู้ดูแลหอพักเพื่อขอสร้างบัญชี',
@@ -1889,11 +1900,11 @@ const pg = {
           `<div class="bd" style="font-size:13px"><span><i class="dt" style="background:${x[2]}"></i> ${x[0]}</span><b>${x[1]}</b></div>`
       )
       .join('')}</div>
-<div class="cd live"><div class="ch"><b>สถิติ</b><span class="pl g live-dot" title="อัปเดตอัตโนมัติ"></span></div><div class="mt3"><div><small>เก็บเงิน</small><b>${rate}%</b></div><div><small>ค้างชำระ</small><b>${un + ov} ใบ</b></div><div><small>รายรับเดือนนี้</small><b>฿${fm(ic)}</b></div></div><small class="mu">รายรับ 6 เดือนล่าสุด (บาท)</small>${bc(
+<div class="cd live"><div class="ch"><b>สรุปการเก็บเงิน</b><span class="pl g live-dot" title="อัปเดตอัตโนมัติ"></span></div><div class="mt3"><div><small>เก็บเงิน</small><b>${rate}%</b></div><div><small>ค้างชำระ</small><b>${un + ov} ใบ</b></div><div><small>รายรับเดือนนี้</small><b>฿${fm(ic)}</b></div></div><small class="mu">รายรับ 6 เดือนล่าสุด (บาท)</small>${bc(
       ps.map(inc),
       ps.map(q => ms(q).split(' ')[0])
     )}</div></div>
-<div class="ch" style="justify-content:flex-start;gap:12px;margin:28px 0 12px"><i class="ci">▥</i><div><h3>สถิติ</h3><small class="mu">ข้อมูลจากใบเรียกเก็บเงินและห้องพักทั้งหมด</small></div></div>
+<div class="ch" style="justify-content:flex-start;gap:12px;margin:28px 0 12px"><i class="ci">▥</i><div><h3>กราฟและสถิติ</h3><small class="mu">ข้อมูลจากใบเรียกเก็บเงินและห้องพักทั้งหมด</small></div></div>
 <div class="dg3b"><div class="cd"><small class="mu">เดือนที่แล้ว</small><div class="k">฿${fm(ip)}</div></div><div class="cd"><small class="mu">รวมทั้งปี</small><div class="k">฿${fm(yr)}</div></div><div class="cd"><small class="mu">เทียบเดือนก่อน</small><div class="k" style="color:${dlt < 0 ? '#dc2626' : '#16a34a'}">${dlt > 0 ? '+' : ''}${dlt}%</div></div></div>
 <div class="dg3b"><div class="cd" style="text-align:center"><h3 style="text-align:left;margin-bottom:10px">เก็บเงินเดือนนี้</h3>${dn(rate)}<br><small class="mu">${cp}/${C.length} ใบที่ชำระแล้ว</small></div>
 <div class="cd"><h3 style="margin-bottom:12px">อายุหนี้ค้างชำระ</h3>${[
@@ -1920,7 +1931,7 @@ const pg = {
     )}</div></div>
 <div class="ch" style="margin:22px 0 4px"><h3>ใบเรียกเก็บเงินล่าสุด</h3><b class="ac" style="cursor:pointer" onclick="go('${U && U.role == 'owner' ? 'rep' : 'pay'}')">ดูทั้งหมด ›</b></div><div class="ri">${rc2.map(i => `<div class="cd" onclick="${U && U.role != 'tenant' && i.slip ? 'vsl' : 'vi'}('${i.id}')" style="cursor:pointer;display:flex;gap:12px;align-items:center;padding:16px"><span class="dy">${due(i).getDate()}</span><div style="flex:1;line-height:1.7"><b>${mlab(i)}</b> <span class="rch">ห้อง ${i.room}</span><br><small class="mu">${e((tu(i) || {}).name)}</small><br>${pill(i)}</div><b>฿${fm(tot(i))}</b></div>`).join('') || '<div class="cd mu">ยังไม่มีใบเรียกเก็บเงิน</div>'}</div>
 <div class="row" style="flex-wrap:wrap;margin-top:14px"><div class="cd" style="flex:2;min-width:300px"><div style="display:flex;justify-content:space-between"><div><h3>สถานะห้องพัก</h3><small class="mu">คลิกห้องเพื่อแก้ไขข้อมูล</small></div><b class="ac" style="cursor:pointer" onclick="go('rooms')">ดูทั้งหมด ›</b></div><br>${rg()}</div>
-<div class="cd" style="flex:1;min-width:240px"><h3>ทางลัด</h3><br>${U && U.role == 'owner' ? `<div class="cd nv rok" style="margin-bottom:10px" onclick="goSlips('all')">สลิปโอนเงินของผู้เช่า</div><div class="cd nv rok" style="margin-bottom:10px" onclick="goSlips('paid')">ใบเสร็จรับเงินของผู้เช่า</div><div class="cd nv rok" onclick="go('rep')">รายงานสรุปรายได้</div>` : `<div class="cd nv" style="margin-bottom:10px" onclick="go('met')">บันทึกเลขมิเตอร์</div><div class="cd nv" style="margin-bottom:10px" onclick="go('met')">ออกใบแจ้งหนี้</div><div class="cd nv" onclick="F='pending';go('pay')">ตรวจสอบสลิป</div>`}</div></div>
+<div class="cd" style="flex:1;min-width:240px"><h3>เมนูที่ใช้บ่อย</h3><br>${U && U.role == 'owner' ? `<div class="cd nv rok" style="margin-bottom:10px" onclick="goSlips('all')">สลิปโอนเงินของผู้เช่า</div><div class="cd nv rok" style="margin-bottom:10px" onclick="goSlips('paid')">ใบเสร็จรับเงินของผู้เช่า</div><div class="cd nv rok" onclick="go('rep')">รายงานสรุปรายได้</div>` : `<div class="cd nv" style="margin-bottom:10px" onclick="go('met')">บันทึกเลขมิเตอร์</div><div class="cd nv" style="margin-bottom:10px" onclick="go('met')">ออกใบแจ้งหนี้</div><div class="cd nv" onclick="F='pending';go('pay')">ตรวจสอบสลิป</div>`}</div></div>
 <div class="cd" style="margin-top:14px"><h3>ใบแจ้งหนี้ประจำเดือน</h3><small class="mu">ค่าเช่า ฿${fm(D.set.rent)} + ค่าไฟ ฿${D.set.rate}/หน่วย</small>${flt()}${tbl()}</div>`;
   },
   rooms() {
@@ -3365,8 +3376,8 @@ pg.help = () => {
     ad = U.role == 'admin',
     tk = (D.tk = D.tk || []).filter(t => ad || t.uid == U.id).sort((a, b) => b.t - a.t),
     id = (S.line || '').trim();
-  return `<div class="hd2"><div><h2>ศูนย์ช่วยเหลือ</h2><p class="mu" style="margin:2px 0">ส่งเรื่องถึงผู้ดูแล คำตอบจะขึ้นในหน้านี้</p></div></div>
-<div class="hlp" style="max-width:780px"><h3 style="margin:18px 0 4px">ช่องทางการติดต่อ</h3><p class="mu" style="margin:0 0 12px">เบอร์โทรและ LINE ของหอพัก</p>
+  return `<div class="hd2"><div><h2>ศูนย์ช่วยเหลือ</h2><p class="mu" style="margin:2px 0">แจ้งปัญหาหรือสอบถามผู้ดูแลได้ที่นี่ ผู้ดูแลจะตอบกลับในหน้านี้</p></div></div>
+<div class="hlp" style="max-width:780px"><h3 style="margin:18px 0 4px">ช่องทางการติดต่อ</h3><p class="mu" style="margin:0 0 12px">ติดต่อหอพักได้ทางโทรศัพท์หรือ LINE</p>
 <div class="ln2"><div class="lnh"><i class="lni"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.5 1.4 4.7 3.7 6.2-.2.8-.7 2.7-.8 3.1 0 0-.1.3.2.4.2.1.4 0 .4 0 .5-.1 3-2 4.1-2.8.8.1 1.6.2 2.4.2 5.5 0 10-3.6 10-8S17.5 3 12 3z"/></svg></i><b>LINE ติดต่อสอบถาม</b></div><div class="lnb"><div class="lq">${S.lineqr ? `<img src="${S.lineqr}" alt="QR LINE">` : 'พื้นที่ใส่ QR LINE<br>' + (ad ? '(กดแก้ไขเพื่อเพิ่ม)' : '(ผู้ดูแลยังไม่ได้เพิ่ม)')}</div><div class="lnx"><h3 class="lid">${id ? e(id) : 'ยังไม่ได้ตั้งค่า LINE ID'}</h3><small class="mu lns">ติดต่อสอบถาม · ${PN()}</small><p class="mu lnt">สแกน QR หรือค้นหา LINE ID เพื่อพูดคุยกับผู้ดูแลหอพัก</p><div class="lna">${id ? `<a class="b lgb" target="_blank" rel="noopener" href="${lnUrl(id)}">เพิ่มเพื่อนใน LINE</a>` : ''}${ad ? '<button class="b b2 sm" onclick="le()">แก้ไข LINE</button>' : ''}</div></div></div>${lnBotRow(ad)}</div>
 ${ad ? '' : contactCard()}${ad ? '' : `<h3 style="margin:28px 0 12px">ส่งคำขอใหม่</h3><div class="cd"><label>หมวดหมู่</label><select id="tkc"><option value="">เลือกหมวดหมู่</option>${['ปัญหาการชำระเงิน', 'ใบแจ้งหนี้ / ค่าไฟ', 'ซ่อมบำรุง', 'บัญชีผู้ใช้', 'อื่นๆ'].map(x => `<option>${x}</option>`).join('')}</select><label>หัวข้อ</label><input id="tkt" placeholder="อธิบายปัญหาโดยย่อ" maxlength="100"><label>รายละเอียด</label><textarea id="tkb" rows="4" placeholder="กรุณาอธิบายปัญหาอย่างละเอียด..."></textarea><label>แนบรูปภาพ (ไม่บังคับ)</label><div style="margin:6px 0"><input type="file" id="tkf" accept="image/jpeg,image/png,image/webp" multiple hidden onchange="tki(this)"><button class="b b2 sm" onclick="$('#tkf').click()">แนบรูปภาพ</button> <small class="mu">สูงสุด 5 รูป (JPEG, PNG, WebP) · ไม่เกิน 5MB ต่อรูป</small></div><div id="tkp" class="fl"></div><div style="text-align:right"><button class="b" onclick="tks()">ส่งคำขอ</button></div></div>`}
 <h3 style="margin:28px 0 12px">${ad ? 'คำขอความช่วยเหลือจากผู้ใช้' : 'คำขอของฉัน'}</h3>${
