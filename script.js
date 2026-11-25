@@ -255,6 +255,7 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
 กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า|user groups: owner · admin · tenant
 กลุ่ม|groups
 การดำเนินการด่วน|Quick actions
+ระบบยังส่งอีเมลไปที่อีเมลนี้ไม่ได้ กรุณาติดต่อผู้ดูแลหอพักให้ช่วยตั้งรหัสผ่านใหม่|We cannot send email to this address yet. Please ask the dorm admin to reset your password
 การเข้าสู่ระบบหมดอายุ กรุณาออกจากระบบแล้วเข้าสู่ระบบใหม่|Your session has expired. Please sign out and sign in again
 ทำรายการบ่อยเกินไป กรุณารอสักครู่แล้วลองใหม่|Too many attempts. Please wait a moment and try again
 รหัสผ่านใหม่ต้องไม่ซ้ำกับรหัสผ่านเดิม|The new password must differ from the old one
@@ -1319,6 +1320,7 @@ function thErr(x) {
     [/failed to fetch|networkerror|load failed|network request failed|timeout|timed out/i, 'เชื่อมต่ออินเทอร์เน็ตไม่ได้ กรุณาตรวจสอบสัญญาณแล้วลองใหม่'],
     [/jwt expired|invalid jwt|auth session missing|refresh token|not authenticated|session.*(expired|not found)/i, 'การเข้าสู่ระบบหมดอายุ กรุณาออกจากระบบแล้วเข้าสู่ระบบใหม่'],
     [/only request this after (\d+) seconds?/i, s => 'ขอบ่อยเกินไป กรุณารอ ' + s.match(/(\d+) seconds?/i)[1] + ' วินาทีแล้วลองใหม่'],
+    [/email address not authorized|email_address_not_authorized/i, 'ระบบยังส่งอีเมลไปที่อีเมลนี้ไม่ได้ กรุณาติดต่อผู้ดูแลหอพักให้ช่วยตั้งรหัสผ่านใหม่'],
     [/rate limit|too many requests/i, 'ทำรายการบ่อยเกินไป กรุณารอสักครู่แล้วลองใหม่'],
     [/should be different from the old password/i, 'รหัสผ่านใหม่ต้องไม่ซ้ำกับรหัสผ่านเดิม'],
     [/password should be at least/i, 'รหัสผ่านสั้นเกินไป'],
