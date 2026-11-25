@@ -1335,19 +1335,61 @@ function thErr(x) {
   return m ? 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง (' + m + ')' : 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง';
 }
 const cf = (m, cb) => dg(m, cb);
-const go = p => {
+// ปุ่มย้อนกลับของมือถือ/เบราว์เซอร์: ปิดหน้าต่างที่เปิดอยู่ หรือกลับไปหน้าก่อนหน้าในระบบ
+// (เดิมกดย้อนกลับแล้วหลุดออกจากเว็บทันที) · เก็บประวัติเฉพาะตอนล็อกอินแล้ว
+const HS = { skip: 0 },
+  // หน้าแรกที่เปิดยังไม่มีป้าย → ติดป้ายหน้าปัจจุบันก่อน กดย้อนกลับมาจะได้รู้ว่าเป็นหน้าไหน
+  hsTag = () => {
+    try {
+      if (!(history.state && history.state.ttm)) history.replaceState({ ttm: 1, p: P }, '');
+    } catch (_) {}
+  },
+  hsPush = st => {
+    try {
+      hsTag();
+      history.pushState(Object.assign({ ttm: 1 }, st), '');
+    } catch (_) {}
+  };
+const go = (p, nh) => {
     if (p == 'met' && P != 'met') PER = pcur(); // กดเข้าเมนู → เดือนล่าสุด
+    const from = P;
+    if (!nh && U) hsTag();
     P = p;
     R();
+    // บันทึกหน้าที่ไปถึงจริง (ถ้าเมนูนั้นไม่มีสิทธิ์ ระบบจะพาไปหน้าอื่นเอง)
+    if (!nh && U && P != from) hsPush({ p: P });
   },
   mo = h => {
     $('#mc').style.maxWidth = '';
     $('#mc').innerHTML = h;
+    if (U && $('#mo').style.display != 'flex') hsPush({ p: P, m: 1 });
     $('#mo').style.display = 'flex';
   },
   cm = () => {
     $('#mo').style.display = 'none';
+    if (history.state && history.state.ttm && history.state.m) {
+      HS.skip = 1;
+      history.back();
+    }
   };
+window.addEventListener('popstate', ev => {
+  if (HS.skip) {
+    HS.skip = 0;
+    return;
+  }
+  const dgEl = $('#dg');
+  if (dgEl && dgEl.style.display == 'flex') {
+    dgEl.style.display = 'none'; // กล่องยืนยัน: ถือว่ากดยกเลิก
+    if (U) hsPush({ p: P });
+    return;
+  }
+  if ($('#mo').style.display == 'flex') {
+    $('#mo').style.display = 'none';
+    return;
+  }
+  const st = ev.state;
+  if (U && st && st.ttm && st.p && st.p != P) go(st.p, 1);
+});
 
 /* 10_pages_public_auth.js — หน้าต้อนรับ เข้าสู่ระบบ ลืมรหัสผ่าน ออกจากระบบ
    (แยกมาจาก script.js บรรทัด 900-951; โหลดเรียงตามเลขหน้าชื่อไฟล์ใน index.html) */
