@@ -907,14 +907,11 @@ html.ap-js .apl .ap-vbox:is(.ap-on, .ap-done) .ap-ring {
 .apl .ap-bn::before {
   content: '';
   position: absolute;
-  inset: -50%;
+  inset: 0;
   z-index: -1;
-  background: conic-gradient(from 0deg, transparent 0 70%, rgba(255, 220, 160, 0.35) 80%, transparent 90%);
-  animation: apSpin 9s linear infinite paused;
-  will-change: transform;
-}
-.apl .ap-bn.ap-see::before {
-  animation-play-state: running;
+  background:
+    radial-gradient(40% 60% at 85% 100%, rgba(255, 190, 150, 0.28), transparent 70%),
+    radial-gradient(30% 50% at 50% 0%, rgba(255, 255, 255, 0.1), transparent 70%);
 }
 .apl .ap-bn::after {
   content: '';
@@ -922,11 +919,6 @@ html.ap-js .apl .ap-vbox:is(.ap-on, .ap-done) .ap-ring {
   inset: 0;
   z-index: -1;
   background: radial-gradient(60% 80% at 15% 10%, rgba(255, 255, 255, 0.22), transparent 60%);
-}
-@keyframes apSpin {
-  to {
-    transform: rotate(360deg);
-  }
 }
 .apl .ap-bn h2 {
   margin: 0 0 10px;
@@ -939,16 +931,16 @@ html.ap-js .apl .ap-vbox:is(.ap-on, .ap-done) .ap-ring {
   color: rgba(255, 255, 255, 0.9);
   font-size: 16px;
 }
-.apl .ap-btn.ap-btn-w {
+html .apl .ap-btn.ap-btn-w,
+html[data-theme='dark'] .apl .ap-btn.ap-btn-w {
   background: #fff !important;
   color: #9e0f2c !important;
   box-shadow: 0 10px 26px -8px rgba(0, 0, 0, 0.35);
 }
-.apl .ap-btn.ap-btn-w::after {
+html .apl .ap-btn.ap-btn-w::after {
   background: linear-gradient(100deg, rgba(158, 15, 44, 0) 0%, rgba(158, 15, 44, 0.18) 50%, rgba(158, 15, 44, 0) 100%) !important;
 }
 @media (prefers-reduced-motion: reduce) {
-  .apl .ap-bn::before,
   .apl .ap-live i {
     animation: none;
   }

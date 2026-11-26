@@ -182,7 +182,6 @@
     });
     // 4) หน้าต้อนรับ: ลูกเล่นตอนเลื่อน (การ์ดโผล่ทีละใบ ตัวเลขนับขึ้น เส้นขั้นตอน ภาพเอียง)
     const apFx = () => {
-      try { document.querySelectorAll('.ap-bn').forEach((b) => { if (b._io) return; b._io = new IntersectionObserver((e) => b.classList.toggle('ap-see', e[0].isIntersecting)); b._io.observe(b); }); } catch (e) {}
       const root = document.querySelector('.apl');
       if (!root || root.dataset.fx) return;
       root.dataset.fx = '1';
