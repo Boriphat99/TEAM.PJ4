@@ -1562,6 +1562,7 @@ const home0 = () => {
   <div class="ap-in">
     <h2 class="ap-r">วิธีจ่ายค่าห้อง</h2>
     <ol class="ap-ol">${steps.map((t, i) => `<li class="ap-r"><b>${i + 1}</b><span>${t}</span></li>`).join('')}</ol>
+    <div class="ap-cta ap-r"><button class="ap-btn" onclick="go('login')">เริ่มใช้งาน</button></div>
   </div>
 </section>
 
@@ -1569,16 +1570,6 @@ const home0 = () => {
   <div class="ap-in">
     <h2 class="ap-r">คำถามที่พบบ่อย</h2>
     <div class="ap-qs">${faq.map(q => `<details class="ap-q ap-r"><summary>${q[0]}<i>+</i></summary><p>${q[1]}</p></details>`).join('')}</div>
-  </div>
-</section>
-
-<section class="ap-sec ap-band">
-  <div class="ap-in">
-    <div class="ap-bn ap-r">
-      <h2>พร้อมใช้งานแล้ว</h2>
-      <p>เข้าสู่ระบบด้วยบัญชีที่ได้รับจากผู้ดูแลหอพัก ดูบิลและจ่ายค่าห้องได้ทันที</p>
-      <button class="ap-btn ap-btn-w" onclick="go('login')">เข้าสู่ระบบ</button>
-    </div>
   </div>
 </section>
 
