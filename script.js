@@ -255,6 +255,9 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
 กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า|user groups: owner · admin · tenant
 กลุ่ม|groups
 การดำเนินการด่วน|Quick actions
+มีบัญชีแล้ว?|Have an account?
+เข้าสู่ระบบเพื่อดูบิลและจ่ายค่าห้อง|Sign in to view bills and pay rent
+มีคำถาม? ดูคำถามที่พบบ่อย|Questions? See the FAQ
 ข้อมูลล่าสุดจากระบบ|Live from the system
 ห้องว่างตอนนี้|Rooms available now
 สนใจเข้าพัก สอบถามหรือนัดดูห้องกับผู้ดูแลหอพักได้เลย|Interested? Ask the dorm admin or book a viewing
@@ -1562,7 +1565,7 @@ const home0 = () => {
   <div class="ap-in">
     <h2 class="ap-r">วิธีจ่ายค่าห้อง</h2>
     <ol class="ap-ol">${steps.map((t, i) => `<li class="ap-r"><b>${i + 1}</b><span>${t}</span></li>`).join('')}</ol>
-    <div class="ap-cta ap-r"><button class="ap-btn" onclick="go('login')">เริ่มใช้งาน</button></div>
+    <div class="ap-cta ap-cta2 ap-r"><div class="ap-pill"><span class="ap-ptx"><b>มีบัญชีแล้ว?</b> เข้าสู่ระบบเพื่อดูบิลและจ่ายค่าห้อง</span><button class="ap-btn ap-go" onclick="go('login')">เริ่มใช้งาน<i aria-hidden="true">→</i></button></div><a class="ap-qlink" onclick="scr('hq')">มีคำถาม? ดูคำถามที่พบบ่อย</a></div>
   </div>
 </section>
 

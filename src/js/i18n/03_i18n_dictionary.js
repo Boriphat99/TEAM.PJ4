@@ -222,6 +222,9 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
 กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า|user groups: owner · admin · tenant
 กลุ่ม|groups
 การดำเนินการด่วน|Quick actions
+มีบัญชีแล้ว?|Have an account?
+เข้าสู่ระบบเพื่อดูบิลและจ่ายค่าห้อง|Sign in to view bills and pay rent
+มีคำถาม? ดูคำถามที่พบบ่อย|Questions? See the FAQ
 ข้อมูลล่าสุดจากระบบ|Live from the system
 ห้องว่างตอนนี้|Rooms available now
 สนใจเข้าพัก สอบถามหรือนัดดูห้องกับผู้ดูแลหอพักได้เลย|Interested? Ask the dorm admin or book a viewing

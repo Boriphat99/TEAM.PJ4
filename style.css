@@ -11163,3 +11163,84 @@ html .apl .ap-btn.ap-btn-w::after {
   }
 }
 
+/* ปุ่มเริ่มใช้งานใต้ขั้นตอนจ่ายเงิน */
+.apl .ap-cta2 {
+  flex-direction: column;
+  gap: 14px;
+}
+.apl .ap-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  padding: 8px 8px 8px 24px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 18px 40px -18px rgba(60, 10, 20, 0.45);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+html[data-theme='dark'] .apl .ap-pill {
+  background: rgba(22, 18, 32, 0.78);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+.apl .ap-ptx {
+  font-size: 14px;
+  color: var(--ap-mu);
+}
+.apl .ap-ptx b {
+  color: var(--ap-tx, inherit);
+  font-weight: 600;
+}
+.apl .ap-btn.ap-go {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+.apl .ap-go i {
+  font-style: normal;
+  transition: transform 0.25s ease;
+}
+.apl .ap-go:hover i {
+  transform: translateX(4px);
+}
+.apl .ap-go::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  border: 2px solid rgba(212, 42, 70, 0.5);
+  opacity: 0;
+  animation: apPulse 2.6s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes apPulse {
+  0% { opacity: 0.7; transform: scale(1); }
+  70%, 100% { opacity: 0; transform: scale(1.18); }
+}
+.apl .ap-qlink {
+  font-size: 13px;
+  color: #fff;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  opacity: 0.9;
+}
+.apl .ap-qlink:hover {
+  opacity: 1;
+}
+@media (max-width: 600px) {
+  .apl .ap-pill {
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: 22px;
+    text-align: center;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .apl .ap-go::before { animation: none; }
+}
+
