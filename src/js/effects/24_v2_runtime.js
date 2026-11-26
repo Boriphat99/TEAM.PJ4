@@ -232,6 +232,102 @@
       );
       root.querySelectorAll('.ap-r, .ap-ol').forEach(el => ob.observe(el));
       apTilt();
+      // 4) หัวข้อใหญ่: บรรทัดแรกโผล่ทีละคำ แล้วบรรทัดสีปาดเข้ามา
+      const h1 = root.querySelector('.ap-hero h1');
+      if (h1) {
+        const seg =
+          window.Intl && Intl.Segmenter ? new Intl.Segmenter(document.documentElement.lang || 'th', { granularity: 'word' }) : null;
+        let k = 0;
+        [...h1.childNodes].forEach(n => {
+          if (n.nodeType != 3 || !n.textContent.trim()) return;
+          const parts = seg ? [...seg.segment(n.textContent)].map(x => x.segment) : n.textContent.split(/(\s+)/),
+            fr = document.createDocumentFragment();
+          parts.forEach(t => {
+            if (!t.trim()) return fr.appendChild(document.createTextNode(t));
+            const sp = document.createElement('span');
+            sp.className = 'ap-w';
+            sp.textContent = t;
+            sp.style.setProperty('--d', 120 + k++ * 110 + 'ms');
+            fr.appendChild(sp);
+          });
+          n.replaceWith(fr);
+        });
+        const em = h1.querySelector('em');
+        if (em) {
+          em.classList.add('ap-wipe');
+          em.style.setProperty('--d', 200 + k * 110 + 'ms');
+        }
+      }
+      // 3) แถบระยะการเลื่อน
+      const nav = root.querySelector('.ap-nav');
+      if (nav && !nav.querySelector('.ap-prog')) {
+        const pr = document.createElement('i');
+        pr.className = 'ap-prog';
+        nav.appendChild(pr);
+      }
+      apScroll();
+      // 2) การ์ดเอียงตามเมาส์ (เฉพาะอุปกรณ์ที่มีเมาส์)
+      if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        const sel = '.ap-tile, .ap-ol li, .ap-st > div';
+        root.addEventListener('pointermove', ev => {
+          const c = ev.target.closest && ev.target.closest(sel);
+          if (!c || c.classList.contains('ap-r')) return;
+          const r = c.getBoundingClientRect(),
+            x = (ev.clientX - r.left) / r.width,
+            y = (ev.clientY - r.top) / r.height;
+          c.style.setProperty('--ry', ((x - 0.5) * 12).toFixed(2) + 'deg');
+          c.style.setProperty('--rx', ((0.5 - y) * 10).toFixed(2) + 'deg');
+          c.style.setProperty('--mx', (x * 100).toFixed(1) + '%');
+          c.style.setProperty('--my', (y * 100).toFixed(1) + '%');
+          c.classList.add('ap-tl');
+        });
+        root.addEventListener('pointerout', ev => {
+          const c = ev.target.closest && ev.target.closest(sel);
+          if (c && !c.contains(ev.relatedTarget)) c.classList.remove('ap-tl');
+        });
+      }
+      // 7) จอตัวอย่างระบบเลื่อนให้ดูเอง (หยุดเมื่อชี้เมาส์ หรือเมื่อเลื่อนหน้าผ่านไปแล้ว)
+      const box = root.querySelector('.ap-dev .pvx');
+      if (box) {
+        let vis = true,
+          hov = false,
+          dir = 1,
+          wait = performance.now() + 1800,
+          last = performance.now();
+        new IntersectionObserver(es => (vis = es[0].isIntersecting)).observe(box);
+        box.addEventListener('pointerenter', () => (hov = true));
+        box.addEventListener('pointerleave', () => (hov = false));
+        const step = now => {
+          if (!box.isConnected) return;
+          const dt = Math.min(64, now - last);
+          last = now;
+          const max = box.scrollHeight - box.clientHeight;
+          if (vis && !hov && max > 0 && now > wait) {
+            box.scrollTop += dir * dt * (dir > 0 ? 0.045 : 0.16);
+            if (dir > 0 && box.scrollTop >= max - 1) (dir = -1), (wait = now + 1600);
+            else if (dir < 0 && box.scrollTop <= 0) (dir = 1), (wait = now + 2200);
+          }
+          requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      }
+    };
+    // 3) + 6) แถบระยะการเลื่อน และไฮไลต์เมนูตามส่วนที่กำลังดู
+    const apScroll = () => {
+      const root = document.querySelector('.apl');
+      if (!root) return;
+      const de = document.documentElement,
+        p = Math.max(0, Math.min(1, scrollY / Math.max(1, de.scrollHeight - innerHeight))),
+        pr = root.querySelector('.ap-prog');
+      if (pr) pr.style.setProperty('--p', p.toFixed(4));
+      const ln = root.querySelectorAll('.ap-links a'),
+        y = scrollY + innerHeight * 0.4,
+        top = id => {
+          const el = document.getElementById(id);
+          return el ? el.getBoundingClientRect().top + scrollY : 1e9;
+        };
+      const on = p > 0.98 || y >= top('hst') ? 2 : y >= top('hf') ? 1 : 0;
+      ln.forEach((a, i) => a.classList.toggle('on', i == on));
     };
     // ภาพตัวอย่างระบบเอียง ~14° ตอนอยู่บนสุด แล้วค่อยๆ ตั้งตรงเมื่อเลื่อนลง
     let apTk = 0;
@@ -246,7 +342,11 @@
     window.addEventListener(
       'scroll',
       () => {
-        if (!apTk) apTk = requestAnimationFrame(apTilt);
+        if (!apTk)
+          apTk = requestAnimationFrame(() => {
+            apTilt();
+            apScroll();
+          });
       },
       { passive: true }
     );
