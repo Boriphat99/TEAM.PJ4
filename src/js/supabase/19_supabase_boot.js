@@ -117,6 +117,7 @@ async function sbExpired() {
 async function sbBoot() {
   await sbInit();
   pubLoad(true);
+  pubInfoLoad();
   const {
     data: { session },
   } = await SBX.cl.auth.getSession();

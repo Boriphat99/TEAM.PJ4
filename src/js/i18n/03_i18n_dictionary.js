@@ -222,6 +222,31 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
 กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า|user groups: owner · admin · tenant
 กลุ่ม|groups
 การดำเนินการด่วน|Quick actions
+ข้อมูลล่าสุดจากระบบ|Live from the system
+ห้องว่างตอนนี้|Rooms available now
+สนใจเข้าพัก สอบถามหรือนัดดูห้องกับผู้ดูแลหอพักได้เลย|Interested? Ask the dorm admin or book a viewing
+ห้องว่าง|available
+จากทั้งหมด|of
+คำถามที่พบบ่อย|FAQ
+คำถาม|FAQ
+ชำระค่าห้องได้ช่องทางไหนบ้าง|How can I pay?
+สแกน QR พร้อมเพย์ในหน้าใบแจ้งหนี้ ยอดเงินขึ้นให้เอง แล้วแนบสลิปในระบบ หรือชำระเป็นเงินสดกับผู้ดูแลหอพัก|Scan the PromptPay QR on your bill (the amount fills in for you) and attach the slip, or pay the dorm admin in cash
+ต้องจ่ายภายในวันไหน มีค่าปรับไหม|When is payment due? Is there a late fee?
+ชำระภายในวันที่|Pay by day
+ของเดือน ถ้าเลยกำหนดคิดค่าปรับวันละ|of the month. Late payments are charged per day
+ส่งสลิปแล้วต้องทำอะไรต่อ|What happens after I send a slip?
+รอผู้ดูแลตรวจสอบ เมื่ออนุมัติแล้วจะได้ใบเสร็จในระบบ ถ้าเชื่อม LINE ไว้จะได้รับแจ้งทาง LINE ด้วย|The admin checks it. Once approved, your receipt appears in the system, and on LINE if you have linked it
+ใบเสร็จตรวจสอบได้ไหมว่าเป็นของจริง|Can I check that a receipt is genuine?
+ได้ ใบเสร็จทุกใบมี QR สแกนแล้วระบบจะบอกว่าใบเสร็จนี้ออกจากระบบจริงหรือไม่|Yes. Every receipt has a QR code; scan it and the system confirms whether it is genuine
+ได้บัญชีเข้าใช้งานจากไหน|How do I get an account?
+ผู้ดูแลหอพักสร้างบัญชีให้ตอนทำสัญญาเช่า เข้าสู่ระบบครั้งแรกแล้วควรเปลี่ยนรหัสผ่านใหม่|The dorm admin creates it when you sign the lease. Change your password after your first sign-in
+ลืมรหัสผ่านทำอย่างไร|I forgot my password
+กด “ลืมรหัสผ่าน” ที่หน้าเข้าสู่ระบบ ระบบจะส่งลิงก์ตั้งรหัสใหม่ไปที่อีเมล หรือติดต่อผู้ดูแลหอพัก|Tap “Forgot password” on the sign-in page to get a reset link by email, or contact the dorm admin
+รับแจ้งเตือนทาง LINE ได้ไหม|Can I get LINE notifications?
+ได้ หลังเข้าสู่ระบบไปที่เมนู LINE แล้วเชื่อมบัญชี จะได้รับแจ้งบิลใหม่ เตือนก่อนครบกำหนด และใบเสร็จ|Yes. After signing in, open the LINE menu and link your account to get new bills, due-date reminders and receipts
+พร้อมใช้งานแล้ว|Ready when you are
+เข้าสู่ระบบด้วยบัญชีที่ได้รับจากผู้ดูแลหอพัก ดูบิลและจ่ายค่าห้องได้ทันที|Sign in with the account from your dorm admin to view bills and pay rent right away
+ติดต่อหอพัก|Contact the dorm
 การเข้าสู่ระบบหมดอายุ หรือมีการออกจากระบบจากเครื่องอื่น|Your session has ended, or you were signed out on another device
 กรุณาเข้าสู่ระบบใหม่|Please sign in again
 ระบบยังส่งอีเมลไปที่อีเมลนี้ไม่ได้ กรุณาติดต่อผู้ดูแลหอพักให้ช่วยตั้งรหัสผ่านใหม่|We cannot send email to this address yet. Please ask the dorm admin to reset your password

@@ -182,6 +182,7 @@
     });
     // 4) หน้าต้อนรับ: ลูกเล่นตอนเลื่อน (การ์ดโผล่ทีละใบ ตัวเลขนับขึ้น เส้นขั้นตอน ภาพเอียง)
     const apFx = () => {
+      try { document.querySelectorAll('.ap-bn').forEach((b) => { if (b._io) return; b._io = new IntersectionObserver((e) => b.classList.toggle('ap-see', e[0].isIntersecting)); b._io.observe(b); }); } catch (e) {}
       const root = document.querySelector('.apl');
       if (!root || root.dataset.fx) return;
       root.dataset.fx = '1';
@@ -330,11 +331,11 @@
           const el = document.getElementById(id);
           return el ? el.getBoundingClientRect().top + scrollY : 1e9;
         };
-        apScroll.c = { h: de2.scrollHeight, r: root, hf: top('hf'), hst: top('hst') };
+        apScroll.c = { h: de2.scrollHeight, r: root, hf: top('hf'), hst: top('hst'), hq: top('hq') };
       }
       const c = apScroll.c,
         y = scrollY + innerHeight * 0.4,
-        on = p > 0.98 || y >= c.hst ? 2 : y >= c.hf ? 1 : 0;
+        on = p > 0.98 || y >= c.hq ? 3 : y >= c.hst ? 2 : y >= c.hf ? 1 : 0;
       if (apScroll.on !== on || apScroll.r2 != root) {
         apScroll.on = on;
         apScroll.r2 = root;

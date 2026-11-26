@@ -20,6 +20,31 @@ const scr = id => {
   const x = document.getElementById(id);
   x && x.scrollIntoView({ behavior: 'smooth' });
 };
+// ข้อมูลหอสำหรับหน้าต้อนรับ: ระบบจริงใช้ public_info() (ห้องว่าง/ติดต่อ/อัตรา) · โหมดทดลองคำนวณจากข้อมูลในเครื่อง
+var PUBI = null;
+async function pubInfoLoad() {
+  if (!SBON || !SBX.cl || window.TTM_PV) return;
+  try {
+    const { data, error } = await SBX.cl.rpc('public_info');
+    if (error || !data) return;
+    PUBI = data;
+    if (!U && P == 'home') R();
+  } catch (_) {}
+}
+function pinfo() {
+  const S = D.set,
+    q = PUBI && !window.TTM_PV ? PUBI : null;
+  return {
+    total: q ? +q.total : D.rooms.filter(r => r.st != 'maint').length,
+    free: q ? +q.free : D.rooms.filter(r => vac(r)).length,
+    phone: (q ? q.phone : S.tel) || '',
+    line: (q ? q.line : S.line) || '',
+    rent: +(q ? q.rent : S.rent) || 0,
+    due: +(q ? q.due : S.due) || 5,
+    fpd: +(q ? q.fpd : S.fpd) || 50,
+    max: +(q ? q.max : S.max) || 0,
+  };
+}
 const home0 = () => {
   const K = kp(),
     nm = e(D.set.name || 'T&T Mansion'),
@@ -39,11 +64,23 @@ const home0 = () => {
     ['3', 'กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า'],
     ['฿' + D.set.rate, 'ค่าไฟต่อหน่วย คำนวณอัตโนมัติ'],
   ];
+  const PIF = pinfo(),
+    tel = PIF.phone.replace(/[^0-9+]/g, ''),
+    lineUrl = 'https://line.me/R/ti/p/~' + encodeURIComponent(PIF.line),
+    faq = [
+      ['ชำระค่าห้องได้ช่องทางไหนบ้าง', 'สแกน QR พร้อมเพย์ในหน้าใบแจ้งหนี้ ยอดเงินขึ้นให้เอง แล้วแนบสลิปในระบบ หรือชำระเป็นเงินสดกับผู้ดูแลหอพัก'],
+      ['ต้องจ่ายภายในวันไหน มีค่าปรับไหม', `ชำระภายในวันที่ ${PIF.due} ของเดือน ถ้าเลยกำหนดคิดค่าปรับวันละ ฿${fm(PIF.fpd)}${PIF.max ? ' สูงสุดไม่เกิน ฿' + fm(PIF.max) : ''}`],
+      ['ส่งสลิปแล้วต้องทำอะไรต่อ', 'รอผู้ดูแลตรวจสอบ เมื่ออนุมัติแล้วจะได้ใบเสร็จในระบบ ถ้าเชื่อม LINE ไว้จะได้รับแจ้งทาง LINE ด้วย'],
+      ['ใบเสร็จตรวจสอบได้ไหมว่าเป็นของจริง', 'ได้ ใบเสร็จทุกใบมี QR สแกนแล้วระบบจะบอกว่าใบเสร็จนี้ออกจากระบบจริงหรือไม่'],
+      ['ได้บัญชีเข้าใช้งานจากไหน', 'ผู้ดูแลหอพักสร้างบัญชีให้ตอนทำสัญญาเช่า เข้าสู่ระบบครั้งแรกแล้วควรเปลี่ยนรหัสผ่านใหม่'],
+      ['ลืมรหัสผ่านทำอย่างไร', 'กด “ลืมรหัสผ่าน” ที่หน้าเข้าสู่ระบบ ระบบจะส่งลิงก์ตั้งรหัสใหม่ไปที่อีเมล หรือติดต่อผู้ดูแลหอพัก'],
+      ['รับแจ้งเตือนทาง LINE ได้ไหม', 'ได้ หลังเข้าสู่ระบบไปที่เมนู LINE แล้วเชื่อมบัญชี จะได้รับแจ้งบิลใหม่ เตือนก่อนครบกำหนด และใบเสร็จ'],
+    ];
   const steps = ['ดูใบแจ้งหนี้ของห้องคุณ', 'สแกน QR ยอดขึ้นอัตโนมัติ', 'แนบสลิปโอนเงิน', 'ผู้ดูแลอนุมัติ รับใบเสร็จ'];
   return `<div class="apl">
 <header class="ap-nav np"><div class="ap-in">
   <a class="ap-logo" onclick="scrollTo({top:0,behavior:'smooth'})"><img class="lgi" src="${LG}" alt=""><span>T&T MANSION</span></a>
-  <nav class="ap-links"><a onclick="scrollTo({top:0,behavior:'smooth'})">หน้าแรก</a><a onclick="scr('hf')">ฟีเจอร์</a><a onclick="scr('hst')">ขั้นตอนชำระเงิน</a></nav>
+  <nav class="ap-links"><a onclick="scrollTo({top:0,behavior:'smooth'})">หน้าแรก</a><a onclick="scr('hf')">ฟีเจอร์</a><a onclick="scr('hst')">ขั้นตอนชำระเงิน</a><a onclick="scr('hq')">คำถาม</a></nav>
   <div class="ap-tools">${TGL()}<button class="ap-login" onclick="go('login')">เข้าสู่ระบบ</button></div>
 </div></header>
 
@@ -74,16 +111,57 @@ const home0 = () => {
   </div>
 </section>
 
+<section class="ap-sec ap-vac">
+  <div class="ap-in">
+    <div class="ap-vbox ap-r">
+      <div class="ap-vl">
+        <span class="ap-live"><i></i>ข้อมูลล่าสุดจากระบบ</span>
+        <h2>ห้องว่างตอนนี้</h2>
+        <p>สนใจเข้าพัก สอบถามหรือนัดดูห้องกับผู้ดูแลหอพักได้เลย</p>
+        <div class="ap-vbtn">${tel ? `<a class="ap-btn" href="tel:${e(tel)}">โทร ${e(PIF.phone)}</a>` : ''}${PIF.line ? `<a class="ap-more" href="${lineUrl}" target="_blank" rel="noopener">LINE: ${e(PIF.line)}</a>` : ''}</div>
+      </div>
+      <div class="ap-vr">
+        <div class="ap-ring" style="--v:${PIF.total ? Math.round((PIF.free / PIF.total) * 100) : 0}"><b>${PIF.free}</b><small>ห้องว่าง</small></div>
+        <small>จากทั้งหมด ${PIF.total} ห้อง${PIF.rent ? ' · ค่าเช่า ฿' + fm(PIF.rent) + '/เดือน' : ''}</small>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="ap-sec ap-steps" id="hst">
   <div class="ap-in">
     <h2 class="ap-r">วิธีจ่ายค่าห้อง</h2>
     <ol class="ap-ol">${steps.map((t, i) => `<li class="ap-r"><b>${i + 1}</b><span>${t}</span></li>`).join('')}</ol>
-    <div class="ap-cta ap-r"><button class="ap-btn" onclick="go('login')">เริ่มใช้งาน</button></div>
   </div>
 </section>
 
-<footer class="ap-foot"><div class="ap-in">© 2026 T&T Mansion Payment System · ${APP_V}</div></footer>
+<section class="ap-sec ap-faq" id="hq">
+  <div class="ap-in">
+    <h2 class="ap-r">คำถามที่พบบ่อย</h2>
+    <div class="ap-qs">${faq.map(q => `<details class="ap-q ap-r"><summary>${q[0]}<i>+</i></summary><p>${q[1]}</p></details>`).join('')}</div>
+  </div>
+</section>
+
+<section class="ap-sec ap-band">
+  <div class="ap-in">
+    <div class="ap-bn ap-r">
+      <h2>พร้อมใช้งานแล้ว</h2>
+      <p>เข้าสู่ระบบด้วยบัญชีที่ได้รับจากผู้ดูแลหอพัก ดูบิลและจ่ายค่าห้องได้ทันที</p>
+      <button class="ap-btn ap-btn-w" onclick="go('login')">เข้าสู่ระบบ</button>
+    </div>
+  </div>
+</section>
+
+<footer class="ap-foot">
+  <div class="ap-in ap-fg">
+    <div class="ap-fb"><a class="ap-logo" onclick="scrollTo({top:0,behavior:'smooth'})"><img class="lgi" src="${LG}" alt=""><span>T&T MANSION</span></a><small>ระบบชำระค่าบริการของหอพัก ${nm}</small></div>
+    <div class="ap-fc"><b>เมนู</b><a onclick="scrollTo({top:0,behavior:'smooth'})">หน้าแรก</a><a onclick="scr('hf')">ฟีเจอร์</a><a onclick="scr('hst')">ขั้นตอนชำระเงิน</a><a onclick="scr('hq')">คำถามที่พบบ่อย</a></div>
+    <div class="ap-fc"><b>ติดต่อหอพัก</b>${tel ? `<a href="tel:${e(tel)}">โทร ${e(PIF.phone)}</a>` : ''}${PIF.line ? `<a href="${lineUrl}" target="_blank" rel="noopener">LINE: ${e(PIF.line)}</a>` : ''}<a onclick="go('login')">เข้าสู่ระบบ</a></div>
+  </div>
+  <div class="ap-in ap-fcopy">© ${new Date().getFullYear()} T&T Mansion Payment System · ${APP_V}</div>
+</footer>
 </div>`;
+
 };
 const home = () => {
   if (PUBD) {
