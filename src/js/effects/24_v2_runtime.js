@@ -286,20 +286,29 @@
           if (c && !c.contains(ev.relatedTarget)) c.classList.remove('ap-tl');
         });
       }
-      // 7) จอตัวอย่างระบบเลื่อนให้ดูเอง (CSS animation บนการ์ดจอ · หยุดเมื่อชี้เมาส์ หรือเลื่อนผ่านไปแล้ว)
+      // 7) จอตัวอย่างระบบเลื่อนให้ดูเอง: เลื่อนเฉพาะเนื้อหาแดชบอร์ด เมนูข้างและแถบค้นหาอยู่กับที่
+      //    (หยุดเมื่อชี้เมาส์ หรือเลื่อนหน้าผ่านไปแล้ว)
       const box = root.querySelector('.ap-dev .pvx'),
-        pvd = box && box.querySelector('.pvd');
-      if (box && pvd) {
-        const f = box.scrollHeight / Math.max(1, pvd.offsetHeight), // ภาพย่อด้วย zoom
-          d = Math.max(0, (box.scrollHeight - box.clientHeight) / f);
+        mn = box && box.querySelector('.pvd .mn'),
+        tb = mn && mn.querySelector(':scope > .top');
+      if (box && mn && tb && !mn.querySelector(':scope > .ap-scr')) {
+        const scr = document.createElement('div');
+        scr.className = 'ap-scr';
+        [...mn.children].filter(x => x != tb).forEach(x => scr.appendChild(x));
+        mn.appendChild(scr);
+        box.scrollTop = 0;
+        const pvd = box.querySelector('.pvd'),
+          f = pvd.getBoundingClientRect().height / Math.max(1, pvd.offsetHeight) || 0.85, // ภาพย่อด้วย zoom
+          z = parseFloat(getComputedStyle(pvd).zoom) || 1,
+          seen = box.clientHeight / z - scr.offsetTop, // ความสูงที่มองเห็นของเนื้อหา (หน่วยในภาพ)
+          d = Math.max(0, scr.offsetHeight - seen + 24);
         if (d > 40) {
-          box.scrollTop = 0;
-          pvd.style.setProperty('--ph', d.toFixed(0) + 'px');
-          pvd.style.setProperty('--pt', Math.round(10 + d / 120) + 's');
-          pvd.classList.add('ap-auto');
+          scr.style.setProperty('--ph', d.toFixed(0) + 'px');
+          scr.style.setProperty('--pt', Math.round(10 + d / 120) + 's');
+          scr.classList.add('ap-auto');
           let vis = true,
             hov = false;
-          const upd = () => pvd.classList.toggle('ap-hold', !vis || hov);
+          const upd = () => scr.classList.toggle('ap-hold', !vis || hov);
           new IntersectionObserver(es => ((vis = es[0].isIntersecting), upd())).observe(box);
           box.addEventListener('pointerenter', () => ((hov = true), upd()));
           box.addEventListener('pointerleave', () => ((hov = false), upd()));

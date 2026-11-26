@@ -521,16 +521,29 @@ html.ap-js.ap-flat .apl .ap-dev .pvw {
     background-color: rgba(28, 22, 26, 0.9) !important;
   }
 }
-/* จอตัวอย่างเลื่อนเอง: ใช้ translate (การ์ดจอทำให้ ไม่ต้องวาดใหม่) · ไม่ให้แถบค้นหา/เมนูในภาพค้างทับเนื้อหา */
+/* จอตัวอย่างเลื่อนเอง: เลื่อนเฉพาะเนื้อหาแดชบอร์ด (เมนูข้างและแถบค้นหาอยู่กับที่)
+   เนื้อหาลอดใต้แถบค้นหาที่มีพื้นทึบ จึงไม่เห็นทับกัน · ใช้ translate ให้การ์ดจอทำงานแทน */
 .apl .ap-dev .pvd :is(.top, .sb) {
   position: relative !important;
   top: auto !important;
 }
-html.ap-js .apl .ap-dev .pvd.ap-auto {
+.apl .ap-dev .pvd .mn > .top {
+  z-index: 3;
+  background: rgba(250, 246, 242, 0.97) !important;
+  box-shadow: 0 8px 18px -12px rgba(60, 20, 30, 0.35);
+}
+html[data-theme='dark'] .apl .ap-dev .pvd .mn > .top {
+  background: rgba(22, 17, 21, 0.97) !important;
+}
+.apl .ap-dev .pvd .ap-scr {
+  position: relative;
+  z-index: 1;
+}
+html.ap-js .apl .ap-dev .pvd .ap-scr.ap-auto {
   will-change: translate;
   animation: apPan var(--pt, 26s) ease-in-out 1.5s infinite;
 }
-html.ap-js .apl .ap-dev .pvd.ap-auto.ap-hold {
+html.ap-js .apl .ap-dev .pvd .ap-scr.ap-auto.ap-hold {
   animation-play-state: paused;
 }
 @keyframes apPan {
