@@ -5575,30 +5575,24 @@ if (SBON) sbBoot().catch(x => alert('เชื่อมต่อระบบไ�
           if (c && !c.contains(ev.relatedTarget)) c.classList.remove('ap-tl');
         });
       }
-      // 7) จอตัวอย่างระบบเลื่อนให้ดูเอง (หยุดเมื่อชี้เมาส์ หรือเมื่อเลื่อนหน้าผ่านไปแล้ว)
-      const box = root.querySelector('.ap-dev .pvx');
-      if (box) {
-        let vis = true,
-          hov = false,
-          dir = 1,
-          wait = performance.now() + 1800,
-          last = performance.now();
-        new IntersectionObserver(es => (vis = es[0].isIntersecting)).observe(box);
-        box.addEventListener('pointerenter', () => (hov = true));
-        box.addEventListener('pointerleave', () => (hov = false));
-        const step = now => {
-          if (!box.isConnected) return;
-          const dt = Math.min(64, now - last);
-          last = now;
-          const max = box.scrollHeight - box.clientHeight;
-          if (vis && !hov && max > 0 && now > wait) {
-            box.scrollTop += dir * dt * (dir > 0 ? 0.045 : 0.16);
-            if (dir > 0 && box.scrollTop >= max - 1) (dir = -1), (wait = now + 1600);
-            else if (dir < 0 && box.scrollTop <= 0) (dir = 1), (wait = now + 2200);
-          }
-          requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
+      // 7) จอตัวอย่างระบบเลื่อนให้ดูเอง (CSS animation บนการ์ดจอ · หยุดเมื่อชี้เมาส์ หรือเลื่อนผ่านไปแล้ว)
+      const box = root.querySelector('.ap-dev .pvx'),
+        pvd = box && box.querySelector('.pvd');
+      if (box && pvd) {
+        const f = box.scrollHeight / Math.max(1, pvd.offsetHeight), // ภาพย่อด้วย zoom
+          d = Math.max(0, (box.scrollHeight - box.clientHeight) / f);
+        if (d > 40) {
+          box.scrollTop = 0;
+          pvd.style.setProperty('--ph', d.toFixed(0) + 'px');
+          pvd.style.setProperty('--pt', Math.round(10 + d / 120) + 's');
+          pvd.classList.add('ap-auto');
+          let vis = true,
+            hov = false;
+          const upd = () => pvd.classList.toggle('ap-hold', !vis || hov);
+          new IntersectionObserver(es => ((vis = es[0].isIntersecting), upd())).observe(box);
+          box.addEventListener('pointerenter', () => ((hov = true), upd()));
+          box.addEventListener('pointerleave', () => ((hov = false), upd()));
+        }
       }
     };
     // 3) + 6) แถบระยะการเลื่อน และไฮไลต์เมนูตามส่วนที่กำลังดู
@@ -5609,24 +5603,33 @@ if (SBON) sbBoot().catch(x => alert('เชื่อมต่อระบบไ�
         p = Math.max(0, Math.min(1, scrollY / Math.max(1, de.scrollHeight - innerHeight))),
         pr = root.querySelector('.ap-prog');
       if (pr) pr.style.setProperty('--p', p.toFixed(4));
-      const ln = root.querySelectorAll('.ap-links a'),
-        y = scrollY + innerHeight * 0.4,
-        top = id => {
+      // ตำแหน่งแต่ละส่วนคำนวณครั้งเดียว (คำนวณใหม่เมื่อหน้าเปลี่ยนขนาด) ไม่อ่านทุกเฟรม
+      const de2 = document.documentElement;
+      if (!apScroll.c || apScroll.c.h != de2.scrollHeight || apScroll.c.r != root) {
+        const top = id => {
           const el = document.getElementById(id);
           return el ? el.getBoundingClientRect().top + scrollY : 1e9;
         };
-      const on = p > 0.98 || y >= top('hst') ? 2 : y >= top('hf') ? 1 : 0;
-      ln.forEach((a, i) => a.classList.toggle('on', i == on));
+        apScroll.c = { h: de2.scrollHeight, r: root, hf: top('hf'), hst: top('hst') };
+      }
+      const c = apScroll.c,
+        y = scrollY + innerHeight * 0.4,
+        on = p > 0.98 || y >= c.hst ? 2 : y >= c.hf ? 1 : 0;
+      if (apScroll.on !== on || apScroll.r2 != root) {
+        apScroll.on = on;
+        apScroll.r2 = root;
+        root.querySelectorAll('.ap-links a').forEach((a, i) => a.classList.toggle('on', i == on));
+      }
     };
     // ภาพตัวอย่างระบบเอียง ~14° ตอนอยู่บนสุด แล้วค่อยๆ ตั้งตรงเมื่อเลื่อนลง
     let apTk = 0;
     const apTilt = () => {
       apTk = 0;
-      const w = document.querySelector('html.ap-js .apl .ap-dev .pvw');
-      if (!w) return;
-      const k = Math.max(0, Math.min(1, 1 - scrollY / (innerHeight * 0.55)));
-      w.style.setProperty('--tilt', (k * 14).toFixed(2) + 'deg');
-      w.style.setProperty('--sc', (1 - k * 0.06).toFixed(3));
+      const f = scrollY > 40;
+      if (apTilt.f !== f) {
+        apTilt.f = f;
+        document.documentElement.classList.toggle('ap-flat', f);
+      }
     };
     window.addEventListener(
       'scroll',

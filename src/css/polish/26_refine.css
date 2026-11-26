@@ -489,11 +489,63 @@ html.ap-js .apl .ap-ol li.ap-on b {
     transform: scaleX(1);
   }
 }
-/* ภาพตัวอย่างระบบ: เอียงแล้วตั้งตรงตามการเลื่อน */
+/* ภาพตัวอย่างระบบ: เอียงตอนอยู่บนสุด เลื่อนลงนิดเดียวก็ตั้งตรง (เปลี่ยนครั้งเดียวด้วย transition ไม่คำนวณทุกเฟรม = ลื่นกว่า) */
 html.ap-js .apl .ap-dev .pvw {
-  transform: perspective(1500px) rotateX(var(--tilt, 0deg)) scale(var(--sc, 1));
+  transform: perspective(1500px) rotateX(12deg) scale(0.95);
   transform-origin: 50% 0;
+  transition: transform 1.1s cubic-bezier(0.2, 0.8, 0.2, 1);
   will-change: transform;
+}
+html.ap-js.ap-flat .apl .ap-dev .pvw {
+  transform: perspective(1500px) rotateX(0deg) scale(1);
+}
+/* ลดภาระตอนเลื่อน: ในภาพตัวอย่างไม่ต้องเบลอฉากหลัง (มองไม่ออกอยู่แล้วเพราะย่อเล็ก) */
+.apl .ap-dev .pvd *,
+.apl .ap-dev .ph * {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+/* การ์ดกระจกบนหน้าต้อนรับ: เบลอน้อยลง (ภาพยังเหมือนเดิม แต่เครื่องทำงานน้อยลงมาก) */
+.apl :is(.ap-tile, .ap-ol li, .ap-st > div, .ap-who span, .ap-ck, .ap-more) {
+  -webkit-backdrop-filter: blur(14px) saturate(1.6) !important;
+  backdrop-filter: blur(14px) saturate(1.6) !important;
+}
+/* มือถือ/แท็บเล็ต: ไม่เบลอเลย ใช้พื้นทึบขึ้นแทน (เลื่อนลื่นกว่าชัดเจน) */
+@media (pointer: coarse) {
+  .apl :is(.ap-tile, .ap-ol li, .ap-st > div, .ap-who span, .ap-ck, .ap-more) {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background-color: rgba(255, 252, 248, 0.9) !important;
+  }
+  html[data-theme='dark'] .apl :is(.ap-tile, .ap-ol li, .ap-st > div, .ap-who span, .ap-ck, .ap-more) {
+    background-color: rgba(28, 22, 26, 0.9) !important;
+  }
+}
+/* จอตัวอย่างเลื่อนเอง: ใช้ translate (การ์ดจอทำให้ ไม่ต้องวาดใหม่) · ไม่ให้แถบค้นหา/เมนูในภาพค้างทับเนื้อหา */
+.apl .ap-dev .pvd :is(.top, .sb) {
+  position: relative !important;
+  top: auto !important;
+}
+html.ap-js .apl .ap-dev .pvd.ap-auto {
+  will-change: translate;
+  animation: apPan var(--pt, 26s) ease-in-out 1.5s infinite;
+}
+html.ap-js .apl .ap-dev .pvd.ap-auto.ap-hold {
+  animation-play-state: paused;
+}
+@keyframes apPan {
+  0%,
+  8% {
+    translate: 0 0;
+  }
+  48%,
+  58% {
+    translate: 0 calc(-1 * var(--ph, 0px));
+  }
+  92%,
+  100% {
+    translate: 0 0;
+  }
 }
 
 /* ---- หน้าต้อนรับ ชุดที่ 2 ---- */
