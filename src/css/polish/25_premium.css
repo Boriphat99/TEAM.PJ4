@@ -2094,7 +2094,7 @@ html[data-theme='dark'] .ap-dev .pv {
 /* ค่อยๆ ปรากฏเมื่อเลื่อนถึง (เฉพาะเบราว์เซอร์ที่รองรับ ถ้าไม่รองรับจะแสดงทันที) */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .ap-r {
+    html:not(.ap-js) .ap-r {
       animation: apIn linear both;
       animation-timeline: view();
       animation-range: entry 0% entry 70%;

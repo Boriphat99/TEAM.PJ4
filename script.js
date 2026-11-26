@@ -5469,9 +5469,80 @@ if (SBON) sbBoot().catch(x => alert('เชื่อมต่อระบบไ�
       w.__bz = 1;
       window[n] = w;
     });
+    // 4) หน้าต้อนรับ: ลูกเล่นตอนเลื่อน (การ์ดโผล่ทีละใบ ตัวเลขนับขึ้น เส้นขั้นตอน ภาพเอียง)
+    const apFx = () => {
+      const root = document.querySelector('.apl');
+      if (!root || root.dataset.fx) return;
+      root.dataset.fx = '1';
+      if (RM || !('IntersectionObserver' in window)) return;
+      document.documentElement.classList.add('ap-js');
+      // ตัวเลขนับขึ้นจาก 0 (คงคำนำหน้า/ต่อท้าย เช่น ฿)
+      const count = b => {
+        if (!b) return;
+        const t0 = b.textContent,
+          m = t0.match(/^(\D*)([\d,]+)(.*)$/);
+        if (!m) return;
+        const n = +m[2].replace(/,/g, ''),
+          st = performance.now(),
+          dur = 1100;
+        const f = now => {
+          const k = Math.min(1, (now - st) / dur),
+            v = Math.round(n * (1 - Math.pow(1 - k, 3)));
+          b.textContent = m[1] + v.toLocaleString('en-US') + m[3];
+          if (k < 1) requestAnimationFrame(f);
+          else b.textContent = t0;
+        };
+        requestAnimationFrame(f);
+      };
+      root.querySelectorAll('.ap-r').forEach(el => {
+        const sib = [...el.parentElement.children].filter(x => x.classList.contains('ap-r'));
+        el.style.setProperty('--d', Math.min(sib.indexOf(el), 6) * 90 + 'ms');
+        if (el.matches('.ap-sec h2')) el.classList.add('ap-fxh');
+      });
+      const ob = new IntersectionObserver(
+        es =>
+          es.forEach(en => {
+            if (!en.isIntersecting) return;
+            const el = en.target;
+            ob.unobserve(el);
+            if (el.matches('.ap-ol')) return el.classList.add('ap-line');
+            el.classList.add('ap-on');
+            if (el.matches('.ap-st > div')) count(el.querySelector('b'));
+            // เล่นจบแล้วคืนสไตล์ปกติ (ให้เอฟเฟกต์ตอนชี้เมาส์ทำงานตามเดิม)
+            setTimeout(
+              () => {
+                el.classList.remove('ap-r', 'ap-on');
+                el.classList.add('ap-done');
+              },
+              1600 + (parseFloat(el.style.getPropertyValue('--d')) || 0)
+            );
+          }),
+        { rootMargin: '0px 0px -10% 0px', threshold: 0.12 }
+      );
+      root.querySelectorAll('.ap-r, .ap-ol').forEach(el => ob.observe(el));
+      apTilt();
+    };
+    // ภาพตัวอย่างระบบเอียง ~14° ตอนอยู่บนสุด แล้วค่อยๆ ตั้งตรงเมื่อเลื่อนลง
+    let apTk = 0;
+    const apTilt = () => {
+      apTk = 0;
+      const w = document.querySelector('html.ap-js .apl .ap-dev .pvw');
+      if (!w) return;
+      const k = Math.max(0, Math.min(1, 1 - scrollY / (innerHeight * 0.55)));
+      w.style.setProperty('--tilt', (k * 14).toFixed(2) + 'deg');
+      w.style.setProperty('--sc', (1 - k * 0.06).toFixed(3));
+    };
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!apTk) apTk = requestAnimationFrame(apTilt);
+      },
+      { passive: true }
+    );
     // เรียกซ้ำทุกครั้งที่หน้าถูกวาดใหม่
     const after = () => {
       reveal();
+      apFx();
       tips();
       onScroll();
       syncThemeUI && syncThemeUI();
