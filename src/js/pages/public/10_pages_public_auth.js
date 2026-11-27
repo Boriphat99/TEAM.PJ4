@@ -66,7 +66,6 @@ const home0 = () => {
   ];
   const PIF = pinfo(),
     tel = PIF.phone.replace(/[^0-9+]/g, ''),
-    lineUrl = 'https://line.me/R/ti/p/~' + encodeURIComponent(PIF.line),
     faq = [
       ['ชำระค่าห้องได้ช่องทางไหนบ้าง', 'สแกน QR พร้อมเพย์ในหน้าใบแจ้งหนี้ ยอดเงินขึ้นให้เอง แล้วแนบสลิปในระบบ หรือชำระเป็นเงินสดกับผู้ดูแลหอพัก'],
       ['ต้องจ่ายภายในวันไหน มีค่าปรับไหม', `ชำระภายในวันที่ ${PIF.due} ของเดือน ถ้าเลยกำหนดคิดค่าปรับวันละ ฿${fm(PIF.fpd)}${PIF.max ? ' สูงสุดไม่เกิน ฿' + fm(PIF.max) : ''}`],
@@ -150,7 +149,7 @@ const home0 = () => {
   <div class="ap-in ap-fg">
     <div class="ap-fb"><a class="ap-logo" onclick="scrollTo({top:0,behavior:'smooth'})"><img class="lgi" src="${LG}" alt=""><span>T&T MANSION</span></a><small>ระบบชำระค่าบริการของหอพัก ${nm}</small></div>
     <div class="ap-fc"><b>เมนู</b><a onclick="scrollTo({top:0,behavior:'smooth'})">หน้าแรก</a><a onclick="scr('hf')">ฟีเจอร์</a><a onclick="scr('hst')">ขั้นตอนชำระเงิน</a><a onclick="scr('hq')">คำถามที่พบบ่อย</a></div>
-    <div class="ap-fc"><b>ติดต่อหอพัก</b>${tel ? `<a href="tel:${e(tel)}">โทร ${e(PIF.phone)}</a>` : ''}${PIF.line ? `<a href="${lineUrl}" target="_blank" rel="noopener">LINE: ${e(PIF.line)}</a>` : ''}<a onclick="go('login')">เข้าสู่ระบบ</a></div>
+    <div class="ap-fc"><b>ติดต่อหอพัก</b>${tel ? `<a href="tel:${e(tel)}">โทร ${e(PIF.phone)}</a>` : ''}<a onclick="go('login')">เข้าสู่ระบบ</a></div>
   </div>
   <div class="ap-in ap-fcopy">© ${new Date().getFullYear()} T&T Mansion Payment System · ${APP_V}</div>
 </footer>
