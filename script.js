@@ -2386,7 +2386,7 @@ function et(id) {
   const u = D.users.find(x => x.id == id),
     fr = D.rooms.filter(r => vac(r) || r.n == u.room);
   mo(
-    `<h3>แก้ไขข้อมูลผู้เช่า</h3><label>ชื่อ - นามสกุล</label><input id="f_n" value="${e(u.name)}"><label>เบอร์โทร</label><input id="f_t" value="${e(u.tel || '')}"><label>อีเมล</label><input id="f_e" value="${e(u.email)}"><label>สถานะผู้เช่า</label><select id="f_s"><option value="in" ${u.out ? '' : 'selected'}>ยังอยู่</option><option value="out" ${u.out ? 'selected' : ''}>ย้ายออกแล้ว</option></select><label>ห้องพัก</label><select id="f_r">${u.room ? '' : '<option value="">ยังไม่จัดห้อง</option>'}${fr.map(r => `<option ${r.n == u.room ? 'selected' : ''}>${r.n}</option>`).join('')}</select><label>รหัสผ่านใหม่ (เว้นว่างถ้าไม่เปลี่ยน)</label><input id="f_w" type="password"><button class="b" onclick="eu(${id})">บันทึก</button> <button class="b b2" onclick="cm()">ยกเลิก</button>`
+    `<h3>แก้ไขข้อมูลผู้เช่า</h3><label>ชื่อ - นามสกุล</label><input id="f_n" maxlength="80" value="${e(u.name)}"><label>เบอร์โทร</label><input id="f_t" type="tel" inputmode="tel" maxlength="20" value="${e(u.tel || '')}"><label>อีเมล</label><input id="f_e" type="email" inputmode="email" maxlength="100" value="${e(u.email)}"><label>สถานะผู้เช่า</label><select id="f_s"><option value="in" ${u.out ? '' : 'selected'}>ยังอยู่</option><option value="out" ${u.out ? 'selected' : ''}>ย้ายออกแล้ว</option></select><label>ห้องพัก</label><select id="f_r">${u.room ? '' : '<option value="">ยังไม่จัดห้อง</option>'}${fr.map(r => `<option ${r.n == u.room ? 'selected' : ''}>${r.n}</option>`).join('')}</select><label>รหัสผ่านใหม่ (เว้นว่างถ้าไม่เปลี่ยน)</label><input id="f_w" type="password"><button class="b" onclick="eu(${id})">บันทึก</button> <button class="b b2" onclick="cm()">ยกเลิก</button>`
   );
 }
 function eu(id) {
@@ -2400,6 +2400,7 @@ function eu(id) {
   if (!n || !m) return alert('กรอกชื่อและอีเมล');
   const tel = $('#f_t').value.trim();
   if (tel && !TELOK(tel)) return alert('เบอร์โทรไม่ถูกต้อง');
+  if (!MAILOK(m)) return alert(MAILMSG);
   if (D.users.some(x => x.id != id && x.email == m)) return alert('อีเมลนี้ถูกใช้แล้ว');
   if (w && pwBad(w, m)) return alert(pwBad(w, m));
   if (!go2 && r) {
@@ -3290,7 +3291,7 @@ async function si(id) {
 pg.prof = () => {
   const ad = U.role != 'tenant';
   return `<h2>โปรไฟล์ของฉัน</h2><p class="mu">ดูและแก้ไขข้อมูลส่วนตัว</p><div class="pf" style="margin-top:14px"><div class="cd" style="text-align:center;display:grid;gap:10px;justify-items:center;align-content:start">${av(U, 120)}<h3>${e(U.name)}</h3><span class="pl ${ad ? 'p' : 'g'}">${U.role == 'owner' ? 'เจ้าของกิจการ' : ad ? 'ผู้ดูแลระบบ' : 'ผู้เช่า'}</span>${ad ? '' : `<p class="mu" style="margin:0">${U.room ? 'ห้อง ' + U.room : 'รอผู้ดูแลจัดห้อง'}<br>เงินแรกเข้า ฿${fm(udep(U))}</p>`}<input type="file" id="pf" accept="image/jpeg,image/png,image/webp" hidden onchange="pa(this)"><div><button class="b" onclick="$('#pf').click()">เปลี่ยนรูปโปรไฟล์</button>${U.av ? ` <button class="b b2" onclick="pr()">ลบรูป</button>` : ''}</div><small class="mu">JPG / PNG / WebP · ไม่เกิน 5MB · ครอปรูปได้ก่อนบันทึก</small></div>
-<div style="display:grid;gap:14px"><div class="cd"><h3>ข้อมูลส่วนตัว</h3><br><label>ชื่อ - นามสกุล</label><input id="p_n" value="${e(U.name)}"><div class="row"><div><label>เบอร์โทร</label><input id="p_t" type="tel" inputmode="tel" autocomplete="tel" value="${e(U.tel || '')}" placeholder="08x-xxx-xxxx"></div><div><label>อีเมล</label><input id="p_e" type="email" inputmode="email" autocomplete="email" value="${e(U.email)}"></div></div><label>เพศ</label><select id="p_g">${['', 'ชาย', 'หญิง', 'อื่นๆ'].map(v => `<option value="${v}" ${U.g == v ? 'selected' : ''}>${v || 'ไม่ระบุ'}</option>`).join('')}</select>${ad ? '' : `<label>ห้องพัก (แก้ไขได้โดยผู้ดูแล)</label><input value="${U.room || 'รอผู้ดูแลจัดห้อง'}" disabled>`}<button class="b" onclick="ps()">บันทึกข้อมูล</button></div>
+<div style="display:grid;gap:14px"><div class="cd"><h3>ข้อมูลส่วนตัว</h3><br><label>ชื่อ - นามสกุล</label><input id="p_n" maxlength="80" autocomplete="name" value="${e(U.name)}"><div class="row"><div><label>เบอร์โทร</label><input id="p_t" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" value="${e(U.tel || '')}" placeholder="08x-xxx-xxxx"></div><div><label>อีเมล</label><input id="p_e" type="email" inputmode="email" autocomplete="email" value="${e(U.email)}"></div></div><label>เพศ</label><select id="p_g">${['', 'ชาย', 'หญิง', 'อื่นๆ'].map(v => `<option value="${v}" ${U.g == v ? 'selected' : ''}>${v || 'ไม่ระบุ'}</option>`).join('')}</select>${ad ? '' : `<label>ห้องพัก (แก้ไขได้โดยผู้ดูแล)</label><input value="${U.room || 'รอผู้ดูแลจัดห้อง'}" disabled>`}<button class="b" onclick="ps()">บันทึกข้อมูล</button></div>
 <div class="cd"><h3>เปลี่ยนรหัสผ่าน</h3><br><label>รหัสผ่านปัจจุบัน</label><input id="p_o" type="password" autocomplete="current-password"><div class="row"><div><label>รหัสผ่านใหม่ (อย่างน้อย 8 ตัว)</label><input id="p_w" type="password" autocomplete="new-password"></div><div><label>ยืนยันรหัสผ่านใหม่</label><input id="p_c" type="password" autocomplete="new-password"></div></div><button class="b b2" onclick="pc()">เปลี่ยนรหัสผ่าน</button></div></div></div>`;
 };
 let CR = null;
@@ -3397,7 +3398,7 @@ function ps() {
     m = $('#p_e').value.trim().toLowerCase(),
     t = $('#p_t').value.trim();
   if (!n || !m) return alert('กรอกชื่อและอีเมล');
-  if (!/^\S+@\S+$/.test(m)) return alert('รูปแบบอีเมลไม่ถูกต้อง');
+  if (!MAILOK(m)) return alert(MAILMSG);
   if (D.users.some(x => x.id != U.id && x.email == m)) return alert('อีเมลนี้ถูกใช้แล้ว');
   if (t && !TELOK(t)) return alert('เบอร์โทรไม่ถูกต้อง');
   Object.assign(U, { name: n, email: m, tel: t, g: $('#p_g').value });

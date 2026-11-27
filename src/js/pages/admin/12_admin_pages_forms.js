@@ -328,7 +328,7 @@ function et(id) {
   const u = D.users.find(x => x.id == id),
     fr = D.rooms.filter(r => vac(r) || r.n == u.room);
   mo(
-    `<h3>แก้ไขข้อมูลผู้เช่า</h3><label>ชื่อ - นามสกุล</label><input id="f_n" value="${e(u.name)}"><label>เบอร์โทร</label><input id="f_t" value="${e(u.tel || '')}"><label>อีเมล</label><input id="f_e" value="${e(u.email)}"><label>สถานะผู้เช่า</label><select id="f_s"><option value="in" ${u.out ? '' : 'selected'}>ยังอยู่</option><option value="out" ${u.out ? 'selected' : ''}>ย้ายออกแล้ว</option></select><label>ห้องพัก</label><select id="f_r">${u.room ? '' : '<option value="">ยังไม่จัดห้อง</option>'}${fr.map(r => `<option ${r.n == u.room ? 'selected' : ''}>${r.n}</option>`).join('')}</select><label>รหัสผ่านใหม่ (เว้นว่างถ้าไม่เปลี่ยน)</label><input id="f_w" type="password"><button class="b" onclick="eu(${id})">บันทึก</button> <button class="b b2" onclick="cm()">ยกเลิก</button>`
+    `<h3>แก้ไขข้อมูลผู้เช่า</h3><label>ชื่อ - นามสกุล</label><input id="f_n" maxlength="80" value="${e(u.name)}"><label>เบอร์โทร</label><input id="f_t" type="tel" inputmode="tel" maxlength="20" value="${e(u.tel || '')}"><label>อีเมล</label><input id="f_e" type="email" inputmode="email" maxlength="100" value="${e(u.email)}"><label>สถานะผู้เช่า</label><select id="f_s"><option value="in" ${u.out ? '' : 'selected'}>ยังอยู่</option><option value="out" ${u.out ? 'selected' : ''}>ย้ายออกแล้ว</option></select><label>ห้องพัก</label><select id="f_r">${u.room ? '' : '<option value="">ยังไม่จัดห้อง</option>'}${fr.map(r => `<option ${r.n == u.room ? 'selected' : ''}>${r.n}</option>`).join('')}</select><label>รหัสผ่านใหม่ (เว้นว่างถ้าไม่เปลี่ยน)</label><input id="f_w" type="password"><button class="b" onclick="eu(${id})">บันทึก</button> <button class="b b2" onclick="cm()">ยกเลิก</button>`
   );
 }
 function eu(id) {
@@ -342,6 +342,7 @@ function eu(id) {
   if (!n || !m) return alert('กรอกชื่อและอีเมล');
   const tel = $('#f_t').value.trim();
   if (tel && !TELOK(tel)) return alert('เบอร์โทรไม่ถูกต้อง');
+  if (!MAILOK(m)) return alert(MAILMSG);
   if (D.users.some(x => x.id != id && x.email == m)) return alert('อีเมลนี้ถูกใช้แล้ว');
   if (w && pwBad(w, m)) return alert(pwBad(w, m));
   if (!go2 && r) {
