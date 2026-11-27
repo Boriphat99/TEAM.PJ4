@@ -27,7 +27,7 @@ function pm(id) {
   mo(`<div class="mh"><h3>${pd ? 'แก้ไขสลิป · ส่งสลิปใหม่' : 'ชำระเงินผ่าน PromptPay'}</h3><span class="mu">${i.id}</span></div>
  <div class="amt"><small>ยอดที่ต้องชำระ</small><div class="big">฿${fm(t)}</div><small>ครบกำหนด ${dt(due(i))}${late(i) > 0 ? ` · <b style="color:#fb7185">เลยกำหนด ${late(i)} วัน</b>` : ''}</small></div>
  <div class="bk">${i.fin ? '' : `<div class="bd"><span>ค่าเช่า</span><span>฿${fm(i.rent)}</span></div>`}<div class="bd"><span>ค่าไฟ ${i.u} หน่วย</span><span>฿${fm(i.el)}</span></div>${i.x ? `<div class="bd"><span>${e(i.xn || 'ค่าใช้จ่ายเพิ่มเติม')}</span><span>฿${fm(i.x)}</span></div>` : ''}${f ? `<div class="bd" style="color:#fb7185"><span>ค่าปรับ (นับถึงวันที่แจ้งชำระ)</span><span>฿${f}</span></div>` : ''}</div>
- ${pd ? '<div class="note">ผู้ดูแลยังไม่ได้ยืนยัน จึงส่งสลิปใหม่ได้ · เมื่อผู้ดูแลยืนยันแล้วจะแก้ไขไม่ได้</div>' : ''}${!pd && i.rj ? `<div class="note" style="background:#fee2e2;color:#b91c1c;border-color:#fecaca">${NI('warn')}สลิปครั้งก่อนถูกปฏิเสธ: ${e(i.rj)}</div>` : ''}<div class="st"><b>1</b> สแกน QR ด้วยแอปธนาคาร</div><div class="qrc"><div class="qr" id="qr"></div><small class="mu">ยอดเงินจะขึ้นอัตโนมัติ ไม่ต้องกรอกเอง</small></div>
+ ${pd ? '<div class="note">ผู้ดูแลยังไม่ได้ยืนยัน จึงส่งสลิปใหม่ได้ · เมื่อผู้ดูแลยืนยันแล้วจะแก้ไขไม่ได้</div>' : ''}${!pd && i.rj ? `<div class="note" style="background:#fee2e2;color:#b91c1c;border-color:#fecaca">${NI('warn')}สลิปครั้งก่อนถูกปฏิเสธ: ${e(i.rj)}</div>` : ''}<div class="st"><b>1</b> สแกน QR ด้วยแอปธนาคาร</div><div class="qrc"><div class="qr" id="qr"></div><small class="mu">ยอดเงินจะขึ้นอัตโนมัติ ไม่ต้องกรอกเอง</small><button class="b b2 sm qrsv" type="button" onclick="qrSave('${id}')">${IC.dl || ''}บันทึกรูป QR</button><small class="mu qrsv-h">จ่ายจากมือถือเครื่องนี้: บันทึกรูป QR แล้วเปิดแอปธนาคาร เลือกสแกนจากรูปในเครื่อง</small></div>
  <div class="st"><b>2</b> อัปโหลดสลิปโอนเงิน (JPG/PNG)</div><label class="drop" id="sfz" ondragover="event.preventDefault();this.classList.add('on')" ondragleave="this.classList.remove('on')" ondrop="slDrop(event)"><input type="file" id="sf" accept="image/jpeg,image/png" onchange="sl(this)"><img class="dz-pv" id="sfp" alt="ตัวอย่างสลิป" hidden><span class="dz-ic">${IC.up}</span><span class="dz-t"><b id="sfn">เลือกรูปสลิป</b><span class="dz-or"> หรือลากไฟล์มาวางที่นี่</span></span><small class="mu" id="sfh">JPG หรือ PNG ไม่เกิน 8 MB</small></label><div id="sfq" class="slq" hidden></div>
  <button class="b" style="width:100%" onclick="sub('${id}')">${pd ? 'ส่งสลิปใหม่' : 'แจ้งชำระเงิน'}</button>
  <div class="note">${NI('cash')}หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div>
@@ -43,6 +43,63 @@ function tm(id) {
     $('#qr').innerHTML = k.createSvgTag(5, 2);
   } catch (x) {
     $('#qr').textContent = 'สร้าง QR ไม่สำเร็จ';
+  }
+}
+// บันทึกรูป QR ลงเครื่อง: จ่ายด้วยมือถือเครื่องเดียวกันได้ (แอปธนาคารสแกนจากรูปในเครื่อง)
+async function qrSave(id) {
+  const i = gi(id),
+    amt = base(i) + fz(i);
+  try {
+    const k = qrcode(0, 'M');
+    k.addData(ppay(D.set.pp, amt));
+    k.make();
+    const n = k.getModuleCount(),
+      cs = 12,
+      pad = 48,
+      q = n * cs,
+      W = q + pad * 2,
+      H = q + pad * 2 + 110,
+      c = document.createElement('canvas');
+    c.width = W;
+    c.height = H;
+    const x = c.getContext('2d');
+    x.fillStyle = '#fff';
+    x.fillRect(0, 0, W, H);
+    x.fillStyle = '#000';
+    for (let r = 0; r < n; r++) for (let cc = 0; cc < n; cc++) if (k.isDark(r, cc)) x.fillRect(pad + cc * cs, pad + r * cs, cs, cs);
+    x.textAlign = 'center';
+    x.fillStyle = '#9e0f2c';
+    x.font = 'bold 40px sans-serif';
+    x.fillText('฿' + fm(amt), W / 2, q + pad + 58);
+    x.fillStyle = '#555';
+    x.font = '24px sans-serif';
+    x.fillText((D.set.name || 'T&T Mansion') + ' · ' + id, W / 2, q + pad + 96);
+    const blob = await new Promise(r => c.toBlob(r, 'image/png')),
+      fn = 'qr-' + id + '.png';
+    // มือถือที่แชร์ไฟล์ได้: เปิดเมนูแชร์ (มีปุ่มบันทึกรูปภาพ)
+    try {
+      const f = new File([blob], fn, { type: 'image/png' });
+      if (matchMedia('(pointer: coarse)').matches && navigator.canShare && navigator.canShare({ files: [f] })) {
+        await navigator.share({ files: [f] });
+        return;
+      }
+    } catch (z) {
+      if (z && z.name == 'AbortError') return;
+    }
+    const u = URL.createObjectURL(blob),
+      a = document.createElement('a');
+    a.href = u;
+    a.download = fn;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      a.remove();
+      URL.revokeObjectURL(u);
+    }, 10000);
+    tt('✓ บันทึกรูป QR แล้ว');
+  } catch (z) {
+    alert('บันทึกรูป QR ไม่สำเร็จ: ' + thErr(z));
   }
 }
 // ---------- ตรวจสลิปเบื้องต้นจาก QR มุมสลิป (mini QR ตามมาตรฐานธนาคารไทย) ----------

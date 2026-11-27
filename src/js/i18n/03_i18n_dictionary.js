@@ -222,6 +222,9 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
 กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า|user groups: owner · admin · tenant
 กลุ่ม|groups
 การดำเนินการด่วน|Quick actions
+บันทึกรูป QR|Save QR image
+จ่ายจากมือถือเครื่องนี้: บันทึกรูป QR แล้วเปิดแอปธนาคาร เลือกสแกนจากรูปในเครื่อง|Paying on this phone? Save the QR image, then open your banking app and scan it from your photos
+✓ บันทึกรูป QR แล้ว|✓ QR image saved
 เรื่องที่ผู้เช่าถามกันบ่อย กดที่คำถามเพื่อดูคำตอบ|Common questions from tenants. Tap a question to see the answer
 ยังมีคำถามอยู่?|Still have questions?
 ถามผู้ดูแลหอพักได้โดยตรง ตอบเรื่องห้องพัก บิล และการใช้งานระบบ|Ask the dorm admin directly about rooms, bills or using the system

@@ -1197,3 +1197,53 @@ html[data-theme='dark'] .apl .ap-pill {
 @media (prefers-reduced-motion: reduce) {
   .apl .ap-go::before { animation: none; }
 }
+
+/* มือถือ: ขยายพื้นที่กดของปุ่มตัวหนังสือเล็กๆ โดยไม่ขยับหน้าตา */
+@media (pointer: coarse) {
+  .fi u::before,
+  .ac[onclick]::before,
+  .b.ac::before,
+  .apl .ap-fc a::before {
+    content: '';
+    position: absolute;
+    inset: -10px -8px;
+  }
+  .ac[onclick],
+  .b.ac,
+  .apl .ap-fc a {
+    position: relative;
+  }
+}
+/* ช่องค้นหา: ไม่ให้เบราว์เซอร์ใส่ปุ่มกากบาท/กรอบของตัวเองจนหน้าตาเพี้ยน */
+input[type='search'] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+input[type='search']::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/* หน้าจ่ายเงิน: ปุ่มบันทึกรูป QR */
+.qrc .qrsv {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 10px auto 0;
+}
+.qrc .qrsv-h {
+  display: none;
+  max-width: 300px;
+  margin: 6px auto 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  text-align: center;
+}
+@media (pointer: coarse) {
+  .qrc .qrsv-h {
+    display: block;
+  }
+  /* มือถือลากไฟล์มาวางไม่ได้ */
+  .drop .dz-or {
+    display: none;
+  }
+}

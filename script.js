@@ -255,6 +255,9 @@ Bot basic ID ของบอทแจ้งเตือน (ดูได้ใ�
 กลุ่มผู้ใช้งาน เจ้าของ · ผู้ดูแล · ผู้เช่า|user groups: owner · admin · tenant
 กลุ่ม|groups
 การดำเนินการด่วน|Quick actions
+บันทึกรูป QR|Save QR image
+จ่ายจากมือถือเครื่องนี้: บันทึกรูป QR แล้วเปิดแอปธนาคาร เลือกสแกนจากรูปในเครื่อง|Paying on this phone? Save the QR image, then open your banking app and scan it from your photos
+✓ บันทึกรูป QR แล้ว|✓ QR image saved
 เรื่องที่ผู้เช่าถามกันบ่อย กดที่คำถามเพื่อดูคำตอบ|Common questions from tenants. Tap a question to see the answer
 ยังมีคำถามอยู่?|Still have questions?
 ถามผู้ดูแลหอพักได้โดยตรง ตอบเรื่องห้องพัก บิล และการใช้งานระบบ|Ask the dorm admin directly about rooms, bills or using the system
@@ -2230,7 +2233,7 @@ const pg = {
         )
         .join('')}</div>
 <div class="tabs" style="max-width:320px"><span class="${TT == 'in' ? 'on' : ''}" onclick="TT='in';R()">ปัจจุบัน (${inn.length})</span><span class="${TT == 'in' ? '' : 'on'}" onclick="TT='out';R()">อดีต (${outn.length})</span></div>
-<div class="tb2" style="margin:14px 0"><input placeholder="ค้นหาผู้เช่า..." value="${e(TQ)}" onchange="TQ=this.value;R()" style="min-width:260px"><select onchange="TS=this.value;R()"><option value="">สถานะ: ทั้งหมด</option><option value="od" ${TS == 'od' ? 'selected' : ''}>ค้างชำระ</option><option value="nr" ${TS == 'nr' ? 'selected' : ''}>รอจัดห้อง</option>${SBX.cl ? `<option value="nl" ${TS == 'nl' ? 'selected' : ''}>ยังไม่เชื่อม LINE</option>` : ''}</select></div>
+<div class="tb2" style="margin:14px 0"><input type="search" enterkeyhint="search" placeholder="ค้นหาผู้เช่า..." value="${e(TQ)}" onchange="TQ=this.value;R()" style="min-width:260px"><select onchange="TS=this.value;R()"><option value="">สถานะ: ทั้งหมด</option><option value="od" ${TS == 'od' ? 'selected' : ''}>ค้างชำระ</option><option value="nr" ${TS == 'nr' ? 'selected' : ''}>รอจัดห้อง</option>${SBX.cl ? `<option value="nl" ${TS == 'nl' ? 'selected' : ''}>ยังไม่เชื่อม LINE</option>` : ''}</select></div>
 <div class="cd sc" style="padding:8px 18px"><table><tr><th>ผู้เช่า</th><th>ที่ตั้ง</th><th>ค่าเช่าต่อเดือน</th><th>สัญญา</th><th>เงินแรกเข้า</th><th></th><th></th></tr>${L.map(u => `<tr><td><span class="tc">${av(u, 40)}<span><b>${e(u.name)}</b> ${u.out ? '<span class="pl" style="color:#94a3b8;border-color:#334155;background:#0f172a">ย้ายออกแล้ว</span>' : '<span class="pl g">ใช้งาน</span>'}${SBX.cl && !u.out ? (lnOn(u._uid) ? ' <span class="pl g" title="ได้รับแจ้งเตือนบิลทาง LINE">เชื่อม LINE แล้ว</span>' : ' <span class="pl y" title="ยังไม่ได้รับแจ้งเตือนทาง LINE">ยังไม่เชื่อม LINE</span>') : ''}<br><small class="mu">${e(u.tel || '-')} · ${e(u.email)}</small></span></span></td><td>${PN()}<br><small class="mu">${u.room ? 'ห้อง ' + u.room + ' · ห้องปรับอากาศ' : '<span class="pl y">รอจัดห้อง</span>'}</small></td><td><b class="ac">฿${fm(D.set.rent)}/เดือน</b></td><td><small class="mu">${dt(u.cs || u.id)} → ${u.ce ? dt(u.ce) : 'ไม่กำหนด'}</small></td><td>฿${fm(udep(u))}</td><td>${u.room ? `<button class="b b2 sm" onclick="rm(${u.room})">ดูห้อง →</button>` : `<button class="b sm" onclick="asr(${u.id})">จัดห้อง</button>`}</td><td><span class="mm" onclick="mnu(event,this)">⋯<span class="mdd"><button onclick="et(${u.id})">แก้ไข</button><button onclick="th(${u.id})">ประวัติชำระ</button>${u.out ? `<button onclick="rv(${u.id})">ย้ายกลับเข้าพัก</button>` : `<button onclick="mv(${u.id})">ย้ายออก</button>`}</span></span></td></tr>`).join('') || '<tr><td colspan=7 class=mu>ไม่มีผู้เช่า</td></tr>'}</table></div>`
     );
   },
@@ -2276,9 +2279,10 @@ const pg = {
     }</table></div>${U.role == 'owner' ? rcTable() : ''}<div class="cd" style="margin-top:14px"><h3>Audit Log</h3><br>${D.log.map(l => `<div class="bd mu"><span>${e(l.by)} · ${e(l.a)}</span><span>${new Date(l.t).toLocaleString(LOCF())}</span></div>`).join('') || '<span class="mu">ยังไม่มีบันทึก</span>'}</div>`;
   },
   set() {
+    const SIM = { rent: ' inputmode="decimal"', rate: ' inputmode="decimal"', dep: ' inputmode="decimal"', max: ' inputmode="decimal"', due: ' inputmode="numeric"', tax: ' inputmode="numeric"', tel: ' type="tel" inputmode="tel"', pp: ' inputmode="tel"', url: ' type="url" inputmode="url"' };
     const s = D.set,
       f = (k, l, u) =>
-        `<div class="cd"><label>${l}</label><div style="display:flex;align-items:center;gap:8px"><input id="s_${k}" value="${e(s[k] ?? '')}"><small class="mu">${u}</small></div></div>`;
+        `<div class="cd"><label>${l}</label><div style="display:flex;align-items:center;gap:8px"><input id="s_${k}" value="${e(s[k] ?? '')}"${SIM[k] || ''}><small class="mu">${u}</small></div></div>`;
     return `<h2>ตั้งค่าระบบ</h2><p class="mu">แก้ไขกฎการคำนวณค่าบริการ</p><div class="cd" style="margin-top:14px"><h3>กฎการเรียกเก็บเงิน</h3><small class="mu">แก้ไขแล้วกดบันทึก ระบบจะใช้กับใบแจ้งหนี้รอบถัดไป</small><div class="g4 sg" style="grid-template-columns:repeat(3,1fr)">${f('rent', 'ค่าเช่าห้องพัก', 'บาท/เดือน')}${f('rate', 'ค่าไฟฟ้า', 'บาท/หน่วย')}${f('dep', 'เงินแรกเข้า', 'บาท')}${f('due', 'วันครบกำหนดชำระ', 'ของเดือน')}${f('max', 'ค่าปรับสูงสุด', 'บาท')}${f('pp', 'PromptPay (เบอร์/เลข ปชช.)', 'บัญชี SCB')}${f('tax', 'เลขประจำตัวผู้เสียภาษี', '')}${f('name', 'ชื่อหอพัก (บนเอกสาร)', '')}${f('payee', 'ชื่อผู้รับเงิน', '')}${f('tel', 'เบอร์ติดต่อ', '')}${f('addr', 'ที่อยู่', '')}${f('url', 'ลิงก์เว็บระบบ', '')}</div><button class="b" onclick="ss()">บันทึกการตั้งค่า</button></div>`;
   },
 };
@@ -2772,7 +2776,7 @@ function pm(id) {
   mo(`<div class="mh"><h3>${pd ? 'แก้ไขสลิป · ส่งสลิปใหม่' : 'ชำระเงินผ่าน PromptPay'}</h3><span class="mu">${i.id}</span></div>
  <div class="amt"><small>ยอดที่ต้องชำระ</small><div class="big">฿${fm(t)}</div><small>ครบกำหนด ${dt(due(i))}${late(i) > 0 ? ` · <b style="color:#fb7185">เลยกำหนด ${late(i)} วัน</b>` : ''}</small></div>
  <div class="bk">${i.fin ? '' : `<div class="bd"><span>ค่าเช่า</span><span>฿${fm(i.rent)}</span></div>`}<div class="bd"><span>ค่าไฟ ${i.u} หน่วย</span><span>฿${fm(i.el)}</span></div>${i.x ? `<div class="bd"><span>${e(i.xn || 'ค่าใช้จ่ายเพิ่มเติม')}</span><span>฿${fm(i.x)}</span></div>` : ''}${f ? `<div class="bd" style="color:#fb7185"><span>ค่าปรับ (นับถึงวันที่แจ้งชำระ)</span><span>฿${f}</span></div>` : ''}</div>
- ${pd ? '<div class="note">ผู้ดูแลยังไม่ได้ยืนยัน จึงส่งสลิปใหม่ได้ · เมื่อผู้ดูแลยืนยันแล้วจะแก้ไขไม่ได้</div>' : ''}${!pd && i.rj ? `<div class="note" style="background:#fee2e2;color:#b91c1c;border-color:#fecaca">${NI('warn')}สลิปครั้งก่อนถูกปฏิเสธ: ${e(i.rj)}</div>` : ''}<div class="st"><b>1</b> สแกน QR ด้วยแอปธนาคาร</div><div class="qrc"><div class="qr" id="qr"></div><small class="mu">ยอดเงินจะขึ้นอัตโนมัติ ไม่ต้องกรอกเอง</small></div>
+ ${pd ? '<div class="note">ผู้ดูแลยังไม่ได้ยืนยัน จึงส่งสลิปใหม่ได้ · เมื่อผู้ดูแลยืนยันแล้วจะแก้ไขไม่ได้</div>' : ''}${!pd && i.rj ? `<div class="note" style="background:#fee2e2;color:#b91c1c;border-color:#fecaca">${NI('warn')}สลิปครั้งก่อนถูกปฏิเสธ: ${e(i.rj)}</div>` : ''}<div class="st"><b>1</b> สแกน QR ด้วยแอปธนาคาร</div><div class="qrc"><div class="qr" id="qr"></div><small class="mu">ยอดเงินจะขึ้นอัตโนมัติ ไม่ต้องกรอกเอง</small><button class="b b2 sm qrsv" type="button" onclick="qrSave('${id}')">${IC.dl || ''}บันทึกรูป QR</button><small class="mu qrsv-h">จ่ายจากมือถือเครื่องนี้: บันทึกรูป QR แล้วเปิดแอปธนาคาร เลือกสแกนจากรูปในเครื่อง</small></div>
  <div class="st"><b>2</b> อัปโหลดสลิปโอนเงิน (JPG/PNG)</div><label class="drop" id="sfz" ondragover="event.preventDefault();this.classList.add('on')" ondragleave="this.classList.remove('on')" ondrop="slDrop(event)"><input type="file" id="sf" accept="image/jpeg,image/png" onchange="sl(this)"><img class="dz-pv" id="sfp" alt="ตัวอย่างสลิป" hidden><span class="dz-ic">${IC.up}</span><span class="dz-t"><b id="sfn">เลือกรูปสลิป</b><span class="dz-or"> หรือลากไฟล์มาวางที่นี่</span></span><small class="mu" id="sfh">JPG หรือ PNG ไม่เกิน 8 MB</small></label><div id="sfq" class="slq" hidden></div>
  <button class="b" style="width:100%" onclick="sub('${id}')">${pd ? 'ส่งสลิปใหม่' : 'แจ้งชำระเงิน'}</button>
  <div class="note">${NI('cash')}หากต้องการชำระเงินสด สามารถชำระได้ที่หน้าเคาน์เตอร์</div>
@@ -2788,6 +2792,63 @@ function tm(id) {
     $('#qr').innerHTML = k.createSvgTag(5, 2);
   } catch (x) {
     $('#qr').textContent = 'สร้าง QR ไม่สำเร็จ';
+  }
+}
+// บันทึกรูป QR ลงเครื่อง: จ่ายด้วยมือถือเครื่องเดียวกันได้ (แอปธนาคารสแกนจากรูปในเครื่อง)
+async function qrSave(id) {
+  const i = gi(id),
+    amt = base(i) + fz(i);
+  try {
+    const k = qrcode(0, 'M');
+    k.addData(ppay(D.set.pp, amt));
+    k.make();
+    const n = k.getModuleCount(),
+      cs = 12,
+      pad = 48,
+      q = n * cs,
+      W = q + pad * 2,
+      H = q + pad * 2 + 110,
+      c = document.createElement('canvas');
+    c.width = W;
+    c.height = H;
+    const x = c.getContext('2d');
+    x.fillStyle = '#fff';
+    x.fillRect(0, 0, W, H);
+    x.fillStyle = '#000';
+    for (let r = 0; r < n; r++) for (let cc = 0; cc < n; cc++) if (k.isDark(r, cc)) x.fillRect(pad + cc * cs, pad + r * cs, cs, cs);
+    x.textAlign = 'center';
+    x.fillStyle = '#9e0f2c';
+    x.font = 'bold 40px sans-serif';
+    x.fillText('฿' + fm(amt), W / 2, q + pad + 58);
+    x.fillStyle = '#555';
+    x.font = '24px sans-serif';
+    x.fillText((D.set.name || 'T&T Mansion') + ' · ' + id, W / 2, q + pad + 96);
+    const blob = await new Promise(r => c.toBlob(r, 'image/png')),
+      fn = 'qr-' + id + '.png';
+    // มือถือที่แชร์ไฟล์ได้: เปิดเมนูแชร์ (มีปุ่มบันทึกรูปภาพ)
+    try {
+      const f = new File([blob], fn, { type: 'image/png' });
+      if (matchMedia('(pointer: coarse)').matches && navigator.canShare && navigator.canShare({ files: [f] })) {
+        await navigator.share({ files: [f] });
+        return;
+      }
+    } catch (z) {
+      if (z && z.name == 'AbortError') return;
+    }
+    const u = URL.createObjectURL(blob),
+      a = document.createElement('a');
+    a.href = u;
+    a.download = fn;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      a.remove();
+      URL.revokeObjectURL(u);
+    }, 10000);
+    tt('✓ บันทึกรูป QR แล้ว');
+  } catch (z) {
+    alert('บันทึกรูป QR ไม่สำเร็จ: ' + thErr(z));
   }
 }
 // ---------- ตรวจสลิปเบื้องต้นจาก QR มุมสลิป (mini QR ตามมาตรฐานธนาคารไทย) ----------
@@ -3229,8 +3290,8 @@ async function si(id) {
 pg.prof = () => {
   const ad = U.role != 'tenant';
   return `<h2>โปรไฟล์ของฉัน</h2><p class="mu">ดูและแก้ไขข้อมูลส่วนตัว</p><div class="pf" style="margin-top:14px"><div class="cd" style="text-align:center;display:grid;gap:10px;justify-items:center;align-content:start">${av(U, 120)}<h3>${e(U.name)}</h3><span class="pl ${ad ? 'p' : 'g'}">${U.role == 'owner' ? 'เจ้าของกิจการ' : ad ? 'ผู้ดูแลระบบ' : 'ผู้เช่า'}</span>${ad ? '' : `<p class="mu" style="margin:0">${U.room ? 'ห้อง ' + U.room : 'รอผู้ดูแลจัดห้อง'}<br>เงินแรกเข้า ฿${fm(udep(U))}</p>`}<input type="file" id="pf" accept="image/jpeg,image/png,image/webp" hidden onchange="pa(this)"><div><button class="b" onclick="$('#pf').click()">เปลี่ยนรูปโปรไฟล์</button>${U.av ? ` <button class="b b2" onclick="pr()">ลบรูป</button>` : ''}</div><small class="mu">JPG / PNG / WebP · ไม่เกิน 5MB · ครอปรูปได้ก่อนบันทึก</small></div>
-<div style="display:grid;gap:14px"><div class="cd"><h3>การแสดงผล</h3><br><div class="bd" style="margin-bottom:16px"><b>ภาษา</b><span class="seg"><span class="${LANG == 'th' ? 'on' : ''}" onclick="setPf('lang','th')">TH</span><span class="${LANG == 'en' ? 'on' : ''}" onclick="setPf('lang','en')">EN</span></span></div><div class="bd"><b>${document.documentElement.dataset.theme == 'dark' ? 'โหมดกลางคืน' : 'โหมดกลางวัน'}</b><div class="tsw ${document.documentElement.dataset.theme == 'dark' ? 'on' : ''}" role="switch" onclick="setPf('theme','${document.documentElement.dataset.theme == 'dark' ? 'light' : 'dark'}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><i></i></div></div></div><div class="cd"><h3>ข้อมูลส่วนตัว</h3><br><label>ชื่อ - นามสกุล</label><input id="p_n" value="${e(U.name)}"><div class="row"><div><label>เบอร์โทร</label><input id="p_t" value="${e(U.tel || '')}" placeholder="08x-xxx-xxxx"></div><div><label>อีเมล</label><input id="p_e" value="${e(U.email)}"></div></div><label>เพศ</label><select id="p_g">${['', 'ชาย', 'หญิง', 'อื่นๆ'].map(v => `<option value="${v}" ${U.g == v ? 'selected' : ''}>${v || 'ไม่ระบุ'}</option>`).join('')}</select>${ad ? '' : `<label>ห้องพัก (แก้ไขได้โดยผู้ดูแล)</label><input value="${U.room || 'รอผู้ดูแลจัดห้อง'}" disabled>`}<button class="b" onclick="ps()">บันทึกข้อมูล</button></div>
-<div class="cd"><h3>เปลี่ยนรหัสผ่าน</h3><br><label>รหัสผ่านปัจจุบัน</label><input id="p_o" type="password"><div class="row"><div><label>รหัสผ่านใหม่ (อย่างน้อย 8 ตัว)</label><input id="p_w" type="password"></div><div><label>ยืนยันรหัสผ่านใหม่</label><input id="p_c" type="password"></div></div><button class="b b2" onclick="pc()">เปลี่ยนรหัสผ่าน</button></div></div></div>`;
+<div style="display:grid;gap:14px"><div class="cd"><h3>การแสดงผล</h3><br><div class="bd" style="margin-bottom:16px"><b>ภาษา</b><span class="seg"><span class="${LANG == 'th' ? 'on' : ''}" onclick="setPf('lang','th')">TH</span><span class="${LANG == 'en' ? 'on' : ''}" onclick="setPf('lang','en')">EN</span></span></div><div class="bd"><b>${document.documentElement.dataset.theme == 'dark' ? 'โหมดกลางคืน' : 'โหมดกลางวัน'}</b><div class="tsw ${document.documentElement.dataset.theme == 'dark' ? 'on' : ''}" role="switch" onclick="setPf('theme','${document.documentElement.dataset.theme == 'dark' ? 'light' : 'dark'}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><i></i></div></div></div><div class="cd"><h3>ข้อมูลส่วนตัว</h3><br><label>ชื่อ - นามสกุล</label><input id="p_n" value="${e(U.name)}"><div class="row"><div><label>เบอร์โทร</label><input id="p_t" type="tel" inputmode="tel" autocomplete="tel" value="${e(U.tel || '')}" placeholder="08x-xxx-xxxx"></div><div><label>อีเมล</label><input id="p_e" type="email" inputmode="email" autocomplete="email" value="${e(U.email)}"></div></div><label>เพศ</label><select id="p_g">${['', 'ชาย', 'หญิง', 'อื่นๆ'].map(v => `<option value="${v}" ${U.g == v ? 'selected' : ''}>${v || 'ไม่ระบุ'}</option>`).join('')}</select>${ad ? '' : `<label>ห้องพัก (แก้ไขได้โดยผู้ดูแล)</label><input value="${U.room || 'รอผู้ดูแลจัดห้อง'}" disabled>`}<button class="b" onclick="ps()">บันทึกข้อมูล</button></div>
+<div class="cd"><h3>เปลี่ยนรหัสผ่าน</h3><br><label>รหัสผ่านปัจจุบัน</label><input id="p_o" type="password" autocomplete="current-password"><div class="row"><div><label>รหัสผ่านใหม่ (อย่างน้อย 8 ตัว)</label><input id="p_w" type="password" autocomplete="new-password"></div><div><label>ยืนยันรหัสผ่านใหม่</label><input id="p_c" type="password" autocomplete="new-password"></div></div><button class="b b2" onclick="pc()">เปลี่ยนรหัสผ่าน</button></div></div></div>`;
 };
 let CR = null;
 function pa(el) {
@@ -3939,6 +4000,7 @@ const IC = {
   ok: SV('<circle cx="12" cy="12" r="9"/><path d="m8 12.3 2.7 2.7L16.2 9.5"/>'),
   info: SV('<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.8h.01"/>'),
   up: SV('<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>'),
+  dl: SV('<path d="M12 4v12M7 11l5 5 5-5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>'),
   top: SV('<path d="m6 15 6-6 6 6"/>'),
   sun: SV(
     '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
@@ -4105,7 +4167,7 @@ function R0() {
             ['prof', 'โปรไฟล์', '◉'],
           ];
   if (!nv.some(n => n[0] == P)) P = nv[0][0];
-  a.innerHTML = `<div class="app"><div class="sb np"><div class="logo" style="margin-bottom:14px"><img class="lgi" src="${LG}" alt=""><div>T&T MANSION<br><small class="ac">PAYMENT SYSTEM</small></div></div>${nv.map(n => `<div class="nv ${P == n[0] ? 'on' : ''}" onclick="go('${n[0]}')" data-tip="${T2(n[1])}"><i>${IC[n[0]] || n[2]}</i><span>${n[1]}</span></div>`).join('')}<button class="sbt np" type="button" onclick="toggleSb()" data-tip="${T2('ย่อ/ขยายเมนู')}">${IC.chev}<span>ย่อเมนู</span></button></div><div class="mn${ow ? ' ro' : ''}" data-pg="${P}"><div class="top np">${ad ? `<input placeholder="ค้นหาห้อง ผู้เช่า หรือเลขที่บิล (กด Enter)" value="${e(Q)}" onkeydown="if(event.key=='Enter'){Q=this.value;F='all';go('pay')}">` : '<span style="flex:1"></span>'}<span class="me" onclick="go('prof')" data-tip="${T2('โปรไฟล์ของฉัน')}">${av(U, 36)}<b>${e(U.name)}</b></span>${THB()}<span class="seg"><span class="${LANG == 'th' ? 'on' : ''}" onclick="setPf('lang','th')">TH</span><span class="${LANG == 'en' ? 'on' : ''}" onclick="setPf('lang','en')">EN</span></span><button class="b b2 sm lo" onclick="askOut()" data-tip="${T2('ออกจากระบบ')}">${IC.out}<span class="lbl">ออกจากระบบ</span></button></div>${pg[P]()}<p class="mu np appv">เวอร์ชันระบบ ${APP_V}</p></div></div>`;
+  a.innerHTML = `<div class="app"><div class="sb np"><div class="logo" style="margin-bottom:14px"><img class="lgi" src="${LG}" alt=""><div>T&T MANSION<br><small class="ac">PAYMENT SYSTEM</small></div></div>${nv.map(n => `<div class="nv ${P == n[0] ? 'on' : ''}" onclick="go('${n[0]}')" data-tip="${T2(n[1])}"><i>${IC[n[0]] || n[2]}</i><span>${n[1]}</span></div>`).join('')}<button class="sbt np" type="button" onclick="toggleSb()" data-tip="${T2('ย่อ/ขยายเมนู')}">${IC.chev}<span>ย่อเมนู</span></button></div><div class="mn${ow ? ' ro' : ''}" data-pg="${P}"><div class="top np">${ad ? `<input type="search" enterkeyhint="search" placeholder="ค้นหาห้อง ผู้เช่า หรือเลขที่บิล (กด Enter)" value="${e(Q)}" onkeydown="if(event.key=='Enter'){Q=this.value;F='all';go('pay')}">` : '<span style="flex:1"></span>'}<span class="me" onclick="go('prof')" data-tip="${T2('โปรไฟล์ของฉัน')}">${av(U, 36)}<b>${e(U.name)}</b></span>${THB()}<span class="seg"><span class="${LANG == 'th' ? 'on' : ''}" onclick="setPf('lang','th')">TH</span><span class="${LANG == 'en' ? 'on' : ''}" onclick="setPf('lang','en')">EN</span></span><button class="b b2 sm lo" onclick="askOut()" data-tip="${T2('ออกจากระบบ')}">${IC.out}<span class="lbl">ออกจากระบบ</span></button></div>${pg[P]()}<p class="mu np appv">เวอร์ชันระบบ ${APP_V}</p></div></div>`;
 }
 
 /* 19_supabase_boot.js — Supabase: เริ่มต้น เข้าสู่ระบบ รีเซ็ต
