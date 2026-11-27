@@ -139,7 +139,15 @@ const home0 = () => {
 <section class="ap-sec ap-faq" id="hq">
   <div class="ap-in">
     <h2 class="ap-r">คำถามที่พบบ่อย</h2>
-    <div class="ap-qs">${faq.map(q => `<details class="ap-q ap-r"><summary>${q[0]}<i>+</i></summary><p>${q[1]}</p></details>`).join('')}</div>
+    <p class="ap-fsub ap-r">เรื่องที่ผู้เช่าถามกันบ่อย กดที่คำถามเพื่อดูคำตอบ</p>
+    <div class="ap-fq">
+      <div class="ap-qs ap-r">${faq.map((q, i) => `<details class="ap-q"><summary><em>${String(i + 1).padStart(2, '0')}</em><span>${q[0]}</span><i aria-hidden="true"></i></summary><div class="ap-qa"><p>${q[1]}</p></div></details>`).join('')}</div>
+      <aside class="ap-fask ap-r">
+        <b>ยังมีคำถามอยู่?</b>
+        <p>ถามผู้ดูแลหอพักได้โดยตรง ตอบเรื่องห้องพัก บิล และการใช้งานระบบ</p>
+        ${tel ? `<a class="ap-btn" href="tel:${e(tel)}">โทร ${e(PIF.phone)}</a>` : ''}${PIF.line ? `<a class="ap-fline" href="${lineUrl}" target="_blank" rel="noopener">LINE: ${e(PIF.line)}</a>` : ''}${!tel && !PIF.line ? `<button class="ap-btn" onclick="go('login')">เข้าสู่ระบบ</button>` : ''}
+      </aside>
+    </div>
   </div>
 </section>
 
