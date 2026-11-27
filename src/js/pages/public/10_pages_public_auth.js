@@ -118,7 +118,7 @@ const home0 = () => {
         <span class="ap-live"><i></i>ข้อมูลล่าสุดจากระบบ</span>
         <h2>ห้องว่างตอนนี้</h2>
         <p>สนใจเข้าพัก สอบถามหรือนัดดูห้องกับผู้ดูแลหอพักได้เลย</p>
-        <div class="ap-vbtn">${tel ? `<a class="ap-btn" href="tel:${e(tel)}">โทร ${e(PIF.phone)}</a>` : ''}${PIF.line ? `<a class="ap-more" href="${lineUrl}" target="_blank" rel="noopener">LINE: ${e(PIF.line)}</a>` : ''}</div>
+        <div class="ap-vbtn">${tel ? `<a class="ap-btn" href="tel:${e(tel)}">โทร ${e(PIF.phone)}</a>` : ''}</div>
       </div>
       <div class="ap-vr">
         <div class="ap-ring" style="--v:${PIF.total ? Math.round((PIF.free / PIF.total) * 100) : 0}"><b>${PIF.free}</b><small>ห้องว่าง</small></div>
@@ -142,11 +142,6 @@ const home0 = () => {
     <p class="ap-fsub ap-r">เรื่องที่ผู้เช่าถามกันบ่อย กดที่คำถามเพื่อดูคำตอบ</p>
     <div class="ap-fq">
       <div class="ap-qs ap-r">${faq.map((q, i) => `<details class="ap-q"><summary><em>${String(i + 1).padStart(2, '0')}</em><span>${q[0]}</span><i aria-hidden="true"></i></summary><div class="ap-qa"><p>${q[1]}</p></div></details>`).join('')}</div>
-      <aside class="ap-fask ap-r">
-        <b>ยังมีคำถามอยู่?</b>
-        <p>ถามผู้ดูแลหอพักได้โดยตรง ตอบเรื่องห้องพัก บิล และการใช้งานระบบ</p>
-        ${tel ? `<a class="ap-btn" href="tel:${e(tel)}">โทร ${e(PIF.phone)}</a>` : ''}${PIF.line ? `<a class="ap-fline" href="${lineUrl}" target="_blank" rel="noopener">LINE: ${e(PIF.line)}</a>` : ''}${!tel && !PIF.line ? `<button class="ap-btn" onclick="go('login')">เข้าสู่ระบบ</button>` : ''}
-      </aside>
     </div>
   </div>
 </section>
