@@ -1247,3 +1247,98 @@ input[type='search']::-webkit-search-decoration {
     display: none;
   }
 }
+
+/* ===== มือถือ: หน้าต้อนรับ ===== */
+@media (max-width: 734px) {
+  /* การ์ดฟีเจอร์: จัดกลาง */
+  .apl .ap-tile {
+    text-align: center;
+    align-items: center;
+  }
+  .apl .ap-tile i {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /* กล่องห้องว่าง: ปุ่มโทรไว้ล่างสุด */
+  .apl .ap-vbox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .apl .ap-vl {
+    display: contents;
+  }
+  .apl .ap-vr {
+    order: 4;
+    margin: 6px 0 4px;
+  }
+  .apl .ap-vbtn {
+    order: 5;
+    margin-top: 18px;
+    width: 100%;
+  }
+  .apl .ap-vbtn .ap-btn {
+    width: 100%;
+    max-width: 320px;
+    justify-content: center;
+  }
+  .apl .ap-vbox p {
+    margin-bottom: 18px;
+  }
+  /* ส่วนท้ายเว็บ: จัดกลาง ลิงก์เป็นปุ่มเม็ดยา */
+  .apl .ap-foot {
+    text-align: center;
+    padding-top: 32px;
+  }
+  .apl .ap-fg {
+    grid-template-columns: 1fr;
+    gap: 26px;
+    justify-items: center;
+  }
+  .apl .ap-fb .ap-logo {
+    justify-content: center;
+  }
+  .apl .ap-fb .ap-logo span {
+    display: inline;
+  }
+  .apl .ap-fb small {
+    margin-top: 8px;
+  }
+  .apl .ap-fc {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+  }
+  .apl .ap-fc b {
+    flex-basis: 100%;
+    margin: 0 0 4px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--ap-mu);
+    font-weight: 600;
+  }
+  .apl .ap-fc a {
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 13.5px;
+    color: var(--ap-tx);
+    background: color-mix(in srgb, var(--ap-tx) 6%, transparent);
+    border: 1px solid color-mix(in srgb, var(--ap-tx) 9%, transparent);
+  }
+  .apl .ap-fc a[href^='tel:'] {
+    color: #fff;
+    background: linear-gradient(135deg, #c8163a, #9e0f2c);
+    border-color: transparent;
+  }
+  .apl .ap-fc a::before {
+    inset: -4px;
+  }
+  .apl .ap-fcopy {
+    margin-top: 26px;
+    font-size: 11.5px;
+    line-height: 1.7;
+  }
+}
